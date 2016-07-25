@@ -231,7 +231,6 @@ class ConfigTab extends React.Component {
               <select value={config.ui.theme}
                 onChange={(e) => this.handleUIChange(e)}
                 ref='uiTheme'
-                disabled
               >
                 <option value='default'>Light</option>
                 <option value='dark'>Dark</option>
