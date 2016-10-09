@@ -21,7 +21,7 @@ var config = Object.assign({}, skeleton, {
     filename: '[name].js',
     sourceMapFilename: '[name].map',
     libraryTarget: 'commonjs2',
-    publicPath: 'http://localhost:8080/assets/'
+    publicPath: '/assets/'
   },
   debug: true,
   devtool: 'cheap-module-eval-source-map'
