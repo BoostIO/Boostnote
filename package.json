@@ -9,8 +9,6 @@
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "old-dev": "babel-node tools/webpack-dev-server",
-    "postinstall": "npm run vendor",
-    "vendor": "oh-my-cdn",
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava"
   },
@@ -88,7 +86,6 @@
     "jsdom": "^9.4.2",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
-    "oh-my-cdn": "^0.1.1",
     "progress-bar-webpack-plugin": "^1.9.0",
     "react": "^15.3.0",
     "react-color": "^2.2.2",
