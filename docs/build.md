@@ -6,19 +6,22 @@ We use Webpack HMR to develop Boostnote.
 You can use following commands to use default configuration at the top of project directory.
 
 Install requirement packages.
-
 ```
 $ npm install
 ```
 
 Build codes.
-
 ```
 $ npm run webpack
 ```
 
-After a few seconds, you will see this message.
+> For old node, like v0.10.21, you can use
+```
+$ alias dev="npm run old-dev"
+$ dev
+```
 
+After a few seconds, you will see this message.
 ```
 webpack: bundle is now VALID.
 ```
@@ -27,6 +30,7 @@ Then, we have to run the app.
 ```
 $ npm run hot
 ```
+
 > Actually the app can be start with `npm start`. However, the app will use the compiled script.
 
 By this, webpack will watch the code changes and apply it automatically.
@@ -42,7 +46,6 @@ We use Grunt.
 Acutal deploy can be run by `grunt`. However, you shouldn't use because the default task is including codesign and authenticode.
 
 So, we prepare a script which just make an excutable file.
-
 ```
 grunt pre-build
 ```
