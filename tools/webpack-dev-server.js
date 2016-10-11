@@ -1,6 +1,7 @@
 import webpackDevServer from 'webpack-dev-server';
 import webpack from 'webpack';
 import config from '../webpack.config.js'
+import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 
 
 Object.keys(config.entry).map( (key) => {
@@ -10,6 +11,7 @@ Object.keys(config.entry).map( (key) => {
     'webpack/hot/dev-server', entry[key]];
 });
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
+config.plugins.push(new ProgressBarPlugin());
 
 console.log(config);
 
