@@ -40,6 +40,7 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidMount () {
+    this.value = this.props.value
     this.editor = CodeMirror(this.refs.root, {
       value: this.props.value,
       lineNumbers: true,

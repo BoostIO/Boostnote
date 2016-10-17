@@ -4,7 +4,7 @@
     "react": "https://cdnjs.cloudflare.com/ajax/libs/react/15.0.2/react.js",
     "react-dom": "https://cdnjs.cloudflare.com/ajax/libs/react/15.0.2/react-dom.js",
     "redux": "https://cdnjs.cloudflare.com/ajax/libs/redux/3.5.2/redux.js",
-    "react-redux": "https://unpkg.com/react-redux@4.4.5/dist/react-redux.min.js"
+    "react-redux": "https://unpkg.com/react-redux@4.4.5/dist/react-redux.min.js",
     "katex": "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js",
     "katex-style": "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css"
   }

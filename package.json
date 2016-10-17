@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.6.8",
+  "version": "0.7.0",
   "description": "Boostnote",
   "main": "index.js",
   "license": "GPL-3.0",

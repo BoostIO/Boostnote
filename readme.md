@@ -1,6 +1,6 @@
 # Boostnote
 
-> We launched [Boostnote store](#goods)!! :tada: Also, you can support us from [Pateron](https://www.patreon.com/boostnote)!
+> We launched [Boostnote store](#goods)!! :tada: Also, you can support us from [Patreon](https://www.patreon.com/boostnote)!
 
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
@@ -66,7 +66,7 @@ The product can be sent anywhere in the world. This store is powered by [Paintor
 
 ## Donation
 
-We launched a [Pateron page](https://www.patreon.com/boostnote).
+We launched a [Patreon page](https://www.patreon.com/boostnote).
 
 ## Author & Maintainer
 
