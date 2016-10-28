@@ -10,6 +10,9 @@ const ipc = electron.ipcRenderer
 
 const OSX = global.process.platform === 'darwin'
 
+const HOTKEY_SAVE = 'hotkeyButton'
+const UI_SAVE = 'uiButton'
+
 class ConfigTab extends React.Component {
   constructor (props) {
     super(props)
@@ -44,7 +47,7 @@ class ConfigTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    this.state.saveSource = 'hotkeyButton'
+    this.state.saveSource = HOTKEY_SAVE
     let newConfig = {
       hotkey: this.state.config.hotkey
     }
@@ -133,7 +136,7 @@ class ConfigTab extends React.Component {
   }
 
   handleSaveUIClick (e) {
-    this.state.saveSource = 'uiButton'
+    this.state.saveSource = UI_SAVE
     let newConfig = {
       ui: this.state.config.ui,
       editor: this.state.config.editor,
@@ -150,12 +153,12 @@ class ConfigTab extends React.Component {
 
   render () {
     let keymapAlert = this.state.keymapAlert
-    let keymapAlertElement = (keymapAlert != null && this.state.saveSource == 'hotkeyButton')
+    let keymapAlertElement = (keymapAlert != null && this.state.saveSource == HOTKEY_SAVE)
       ? <p className={`alert ${keymapAlert.type}`}>
         {keymapAlert.message}
       </p>
       : null
-    let uiAlertElement = (keymapAlert != null && this.state.saveSource == 'uiButton')
+    let uiAlertElement = (keymapAlert != null && this.state.saveSource == UI_SAVE)
       ? <p className={`alert ${keymapAlert.type}`}>
         {keymapAlert.message}
       </p>
