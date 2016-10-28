@@ -16,7 +16,8 @@ class ConfigTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      config: props.config
+      config: props.config,
+      saveSource: null
     }
   }
 
@@ -43,6 +44,7 @@ class ConfigTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
+    this.state.saveSource = 'hotkeyButton'
     let newConfig = {
       hotkey: this.state.config.hotkey
     }
@@ -131,6 +133,7 @@ class ConfigTab extends React.Component {
   }
 
   handleSaveUIClick (e) {
+    this.state.saveSource = 'uiButton'
     let newConfig = {
       ui: this.state.config.ui,
       editor: this.state.config.editor,
@@ -147,7 +150,12 @@ class ConfigTab extends React.Component {
 
   render () {
     let keymapAlert = this.state.keymapAlert
-    let keymapAlertElement = keymapAlert != null
+    let keymapAlertElement = (keymapAlert != null && this.state.saveSource == 'hotkeyButton')
+      ? <p className={`alert ${keymapAlert.type}`}>
+        {keymapAlert.message}
+      </p>
+      : null
+    let uiAlertElement = (keymapAlert != null && this.state.saveSource == 'uiButton')
       ? <p className={`alert ${keymapAlert.type}`}>
         {keymapAlert.message}
       </p>
@@ -385,12 +393,13 @@ class ConfigTab extends React.Component {
             </label>
           </div>
 
-          <div className='group-control'>
+          <div styleName='group-control'>
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveUIClick(e)}
             >
               Save UI Config
             </button>
+            {uiAlertElement}
           </div>
         </div>
       </div>
