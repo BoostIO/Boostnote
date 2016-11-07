@@ -9,6 +9,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
+const { ipcRenderer } = electron
 
 function sortByCreatedAt (a, b) {
   return new Date(b.createdAt) - new Date(a.createdAt)
@@ -46,6 +47,8 @@ class NoteList extends React.Component {
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('list:focus', this.focusHandler)
+    var self = this;
+    ipcRenderer.on('ipc-open-note', function (event, uniqueKey) { self.showNote(uniqueKey); });
   }
 
   componentWillReceiveProps (nextProps) {
@@ -64,6 +67,8 @@ class NoteList extends React.Component {
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
     ee.off('list:focus', this.focusHandler)
+    var self = this;
+    ipcRenderer.removeListener('ipc-open-note', function (event, uniqueKey) { self.showNote(uniqueKey); });
   }
 
   componentDidUpdate (prevProps) {
@@ -220,6 +225,20 @@ class NoteList extends React.Component {
       : []
   }
 
+  showNote (uniqueKey) {
+    let { router } = this.context;
+    let { location } = this.props;
+
+    //TODO : check if note matching this uniqueKey exists
+
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: uniqueKey
+      }
+    });
+  }
+  
   handleNoteClick (e, uniqueKey) {
     let { router } = this.context
     let { location } = this.props
