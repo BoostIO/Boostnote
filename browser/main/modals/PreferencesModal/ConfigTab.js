@@ -10,25 +10,29 @@ const ipc = electron.ipcRenderer
 
 const OSX = global.process.platform === 'darwin'
 
+const HOTKEY_SAVE = 'hotkeyButton'
+const UI_SAVE = 'uiButton'
+
 class ConfigTab extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
       isHotkeyHintOpen: false,
-      config: props.config
+      config: props.config,
+      saveSource: null
     }
   }
 
   componentDidMount () {
     this.handleSettingDone = () => {
-      this.setState({keymapAlert: {
+      this.setState({saveAlert: {
         type: 'success',
         message: 'Successfully applied!'
       }})
     }
     this.handleSettingError = (err) => {
-      this.setState({keymapAlert: {
+      this.setState({saveAlert: {
         type: 'error',
         message: err.message != null ? err.message : 'Error occurs!'
       }})
@@ -43,6 +47,7 @@ class ConfigTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
+    this.state.saveSource = HOTKEY_SAVE
     let newConfig = {
       hotkey: this.state.config.hotkey
     }
@@ -131,6 +136,7 @@ class ConfigTab extends React.Component {
   }
 
   handleSaveUIClick (e) {
+    this.state.saveSource = UI_SAVE
     let newConfig = {
       ui: this.state.config.ui,
       editor: this.state.config.editor,
@@ -146,10 +152,10 @@ class ConfigTab extends React.Component {
   }
 
   render () {
-    let keymapAlert = this.state.keymapAlert
-    let keymapAlertElement = keymapAlert != null
-      ? <p className={`alert ${keymapAlert.type}`}>
-        {keymapAlert.message}
+    let saveAlert = this.state.saveAlert
+    let saveAlertElement = saveAlert != null
+      ? <p className={`alert ${saveAlert.type}`}>
+        {saveAlert.message}
       </p>
       : null
     let themes = consts.THEMES
@@ -193,7 +199,7 @@ class ConfigTab extends React.Component {
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveButtonClick(e)}>Save Hotkey
             </button>
-            {keymapAlertElement}
+            {(this.state.saveSource == HOTKEY_SAVE) ? saveAlertElement : null}
           </div>
           {this.state.isHotkeyHintOpen &&
             <div styleName='group-hint'>
@@ -385,12 +391,13 @@ class ConfigTab extends React.Component {
             </label>
           </div>
 
-          <div className='group-control'>
+          <div styleName='group-control'>
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveUIClick(e)}
             >
               Save UI Config
             </button>
+            {(this.state.saveSource == UI_SAVE) ? saveAlertElement : null}
           </div>
         </div>
       </div>
