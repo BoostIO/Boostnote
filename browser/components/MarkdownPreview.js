@@ -140,7 +140,7 @@ export default class MarkdownPreview extends React.Component {
 
     this.refs.root.contentWindow.document.head.innerHTML = `
       <style id='style'></style>
-      <link rel="stylesheet" href="${appPath}/compiled/katex-style.css">
+      <link rel="stylesheet" href="${appPath}/node_modules/katex/dist/katex.min.css">
       <link rel="stylesheet" href="${appPath}/node_modules/codemirror/lib/codemirror.css">
       <link rel="stylesheet" id="codeTheme">
     `
