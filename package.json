@@ -8,8 +8,6 @@
     "start": "electron ./index.js",
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
-    "postinstall": "npm run vendor",
-    "vendor": "oh-my-cdn",
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava"
   },
@@ -94,7 +92,6 @@
     "jsdom": "^9.4.2",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
-    "oh-my-cdn": "^0.1.1",
     "react": "^15.3.0",
     "react-color": "^2.2.2",
     "react-css-modules": "^3.7.6",
