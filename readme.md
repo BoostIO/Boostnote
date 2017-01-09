@@ -32,8 +32,8 @@ Please use the [issue tracker](https://github.com/BoostIO/Boostnote/issues) for 
 
 
 ## Store
-<img src="https://boostnote.io/images/t3.png" width="250"/>
-<img src="https://boostnote.io/images/t1.png" width="250"/>
+<img src="https://b00st.io/images/t3.png" width="250"/>
+<img src="https://b00st.io/images/t1.png" width="250"/>
 
 We're selling Boostnote goods on the [Boostnote store](https://boostnote.paintory.com/).
 

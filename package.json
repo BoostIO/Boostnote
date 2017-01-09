@@ -44,7 +44,7 @@
   "bugs": {
     "url": "https://github.com/BoostIO/Boostnote/issues"
   },
-  "homepage": "https://boostnote.io",
+  "homepage": "https://b00st.io",
   "dependencies": {
     "@rokt33r/markdown-it-math": "^4.0.1",
     "@rokt33r/season": "^5.3.0",
