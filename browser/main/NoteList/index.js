@@ -41,6 +41,8 @@ class NoteList extends React.Component {
 
     this.state = {
     }
+
+    this.shortcutKey = props.config.preview.shortcutKey
   }
 
   componentDidMount () {
@@ -161,27 +163,27 @@ class NoteList extends React.Component {
   handleNoteListKeyDown (e) {
     if (e.metaKey || e.ctrlKey) return true
 
-    if (e.keyCode === 65 && !e.shiftKey) {
+    if (e.key === this.shortcutKey.createNote && !e.shiftKey) {
       e.preventDefault()
       ee.emit('top:new-note')
     }
 
-    if (e.keyCode === 68) {
+    if (e.key === this.shortcutKey.deleteNote) {
       e.preventDefault()
       ee.emit('detail:delete')
     }
 
-    if (e.keyCode === 69) {
+    if (e.key === this.shortcutKey.focusNote) {
       e.preventDefault()
       ee.emit('detail:focus')
     }
 
-    if (e.keyCode === 38) {
+    if (e.key === this.shortcutKey.priorNote) {
       e.preventDefault()
       this.selectPriorNote()
     }
 
-    if (e.keyCode === 40) {
+    if (e.key === this.shortcutKey.nextNote) {
       e.preventDefault()
       this.selectNextNote()
     }

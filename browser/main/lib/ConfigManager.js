@@ -35,7 +35,14 @@ export const DEFAULT_CONFIG = {
     fontSize: '14',
     fontFamily: 'Lato',
     codeBlockTheme: 'elegant',
-    lineNumber: true
+    lineNumber: true,
+    shortcutKey: {
+      deleteNote: 'd',
+      createNote: 'a',
+      focusNote: 'e',
+      priorNote: 'ArrowDown',
+      nextNote: 'ArrowUp'
+    }
   }
 }
 
