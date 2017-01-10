@@ -161,32 +161,43 @@ class NoteList extends React.Component {
   }
 
   handleNoteListKeyDown (e) {
+    this.shortcutKey.keyPressed[e.key] = true
+    let isShortcutKey = (e) => { return this.shortcutKey.keyPressed[e] }
     if (e.metaKey || e.ctrlKey) return true
 
-    if (e.key === this.shortcutKey.createNote && !e.shiftKey) {
+    if (this.shortcutKey.createNote.every(isShortcutKey)) {
       e.preventDefault()
       ee.emit('top:new-note')
+      this.shortcutKey.createNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
     }
 
-    if (e.key === this.shortcutKey.deleteNote) {
+    if (this.shortcutKey.deleteNote.every(isShortcutKey)) {
       e.preventDefault()
       ee.emit('detail:delete')
+      this.shortcutKey.deleteNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
     }
 
-    if (e.key === this.shortcutKey.focusNote) {
+    if (this.shortcutKey.focusNote.every(isShortcutKey)) {
       e.preventDefault()
       ee.emit('detail:focus')
+      this.shortcutKey.focusNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
     }
 
-    if (e.key === this.shortcutKey.priorNote) {
+    if (this.shortcutKey.priorNote.every(isShortcutKey)) {
       e.preventDefault()
       this.selectPriorNote()
+      this.shortcutKey.priorNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
     }
 
-    if (e.key === this.shortcutKey.nextNote) {
+    if (this.shortcutKey.nextNote.every(isShortcutKey)) {
       e.preventDefault()
       this.selectNextNote()
+      this.shortcutKey.nextNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
     }
+  }
+
+  handleNoteListKeyUp (e) {
+    this.shortcutKey.keyPressed[e.key] = false
   }
 
   getNotes () {
@@ -393,6 +404,7 @@ class NoteList extends React.Component {
           ref='list'
           tabIndex='-1'
           onKeyDown={(e) => this.handleNoteListKeyDown(e)}
+          onKeyUp={(e) => this.handleNoteListKeyUp(e)}
         >
           {noteList}
         </div>

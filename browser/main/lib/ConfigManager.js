@@ -37,11 +37,12 @@ export const DEFAULT_CONFIG = {
     codeBlockTheme: 'elegant',
     lineNumber: true,
     shortcutKey: {
-      deleteNote: 'd',
-      createNote: 'a',
-      focusNote: 'e',
-      priorNote: 'ArrowDown',
-      nextNote: 'ArrowUp'
+      keyPressed: [],
+      deleteNote: ['d'],
+      createNote: ['a'],
+      focusNote: ['e'],
+      priorNote: ['ArrowUp'],
+      nextNote: ['ArrowDown']
     }
   }
 }
