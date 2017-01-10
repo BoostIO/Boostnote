@@ -16,7 +16,13 @@ export const DEFAULT_CONFIG = {
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
+    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E',
+    keyPressed: [],
+    createNote: ['a'],
+    deleteNote: ['d'],
+    focusNote: ['e'],
+    priorNote: ['ArrowUp'],
+    nextNote: ['ArrowDown']
   },
   ui: {
     theme: 'default',
@@ -35,15 +41,7 @@ export const DEFAULT_CONFIG = {
     fontSize: '14',
     fontFamily: 'Lato',
     codeBlockTheme: 'elegant',
-    lineNumber: true,
-    shortcutKey: {
-      keyPressed: [],
-      deleteNote: ['d'],
-      createNote: ['a'],
-      focusNote: ['e'],
-      priorNote: ['ArrowUp'],
-      nextNote: ['ArrowDown']
-    }
+    lineNumber: true
   }
 }
 

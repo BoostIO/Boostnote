@@ -39,10 +39,10 @@ class NoteList extends React.Component {
       this.refs.list.focus()
     }
 
+    this.hotkey = props.config.hotkey
+
     this.state = {
     }
-
-    this.shortcutKey = props.config.preview.shortcutKey
   }
 
   componentDidMount () {
@@ -161,43 +161,43 @@ class NoteList extends React.Component {
   }
 
   handleNoteListKeyDown (e) {
-    this.shortcutKey.keyPressed[e.key] = true
-    let isShortcutKey = (e) => { return this.shortcutKey.keyPressed[e] }
+    this.hotkey.keyPressed[e.key] = true
+    let isShortcutKey = (e) => { return this.hotkey.keyPressed[e] }
     if (e.metaKey || e.ctrlKey) return true
 
-    if (this.shortcutKey.createNote.every(isShortcutKey)) {
+    if (this.hotkey.createNote.every(isShortcutKey)) {
       e.preventDefault()
       ee.emit('top:new-note')
-      this.shortcutKey.createNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
+      this.hotkey.createNote.forEach((el) => {this.hotkey.keyPressed[el] = false})
     }
 
-    if (this.shortcutKey.deleteNote.every(isShortcutKey)) {
+    if (this.hotkey.deleteNote.every(isShortcutKey)) {
       e.preventDefault()
       ee.emit('detail:delete')
-      this.shortcutKey.deleteNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
+      this.hotkey.deleteNote.forEach((el) => {this.hotkey.keyPressed[el] = false})
     }
 
-    if (this.shortcutKey.focusNote.every(isShortcutKey)) {
+    if (this.hotkey.focusNote.every(isShortcutKey)) {
       e.preventDefault()
       ee.emit('detail:focus')
-      this.shortcutKey.focusNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
+      this.hotkey.focusNote.forEach((el) => {this.hotkey.keyPressed[el] = false})
     }
 
-    if (this.shortcutKey.priorNote.every(isShortcutKey)) {
+    if (this.hotkey.priorNote.every(isShortcutKey)) {
       e.preventDefault()
       this.selectPriorNote()
-      this.shortcutKey.priorNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
+      this.hotkey.priorNote.forEach((el) => {this.hotkey.keyPressed[el] = false})
     }
 
-    if (this.shortcutKey.nextNote.every(isShortcutKey)) {
+    if (this.hotkey.nextNote.every(isShortcutKey)) {
       e.preventDefault()
       this.selectNextNote()
-      this.shortcutKey.nextNote.forEach((el) => {this.shortcutKey.keyPressed[el] = false})
+      this.hotkey.nextNote.forEach((el) => {this.hotkey.keyPressed[el] = false})
     }
   }
 
   handleNoteListKeyUp (e) {
-    this.shortcutKey.keyPressed[e.key] = false
+    this.hotkey.keyPressed[e.key] = false
   }
 
   getNotes () {
