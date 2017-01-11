@@ -17,12 +17,14 @@ export const DEFAULT_CONFIG = {
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E',
-    keyPressed: [],
-    createNote: ['a'],
-    deleteNote: ['d'],
-    focusNote: ['e'],
-    priorNote: ['ArrowUp'],
-    nextNote: ['ArrowDown']
+    noteHandlerKey: {
+      keyPressed: [],
+      createNote: ['a'],
+      deleteNote: ['d'],
+      focusNote: ['e'],
+      priorNote: ['ArrowUp'],
+      nextNote: ['ArrowDown']
+    }
   },
   ui: {
     theme: 'default',
