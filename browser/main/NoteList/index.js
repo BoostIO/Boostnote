@@ -42,6 +42,8 @@ class NoteList extends React.Component {
       this.alertIfSnippet()
     }
 
+    this.hotkey = props.config.hotkey
+
     this.state = {
     }
   }
@@ -164,32 +166,43 @@ class NoteList extends React.Component {
   }
 
   handleNoteListKeyDown (e) {
+    this.hotkey.noteHandlerKey.keyPressed[e.key] = true
+    let isNoteHandlerKey = (el) => { return this.hotkey.noteHandlerKey.keyPressed[el] }
     if (e.metaKey || e.ctrlKey) return true
 
-    if (e.keyCode === 65 && !e.shiftKey) {
+    if (this.hotkey.noteHandlerKey.createNote.every(isNoteHandlerKey)) {
       e.preventDefault()
       ee.emit('top:new-note')
+      this.hotkey.noteHandlerKey.createNote.forEach((el) => {this.hotkey.noteHandlerKey.keyPressed[el] = false})
     }
 
-    if (e.keyCode === 68) {
+    if (this.hotkey.noteHandlerKey.deleteNote.every(isNoteHandlerKey)) {
       e.preventDefault()
       ee.emit('detail:delete')
+      this.hotkey.noteHandlerKey.deleteNote.forEach((el) => {this.hotkey.noteHandlerKey.keyPressed[el] = false})
     }
 
-    if (e.keyCode === 69) {
+    if (this.hotkey.noteHandlerKey.focusNote.every(isNoteHandlerKey)) {
       e.preventDefault()
       ee.emit('detail:focus')
+      this.hotkey.noteHandlerKey.focusNote.forEach((el) => {this.hotkey.noteHandlerKey.keyPressed[el] = false})
     }
 
-    if (e.keyCode === 38) {
+    if (this.hotkey.noteHandlerKey.priorNote.every(isNoteHandlerKey)) {
       e.preventDefault()
       this.selectPriorNote()
+      this.hotkey.noteHandlerKey.priorNote.forEach((el) => {this.hotkey.noteHandlerKey.keyPressed[el] = false})
     }
 
-    if (e.keyCode === 40) {
+    if (this.hotkey.noteHandlerKey.nextNote.every(isNoteHandlerKey)) {
       e.preventDefault()
       this.selectNextNote()
+      this.hotkey.noteHandlerKey.nextNote.forEach((el) => {this.hotkey.noteHandlerKey.keyPressed[el] = false})
     }
+  }
+
+  handleNoteListKeyUp (e) {
+    this.hotkey.noteHandlerKey.keyPressed[e.key] = false
   }
 
   getNotes () {
@@ -410,6 +423,7 @@ class NoteList extends React.Component {
           ref='list'
           tabIndex='-1'
           onKeyDown={(e) => this.handleNoteListKeyDown(e)}
+          onKeyUp={(e) => this.handleNoteListKeyUp(e)}
         >
           {noteList}
         </div>
