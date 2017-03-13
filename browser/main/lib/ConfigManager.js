@@ -75,11 +75,10 @@ function get () {
       config.preview = Object.assign({}, DEFAULT_CONFIG.preview, boostnotercConfig.preview)
     }
 
-    config = Object.assign(config, DEFAULT_CONFIG, config)
-    config.hotkey = Object.assign(config, DEFAULT_CONFIG.hotkey, config.hotkey)
-    config.ui = Object.assign(config, DEFAULT_CONFIG.ui, config.ui)
-    config.editor = Object.assign(config, DEFAULT_CONFIG.editor, config.editor)
-    config.preview = Object.assign(config, DEFAULT_CONFIG.preview, config.preview)
+    config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, config.hotkey)
+    config.ui = Object.assign({}, DEFAULT_CONFIG.ui, config.ui)
+    config.editor = Object.assign({}, DEFAULT_CONFIG.editor, config.editor)
+    config.preview = Object.assign({}, DEFAULT_CONFIG.preview, config.preview)
 
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
