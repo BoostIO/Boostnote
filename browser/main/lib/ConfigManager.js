@@ -69,6 +69,7 @@ function get () {
     config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
 
     if (boostnotercConfig !== undefined) {
+      config = Object.assign({}, DEFAULT_CONFIG, boostnotercConfig)
       config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, boostnotercConfig.hotkey)
       config.ui = Object.assign({}, DEFAULT_CONFIG.ui, boostnotercConfig.ui)
       config.editor = Object.assign({}, DEFAULT_CONFIG.editor, boostnotercConfig.editor)
