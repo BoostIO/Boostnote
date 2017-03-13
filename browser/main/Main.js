@@ -12,6 +12,10 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
 import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
+import RcParser from 'browser/main/lib/RcParser'
+import path from 'path'
+
+const BOOSTNOTERC = '.boostnoterc'
 
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
@@ -64,6 +68,10 @@ class Main extends React.Component {
       })
 
     window.addEventListener('focus', focused)
+
+    const homePath = global.process.env.HOME || global.process.env.USERPROFILE
+    const boostnotercPath = path.join(homePath, BOOSTNOTERC)
+    RcParser.exec(boostnotercPath)
   }
 
   componentWillUnmount () {

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const path = require('path')
 const sander = require('sander')
 
@@ -7,6 +9,15 @@ function parse (boostnotercPath) {
   return config
 }
 
+function exec (boostnotercPath) {
+  const config = this.parse(boostnotercPath)
+  if (config.execs === undefined) return
+  _.forEach(config.execs, (exec) => {
+    eval(exec)
+  })
+}
+
 export default {
-  parse
+  parse,
+  exec
 }
