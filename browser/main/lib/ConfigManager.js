@@ -62,9 +62,7 @@ function get () {
   let config = window.localStorage.getItem('config')
 
   try {
-    const homePath = global.process.env.HOME || global.process.env.USERPROFILE
-    const boostnotercPath = path.join(homePath, BOOSTNOTERC)
-    const boostnotercConfig = RcParser.parse(boostnotercPath)
+    const boostnotercConfig = RcParser.parse()
 
     config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
 
