@@ -1,5 +1,5 @@
-const path = require('path')
-const sander = require('sander')
+import path from 'path'
+import sander from 'sander'
 
 function parse (boostnotercPath) {
   if (!sander.existsSync(boostnotercPath)) return {}
