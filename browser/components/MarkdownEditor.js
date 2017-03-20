@@ -169,7 +169,10 @@ class MarkdownEditor extends React.Component {
     this.setState({ keyPressed })
     let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
     if (!this.state.isLocked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
-      document.activeElement.blur()
+      this.setState({status: 'PREVIEW'}, () => {
+        document.activeElement.blur()
+        eventEmitter.emit('topbar:showlockbutton')
+      })
     }
     if (this.supportMdBold.every(isNoteHandlerKey)) {
       this.addMdAndMoveCaretToCenter('****')
