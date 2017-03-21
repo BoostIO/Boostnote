@@ -550,7 +550,7 @@ class SnippetNoteDetail extends React.Component {
             <button styleName='control-trashButton'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
-              <svg height="17px" id="Capa_1" style={{"enableBackground":"new 0 0 753.23 753.23"}} width="17px" version="1.1" viewBox="0 0 753.23 753.23" x="0px" y="0px" xmlSpace="preserve">
+              <svg height="14px" id="Capa_1" style={{"enableBackground":"new 0 0 753.23 753.23"}} width="14px" version="1.1" viewBox="0 0 753.23 753.23" x="0px" y="0px" xmlSpace="preserve">
                 <g>
                   <g id="_x34__19_">
                     <g>
