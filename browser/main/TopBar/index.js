@@ -146,12 +146,6 @@ class TopBar extends React.Component {
           if (note.type === 'SNIPPET_NOTE') {
             return note.description.match(regExp)
           } else if (note.type === 'MARKDOWN_NOTE') {
-            let a
-            note.content.split('\n').forEach((el) => {
-              if (el.match(regExp) !== null) {
-                a = el.match(regExp)
-              }
-            })
             return note.content.match(regExp)
           }
           return false
