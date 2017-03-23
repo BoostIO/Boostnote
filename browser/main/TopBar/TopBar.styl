@@ -44,15 +44,15 @@ $control-height = 34px
 .control-search-optionList
   position fixed
   z-index 200
-  width 275px
-  height 175px
+  width 500px
+  height 300px
   overflow-y auto
   background-color $modal-background
   border-radius 2px
   box-shadow 2px 2px 10px gray
 
 .control-search-optionList-item
-  height 50px
+  height 70px
   border-bottom $ui-border
   transition background-color 0.15s
   padding 5px
@@ -85,6 +85,15 @@ $control-height = 34px
   color $ui-inactive-text-color
   line-height 150px
   text-align center
+
+.control-search-optionList-item-matchedContent
+  color #939395
+  font-size 15px
+  margin-left 16px
+  margin-top 5px
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
 
 .control-newPostButton
   display block
