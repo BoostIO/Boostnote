@@ -265,10 +265,10 @@ class TopBar extends React.Component {
       .map((note) => {
         // detect a matched line
         let matchedLine
-        if (note.type === 'MARKDOWN_NOTE'){
+        if (note.type === 'MARKDOWN_NOTE') {
           const regExp = new RegExp(_.escapeRegExp(search), 'i')
           note.content.split('\n').forEach((el) => {
-            if (el.match(regExp) !== null){
+            if (el.match(regExp) !== null) {
               matchedLine = el
             }
           })
