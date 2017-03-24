@@ -15,7 +15,7 @@
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
 
-[日本語](./readme-ja.md) - [한국어](./readme-ko.md)
+[日本語](./readme-ja.md) - [한국어](./readme-ko.md) - [简体中文](./readme-zh-cn.md)
 
 ## Goals
 * We want our users to enjoying writing _anything_. :grinning:
