@@ -28,7 +28,7 @@
 https://boostnote-group.slack.com/shared_invite/MTU3ODcwNzY1ODk0LTE0OTAwNjQ0NTYtMjY4NTYwOTdmYQ
 
 ## 更多信息
-* 官网: http://boostnote.io/
+* 网站: http://boostnote.io/
 * 路线图（即将到来的功能和 BUG 修复）: https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features
 * Boostnote 商店（商品运往世界各地 :+1:）: https://boostnote.paintory.com/
 * 捐款: [Patreon](https://www.patreon.com/boostnote)
