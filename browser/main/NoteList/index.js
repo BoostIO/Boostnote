@@ -404,14 +404,14 @@ class NoteList extends React.Component {
       >
         <div styleName='control'>
           <div styleName='control-sortBy'>
-            Sort by
+            排序
             <select styleName='control-sortBy-select'
               value={config.sortBy}
               onChange={(e) => this.handleSortByChange(e)}
             >
-              <option value='UPDATED_AT'>Updated Time</option>
-              <option value='CREATED_AT'>Created Time</option>
-              <option value='ALPHABETICAL'>Alphabetical</option>
+              <option value='UPDATED_AT'>更新时间</option>
+              <option value='CREATED_AT'>创建时间</option>
+              <option value='ALPHABETICAL'>字母顺序</option>
             </select>
           </div>
           <button styleName={config.listStyle === 'DEFAULT'
