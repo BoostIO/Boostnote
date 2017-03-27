@@ -41,6 +41,7 @@ class NoteList extends React.Component {
     this.alertIfSnippetHandler = () => {
       this.alertIfSnippet()
     }
+    this.jumpNoteByHash = this.jumpNoteByHashHandler.bind(this)
 
     this.jumpToTopHandler = () => {
       this.jumpToTop()
@@ -58,6 +59,7 @@ class NoteList extends React.Component {
     ee.on('list:isMarkdownNote', this.alertIfSnippetHandler)
     ee.on('list:top', this.jumpToTopHandler)
     ee.on('list:jumpToTop', this.jumpToTopHandler)
+    ee.on('list:jump', this.jumpNoteByHash)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -79,6 +81,7 @@ class NoteList extends React.Component {
     ee.off('list:isMarkdownNote', this.alertIfSnippetHandler)
     ee.off('list:top', this.jumpToTopHandler)
     ee.off('list:jumpToTop', this.jumpToTopHandler)
+    ee.off('list:jump', this.jumpNoteByHash)
   }
 
   componentDidUpdate (prevProps) {
@@ -168,6 +171,32 @@ class NoteList extends React.Component {
         key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
       }
     })
+    ee.emit('list:moved')
+  }
+
+  jumpNoteByHashHandler (event, noteHash) {
+    // first argument event isn't used.
+    if (this.notes == null || this.notes.length === 0) {
+      return
+    }
+
+    const { router } = this.context
+    const { location } = this.props
+
+    let targetIndex = _.findIndex(this.notes, (note) => {
+      console.log(note.storage+'-'+note.key)
+      return note.storage + '-' + note.key === noteHash
+    })
+
+    if (targetIndex < 0) targetIndex = 0
+
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
+      }
+    })
+
     ee.emit('list:moved')
   }
 
