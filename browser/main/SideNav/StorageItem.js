@@ -23,7 +23,7 @@ class StorageItem extends React.Component {
   handleHeaderContextMenu (e) {
     let menu = new Menu()
     menu.append(new MenuItem({
-      label: 'Add Folder',
+      label: '添加文件夹',
       click: (e) => this.handleAddFolderButtonClick(e)
     }))
     menu.append(new MenuItem({
@@ -88,14 +88,14 @@ class StorageItem extends React.Component {
   handleFolderButtonContextMenu (e, folder) {
     let menu = new Menu()
     menu.append(new MenuItem({
-      label: 'Rename Folder',
+      label: '重命名文件夹',
       click: (e) => this.handleRenameFolderClick(e, folder)
     }))
     menu.append(new MenuItem({
       type: 'separator'
     }))
     menu.append(new MenuItem({
-      label: 'Delete Folder',
+      label: '删除文件夹',
       click: (e) => this.handleFolderDeleteClick(e, folder)
     }))
     menu.popup()
@@ -112,9 +112,9 @@ class StorageItem extends React.Component {
   handleFolderDeleteClick (e, folder) {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
-      message: 'Delete Folder',
-      detail: 'This work will deletes all notes in the folder and can not be undone.',
-      buttons: ['Confirm', 'Cancel']
+      message: '删除文件夹',
+      detail: '该操作将删除文件夹以及包含的所有笔记并且无法撤销',
+      buttons: ['确定', '取消']
     })
 
     if (index === 0) {

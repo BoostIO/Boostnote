@@ -22,13 +22,13 @@ const SideNavFilter = ({
       onClick={handleAllNotesButtonClick}
     >
       <i className='fa fa-book fa-fw' />
-      <span styleName='menu-button-label'>All Notes</span>
+      <span styleName='menu-button-label'>所有笔记</span>
     </button>
     <button styleName={isStarredActive ? 'menu-button--active' : 'menu-button'}
       onClick={handleStarredButtonClick}
     >
       <i className='fa fa-star fa-fw' />
-      <span styleName='menu-button-label'>Starred</span>
+      <span styleName='menu-button-label'>加星</span>
     </button>
   </div>
 )

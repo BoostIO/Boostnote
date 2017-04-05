@@ -14,9 +14,9 @@ class StatusBar extends React.Component {
   updateApp () {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
-      message: 'Update Boostnote',
-      detail: 'New Boostnote is ready to be installed.',
-      buttons: ['Restart & Install', 'Not Now']
+      message: '更新 Boostnote',
+      detail: '新的 Boostnote 准备安装。',
+      buttons: ['重启 & 安装', '稍后']
     })
 
     if (index === 0) {

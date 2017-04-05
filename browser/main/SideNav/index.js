@@ -63,7 +63,7 @@ class SideNav extends React.Component {
             onClick={(e) => this.handleMenuButtonClick(e)}
           >
             <i className='fa fa-navicon fa-fw' />
-            <span styleName='top-menu-label'>Menu</span>
+            <span styleName='top-menu-label'>菜单</span>
           </button>
         </div>
 
@@ -77,7 +77,7 @@ class SideNav extends React.Component {
 
         <div styleName='storageList'>
           {storageList.length > 0 ? storageList : (
-            <div styleName='storageList-empty'>No storage mount.</div>
+            <div styleName='storageList-empty'>文件夹为空</div>
           )}
         </div>
         <button styleName='navToggle'
