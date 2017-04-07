@@ -244,7 +244,6 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', this.linkClickHandler)
     })
 
-
     let { value, theme, indentSize, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
