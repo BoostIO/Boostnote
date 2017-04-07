@@ -184,7 +184,6 @@ class NoteList extends React.Component {
     const { location } = this.props
 
     let targetIndex = _.findIndex(this.notes, (note) => {
-      console.log(note.storage+'-'+note.key)
       return note.storage + '-' + note.key === noteHash
     })
 
