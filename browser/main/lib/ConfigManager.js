@@ -67,15 +67,7 @@ function get () {
     config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
 
     config = Object.assign({}, DEFAULT_CONFIG, boostnotercConfig)
-    config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, boostnotercConfig.hotkey)
-    config.ui = Object.assign({}, DEFAULT_CONFIG.ui, boostnotercConfig.ui)
-    config.editor = Object.assign({}, DEFAULT_CONFIG.editor, boostnotercConfig.editor)
-    config.preview = Object.assign({}, DEFAULT_CONFIG.preview, boostnotercConfig.preview)
-
-    config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, config.hotkey)
-    config.ui = Object.assign({}, DEFAULT_CONFIG.ui, config.ui)
-    config.editor = Object.assign({}, DEFAULT_CONFIG.editor, config.editor)
-    config.preview = Object.assign({}, DEFAULT_CONFIG.preview, config.preview)
+    config = assignConfigValues(config, boostnotercConfig, config)
 
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
@@ -136,6 +128,14 @@ function set (updates) {
   ipcRenderer.send('config-renew', {
     config: get()
   })
+}
+
+function assignConfigValues (config, rcConfig, originalConfig) {
+  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, rcConfig, originalConfig.hotkey)
+  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, rcConfig, originalConfig.ui)
+  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, rcConfig, originalConfig.editor)
+  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, rcConfig, originalConfig.preview)
+  return config
 }
 
 export default {
