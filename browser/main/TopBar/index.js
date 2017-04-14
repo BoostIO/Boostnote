@@ -260,8 +260,19 @@ class TopBar extends React.Component {
 
   render () {
     let { config, style, data } = this.props
+    const { search } = this.state
     let searchOptionList = this.getOptions()
       .map((note) => {
+        // detect a matched line
+        let matchedLine
+        if (note.type === 'MARKDOWN_NOTE') {
+          const regExp = new RegExp(_.escapeRegExp(search), 'i')
+          note.content.split('\n').forEach((el) => {
+            if (el.match(regExp) !== null) {
+              matchedLine = el
+            }
+          })
+        }
         let storage = data.storageMap.get(note.storage)
         let folder = _.find(storage.folders, {key: note.folder})
         return <div styleName='control-search-optionList-item'
@@ -278,6 +289,7 @@ class TopBar extends React.Component {
             : <i styleName='control-search-optionList-item-type' className='fa fa-file-text-o' />
           }&nbsp;
           {note.title}
+          <div styleName='control-search-optionList-item-matchedContent'>{matchedLine}</div>
         </div>
       })
 
