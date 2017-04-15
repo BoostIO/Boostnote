@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import store from '../store'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -26,7 +25,6 @@ export default class DeleteArticleModal extends React.Component {
   }
 
   handleYesButtonClick (e) {
-    // store.dispatch(destroyArticle(this.props.articleKey))
     this.props.close()
   }
 

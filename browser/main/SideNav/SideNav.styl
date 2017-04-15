@@ -12,9 +12,14 @@
   navButtonColor()
   height $topBar-height
   padding 0 15px
-  font-size 14px
+  font-size 12px
   width 100%
   text-align left
+  &:hover
+    color $ui-text-color
+  &:active, &:active:hover
+    color $ui-text-color
+    background-color alpha($ui-button--active-backgroundColor, 20%)
 
 .top-menu-label
   margin-left 5px
@@ -110,10 +115,10 @@ body[data-theme="dark"]
 
   .top-menu
     navDarkButtonColor()
+    &:active
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
 
   .storageList-empty
     color $ui-dark-inactive-text-color
-
-  .navToggle
-    navDarkButtonColor()
-

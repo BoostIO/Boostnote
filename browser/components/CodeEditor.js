@@ -58,17 +58,61 @@ export default class CodeEditor extends React.Component {
       dragDrop: false,
       extraKeys: {
         Tab: function (cm) {
+          const cursor = cm.getCursor()
+          const line = cm.getLine(cursor.line)
           if (cm.somethingSelected()) cm.indentSelection('add')
           else {
-            if (cm.getOption('indentWithTabs')) {
-              cm.execCommand('insertTab')
+            const tabs = cm.getOption('indentWithTabs')
+            if (line.trimLeft() === '- ' || line.trimLeft() === '* ' || line.trimLeft() === '+ ') {
+              cm.execCommand('goLineStart')
+              if (tabs) {
+                cm.execCommand('insertTab')
+              } else {
+                cm.execCommand('insertSoftTab')
+              }
+              cm.execCommand('goLineEnd')
             } else {
-              cm.execCommand('insertSoftTab')
+              if (tabs) {
+                cm.execCommand('insertTab')
+              } else {
+                cm.execCommand('insertSoftTab')
+              }
             }
           }
         },
         'Cmd-T': function (cm) {
           // Do nothing
+        },
+        Enter: (cm) => {
+          const cursor = cm.getCursor()
+          const line = cm.getLine(cursor.line)
+          let bulletType
+          if (line.trim().startsWith('- ')) {
+            bulletType = 1 // dash
+          } else if (line.trim().startsWith('* ')) {
+            bulletType = 2 // star
+          } else if (line.trim().startsWith('+ ')) {
+            bulletType = 3 // plus
+          } else {
+            bulletType = 0 // not a bullet
+          }
+          const numberedListRegex = /^(\d+)\. .+/
+          const match = line.trim().match(numberedListRegex)
+          if (bulletType !== 0 || match) {
+            cm.execCommand('newlineAndIndent')
+            const range = {line: cursor.line + 1, ch: cm.getLine(cursor.line + 1).length}
+            if (match) {
+              cm.replaceRange((parseInt(match[1]) + 1) + '. ', range)
+            } else if (bulletType === 1) {
+              cm.replaceRange('- ', range)
+            } else if (bulletType === 2) {
+              cm.replaceRange('* ', range)
+            } else if (bulletType === 3) {
+              cm.replaceRange('+ ', range)
+            }
+          } else {
+            cm.execCommand('newlineAndIndent')
+          }
         }
       }
     })
@@ -157,6 +201,7 @@ export default class CodeEditor extends React.Component {
     this.editor.setValue(this.props.value)
     this.editor.clearHistory()
     this.editor.on('change', this.changeHandler)
+    this.editor.refresh()
   }
 
   setValue (value) {

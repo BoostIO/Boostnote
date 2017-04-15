@@ -16,7 +16,7 @@
   padding-left 10px
   vertical-align middle
   height 20px
-  background-color $ui-tag-backgroundColor
+  background-color alpha($ui-tag-backgroundColor, 10%)
   border-radius 20px
   overflow hidden
   clearfix()
@@ -39,9 +39,9 @@
   padding-right 4px
 
 .tag-label
-  font-size 12px
-  font-weight bold
-  color: #FFFFFF
+  font-size 11px
+  font-weight 600
+  color: alpha($ui-text-color, 80%)
   float left
   height 20px
   line-height 20px
@@ -83,7 +83,7 @@ body[data-theme="dark"]
     color $ui-dark-button-color
 
   .tag
-    background-color $ui-dark-tag-backgroundColor
+    background-color alpha($ui-dark-tag-backgroundColor, 60%)
 
   .tag-removeButton
     border-color $ui-button--focus-borderColor

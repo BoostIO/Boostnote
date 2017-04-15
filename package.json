@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Boostnote",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -11,7 +11,8 @@
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava",
     "fix": "npm run lint --fix",
-    "lint": "eslint ./**/*.js"
+    "lint": "eslint .",
+    "dev-start": "concurrently --kill-others \"npm run webpack\" \"npm run hot\""
   },
   "config": {
     "electron-version": "1.2.8"
@@ -55,13 +56,12 @@
     "font-awesome": "^4.3.0",
     "immutable": "^3.8.1",
     "js-sequence-diagrams": "^1000000.0.6",
-    "katex": "^0.6.0",
+    "katex": "^0.7.1",
     "lodash": "^4.11.1",
     "markdown-it": "^6.0.1",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^3.0.0",
-    "markdown-it-toc-and-anchor": "^4.1.1",
     "md5": "^2.0.0",
     "mixpanel": "^0.4.1",
     "moment": "^2.10.3",
@@ -85,6 +85,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.0.1",
     "babel-register": "^6.11.6",
+    "concurrently": "^3.4.0",
     "css-loader": "^0.19.0",
     "devtron": "^1.1.0",
     "dom-storage": "^2.0.2",
@@ -100,10 +101,8 @@
     "jsdom": "^9.4.2",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
-    "react": "^15.3.0",
     "react-color": "^2.2.2",
     "react-css-modules": "^3.7.6",
-    "react-dom": "^15.3.0",
     "react-input-autosize": "^1.1.0",
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",

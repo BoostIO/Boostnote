@@ -4,11 +4,9 @@
   padding 15px
   white-space pre
   line-height 1.4
-  color $ui-text-color
+  color alpha($ui-text-color, 90%)
   width 100%
-
-.clear
-  clear both
+  font-size 14px
 
 .top
   text-align left
@@ -34,26 +32,16 @@
 .description
   font-size 14px
 
-.madeBy
-  font-size 14px
-  $ui-inactive-text-color
-
-.copyright
-  font-size 14px
-  $ui-inactive-text-color
-
 .list
   list-style square
   padding-left 2em
   li
     white-space normal
-
+    padding-bottom 10px
+  a
+    color #4E8EC6
+    text-decoration none
+  
 body[data-theme="dark"]
   .root
-    color $tab--dark-text-color
-
-  .madeBy
-    color $ui-dark-inactive-text-color
-
-  .copyright
-    color $ui-dark-inactive-text-color
+    color alpha($tab--dark-text-color, 80%)

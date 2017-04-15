@@ -118,7 +118,7 @@ class Preferences extends React.Component {
           <p>Your menu for Boostnote</p>
         </div>
         <button styleName='top-bar-close' onClick={(e) => this.handleEscButtonClick(e)}>
-          <div styleName='top-bar-close-mark'>X</div>
+          <div styleName='top-bar-close-mark'>×</div>
           <div styleName='top-bar-close-text'>esc</div>
         </button>
         <div styleName='nav'>

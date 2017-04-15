@@ -1,7 +1,6 @@
 import markdownit from 'markdown-it'
 import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
-import tocAndAnchor from "markdown-it-toc-and-anchor"
 import _ from 'lodash'
 
 const katex = window.katex
@@ -36,9 +35,6 @@ var md = markdownit({
 })
 md.use(emoji, {
   shortcuts: {}
-})
-md.use(tocAndAnchor, {
-  anchorLink: false
 })
 md.use(math, {
   inlineRenderer: function (str) {

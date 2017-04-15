@@ -152,7 +152,7 @@ export default class MarkdownPreview extends React.Component {
   exportAsDocument (fileType) {
     const options = {
       filters: [
-        { name: 'Documents', extensions: [fileType]}
+        { name: 'Documents', extensions: [fileType] }
       ],
       properties: ['openFile', 'createDirectory']
     }
@@ -333,7 +333,7 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
-  preventImageDroppedHandler(e) {
+  preventImageDroppedHandler (e) {
     e.preventDefault()
     e.stopPropagation()
   }

@@ -8,28 +8,22 @@ You can use following commands to use default configuration at the top of projec
 Install requirement packages.
 
 ```
-$ npm install
+$ yarn
 ```
 
-Build codes.
+Build codes and run.
 
 ```
-$ npm run webpack
+$ yarn run dev-start
 ```
 
-After a few seconds, you will see this message.
+This command runs `yarn run webpack` and `yarn run hot` in parallel. It means it is the same thing to run those commands in 2 terminals.
 
-```
-webpack: bundle is now VALID.
-```
+And webpack will watch the code changes and apply it automatically.
 
-Then, we have to run the app.
-```
-$ npm run hot
-```
-> Actually the app can be start with `npm start`. However, the app will use the compiled script.
+If this error: `Failed to load resource: net::ERR_CONNECTION_REFUSED` happens, please reload Boostnote.
 
-By this, webpack will watch the code changes and apply it automatically.
+![net::ERR_CONNECTION_REFUSED](https://cloud.githubusercontent.com/assets/11307908/24343004/081e66ae-1279-11e7-8d9e-7f478043d835.png)
 
 > ### Notice
 > There are some cases you have to refresh app yourself.

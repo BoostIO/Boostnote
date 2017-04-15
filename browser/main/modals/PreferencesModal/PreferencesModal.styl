@@ -45,22 +45,20 @@ top-bar--height = 50px
   text-align left
   width 100px
   margin 4px 0
-  padding 7px 0
-  padding-left 7px
+  padding 5px 0
+  padding-left 10px
   border none
-  border-radius 3px
+  border-radius 2px
   background-color transparent
   color $ui-text-color
   font-size 14px
-  &:hover
-    color $ui-active-color
 
 .nav-button--active
   @extend .nav-button
-  color white
-  background-color $ui-active-color
+  color $ui-text-color
+  background-color $ui-button--active-backgroundColor
   &:hover
-    color white
+    color $ui-text-color
 
 .nav-button-icon
   display block
@@ -91,3 +89,10 @@ body[data-theme="dark"]
     color $tab--dark-text-color
     &:hover
       color $ui-dark-text-color
+
+  .nav-button--active
+    @extend .nav-button
+    color white
+    background-color $dark-primary-button-background--active
+    &:hover
+      color white

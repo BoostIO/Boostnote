@@ -13,7 +13,7 @@ import styles from './NoteItem.styl'
  */
 const TagElement = ({ tagName }) => (
   <span styleName='item-bottom-tagList-item' key={tagName}>
-    {tagName}
+    #{tagName}
   </span>
 )
 
@@ -52,8 +52,10 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
   >
     <div styleName='item-wrapper'>
-      <div styleName='item-bottom-time'>{dateDisplay}</div>
-
+      {note.type === 'SNIPPET_NOTE'
+        ? <i styleName='item-title-icon' className='fa fa-fw fa-code' />
+        : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />
+      }
       <div styleName='item-title'>
         {note.title.trim().length > 0
           ? note.title
@@ -61,23 +63,18 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
         }
       </div>
 
+      <div styleName='item-bottom-time'>{dateDisplay}</div>
+      {note.isStarred
+        ? <i styleName='item-star' className='fa fa-star' /> : ''
+      }
       <div styleName='item-bottom'>
         <div styleName='item-bottom-tagList'>
           {note.tags.length > 0
             ? TagElementList(note.tags)
-            : ''
+            : <span styleName='item-bottom-tagList-empty' />
           }
         </div>
       </div>
-
-      {note.type === 'SNIPPET_NOTE'
-        ? <i styleName='item-title-icon' className='fa fa-fw fa-code' />
-        : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />
-      }
-
-      {note.isStarred
-        ? <i styleName='item-star' className='fa fa-star' /> : ''
-      }
     </div>
   </div>
 )

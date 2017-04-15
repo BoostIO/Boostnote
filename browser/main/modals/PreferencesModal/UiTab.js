@@ -253,7 +253,7 @@ class UiTab extends React.Component {
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveUIClick(e)}
             >
-              Save UI Config
+              Save
             </button>
           </div>
         </div>

@@ -21,7 +21,7 @@ const SideNavFilter = ({
     <button styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
       onClick={handleAllNotesButtonClick}
     >
-      <i className='fa fa-book fa-fw' />
+      <i className='fa fa-archive fa-fw' />
       <span styleName='menu-button-label'>All Notes</span>
     </button>
     <button styleName={isStarredActive ? 'menu-button--active' : 'menu-button'}

@@ -32,14 +32,20 @@
 .group-section-control
   flex 1
 
+.group-section-control select
+  outline none
+  border 1px solid $ui-borderColor
+  background-color transparent
+
 .group-section-control-input
   height 30px
   vertical-align middle
   width 400px
   font-size $tab--button-font-size
   border solid 1px $border-color
-  border-radius $tab--input-border-radius
+  border-radius 2px
   padding 0 5px
+  outline none
   &:disabled
     background-color $ui-input--disabled-backgroundColor
 
@@ -64,7 +70,7 @@
 .group-control-leftButton
   colorDefaultButton()
   border none
-  border-radius 5px
+  border-radius 2px
   font-size $tab--button-font-size
   height $tab--button-height
   padding 0 15px
@@ -74,17 +80,17 @@
   float right
   colorPrimaryButton()
   border none
-  border-radius $tab--button-border-radius
+  border-radius 2px
   font-size $tab--button-font-size
-  height $tab--button-height
-  padding 0 15px
+  height 35px
+  width 100px
   margin-right 10px
 
 .group-hint
   border $ui-border
   padding 10px 15px
   margin 15px 0
-  border-radius 5px
+  border-radius 2px
   background-color $ui-backgroundColor
   color $ui-inactive-text-color
   ul

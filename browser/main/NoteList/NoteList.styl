@@ -26,6 +26,8 @@ $control-height = 30px
   padding 0
   border none
   background-color transparent
+  outline none
+  cursor pointer
   font-size 10px
 
 .control-button
@@ -33,18 +35,18 @@ $control-height = 30px
   padding 0
   background-color transparent
   border none
-  color $ui-inactive-text-color
+  color alpha($ui-inactive-text-color, 60%)
   transition 0.15s
   &:active, &:active:hover
-    color $ui-active-color
+    color $ui-inactive-text-color
   &:hover
-    color $ui-text-color
+    color $ui-inactive-text-color
 
 .control-button--active
   @extend .control-button
-  color $ui-active-color
+  color $ui-inactive-text-color
   &:hover
-    color $ui-active-color
+    color $ui-inactive-text-color
 
 .list
   absolute left right bottom
@@ -67,4 +69,8 @@ body[data-theme="dark"]
     color $ui-dark-inactive-text-color
     &:hover
       color $ui-dark-text-color
-
+  
+  .control-button--active
+    color $ui-dark-text-color
+    &:active
+      color $ui-dark-text-color

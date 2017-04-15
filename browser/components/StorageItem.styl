@@ -13,30 +13,32 @@
   text-align left
   border none
   overflow ellipsis
-  font-size 14px
+  font-size 12px
   &:first-child
     margin-top 0
   &:hover
-    background-color $ui-button--hover-backgroundColor
+    color $ui-text-color
+    background-color alpha($ui-button--active-backgroundColor, 20%)
+    transition background-color 0.15s
   &:active
-    color $ui-button--active-color
+    color $ui-text-color
     background-color $ui-button--active-backgroundColor
 
 .folderList-item--active
   @extend .folderList-item
-  color $ui-button--active-color
+  color $ui-text-color
   background-color $ui-button--active-backgroundColor
   &:hover
-    color $ui-button--active-color
+    color $ui-text-color
     background-color $ui-button--active-backgroundColor
 
 .folderList-item-name
   display block
   flex 1
-  padding 0 30px
+  padding 0 15px
   height 26px
   line-height 26px
-  border-width 0 0 0 3px
+  border-width 0 0 0 1px
   border-style solid
   border-color transparent
   overflow hidden
@@ -67,4 +69,24 @@
 
 .folderList-item-name--folded
   @extend .folderList-item-name
-  padding-left 14px
+  padding-left 12px
+
+
+body[data-theme="dark"]
+  .folderList-item
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-dark-text-color
+    &:active
+      color $ui-dark-text-color
+      background-color $ui-dark-button--active-backgroundColor
+
+  .folderList-item--active
+    @extend .folderList-item
+    color $ui-dark-text-color
+    background-color $ui-dark-button--active-backgroundColor
+    &:active
+      background-color $ui-dark-button--active-backgroundColor
+    &:hover
+      color $ui-dark-text-color
+      background-color $ui-dark-button--active-backgroundColor

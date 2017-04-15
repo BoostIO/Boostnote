@@ -13,36 +13,40 @@ $control-height = 30px
   background-color $ui-noteList-backgroundColor
   transition background-color 0.15s
   &:hover
-    background-color alpha($ui-active-color, 20%)
-  &:active
-    background-color $ui-active-color
-    color white
+    background-color alpha($ui-button--active-backgroundColor, 40%)
     .item-simple-title
     .item-simple-title-empty
     .item-simple-title-icon
-      color white
+      color $ui-text-color
+  &:active
+    background-color $ui-button--active-backgroundColor
+    color $ui-text-color
+    .item-simple-title
+    .item-simple-title-empty
+    .item-simple-title-icon
+      color $ui-text-color
 
 .item-simple--active
   @extend .item-simple
-  background-color $ui-active-color
-  color white
+  background-color $ui-button--active-backgroundColor
+  color $ui-text-color
   .item-simple-title
   .item-simple-title-empty
     border-color transparent
-    color white
+    color $ui-text-color
   .item-simple-title-icon
-    color white
+    color $ui-text-color
   &:hover
-    background-color $ui-active-color
+    background-color $ui-button--active-backgroundColor
 
 .item-simple-title
-  font-size 14px
+  font-size 12px
   height 40px
   box-sizing border-box
   line-height 24px
   padding-top 8px
   overflow ellipsis
-  color $ui-text-color
+  color $ui-inactive-text-color
   border-bottom $ui-border
 
 .item-simple-title-icon
@@ -63,23 +67,35 @@ body[data-theme="dark"]
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
     &:active
-      background-color $ui-active-color
+      background-color $ui-dark-button--active-backgroundColor
+      .item-simple-title
+      .item-simple-title-icon
+      .item-simple-bottom-time
+      .item-simple-bottom-tagList-item
+        transition 0.15s
+        color $ui-dark-text-color
     &:hover
-      background-color alpha($ui-active-color, 20%)
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      .item-simple-title
+      .item-simple-title-icon
+      .item-simple-bottom-time
+      .item-simple-bottom-tagList-item
+        transition 0.15s
+        color $ui-dark-text-color
 
   .item-simple--active
-    @extend .item-simple
     border-color $ui-dark-borderColor
-    background-color $ui-active-color
+    background-color $ui-dark-button--active-backgroundColor
     .item-simple-title
-    .item-simple-title-empty
-      color white
-      border-color transparent
-    &:hover
-      background-color $ui-active-color
+    .item-simple-title-icon
+    .item-simple-bottom-time
+      color $ui-dark-text-color
+    .item-simple-bottom-tagList-item
+      background-color transparent
+      color $ui-dark-text-color
 
   .item-simple-title
-    color $ui-dark-text-color
+    color $ui-inactive-text-color
     border-color $ui-dark-borderColor
 
   .item-simple-title-icon

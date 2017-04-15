@@ -44,12 +44,13 @@ $control-height = 34px
 .control-search-optionList
   position fixed
   z-index 200
-  width 275px
-  height 175px
+  width 500px
+  height 250px
   overflow-y auto
   background-color $modal-background
   border-radius 2px
-  box-shadow 2px 2px 10px gray
+  border-none
+  box-shadow 0 0 1px rgba(76,86,103,.25), 0 2px 18px rgba(31,37,50,.32)
 
 .control-search-optionList-item
   height 50px
@@ -59,10 +60,10 @@ $control-height = 34px
   cursor pointer
   overflow ellipsis
   &:hover
-    background-color alpha($ui-active-color, 10%)
+    background-color alpha(#D4D4D4, 30%)
 
 .control-search-optionList-item-folder
-  border-left 4px solid transparent
+  border-left 2px solid transparent
   padding 2px 5px
   color $ui-text-color
   overflow ellipsis

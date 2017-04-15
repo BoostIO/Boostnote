@@ -23,6 +23,9 @@
 ## Contributors
 [Great contributors](https://github.com/BoostIO/Boostnote/graphs/contributors) :tada:
 
+## slack group
+私たちにはslack groupもあります！世界中のプログラマー達と、Boostnoteについてディスカッションをしましょう！ <br>
+[こちらから](https://boostnote-group.slack.com/shared_invite/MTY3MzY5Mjc4ODk3LTE0OTE5Njg0NjEtNzg2MzUwOTY3NQ)
 
 ## More Information
 * Website: http://boostnote.io/

@@ -5,17 +5,18 @@
   navButtonColor()
   height 32px
   padding 0 15px
-  font-size 14px
+  font-size 12px
   width 100%
   text-align left
   overflow ellipsis
 
 .menu-button--active
   @extend .menu-button
+  color $ui-text-color
   background-color $ui-button--active-backgroundColor
-  color $ui-button--active-color
   &:hover
     background-color $ui-button--active-backgroundColor
+    color $ui-text-color
 
 .menu-button-label
   margin-left 5px
@@ -48,11 +49,15 @@
 
 body[data-theme="dark"]
   .menu-button
-    navDarkButtonColor()
-
-  .menu-button--active
-    @extend .menu-button
-    background-color $ui-dark-button--active-backgroundColor
-    color $ui-dark-button--active-color
-    &:hover
+    &:active
       background-color $ui-dark-button--active-backgroundColor
+      color $ui-dark-text-color
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-dark-text-color
+  .menu-button--active
+    color $ui-dark-text-color
+    background-color $ui-dark-button--active-backgroundColor
+    &:active
+      background-color $ui-dark-button--active-backgroundColor
+      color $ui-dark-text-color

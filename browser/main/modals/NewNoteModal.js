@@ -103,7 +103,7 @@ class NewNoteModal extends React.Component {
           <div styleName='title'>Make a Note</div>
         </div>
         <button styleName='closeButton' onClick={(e) => this.handleCloseButtonClick(e)}>
-          <div styleName='close-mark'>X</div>
+          <div styleName='close-mark'>×</div>
           <div styleName='close-text'>esc</div>
         </button>
 

@@ -3,6 +3,7 @@
   top 0
   padding 0
   &:hover
+    background-color #DCDCDC
     .icon
       transform rotate(-72deg)
     .tooltip
@@ -18,3 +19,8 @@
 
 .icon
   transition transform 0.15s
+
+body[data-theme="dark"]
+  .root
+    &:hover
+      background-color #272B32

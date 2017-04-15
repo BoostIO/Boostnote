@@ -38,7 +38,7 @@ $info-margin-under-border = 27px
   margin 13px 2px
   padding 0
   border-radius 17px
-  &:hover .info-right-button-tooltip
+  &:hover .info-left-button-tooltip
     opacity 1
   &:focus
     border-color $ui-favorite-star-button-color
@@ -53,22 +53,6 @@ $info-margin-under-border = 27px
   background $ui-noteDetail-backgroundColor
   bottom 1px
   padding-left 30px
-
-.info-right-button
-  width 34px
-  height 34px
-  border-radius 17px
-  font-size 14px
-  margin 13px 7px
-  padding-top 7px 
-  border none
-  color $ui-button-color
-  fill $ui-button-color
-  background-color transparent
-  &:hover
-    opacity 1
-    background-color $ui-button--hover-backgroundColor
-
 
 body[data-theme="dark"]
   .info
@@ -89,11 +73,3 @@ body[data-theme="dark"]
 
   .info-right
     background-color $ui-dark-noteDetail-backgroundColor
-
-  .info-right-button
-    navDarkButtonColor()
-    border-color $ui-dark-borderColor
-    &:active
-      border-color $ui-dark-button--focus-borderColor
-    &:focus
-      border-color $ui-button--focus-borderColor
