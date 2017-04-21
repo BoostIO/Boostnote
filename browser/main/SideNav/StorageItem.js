@@ -7,7 +7,10 @@ import CreateFolderModal from 'browser/main/modals/CreateFolderModal'
 import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
 import dataApi from 'browser/main/lib/dataApi'
 import StorageItemChild from 'browser/components/StorageItem'
+import _ from 'lodash'
+import CSON from '@rokt33r/season'
 
+const path = require('path')
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
 
@@ -131,8 +134,39 @@ class StorageItem extends React.Component {
     }
   }
 
+  handleDragStart (e, folder) {
+    e.dataTransfer.setData('dragFolderKey', folder.key)
+  }
+
+  handleDrop (e, folder, storage, dispatch) {
+    const dragFolderKey = e.dataTransfer.getData('dragFolderKey')
+    this.rearrangeFolder(dragFolderKey, folder.key, storage.folders)
+    dataApi
+      .moveFolder(storage.key, storage.folders)
+    dispatch({
+      type: 'UPDATE_FOLDER',
+      storage: storage
+    })
+  }
+
+  rearrangeFolder (dragFolderKey, targetFolderKey, folders) {
+    const dragFolderIndex = this.getFolderIndex(folders, dragFolderKey)
+    const targetFolderIndex = this.getFolderIndex(folders, targetFolderKey)
+    this.moveFolderElements(folders, dragFolderIndex, targetFolderIndex)
+  }
+
+  getFolderIndex (folders, targetFolderKey) {
+    return folders.indexOf(_.find(folders, {key: targetFolderKey}))
+  }
+
+  moveFolderElements (folders, dragFolderIndex, targetFolderIndex) {
+    folders.splice(targetFolderIndex, 0, folders[dragFolderIndex])
+    const deleteIndex = (dragFolderIndex > targetFolderIndex) ? 1 : 0
+    folders.splice(dragFolderIndex + deleteIndex, 1)
+  }
+
   render () {
-    let { storage, location, isFolded, data } = this.props
+    let { storage, location, isFolded, data, dispatch } = this.props
     let { folderNoteMap } = data
     let folderList = storage.folders.map((folder) => {
       let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
@@ -151,6 +185,8 @@ class StorageItem extends React.Component {
           folderColor={folder.color}
           isFolded={isFolded}
           noteCount={noteCount}
+          handleDragStart={(e) => this.handleDragStart(e, folder)}
+          handleDrop={(e) => this.handleDrop(e, folder, storage, dispatch)}
         />
       )
     })

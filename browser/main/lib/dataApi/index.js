@@ -11,6 +11,7 @@ const dataApi = {
   deleteNote: require('./deleteNote'),
   moveNote: require('./moveNote'),
   migrateFromV5Storage: require('./migrateFromV5Storage'),
+  moveFolder: require('./moveFolder'),
 
   _migrateFromV6Storage: require('./migrateFromV6Storage'),
   _resolveStorageData: require('./resolveStorageData'),
