@@ -60,7 +60,7 @@ body[data-theme="dark"]
         &:hover
           background-color darken($ui-dark-button--hover-backgroundColor, 15%)
         &:active
-          color white
+          color $ui-dark-text-color
           background-color $ui-dark-button--active-backgroundColor
 
   .root--active
@@ -73,7 +73,7 @@ body[data-theme="dark"]
         &:hover
           background-color darken($ui-dark-button--hover-backgroundColor, 15%)
         &:active
-          color white
+          color $ui-dark-text-color
           background-color $ui-dark-button--active-backgroundColor
 
   .button
@@ -83,9 +83,9 @@ body[data-theme="dark"]
     transition color background-color 0.15s
     border-left 4px solid transparent
     &:hover
-      color white
+      color $ui-dark-text-color
       background-color $ui-dark-button--hover-backgroundColor
 
   .input
     background-color $ui-dark-button--hover-backgroundColor
-    color white
+    color $ui-dark-text-color

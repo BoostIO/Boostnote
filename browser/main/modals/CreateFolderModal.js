@@ -78,7 +78,7 @@ class CreateFolderModal extends React.Component {
           <div styleName='title'>Create new folder</div>
         </div>
         <button styleName='close' onClick={(e) => this.handleCloseButtonClick(e)}>
-          <div styleName='close-mark'>X</div>
+          <div styleName='close-mark'>×</div>
           <div styleName='close-text'>esc</div>
         </button>
 
@@ -95,7 +95,7 @@ class CreateFolderModal extends React.Component {
           <button styleName='control-confirmButton'
             onClick={(e) => this.handleConfirmButtonClick(e)}
           >
-            Create Folder
+            Create
           </button>
         </div>
       </div>

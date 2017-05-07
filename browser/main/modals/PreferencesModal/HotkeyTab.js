@@ -139,6 +139,7 @@ class HotkeyTab extends React.Component {
                 <li><code>VolumeUp</code>, <code>VolumeDown</code> and <code>VolumeMute</code></li>
                 <li><code>MediaNextTrack</code>, <code>MediaPreviousTrack</code>, <code>MediaStop</code> and <code>MediaPlayPause</code></li>
                 <li><code>Control</code> (or <code>Ctrl</code> for short)</li>
+                <li><code>Shift</code></li>
               </ul>
             </div>
           }

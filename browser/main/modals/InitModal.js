@@ -41,10 +41,6 @@ class InitModal extends React.Component {
     }
   }
 
-  handleCloseButtonClick (e) {
-    this.props.close()
-  }
-
   handlePathChange (e) {
     this.setState({
       path: e.target.value
@@ -143,7 +139,7 @@ class InitModal extends React.Component {
               type: 'SNIPPET_NOTE',
               folder: data.storage.folders[0].key,
               title: 'Snippet note example',
-              description: 'Snippet note example\nYou can store a series of snippet as a single note like Gist.',
+              description: 'Snippet note example\nYou can store a series of snippets as a single note, like Gist.',
               snippets: [
                 {
                   name: 'example.html',
@@ -187,12 +183,6 @@ class InitModal extends React.Component {
     })
   }
 
-  handleKeyDown (e) {
-    if (e.keyCode === 27) {
-      this.props.close()
-    }
-  }
-
   render () {
     if (this.state.isLoading) {
       return <div styleName='root--loading'>
@@ -209,15 +199,12 @@ class InitModal extends React.Component {
         <div styleName='header'>
           <div styleName='header-title'>Initialize Storage</div>
         </div>
-        <button styleName='closeButton'
-          onClick={(e) => this.handleCloseButtonClick(e)}
-        >Close</button>
         <div styleName='body'>
           <div styleName='body-welcome'>
-            Welcome you!
+            Welcome!
           </div>
           <div styleName='body-description'>
-            Boostnote will use this directory as a default storage.
+           Please select a directory for Boostnote storage.
           </div>
           <div styleName='body-path'>
             <input styleName='body-path-input'

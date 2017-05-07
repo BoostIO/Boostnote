@@ -96,6 +96,7 @@ class SnippetTab extends React.Component {
         {!this.state.isRenaming
           ? <button styleName='button'
             onClick={(e) => this.handleClick(e)}
+            onDoubleClick={(e) => this.handleRenameClick(e)}
             onContextMenu={(e) => this.handleContextMenu(e)}
           >
             {snippet.name.trim().length > 0

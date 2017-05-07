@@ -11,7 +11,7 @@
 
   <style>
   @font-face {
-    font-family: 'Lato';
+    font-family: 'OpenSans';
     src: url('../resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
          url('../resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
          url('../resources/fonts/Lato-Regular.ttf') format('truetype');
@@ -20,6 +20,7 @@
     text-rendering: optimizeLegibility;
   }
   #loadingCover{
+    background-color: #f4f4f4;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -47,7 +48,7 @@
 <body>
   <div id="loadingCover">
     <img src="../resources/app.png">
-    <div class='message'>Loading...</div>
+    <div class='message'><i class="fa fa-spinner fa-spin" spin></i></div>
   </div>
 
   <div id="content"></div>

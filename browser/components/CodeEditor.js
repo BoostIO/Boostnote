@@ -58,18 +58,32 @@ export default class CodeEditor extends React.Component {
       dragDrop: false,
       extraKeys: {
         Tab: function (cm) {
+          const cursor = cm.getCursor()
+          const line = cm.getLine(cursor.line)
           if (cm.somethingSelected()) cm.indentSelection('add')
           else {
-            if (cm.getOption('indentWithTabs')) {
-              cm.execCommand('insertTab')
+            const tabs = cm.getOption('indentWithTabs')
+            if (line.trimLeft() === '- ' || line.trimLeft() === '* ' || line.trimLeft() === '+ ') {
+              cm.execCommand('goLineStart')
+              if (tabs) {
+                cm.execCommand('insertTab')
+              } else {
+                cm.execCommand('insertSoftTab')
+              }
+              cm.execCommand('goLineEnd')
             } else {
-              cm.execCommand('insertSoftTab')
+              if (tabs) {
+                cm.execCommand('insertTab')
+              } else {
+                cm.execCommand('insertSoftTab')
+              }
             }
           }
         },
         'Cmd-T': function (cm) {
           // Do nothing
-        }
+        },
+        Enter: 'newlineAndIndentContinueMarkdownList'
       }
     })
 
@@ -157,6 +171,7 @@ export default class CodeEditor extends React.Component {
     this.editor.setValue(this.props.value)
     this.editor.clearHistory()
     this.editor.on('change', this.changeHandler)
+    this.editor.refresh()
   }
 
   setValue (value) {

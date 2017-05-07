@@ -5,25 +5,25 @@
 Webpack HRMを使います。
 次の命令から私達がしておいた設定を使うことができます。
 
-```
-npm run webpack
-```
-
-数秒後、次のメッセージが表示されます。
+依存するパッケージをインストールします。
 
 ```
-webpack: bundle is now VALID.
+$ yarn
 ```
 
-では、アプリを起動します。
+ビルドして実行します。
 
 ```
-npm run hot
+$ yarn run dev-start
 ```
 
-> 元々、アプリは`npm start`から起動できます。しかし、この場合、コンパイルされたスクリプトを利用します。
+このコマンドは `yarn run webpack` と `yarn run hot`を並列に実行します。つまりこのコマンドは2つのターミナルで同時にこれらのコマンドを実行するのと同じことです。
 
-これにより、Webpackが自動的にコードの変更を確認し、それを適用してくれるようになります。
+そして、Webpackが自動的にコードの変更を確認し、それを適用してくれるようになります。
+
+もし、 `Failed to load resource: net::ERR_CONNECTION_REFUSED`というエラーが起きた場合、Boostnoteをリロードしてください。
+
+![net::ERR_CONNECTION_REFUSED](https://cloud.githubusercontent.com/assets/11307908/24343004/081e66ae-1279-11e7-8d9e-7f478043d835.png)
 
 > ### 注意
 > 時々、直接リフレッシュをする必要があります。

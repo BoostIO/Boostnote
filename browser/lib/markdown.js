@@ -19,6 +19,7 @@ var md = markdownit({
   linkify: true,
   html: true,
   xhtmlOut: true,
+  breaks: true,
   highlight: function (str, lang) {
     if (lang === 'flowchart') {
       return `<pre class="flowchart">${str}</pre>`

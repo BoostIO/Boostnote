@@ -15,6 +15,9 @@ class ModalBase extends React.Component {
 
   close () {
     if (modalBase != null) modalBase.setState({component: null, componentProps: null, isHidden: true})
+    // Toggle overflow style on NoteList
+    let list = document.querySelector('.NoteList__list___browser-main-NoteList-')
+    list.style.overflow = 'auto'
   }
 
   render () {
@@ -37,7 +40,9 @@ let modalBase = ReactDOM.render(<ModalBase />, el)
 
 export function openModal (component, props) {
   if (modalBase == null) { return }
-
+  // Hide scrollbar by removing overflow when modal opens
+  let list = document.querySelector('.NoteList__list___browser-main-NoteList-')
+  list.style.overflow = 'hidden'
   document.body.setAttribute('data-modal', 'open')
   modalBase.setState({component: component, componentProps: props, isHidden: false})
 }

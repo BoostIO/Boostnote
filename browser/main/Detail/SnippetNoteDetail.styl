@@ -22,6 +22,7 @@
   height 80px
 
 .body .description textarea
+  outline none
   display block
   height 100%
   width 100%
@@ -62,9 +63,6 @@
   button
     navButtonColor()
     height 24px
-    border-width 0 1px 0 0
-    border-style solid
-    border-color $ui-borderColor
     &:active .update-icon
       color white
 
@@ -83,7 +81,7 @@ body[data-theme="dark"]
 
   .body .description textarea
     background-color $ui-dark-noteDetail-backgroundColor
-    color white
+    color $ui-dark-text-color
 
   .tabList
     background-color $ui-button--active-backgroundColor
@@ -97,6 +95,10 @@ body[data-theme="dark"]
   .override
     button
       border-color $ui-dark-borderColor
+      &:hover
+        background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+        transition 0.15s
+        color $ui-dark-text-color
 
   .control-trashButton
     topBarButtonDark()

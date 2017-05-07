@@ -22,7 +22,7 @@ class Detail extends React.Component {
       }
     }
     this.deleteHandler = () => {
-      this.refs.root != null && this.refs.root.handleDeleteMenuClick()
+      this.refs.root != null && this.refs.root.handleDeleteButtonClick()
     }
   }
 

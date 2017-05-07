@@ -2,19 +2,46 @@
   left 7px
   top 0
   padding 0
+  color alpha($ui-favorite-star-button-color, 60%)
   &:hover
-    .icon
-      transform rotate(-72deg)
-    .tooltip
-      opacity 1
+    transition 0.15s
+    background-color alpha($ui-button--active-backgroundColor, 40%)
+    color $ui-favorite-star-button-color
+  &:active
+    transition 0.15s
+    background-color alpha($ui-button--active-backgroundColor, 40%)
+    color $ui-favorite-star-button-color
 
 .root--active
   @extend .root
   color $ui-favorite-star-button-color
   &:hover
+    transition 0.15s
     color $ui-favorite-star-button-color
-  .icon
-    transform rotate(-72deg)
+    background-color alpha($ui-button--active-backgroundColor, 40%)
+  &:active
+    transition 0.15s
+    color $ui-favorite-star-button-color
+    background-color alpha($ui-button--active-backgroundColor, 40%)
 
 .icon
   transition transform 0.15s
+
+body[data-theme="dark"]
+  .root
+    &:hover
+      transition 0.15s
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-favorite-star-button-color
+    &:active
+      transition 0.15s
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-favorite-star-button-color
+
+  .root--active
+    @extend .root
+    color $ui-favorite-star-button-color
+    &:hover
+      transition 0.15s
+      color $ui-favorite-star-button-color
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)

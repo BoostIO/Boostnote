@@ -107,7 +107,7 @@ class TagSelect extends React.Component {
           <span styleName='tag'
             key={tag}
           >
-            <span styleName='tag-label'>{tag}</span>
+            <span styleName='tag-label'>#{tag}</span>
             <button styleName='tag-removeButton'
               onClick={(e) => this.handleTagRemoveButtonClick(tag)(e)}
             >

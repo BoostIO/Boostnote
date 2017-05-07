@@ -11,7 +11,7 @@ $sideNav--folded-width = 44px
 $topBar-height = 60px
 
 // UI default
-$ui-text-color = #515151
+$ui-text-color = #333333
 $ui-inactive-text-color = #939395
 $ui-borderColor = #D1D1D1
 $ui-backgroundColor = #FFFFFF
@@ -23,9 +23,9 @@ $ui-tag-backgroundColor = rgba(0, 0, 0, 0.3)
 
 // UI Button
 $ui-button-color = #939395
-$ui-button--hover-backgroundColor = rgba(126, 127, 129, 0.08)
+$ui-button--hover-backgroundColor = #D9D9D9
 $ui-button--active-color = white
-$ui-button--active-backgroundColor = #6AA5E9
+$ui-button--active-backgroundColor = #D9D9D9
 $ui-button--focus-borderColor = lighten(#369DCD, 25%)
 
 // UI Tooltip
@@ -67,29 +67,43 @@ $active-border = solid 1px $active-border-color
 // Default button
 $default-button-background = white
 $default-button-background--hover = #e6e6e6
-$default-button-background--active = #d4d4d4
+$default-button-background--active = #D9D9D9
 
 colorDefaultButton()
   background-color $default-button-background
   &:hover
-    background-color $default-button-background--hover
+    background-color transparent
   &:active
   &:active:hover
     background-color $default-button-background--active
 
 // Primary button(Brand color)
-$primary-button-background = $brand-color
+$primary-button-background = alpha($brand-color, 60%)
 $primary-button-background--hover = darken($brand-color, 5%)
 $primary-button-background--active = darken($brand-color, 10%)
 
 colorPrimaryButton()
-  color white
-  background-color $primary-button-background
+  color $ui-text-color
+  background-color $default-button-background--hover
   &:hover
-    background-color $primary-button-background--hover
+    background-color $default-button-background--active
   &:active
   &:active:hover
-    background-color $primary-button-background--active
+    background-color $default-button-background--active
+
+// Dark Primary button(Brand color)
+$dark-primary-button-background = alpha(#3A404C, 80%)
+$dark-primary-button-background--hover = #3A404C
+$dark-primary-button-background--active = #3A404C
+
+colorDarkPrimaryButton()
+  color white
+  background-color $dark-primary-button-background
+  &:hover
+    background-color $dark-primary-button-background--hover
+  &:active
+  &:active:hover
+    background-color $dark-primary-button-background--active
 
 // Danger button(Brand color)
 $danger-button-background = #c9302c
@@ -113,13 +127,15 @@ navButtonColor()
   border none
   color $ui-button-color
   background-color transparent
-  transition color background-color  0.15s
+  transition 0.15s
   &:hover
-    background-color $ui-button--hover-backgroundColor
+    background-color alpha($ui-button--active-backgroundColor, 20%)
+    transition  0.15s
+    color $ui-text-color
   &:active, &:active:hover
     background-color $ui-button--active-backgroundColor
-    color $ui-button--active-color
-
+    color $ui-text-color
+    transition 0.15s
 /**
 * # Modal Stuff
 * These will be moved lib/modal
@@ -137,7 +153,7 @@ modal()
   background-color $modal-background
   overflow hidden
   border-radius $modal-border-radius
-  box-shadow 2px 2px 10px gray
+  box-shadow 0 0 1px rgba(76,86,103,.15), 0 2px 18px rgba(31,37,50,.22)
 
 topBarButtonLight()
   width 34px
@@ -158,15 +174,16 @@ topBarButtonLight()
       opacity 1
 
 // Dark theme
+$ui-dark-active-color = #3A404C
 $ui-dark-borderColor = lighten(#21252B, 20%)
 $ui-dark-backgroundColor = #1D1D1D
 $ui-dark-noteList-backgroundColor = #181818
 $ui-dark-noteDetail-backgroundColor = #0D0D0D
-$ui-dark-tag-backgroundColor = rgba(255, 255, 255, 0.3)
+$ui-dark-tag-backgroundColor = #3A404C
 $dark-background-color = lighten($ui-dark-backgroundColor, 10%)
 $ui-dark-text-color = #DDDDDD
 $ui-dark-button--active-color = white
-$ui-dark-button--active-backgroundColor = #6AA5E9
+$ui-dark-button--active-backgroundColor = #3A404C
 $ui-dark-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
 $ui-dark-button--focus-borderColor = lighten(#369DCD, 25%)
 $ui-dark-topbar-button-color = #939395
@@ -200,14 +217,15 @@ navDarkButtonColor()
   border none
   color $ui-dark-button-color
   background-color transparent
-  transition color background-color 0.15s
+  transition 0.15s
   &:hover
-    color white
+    color $ui-dark-text-color
     background-color $ui-dark-button--hover-backgroundColor
+    transition 0.15s
   &:active
   &:active:hover
-    background-color $ui-dark-button--active-backgroundColor
-    color $ui-dark-button--active-color
+    transition 0.15s
+    color $ui-dark-text-color
 
 topBarButtonDark()
   border-color $ui-dark-borderColor

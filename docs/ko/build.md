@@ -6,7 +6,7 @@ Webpack HRM을 개발을 위해 사용합니다.
 다음 명령을 통해 저희가 해둔 설정을 사용 할 수 있습니다.
 
 ```
-npm run webpack
+yarn run webpack
 ```
 
 몇 초 후, 다음 메세지를 보게 될겁니다.
@@ -18,10 +18,10 @@ webpack: bundle is now VALID.
 그럼 앱을 실행합시다.
 
 ```
-npm run hot
+yarn run hot
 ```
 
-> 원래 앱은 `npm start`로 실행가능합니다. 하지만 이 경우, 컴파일된 스크립트를 사용할 것입니다.
+> 원래 앱은 `yarn start`로 실행가능합니다. 하지만 이 경우, 컴파일된 스크립트를 사용할 것입니다.
 
 이로써 웹팩이 자동적으로 코드변경을 확인하고 적용해줄 것입니다.
 

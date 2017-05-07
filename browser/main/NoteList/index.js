@@ -318,7 +318,7 @@ class NoteList extends React.Component {
     })
   }
 
-  alertIfSnippet() {
+  alertIfSnippet () {
     let { location } = this.props
     const targetIndex = _.findIndex(this.notes, (note) => {
       return `${note.storage}-${note.key}` === location.query.key
@@ -332,7 +332,7 @@ class NoteList extends React.Component {
     }
   }
 
-  jumpToTop() {
+  jumpToTop () {
     if (this.notes === null || this.notes.length === 0) {
       return
     }
@@ -404,7 +404,7 @@ class NoteList extends React.Component {
       >
         <div styleName='control'>
           <div styleName='control-sortBy'>
-            Sort by
+            <i className='fa fa-bolt' />
             <select styleName='control-sortBy-select'
               value={config.sortBy}
               onChange={(e) => this.handleSortByChange(e)}

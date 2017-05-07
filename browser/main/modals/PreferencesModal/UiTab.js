@@ -4,44 +4,66 @@ import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
+import ReactCodeMirror from 'react-codemirror'
+import CodeMirror from 'codemirror'
 
 const OSX = global.process.platform === 'darwin'
 
 class UiTab extends React.Component {
   constructor (props) {
     super(props)
-
     this.state = {
-      config: props.config
+      config: props.config,
+      codemirrorTheme: props.config.editor.theme
     }
   }
 
+  componentWillMount () {
+    CodeMirror.autoLoadMode(ReactCodeMirror, 'javascript')
+  }
+
   handleUIChange (e) {
-    let { config } = this.state
+    const { codemirrorTheme } = this.state
+    let checkHighLight = document.getElementById('checkHighLight')
 
-    config.ui = {
-      theme: this.refs.uiTheme.value,
-      disableDirectWrite: this.refs.uiD2w != null
-        ? this.refs.uiD2w.checked
-        : false
-    }
-    config.editor = {
-      theme: this.refs.editorTheme.value,
-      fontSize: this.refs.editorFontSize.value,
-      fontFamily: this.refs.editorFontFamily.value,
-      indentType: this.refs.editorIndentType.value,
-      indentSize: this.refs.editorIndentSize.value,
-      switchPreview: this.refs.editorSwitchPreview.value,
-      keyMap: this.refs.editorKeyMap.value
-    }
-    config.preview = {
-      fontSize: this.refs.previewFontSize.value,
-      fontFamily: this.refs.previewFontFamily.value,
-      codeBlockTheme: this.refs.previewCodeBlockTheme.value,
-      lineNumber: this.refs.previewLineNumber.checked
+    if (checkHighLight === null) {
+      checkHighLight = document.createElement('link')
+      checkHighLight.setAttribute('id', 'checkHighLight')
+      checkHighLight.setAttribute('rel', 'stylesheet')
+      document.head.appendChild(checkHighLight)
     }
 
-    this.setState({ config })
+    const newConfig = {
+      ui: {
+        theme: this.refs.uiTheme.value,
+        disableDirectWrite: this.refs.uiD2w != null
+          ? this.refs.uiD2w.checked
+          : false
+      },
+      editor: {
+        theme: this.refs.editorTheme.value,
+        fontSize: this.refs.editorFontSize.value,
+        fontFamily: this.refs.editorFontFamily.value,
+        indentType: this.refs.editorIndentType.value,
+        indentSize: this.refs.editorIndentSize.value,
+        switchPreview: this.refs.editorSwitchPreview.value,
+        keyMap: this.refs.editorKeyMap.value
+      },
+      preview: {
+        fontSize: this.refs.previewFontSize.value,
+        fontFamily: this.refs.previewFontFamily.value,
+        codeBlockTheme: this.refs.previewCodeBlockTheme.value,
+        lineNumber: this.refs.previewLineNumber.checked
+      }
+    }
+
+    const newCodemirrorTheme = this.refs.editorTheme.value
+
+    if (newCodemirrorTheme !== codemirrorTheme) {
+      checkHighLight.setAttribute('href', `../node_modules/codemirror/theme/${newCodemirrorTheme}.css`)
+    }
+
+    this.setState({ config: newConfig, codemirrorTheme: newCodemirrorTheme })
   }
 
   handleSaveUIClick (e) {
@@ -61,8 +83,8 @@ class UiTab extends React.Component {
 
   render () {
     const themes = consts.THEMES
-    const { config } = this.state
-
+    const { config, codemirrorTheme } = this.state
+    const codemirrorSampleCode = 'function iamHappy (happy) {\n\tif (happy) {\n\t  console.log("I am Happy!")\n\t} else {\n\t  console.log("I am not Happy!")\n\t}\n};'
     return (
       <div styleName='root'>
         <div styleName='group'>
@@ -113,6 +135,9 @@ class UiTab extends React.Component {
                   })
                 }
               </select>
+              <div styleName='code-mirror'>
+                <ReactCodeMirror value={codemirrorSampleCode} options={{ lineNumbers: true, readOnly: true, mode: 'javascript', theme: codemirrorTheme }} />
+              </div>
             </div>
           </div>
           <div styleName='group-section'>
@@ -253,7 +278,7 @@ class UiTab extends React.Component {
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveUIClick(e)}
             >
-              Save UI Config
+              Save
             </button>
           </div>
         </div>

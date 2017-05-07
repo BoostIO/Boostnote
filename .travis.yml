@@ -1,6 +1,23 @@
 language: node_js
-node_js:
-  - 'stable'
-  - 'lts/*'
-
-script: npm run lint && npm run test
+matrix:
+  include:
+    - os: osx
+      install:
+        - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" ]]; then yarn; fi'
+      node_js:
+        - 'stable'
+        - 'lts/*'
+      script:
+        - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" && ${TRAVIS_NODE_VERSION} = "stable" ]]; then
+             npm run lint;
+             npm run test;
+             ./script/e2e-runner.sh;
+           fi'
+    - os: linux
+      node_js:
+        - 'stable'
+        - 'lts/*'
+      script:
+        - 'npm run lint'
+        - 'npm run test'
+        - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" && ${TRAVIS_NODE_VERSION} = "stable" ]]; then ./script/e2e-runner.sh; fi'

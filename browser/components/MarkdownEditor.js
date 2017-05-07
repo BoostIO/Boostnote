@@ -9,16 +9,16 @@ class MarkdownEditor extends React.Component {
   constructor (props) {
     super(props)
 
-    this.escapeFromEditor = ['Control', 'w']
+    // char codes for ctrl + w
+    this.escapeFromEditor = [17, 87]
 
-    this.supportMdBold = ['Control', 'b']
-
-    this.supportMdWordBold = ['Control', ':']
+    // ctrl + shift + ;
+    this.supportMdSelectionBold = [16, 17, 186]
 
     this.state = {
       status: 'PREVIEW',
       renderValue: props.value,
-      keyPressed: {},
+      keyPressed: new Set(),
       isLocked: false
     }
 
@@ -89,7 +89,7 @@ class MarkdownEditor extends React.Component {
 
   handleBlur (e) {
     if (this.state.isLocked) return
-    this.setState({ keyPressed: [] })
+    this.setState({ keyPressed: new Set() })
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
       let cursorPosition = this.refs.code.editor.getCursor()
@@ -161,35 +161,27 @@ class MarkdownEditor extends React.Component {
     this.renderPreview(this.props.value)
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     if (this.state.status !== 'CODE') return false
-    const keyPressed = Object.assign(this.state.keyPressed, {
-      [e.key]: true
-    })
+    const keyPressed = this.state.keyPressed
+    keyPressed.add(e.keyCode)
     this.setState({ keyPressed })
-    let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
-    if (!this.state.isLocked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
-      this.setState({status: 'PREVIEW'}, () => {
-        document.activeElement.blur()
-        eventEmitter.emit('topbar:showlockbutton')
-      })
+
+    let isNoteHandlerKey = (el) => { return keyPressed.has(el) }
+    if (keyPressed.size === this.escapeFromEditor.length &&
+        !this.state.isLocked && this.state.status === 'CODE' &&
+        this.escapeFromEditor.every(isNoteHandlerKey)) {
+      document.activeElement.blur()
     }
-    if (this.supportMdBold.every(isNoteHandlerKey)) {
-      this.addMdAndMoveCaretToCenter('****')
-    }
-    if (this.supportMdWordBold.every(isNoteHandlerKey)) {
-      this.addMdBetweenWord('**')
+    if (keyPressed.size === this.supportMdSelectionBold.length && this.supportMdSelectionBold.every(isNoteHandlerKey)) {
+      this.addMdAroundWord('**')
     }
   }
 
-  addMdAndMoveCaretToCenter (mdElement) {
-    const currentCaret = this.refs.code.editor.getCursor()
-    const cmDoc = this.refs.code.editor.getDoc()
-    cmDoc.replaceRange(mdElement, currentCaret)
-    this.refs.code.editor.setCursor({line: currentCaret.line, ch: currentCaret.ch + mdElement.length/2})
-  }
-
-  addMdBetweenWord (mdElement) {
+  addMdAroundWord (mdElement) {
+    if (this.refs.code.editor.getSelection()) {
+      return this.addMdAroundSelection(mdElement)
+    }
     const currentCaret = this.refs.code.editor.getCursor()
     const word = this.refs.code.editor.findWordAt(currentCaret)
     const cmDoc = this.refs.code.editor.getDoc()
@@ -197,10 +189,13 @@ class MarkdownEditor extends React.Component {
     cmDoc.replaceRange(mdElement, { line: word.head.line, ch: word.head.ch + mdElement.length })
   }
 
+  addMdAroundSelection (mdElement) {
+    this.refs.code.editor.replaceSelection(`${mdElement}${this.refs.code.editor.getSelection()}${mdElement}`)
+  }
+
   handleKeyUp (e) {
-    const keyPressed = Object.assign(this.state.keyPressed, {
-      [e.key]: false
-    })
+    const keyPressed = this.state.keyPressed
+    keyPressed.delete(e.keyCode)
     this.setState({ keyPressed })
   }
 

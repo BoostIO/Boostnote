@@ -259,6 +259,8 @@ module.exports = function (grunt) {
       case 'osx':
         grunt.task.run(['compile', 'pack:osx'])
         break
+      case 'linux':
+        grunt.task.run(['compile', 'pack:linux'])
     }
   })
 

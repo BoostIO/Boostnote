@@ -12,12 +12,12 @@
 
 .tag
   display inline-block
-  margin 0 2px
-  padding-left 10px
+  margin 1px 3px
+  padding 0
   vertical-align middle
   height 20px
-  background-color $ui-tag-backgroundColor
-  border-radius 20px
+  background-color alpha($ui-tag-backgroundColor, 10%)
+  border-radius 3px
   overflow hidden
   clearfix()
 
@@ -39,9 +39,9 @@
   padding-right 4px
 
 .tag-label
-  font-size 12px
-  font-weight bold
-  color: #FFFFFF
+  font-size 11px
+  font-weight 600
+  color: alpha($ui-text-color, 80%)
   float left
   height 20px
   line-height 20px
@@ -54,36 +54,13 @@
   height 24px
   box-sizing borde-box
   border none
-  border-bottom $ui-border
   background-color transparent
   outline none
   padding 0 4px
-  &:focus
-    border-color $ui-input--focus-borderColor = #369DCD
-  &:disabled
-    background-color $ui-input--disabled-backgroundColor = #DDD
-
-.add-tag-button
-  display inline
-  margin-left 5px
-  width 20px
-  height 20px
-  border none
-  border-radius 20px
-  padding 0
-  color #FFFFFF
-  &:hover
-    background-color rgba(0, 0, 0, 0.3)
-  &:active, &:active:hover
-    background-color rgba(0, 0, 0, 0.5)
-    color $ui-button--active-color
 
 body[data-theme="dark"]
-  .icon
-    color $ui-dark-button-color
-
   .tag
-    background-color $ui-dark-tag-backgroundColor
+    background-color alpha($ui-dark-tag-backgroundColor, 60%)
 
   .tag-removeButton
     border-color $ui-button--focus-borderColor
@@ -94,17 +71,6 @@ body[data-theme="dark"]
     color $ui-dark-text-color
 
   .newTag
-    border-color $ui-dark-borderColor
+    border-color none
     background-color transparent
     color $ui-dark-text-color
-    &:focus
-      border-color $ui-input--focus-borderColor = #369DCD
-    &:disabled
-      background-color $ui-input--disabled-backgroundColor = #DDD
-
-  .add-tag-button
-    &:hover
-      background-color rgba(255, 255, 255, 0.3)
-    &:active, &:active:hover
-      background-color rgba(255, 255, 255, 0.5)
-      color $ui-button--active-color

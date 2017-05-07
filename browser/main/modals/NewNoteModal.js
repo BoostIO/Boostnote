@@ -103,7 +103,7 @@ class NewNoteModal extends React.Component {
           <div styleName='title'>Make a Note</div>
         </div>
         <button styleName='closeButton' onClick={(e) => this.handleCloseButtonClick(e)}>
-          <div styleName='close-mark'>X</div>
+          <div styleName='close-mark'>×</div>
           <div styleName='close-text'>esc</div>
         </button>
 
@@ -117,7 +117,7 @@ class NewNoteModal extends React.Component {
               className='fa fa-file-text-o'
             /><br />
             <span styleName='control-button-label'>Markdown Note</span><br />
-            <span styleName='control-button-description'>It is good for any type of documents. Check List, Code block and Latex block are available.</span>
+            <span styleName='control-button-description'>This format is for creating text documents. Checklists, code blocks and Latex blocks are available.</span>
           </button>
 
           <button styleName='control-button'
@@ -129,7 +129,7 @@ class NewNoteModal extends React.Component {
               className='fa fa-code'
             /><br />
             <span styleName='control-button-label'>Snippet Note</span><br />
-            <span styleName='control-button-description'>This format is specialized on managing snippets like Gist. Multiple snippets can be grouped as a note.
+            <span styleName='control-button-description'>This format is for creating code snippets. Multiple snippets can be grouped into a single note.
             </span>
           </button>
 

@@ -1,5 +1,12 @@
 # Contributing to Boostnote
 
+## When you open an issue of a bug report
+There are no issue template. But there is a request.
+
+**Please paste screenshots of Boostnote with developer tool open**
+
+Thank you for your help in advance.
+
 ## About copyright of Pull Request
 
 If you make a pull request, It means you agree to transfer the copyright of the code changes to MAISIN&CO.
@@ -10,6 +17,13 @@ Because GPL v3 is too strict to be compatible with any other License, We thought
 ---
 
 # Contributing to Boostnote(Japanese)
+
+## バグレポートに関してのissueを立てる時
+イシューテンプレートはありませんが、1つお願いがあります。
+
+**開発者ツールを開いた状態のBoostnoteのスクリーンショットを貼ってください**
+
+よろしくお願いします。
 
 ## Pull requestの著作権について
 
