@@ -4,20 +4,24 @@
 .codeEditor
   absolute top bottom left right
 
+.hide
+  z-index 0
+  opacity 0
+  pointer-events none
+
 .codeEditor--hide
   @extend .codeEditor
+  @extend .hide
 
 .preview
   display block
   absolute top bottom left right
   z-index 100
-  background-color white
+  background-color transparent
   height 100%
   width 100%
 
 .preview--hide
   @extend .preview
-  z-index 0
-  opacity 0
-  pointer-events none
+  @extend .hide
 

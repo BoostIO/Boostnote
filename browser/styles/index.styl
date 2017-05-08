@@ -35,6 +35,22 @@ $ui-tooltip-button-backgroundColor = #D1D1D1
 $ui-tooltip-button--hover-backgroundColor = lighten(#D1D1D1, 30%)
 $ui-tooltip-font-size = 12px
 
+::-webkit-scrollbar
+  height 6px
+  width 6px
+  background transparent
+
+::-webkit-scrollbar-thumb
+  background #ccc
+  -moz-box-sizing border-box
+  box-sizing border-box
+  border 1px solid #bbb
+  border-radius 2px
+
+::-webkit-scrollbar-corner
+  background transparent
+
+
 tooltip()
   background-color $ui-tooltip-backgroundColor = alpha(#444, 70%)
   color $ui-tooltip-text-color = white

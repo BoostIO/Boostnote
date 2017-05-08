@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import markdown from 'browser/lib/markdown'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
+import {enhanceWithScrollbars} from '../lib/codemirrorScrollbars'
 import consts from 'browser/lib/consts'
 import Raphael from 'raphael'
 import flowchart from 'flowchart'
@@ -260,6 +261,7 @@ export default class MarkdownPreview extends React.Component {
       : 'default'
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
+      enhanceWithScrollbars(CodeMirror);
       let syntax = CodeMirror.findModeByName(el.className)
       if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
       CodeMirror.requireMode(syntax.mode, () => {
@@ -267,6 +269,7 @@ export default class MarkdownPreview extends React.Component {
         el.innerHTML = ''
         el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
         CodeMirror.runMode(content, syntax.mime, el, {
+          scrollbarStyle: 'simple',
           tabSize: indentSize
         })
       })
