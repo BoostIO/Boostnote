@@ -57,6 +57,7 @@ md.use(math, {
     return output
   }
 })
+md.use(require('markdown-it-checkbox'))
 md.use(require('markdown-it-footnote'))
 // Override task item
 md.block.ruler.at('paragraph', function (state, startLine/*, endLine */) {
