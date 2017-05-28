@@ -198,6 +198,7 @@ class Main extends React.Component {
         />
         {!config.isSideNavFolded &&
           <div styleName={this.state.isLeftSliderFocused ? 'slider--active' : 'slider'}
+            id='slider-left'
             style={{left: this.state.navWidth}}
             onMouseDown={(e) => this.handleLeftSlideMouseDown(e)}
             draggable='false'
@@ -229,6 +230,7 @@ class Main extends React.Component {
             ])}
           />
           <div styleName={this.state.isRightSliderFocused ? 'slider-right--active' : 'slider-right'}
+            id='slider-right'
             style={{left: this.state.listWidth - 1}}
             onMouseDown={(e) => this.handleRightSlideMouseDown(e)}
             draggable='false'
