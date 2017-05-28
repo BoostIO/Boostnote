@@ -30,13 +30,9 @@ class MarkdownNoteDetail extends React.Component {
       }, props.note),
       isLockButtonShown: false,
       isLocked: false,
-      fullScreen: {
-        status: false,
-        oldState: {
-          nd : 0,
-          mb : 0
-        }
-      }
+      fullScreen: false,
+      widthOfNoteDetail: 0,
+      widthOfMainBody: 0
     }
     this.dispatchTimer = null
 
@@ -201,31 +197,27 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleFullScreenButton (e) {
+    const currentScreenState = !Object.assign({}, this.state).fullScreen
+    this.setState({ fullScreen: currentScreenState })
 
-    this.state.fullScreen.status = !this.state.fullScreen.status
-    const noteDetail = document.querySelector(".NoteDetail")
-    const mainBody = document.querySelector(".Main__body___browser-main-")
-    const sliderRight = document.querySelector(".Main__slider-right___browser-main-")
-    const slider = document.querySelector(".Main__slider___browser-main-")
+    const noteDetail = document.querySelector('.NoteDetail')
+    const mainBody = document.querySelector('#main-body')
+    const sliderRight = document.querySelector('#slider-right')
+    const sliderLeft = document.querySelector('#slider-left')
 
-    if(this.state.fullScreen.status) {
-
-      this.state.fullScreen.oldState.nd = noteDetail.style.left
-      this.state.fullScreen.oldState.mb = mainBody.style.left
-      noteDetail.style.left = "0px"
-      mainBody.style.left = "0px"
+    if (currentScreenState) {
+      this.state.widthOfNoteDetail = noteDetail.style.left
+      this.state.widthOfMainBody = mainBody.style.left
+      noteDetail.style.left = '0px'
+      mainBody.style.left = '0px'
       sliderRight.style.display = 'none'
-      slider.style.display = 'none'
-
-    }else {
-
-      noteDetail.style.left = this.state.fullScreen.oldState.nd
-      mainBody.style.left = this.state.fullScreen.oldState.mb
+      sliderLeft.style.display = 'none'
+    } else {
+      noteDetail.style.left = this.state.widthOfNoteDetail
+      mainBody.style.left = this.state.widthOfMainBody
       sliderRight.style.display = 'block'
-      slider.style.display = 'block'
-
+      sliderLeft.style.display = 'block'
     }
-
   }
 
   handleLockButtonMouseDown (e) {
