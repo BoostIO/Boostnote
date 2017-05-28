@@ -51,7 +51,6 @@ class SnippetNoteDetail extends React.Component {
       fullScreen: false,
       widthOfNoteDetail: 0,
       widthOfMainBody: 0
-
     }
   }
 
@@ -192,27 +191,25 @@ class SnippetNoteDetail extends React.Component {
   }
 
   handleFullScreenButton (e) {
-    const currentScreenState = !Object.assign({}, this.state).fullScreen
-    this.setState({ fullScreen: currentScreenState })
-
-    const noteDetail = document.querySelector('.NoteDetail')
-    const mainBody = document.querySelector('#main-body')
-    const sliderRight = document.querySelector('#slider-right')
-    const sliderLeft = document.querySelector('#slider-left')
-
-    if (currentScreenState) {
-      this.state.widthOfNoteDetail = noteDetail.style.left
-      this.state.widthOfMainBody = mainBody.style.left
-      noteDetail.style.left = '0px'
-      mainBody.style.left = '0px'
-      sliderRight.style.display = 'none'
-      sliderLeft.style.display = 'none'
-    } else {
-      noteDetail.style.left = this.state.widthOfNoteDetail
-      mainBody.style.left = this.state.widthOfMainBody
-      sliderRight.style.display = 'block'
-      sliderLeft.style.display = 'block'
-    }
+    this.setState({ fullScreen: !this.state.fullScreen }, () => {
+      const noteDetail = document.querySelector('.NoteDetail')
+      const mainBody = document.querySelector('#main-body')
+      const sliderRight = document.querySelector('#slider-right')
+      const sliderLeft = document.querySelector('#slider-left')
+      if (this.state.fullScreen) {
+        this.state.widthOfNoteDetail = noteDetail.style.left
+        this.state.widthOfMainBody = mainBody.style.left
+        noteDetail.style.left = '0px'
+        mainBody.style.left = '0px'
+        sliderRight.style.display = 'none'
+        sliderLeft.style.display = 'none'
+      } else {
+        noteDetail.style.left = this.state.widthOfNoteDetail
+        mainBody.style.left = this.state.widthOfMainBody
+        sliderRight.style.display = 'block'
+        sliderLeft.style.display = 'block'
+      }
+    })
   }
 
   handleTabPlusButtonClick (e) {
@@ -555,7 +552,7 @@ class SnippetNoteDetail extends React.Component {
             <button styleName='control-fullScreenButton'
               onMouseDown={(e) => this.handleFullScreenButton(e)}
             >
-              <i className={'fa fa-arrows-alt'} styleName='fullScreen-button' />
+              <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
             </button>
           </div>
         </div>
