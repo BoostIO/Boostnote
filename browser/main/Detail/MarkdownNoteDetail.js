@@ -29,7 +29,14 @@ class MarkdownNoteDetail extends React.Component {
         content: ''
       }, props.note),
       isLockButtonShown: false,
-      isLocked: false
+      isLocked: false,
+      fullScreen: {
+        status: false,
+        oldState: {
+          nd : 0,
+          mb : 0
+        }
+      }
     }
     this.dispatchTimer = null
 
