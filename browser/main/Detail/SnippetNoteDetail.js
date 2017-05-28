@@ -51,7 +51,6 @@ class SnippetNoteDetail extends React.Component {
       fullScreen: false,
       widthOfNoteDetail: 0,
       widthOfMainBody: 0
-
     }
   }
 
