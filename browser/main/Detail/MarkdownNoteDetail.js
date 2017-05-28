@@ -29,7 +29,14 @@ class MarkdownNoteDetail extends React.Component {
         content: ''
       }, props.note),
       isLockButtonShown: false,
-      isLocked: false
+      isLocked: false,
+      fullScreen: {
+        status: false,
+        oldState: {
+          nd : 0,
+          mb : 0
+        }
+      }
     }
     this.dispatchTimer = null
 
@@ -193,6 +200,34 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
+  handleFullScreenButton (e) {
+
+    this.state.fullScreen.status = !this.state.fullScreen.status
+    const noteDetail = document.querySelector(".NoteDetail")
+    const mainBody = document.querySelector(".Main__body___browser-main-")
+    const sliderRight = document.querySelector(".Main__slider-right___browser-main-")
+    const slider = document.querySelector(".Main__slider___browser-main-")
+
+    if(this.state.fullScreen.status) {
+
+      this.state.fullScreen.oldState.nd = noteDetail.style.left
+      this.state.fullScreen.oldState.mb = mainBody.style.left
+      noteDetail.style.left = "0px"
+      mainBody.style.left = "0px"
+      sliderRight.style.display = 'none'
+      slider.style.display = 'none'
+
+    }else {
+
+      noteDetail.style.left = this.state.fullScreen.oldState.nd
+      mainBody.style.left = this.state.fullScreen.oldState.mb
+      sliderRight.style.display = 'block'
+      slider.style.display = 'block'
+
+    }
+
+  }
+
   handleLockButtonMouseDown (e) {
     e.preventDefault()
     ee.emit('editor:lock')
@@ -283,6 +318,11 @@ class MarkdownNoteDetail extends React.Component {
                   </g>
                 </g>
               </svg>
+            </button>
+            <button styleName='control-fullScreenButton'
+              onMouseDown={(e) => this.handleFullScreenButton(e)}
+            >
+              <i className={'fa fa-arrows-alt'} styleName='fullScreen-button' />
             </button>
           </div>
         </div>

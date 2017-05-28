@@ -47,7 +47,15 @@ class SnippetNoteDetail extends React.Component {
         description: ''
       }, props.note, {
         snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
-      })
+      }),
+      fullScreen: {
+        status: false,
+        oldState: {
+          nd : 0,
+          mb : 0
+        }
+      }
+
     }
   }
 
@@ -185,6 +193,34 @@ class SnippetNoteDetail extends React.Component {
           ee.emit('list:next')
         })
     }
+  }
+
+  handleFullScreenButton (e) {
+
+    this.state.fullScreen.status = !this.state.fullScreen.status
+    const noteDetail = document.querySelector(".NoteDetail")
+    const mainBody = document.querySelector(".Main__body___browser-main-")
+    const sliderRight = document.querySelector(".Main__slider-right___browser-main-")
+    const slider = document.querySelector(".Main__slider___browser-main-")
+
+    if(this.state.fullScreen.status) {
+
+      this.state.fullScreen.oldState.nd = noteDetail.style.left
+      this.state.fullScreen.oldState.mb = mainBody.style.left
+      noteDetail.style.left = "0px"
+      mainBody.style.left = "0px"
+      sliderRight.style.display = 'none'
+      slider.style.display = 'none'
+
+    }else {
+
+      noteDetail.style.left = this.state.fullScreen.oldState.nd
+      mainBody.style.left = this.state.fullScreen.oldState.mb
+      sliderRight.style.display = 'block'
+      slider.style.display = 'block'
+
+    }
+
   }
 
   handleTabPlusButtonClick (e) {
@@ -523,6 +559,11 @@ class SnippetNoteDetail extends React.Component {
                   </g>
                 </g>
               </svg>
+            </button>
+            <button styleName='control-fullScreenButton'
+              onMouseDown={(e) => this.handleFullScreenButton(e)}
+            >
+              <i className={'fa fa-arrows-alt'} styleName='fullScreen-button' />
             </button>
           </div>
         </div>
