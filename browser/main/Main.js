@@ -30,6 +30,8 @@ class Main extends React.Component {
       navWidth: config.navWidth,
       isLeftSliderFocused: false,
       fullScreen: false,
+      noteDetailWidth: 0,
+      mainBodyWidth: 0
     }
 
     this.fullScreenEditorCode = () => this.handleFullScreenButton()
@@ -157,11 +159,15 @@ class Main extends React.Component {
       const sliderRight = document.querySelector('#slider-right')
       const sliderLeft = document.querySelector('#slider-left')
       if (this.state.fullScreen) {
+        this.state.noteDetailWidth = noteDetail.style.left
+        this.state.mainBodyWidth = mainBody.style.left
         noteDetail.style.left = '0px'
         mainBody.style.left = '0px'
         sliderRight.style.display = 'none'
         sliderLeft.style.display = 'none'
       } else {
+        noteDetail.style.left = this.state.noteDetailWidth
+        mainBody.style.left = this.state.mainBodyWidth
         sliderRight.style.display = 'block'
         sliderLeft.style.display = 'block'
       }
