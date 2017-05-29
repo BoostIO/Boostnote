@@ -12,6 +12,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
 import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
@@ -27,8 +28,11 @@ class Main extends React.Component {
       isRightSliderFocused: false,
       listWidth: config.listWidth,
       navWidth: config.navWidth,
-      isLeftSliderFocused: false
+      isLeftSliderFocused: false,
+      fullScreen: false,
     }
+
+    this.fullScreenEditorCode = () => this.handleFullScreenButton()
   }
 
   getChildContext () {
@@ -63,11 +67,13 @@ class Main extends React.Component {
         }
       })
 
+    eventEmitter.on('editor:fullscreen', this.fullScreenEditorCode)
     window.addEventListener('focus', focused)
   }
 
   componentWillUnmount () {
     window.removeEventListener('focus', focused)
+    eventEmitter.off('editor:fullscreen', this.fullScreenEditorCode)
   }
 
   handleLeftSlideMouseDown (e) {
@@ -142,6 +148,24 @@ class Main extends React.Component {
         navWidth: navWidth
       })
     }
+  }
+
+  handleFullScreenButton (e) {
+    this.setState({ fullScreen: !this.state.fullScreen }, () => {
+      const noteDetail = document.querySelector('.NoteDetail')
+      const mainBody = document.querySelector('#main-body')
+      const sliderRight = document.querySelector('#slider-right')
+      const sliderLeft = document.querySelector('#slider-left')
+      if (this.state.fullScreen) {
+        noteDetail.style.left = '0px'
+        mainBody.style.left = '0px'
+        sliderRight.style.display = 'none'
+        sliderLeft.style.display = 'none'
+      } else {
+        sliderRight.style.display = 'block'
+        sliderLeft.style.display = 'block'
+      }
+    })
   }
 
   render () {

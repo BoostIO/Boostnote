@@ -47,10 +47,7 @@ class SnippetNoteDetail extends React.Component {
         description: ''
       }, props.note, {
         snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
-      }),
-      fullScreen: false,
-      widthOfNoteDetail: 0,
-      widthOfMainBody: 0
+      })
     }
   }
 
@@ -191,25 +188,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   handleFullScreenButton (e) {
-    this.setState({ fullScreen: !this.state.fullScreen }, () => {
-      const noteDetail = document.querySelector('.NoteDetail')
-      const mainBody = document.querySelector('#main-body')
-      const sliderRight = document.querySelector('#slider-right')
-      const sliderLeft = document.querySelector('#slider-left')
-      if (this.state.fullScreen) {
-        this.state.widthOfNoteDetail = noteDetail.style.left
-        this.state.widthOfMainBody = mainBody.style.left
-        noteDetail.style.left = '0px'
-        mainBody.style.left = '0px'
-        sliderRight.style.display = 'none'
-        sliderLeft.style.display = 'none'
-      } else {
-        noteDetail.style.left = this.state.widthOfNoteDetail
-        mainBody.style.left = this.state.widthOfMainBody
-        sliderRight.style.display = 'block'
-        sliderLeft.style.display = 'block'
-      }
-    })
+    ee.emit('editor:fullscreen')
   }
 
   handleTabPlusButtonClick (e) {
