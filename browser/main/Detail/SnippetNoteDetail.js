@@ -47,10 +47,7 @@ class SnippetNoteDetail extends React.Component {
         description: ''
       }, props.note, {
         snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
-      }),
-      fullScreen: false,
-      widthOfNoteDetail: 0,
-      widthOfMainBody: 0
+      })
     }
   }
 

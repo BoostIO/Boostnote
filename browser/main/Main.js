@@ -35,6 +35,7 @@ class Main extends React.Component {
     }
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
+
   }
 
   getChildContext () {
