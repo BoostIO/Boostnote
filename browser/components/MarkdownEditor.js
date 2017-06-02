@@ -223,7 +223,10 @@ class MarkdownEditor extends React.Component {
         onKeyDown={(e) => this.handleKeyDown(e)}
         onKeyUp={(e) => this.handleKeyUp(e)}
       >
-        <CodeEditor styleName='codeEditor'
+        <CodeEditor styleName={this.state.status === 'CODE'
+		        ? 'codeEditor'
+		        : 'codeEditor--hide'
+          }
           ref='code'
           mode='GitHub Flavored Markdown'
           value={value}

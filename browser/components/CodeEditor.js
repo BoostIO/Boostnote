@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
+import {enhanceWithScrollbars} from '../lib/codemirrorScrollbars'
 import CodeMirror from 'codemirror'
 import path from 'path'
 
@@ -45,8 +46,10 @@ export default class CodeEditor extends React.Component {
 
   componentDidMount () {
     this.value = this.props.value
-    this.editor = CodeMirror(this.refs.root, {
+      enhanceWithScrollbars(CodeMirror)
+      this.editor = CodeMirror(this.refs.root, {
       value: this.props.value,
+      scrollbarStyle: 'simple',
       lineNumbers: true,
       lineWrapping: true,
       theme: this.props.theme,
