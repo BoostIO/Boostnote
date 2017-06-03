@@ -165,14 +165,14 @@ class Main extends React.Component {
     })
   }
 
-  hideLeftLists(noteDetail, mainBody) {
+  hideLeftLists (noteDetail, mainBody) {
     this.state.noteDetailWidth = noteDetail.style.left
     this.state.mainBodyWidth = mainBody.style.left
     noteDetail.style.left = '0px'
     mainBody.style.left = '0px'
   }
 
-  showLeftLists(noteDetail, mainBody) {
+  showLeftLists (noteDetail, mainBody) {
     noteDetail.style.left = this.state.noteDetailWidth
     mainBody.style.left = this.state.mainBodyWidth
   }
