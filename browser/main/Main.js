@@ -34,7 +34,7 @@ class Main extends React.Component {
       mainBodyWidth: 0
     }
 
-    this.fullScreenEditorCode = () => this.handleFullScreenButton()
+    this.toggleFullScreen = () => this.handleFullScreenButton()
   }
 
   getChildContext () {
@@ -69,13 +69,13 @@ class Main extends React.Component {
         }
       })
 
-    eventEmitter.on('editor:fullscreen', this.fullScreenEditorCode)
+    eventEmitter.on('editor:fullscreen', this.toggleFullScreen)
     window.addEventListener('focus', focused)
   }
 
   componentWillUnmount () {
     window.removeEventListener('focus', focused)
-    eventEmitter.off('editor:fullscreen', this.fullScreenEditorCode)
+    eventEmitter.off('editor:fullscreen', this.toggleFullScreen)
   }
 
   handleLeftSlideMouseDown (e) {
@@ -156,22 +156,25 @@ class Main extends React.Component {
     this.setState({ fullScreen: !this.state.fullScreen }, () => {
       const noteDetail = document.querySelector('.NoteDetail')
       const mainBody = document.querySelector('#main-body')
-      const sliderRight = document.querySelector('#slider-right')
-      const sliderLeft = document.querySelector('#slider-left')
+
       if (this.state.fullScreen) {
-        this.state.noteDetailWidth = noteDetail.style.left
-        this.state.mainBodyWidth = mainBody.style.left
-        noteDetail.style.left = '0px'
-        mainBody.style.left = '0px'
-        sliderRight.style.display = 'none'
-        sliderLeft.style.display = 'none'
+        this.hideLeftLists(noteDetail, mainBody)
       } else {
-        noteDetail.style.left = this.state.noteDetailWidth
-        mainBody.style.left = this.state.mainBodyWidth
-        sliderRight.style.display = 'block'
-        sliderLeft.style.display = 'block'
+        this.showLeftLists(noteDetail, mainBody)
       }
     })
+  }
+
+  hideLeftLists(noteDetail, mainBody) {
+    this.state.noteDetailWidth = noteDetail.style.left
+    this.state.mainBodyWidth = mainBody.style.left
+    noteDetail.style.left = '0px'
+    mainBody.style.left = '0px'
+  }
+
+  showLeftLists(noteDetail, mainBody) {
+    noteDetail.style.left = this.state.noteDetailWidth
+    mainBody.style.left = this.state.mainBodyWidth
   }
 
   render () {
@@ -195,7 +198,6 @@ class Main extends React.Component {
         />
         {!config.isSideNavFolded &&
           <div styleName={this.state.isLeftSliderFocused ? 'slider--active' : 'slider'}
-            id='slider-left'
             style={{left: this.state.navWidth}}
             onMouseDown={(e) => this.handleLeftSlideMouseDown(e)}
             draggable='false'
@@ -227,7 +229,6 @@ class Main extends React.Component {
             ])}
           />
           <div styleName={this.state.isRightSliderFocused ? 'slider-right--active' : 'slider-right'}
-            id='slider-right'
             style={{left: this.state.listWidth - 1}}
             onMouseDown={(e) => this.handleRightSlideMouseDown(e)}
             draggable='false'
