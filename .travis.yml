@@ -23,4 +23,6 @@ matrix:
       script:
         - 'npm run lint'
         - 'npm run test'
-        - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" && ${TRAVIS_NODE_VERSION} = "stable" ]]; then ./script/e2e-runner.sh; fi'
+        - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" &&\
+                 ${TRAVIS_NODE_VERSION} = "stable" &&\
+                 ${TRAVIS_PULL_REQUEST} != "false" ]]; then ./script/e2e-runner.sh; fi'
