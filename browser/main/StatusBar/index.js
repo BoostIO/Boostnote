@@ -48,6 +48,7 @@ class StatusBar extends React.Component {
 
   render () {
     let { config, status } = this.context
+    const { location } = this.props
 
     return (
       <div className='StatusBar'
@@ -60,6 +61,7 @@ class StatusBar extends React.Component {
           {Math.floor(config.zoom * 100)}%
         </button>
 
+        <div styleName='note-hash'>#{location.query.key}</div>
         <div styleName='blank' />
 
         {status.updateReady

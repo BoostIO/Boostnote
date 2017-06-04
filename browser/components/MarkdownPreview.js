@@ -87,6 +87,8 @@ export default class MarkdownPreview extends React.Component {
     this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
     this.saveAsTextHandler = () => this.handleSaveAsText()
     this.saveAsMdHandler = () => this.handleSaveAsMd()
+
+    this.linkClickHandler = this.handlelinkClick.bind(this)
   }
 
   handlePreviewAnchorClick (e) {
@@ -228,6 +230,10 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', this.checkboxClickHandler)
     })
 
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+      el.removeEventListener('click', this.linkClickHandler)
+    })
+
     let { value, theme, indentSize, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
@@ -250,6 +256,10 @@ export default class MarkdownPreview extends React.Component {
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
       el.addEventListener('click', this.checkboxClickHandler)
+    })
+
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+      el.addEventListener('click', this.linkClickHandler)
     })
 
     codeBlockTheme = consts.THEMES.some((_theme) => _theme === codeBlockTheme)
@@ -333,6 +343,14 @@ export default class MarkdownPreview extends React.Component {
   preventImageDroppedHandler (e) {
     e.preventDefault()
     e.stopPropagation()
+  }
+
+  handlelinkClick (e) {
+    const noteHash = e.target.hash
+    const regexIsNoteLink = /^#(.{20})-(.{20})$/
+    if (regexIsNoteLink.test(noteHash)) {
+      eventEmitter.emit('list:jump', noteHash.replace(/^#/, ''))
+    }
   }
 
   render () {
