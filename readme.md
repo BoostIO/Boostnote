@@ -35,6 +35,19 @@ Let's talk about Boostnote's great features, new feature requests and things lik
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md) : Development configurations for Boostnote 🚀
 * Copyright (C) 2017 Maisin&Co.
 
+### Help spread the word
+
+<!-- Please don't remove this: Grab your social icons from https://github.com/carlsednaoui/gitsocial -->
+
+[![1.1]][1]
+[![2.1]][2]
+
 ## License
 
 [GPL v3](./LICENSE).
+
+[1]: https://twitter.com/intent/tweet?text=Boostnote%20is%20an%20open%20source%20note-taking%20app%20made%20for%20programmers%20just%20like%20you.%20https://boostnote.io/
+[1.1]: http://i.imgur.com/tXSoThF.png
+
+[2]: https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fboostnote.io
+[2.1]: http://i.imgur.com/P3YfQoD.png
