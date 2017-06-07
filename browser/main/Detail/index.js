@@ -14,7 +14,12 @@ class Detail extends React.Component {
     super(props)
 
     this.focusHandler = () => {
+      if (this.refs.root.state.status === 'CODE') return
       this.refs.root != null && this.refs.root.focus()
+      let { config } = this.props
+      if (config.editor.switchPreview === 'RIGHTCLICK') {
+        this.refs.root.setState({status: ''})
+      }
     }
     this.deleteHandler = () => {
       this.refs.root != null && this.refs.root.handleDeleteButtonClick()

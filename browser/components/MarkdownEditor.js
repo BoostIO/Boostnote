@@ -166,6 +166,7 @@ class MarkdownEditor extends React.Component {
     const keyPressed = this.state.keyPressed
     keyPressed.add(e.keyCode)
     this.setState({ keyPressed })
+
     let isNoteHandlerKey = (el) => { return keyPressed.has(el) }
     if (keyPressed.size === this.escapeFromEditor.length &&
         !this.state.isLocked && this.state.status === 'CODE' &&
