@@ -15,9 +15,17 @@ class ModalBase extends React.Component {
 
   close () {
     if (modalBase != null) modalBase.setState({component: null, componentProps: null, isHidden: true})
-    // Toggle overflow style on NoteList
-    let list = document.querySelector('.NoteList__list___browser-main-NoteList-')
-    list.style.overflow = 'auto'
+
+    // Toggle overflow style on NoteList and Notes
+    this.showScrollBars()
+  }
+
+  function showScrollBars() {
+    let list = document.querySelectorAll('.NoteList__list___browser-main-NoteList-, .SnippetNoteDetail__description___browser-main-Detail- > textarea')
+    list.forEach((each)=> {each.style.overflow = 'hidden'})
+
+    let notesScrollbar = document.querySelector('.CodeMirror-vscrollbar')
+    list.style.display = 'none'
   }
 
   render () {
@@ -38,11 +46,19 @@ let el = document.createElement('div')
 document.body.appendChild(el)
 let modalBase = ReactDOM.render(<ModalBase />, el)
 
+function hideScrollBars() {
+  let list = document.querySelectorAll('.NoteList__list___browser-main-NoteList-, .SnippetNoteDetail__description___browser-main-Detail- > textarea')
+  list.forEach((each)=> {each.style.overflow = 'auto'})
+
+  let notesScrollbar = document.querySelector('.CodeMirror-vscrollbar')
+  list.style.display = 'block'
+}
+
 export function openModal (component, props) {
   if (modalBase == null) { return }
   // Hide scrollbar by removing overflow when modal opens
-  let list = document.querySelector('.NoteList__list___browser-main-NoteList-')
-  list.style.overflow = 'hidden'
+  hideScrollBars()
+
   document.body.setAttribute('data-modal', 'open')
   modalBase.setState({component: component, componentProps: props, isHidden: false})
 }
