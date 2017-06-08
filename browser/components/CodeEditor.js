@@ -57,7 +57,7 @@ export default class CodeEditor extends React.Component {
       keyMap: this.props.keyMap,
       inputStyle: 'textarea',
       dragDrop: false,
-      extraKeys: {
+      extraKeys: Object.assign({
         Tab: function (cm) {
           const cursor = cm.getCursor()
           const line = cm.getLine(cursor.line)
@@ -81,11 +81,8 @@ export default class CodeEditor extends React.Component {
             }
           }
         },
-        'Cmd-T': function (cm) {
-          // Do nothing
-        },
         Enter: 'newlineAndIndentContinueMarkdownList'
-      }
+      }, this.props.extraKeys)
     })
 
     this.setMode(this.props.mode)

@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './MarkdownEditor.styl'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
+import MarkdownShortcuts from '../lib/keymaps'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 
 class MarkdownEditor extends React.Component {
@@ -202,6 +203,15 @@ class MarkdownEditor extends React.Component {
     this.setState({ isLocked: !this.state.isLocked })
   }
 
+  getExtraKeys () {
+    const { config } = this.props
+    let keymap = {}
+    if (config.editor.keyMap === 'sublime') {
+      keymap = MarkdownShortcuts.markdownKeys()
+    }
+    return keymap
+  }
+
   render () {
     let { className, value, config, storageKey } = this.props
 
@@ -239,6 +249,7 @@ class MarkdownEditor extends React.Component {
           storageKey={storageKey}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
+          extraKeys={this.getExtraKeys()}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
