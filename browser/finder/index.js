@@ -10,6 +10,7 @@ import StorageSection from './StorageSection'
 import NoteList from './NoteList'
 import NoteDetail from './NoteDetail'
 import SideNavFilter from 'browser/components/SideNavFilter'
+import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 require('!!style!css!stylus?sourceMap!../main/global.styl')
 require('../lib/customMeta')
 
@@ -94,6 +95,7 @@ class FinderMain extends React.Component {
 
     if (e.keyCode === 13) {
       this.refs.detail.saveToClipboard()
+      AwsMobileAnalyticsConfig.recordDynamitCustomEvent('COPY_FINDER')
       hideFinder()
       e.preventDefault()
     }

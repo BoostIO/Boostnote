@@ -50,6 +50,8 @@
   "dependencies": {
     "@rokt33r/markdown-it-math": "^4.0.1",
     "@rokt33r/season": "^5.3.0",
+    "aws-sdk": "^2.48.0",
+    "aws-sdk-mobile-analytics": "^0.9.2",
     "codemirror": "^5.19.0",
     "electron-config": "^0.2.1",
     "electron-gh-releases": "^2.0.2",
@@ -104,6 +106,7 @@
     "grunt-electron-installer": "^1.2.0",
     "history": "^1.17.0",
     "jsdom": "^9.4.2",
+    "json-loader": "^0.5.4",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
     "react-color": "^2.2.2",

@@ -13,6 +13,7 @@ import markdown from 'browser/lib/markdown'
 import StatusBar from '../StatusBar'
 import _ from 'lodash'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
+import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 
 const electron = require('electron')
 const { remote } = electron
@@ -116,6 +117,7 @@ class MarkdownNoteDetail extends React.Component {
           type: 'UPDATE_NOTE',
           note: note
         })
+        AwsMobileAnalyticsConfig.recordDynamitCustomEvent('EDIT_NOTE')
       })
   }
 
@@ -154,6 +156,7 @@ class MarkdownNoteDetail extends React.Component {
 
   handleStarButtonClick (e) {
     let { note } = this.state
+    if (!note.isStarred) AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_STAR')
 
     note.isStarred = !note.isStarred
 

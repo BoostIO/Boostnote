@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TagSelect.styl'
 import _ from 'lodash'
+import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 
 class TagSelect extends React.Component {
   constructor (props) {
@@ -56,6 +57,7 @@ class TagSelect extends React.Component {
   }
 
   submitTag () {
+    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_TAG')
     let { value } = this.props
     let newTag = this.refs.newTag.value.trim().replace(/ +/g, '_')
 

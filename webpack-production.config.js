@@ -15,6 +15,10 @@ var config = Object.assign({}, skeleton, {
         test: /\.styl$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'style!css?modules&importLoaders=1&localIdentName=[name]__[local]___[path]!stylus?sourceMap'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   },

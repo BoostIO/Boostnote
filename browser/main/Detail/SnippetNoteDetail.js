@@ -16,6 +16,7 @@ import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
+import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 
 function pass (name) {
   switch (name) {
@@ -110,6 +111,7 @@ class SnippetNoteDetail extends React.Component {
           type: 'UPDATE_NOTE',
           note: note
         })
+        AwsMobileAnalyticsConfig.recordDynamitCustomEvent('EDIT_NOTE')
       })
   }
 
@@ -148,6 +150,7 @@ class SnippetNoteDetail extends React.Component {
 
   handleStarButtonClick (e) {
     let { note } = this.state
+    if (!note.isStarred) AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_STAR')
 
     note.isStarred = !note.isStarred
 
