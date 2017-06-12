@@ -12,6 +12,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
 import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 import mobileAnalytics from 'browser/main/lib/awsMobileAnalyticsConfig'
 
 function focused () {
@@ -30,8 +31,13 @@ class Main extends React.Component {
       isRightSliderFocused: false,
       listWidth: config.listWidth,
       navWidth: config.navWidth,
-      isLeftSliderFocused: false
+      isLeftSliderFocused: false,
+      fullScreen: false,
+      noteDetailWidth: 0,
+      mainBodyWidth: 0
     }
+
+    this.toggleFullScreen = () => this.handleFullScreenButton()
   }
 
   getChildContext () {
@@ -66,11 +72,13 @@ class Main extends React.Component {
         }
       })
 
+    eventEmitter.on('editor:fullscreen', this.toggleFullScreen)
     window.addEventListener('focus', focused)
   }
 
   componentWillUnmount () {
     window.removeEventListener('focus', focused)
+    eventEmitter.off('editor:fullscreen', this.toggleFullScreen)
   }
 
   handleLeftSlideMouseDown (e) {
@@ -147,6 +155,31 @@ class Main extends React.Component {
     }
   }
 
+  handleFullScreenButton (e) {
+    this.setState({ fullScreen: !this.state.fullScreen }, () => {
+      const noteDetail = document.querySelector('.NoteDetail')
+      const mainBody = document.querySelector('#main-body')
+
+      if (this.state.fullScreen) {
+        this.hideLeftLists(noteDetail, mainBody)
+      } else {
+        this.showLeftLists(noteDetail, mainBody)
+      }
+    })
+  }
+
+  hideLeftLists (noteDetail, mainBody) {
+    this.state.noteDetailWidth = noteDetail.style.left
+    this.state.mainBodyWidth = mainBody.style.left
+    noteDetail.style.left = '0px'
+    mainBody.style.left = '0px'
+  }
+
+  showLeftLists (noteDetail, mainBody) {
+    noteDetail.style.left = this.state.noteDetailWidth
+    mainBody.style.left = this.state.mainBodyWidth
+  }
+
   render () {
     let { config } = this.props
 
@@ -176,6 +209,7 @@ class Main extends React.Component {
           </div>
         }
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
+          id='main-body'
           ref='body'
           style={{left: config.isSideNavFolded ? 44 : this.state.navWidth}}
         >

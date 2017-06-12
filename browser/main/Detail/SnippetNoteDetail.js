@@ -190,6 +190,10 @@ class SnippetNoteDetail extends React.Component {
     }
   }
 
+  handleFullScreenButton (e) {
+    ee.emit('editor:fullscreen')
+  }
+
   handleTabPlusButtonClick (e) {
     this.addSnippet()
   }
@@ -526,6 +530,11 @@ class SnippetNoteDetail extends React.Component {
                   </g>
                 </g>
               </svg>
+            </button>
+            <button styleName='control-fullScreenButton'
+              onMouseDown={(e) => this.handleFullScreenButton(e)}
+            >
+              <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
             </button>
           </div>
         </div>

@@ -70,6 +70,10 @@
   float right
   topBarButtonLight()
 
+.control-fullScreenButton
+  float right
+  topBarButtonLight()
+
 body[data-theme="dark"]
   .root
     border-color $ui-dark-borderColor
@@ -101,4 +105,7 @@ body[data-theme="dark"]
         color $ui-dark-text-color
 
   .control-trashButton
+    topBarButtonDark()
+
+  .control-fullScreenButton
     topBarButtonDark()

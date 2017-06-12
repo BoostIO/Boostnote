@@ -196,6 +196,10 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
+  handleFullScreenButton (e) {
+    ee.emit('editor:fullscreen')
+  }
+
   handleLockButtonMouseDown (e) {
     e.preventDefault()
     ee.emit('editor:lock')
@@ -286,6 +290,11 @@ class MarkdownNoteDetail extends React.Component {
                   </g>
                 </g>
               </svg>
+            </button>
+            <button styleName='control-fullScreenButton'
+              onMouseDown={(e) => this.handleFullScreenButton(e)}
+            >
+              <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
             </button>
           </div>
         </div>
