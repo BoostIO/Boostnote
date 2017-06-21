@@ -50,7 +50,7 @@ nodeIpc.connectTo(
       console.log(err)
     })
     nodeIpc.of.node.on('connect', function () {
-      console.log('Conncted successfully')
+      console.log('Connected successfully')
     })
     nodeIpc.of.node.on('disconnect', function () {
       console.log('disconnected')

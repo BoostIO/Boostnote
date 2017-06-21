@@ -18,7 +18,7 @@ nodeIpc.connectTo(
       console.log(err)
     })
     nodeIpc.of.node.on('connect', function () {
-      console.log('Conncted successfully')
+      console.log('Connected successfully')
       ipcRenderer.send('config-renew', {config: ConfigManager.get()})
     })
     nodeIpc.of.node.on('disconnect', function () {
