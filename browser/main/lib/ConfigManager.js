@@ -1,9 +1,13 @@
 import _ from 'lodash'
+import RcParser from 'browser/main/lib/RcParser'
 
 const OSX = global.process.platform === 'darwin'
 const electron = require('electron')
 const { ipcRenderer } = electron
 const consts = require('browser/lib/consts')
+const path = require('path')
+const fs = require('fs')
+const BOOSTNOTERC = '.boostnoterc'
 
 let isInitialized = false
 
@@ -58,11 +62,13 @@ function get () {
   let config = window.localStorage.getItem('config')
 
   try {
+    const boostnotercConfig = RcParser.parse()
+
     config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
-    config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, config.hotkey)
-    config.ui = Object.assign({}, DEFAULT_CONFIG.ui, config.ui)
-    config.editor = Object.assign({}, DEFAULT_CONFIG.editor, config.editor)
-    config.preview = Object.assign({}, DEFAULT_CONFIG.preview, config.preview)
+
+    config = Object.assign({}, DEFAULT_CONFIG, boostnotercConfig)
+    config = assignConfigValues(config, boostnotercConfig, config)
+
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
     console.warn('Boostnote resets the malformed configuration.')
@@ -122,6 +128,14 @@ function set (updates) {
   ipcRenderer.send('config-renew', {
     config: get()
   })
+}
+
+function assignConfigValues (config, rcConfig, originalConfig) {
+  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, rcConfig, originalConfig.hotkey)
+  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, rcConfig, originalConfig.ui)
+  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, rcConfig, originalConfig.editor)
+  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, rcConfig, originalConfig.preview)
+  return config
 }
 
 export default {
