@@ -1,0 +1,24 @@
+.lock-button
+  padding-bottom 3px
+
+.control-lockButton
+  topBarButtonLight()
+
+.control-lockButton-tooltip
+  tooltip()
+  position fixed
+  pointer-events none
+  top 50px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
+body[data-theme="dark"]
+  .control-lockButton-tooltip
+    darkTooltip()
+
+  .control-lockButton
+    topBarButtonDark()

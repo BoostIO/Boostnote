@@ -15,6 +15,7 @@ import _ from 'lodash'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
+import LockButton from './LockButton'
 
 const electron = require('electron')
 const { remote } = electron
@@ -30,16 +31,11 @@ class MarkdownNoteDetail extends React.Component {
         title: '',
         content: ''
       }, props.note),
-      isLockButtonShown: false,
-      isLocked: false
+      isLockButtonShown: false
     }
     this.dispatchTimer = null
 
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
-  }
-
-  focus () {
-    this.refs.content.focus()
   }
 
   componentDidMount () {
@@ -201,17 +197,6 @@ class MarkdownNoteDetail extends React.Component {
     ee.emit('editor:fullscreen')
   }
 
-  handleLockButtonMouseDown (e) {
-    e.preventDefault()
-    ee.emit('editor:lock')
-    this.setState({ isLocked: !this.state.isLocked })
-    if (this.state.isLocked) this.focus()
-  }
-
-  getToggleLockButton () {
-    return this.state.isLocked ? 'fa-lock' : 'fa-unlock-alt'
-  }
-
   handleDeleteKeyDown (e) {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
@@ -223,10 +208,6 @@ class MarkdownNoteDetail extends React.Component {
     } else {
       this.setState({isLockButtonShown: false})
     }
-  }
-
-  handleFocus (e) {
-    this.focus()
   }
 
   render () {
@@ -263,25 +244,11 @@ class MarkdownNoteDetail extends React.Component {
             />
           </div>
           <div styleName='info-right'>
-            {(() => {
-              const faClassName = `fa ${this.getToggleLockButton()}`
-              const lockButtonComponent =
-                <button styleName='control-lockButton'
-                  onFocus={(e) => this.handleFocus(e)}
-                  onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
-                >
-                  <i className={faClassName} styleName='lock-button' />
-                  <span styleName='control-lockButton-tooltip'>
-                    {this.state.isLocked ? 'Unlock' : 'Lock'}
-                  </span>
-                </button>
-              return (
-                this.state.isLockButtonShown ? lockButtonComponent : ''
-              )
-            })()}
             <TrashButton
               onClick={(e) => this.handleTrashButtonClick(e)}
             />
+            {this.state.isLockButtonShown ? <LockButton /> : ''}
+
             <button styleName='control-fullScreenButton'
               onMouseDown={(e) => this.handleFullScreenButton(e)}
             >
