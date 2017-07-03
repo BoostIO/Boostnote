@@ -534,7 +534,6 @@ class SnippetNoteDetail extends React.Component {
           <div styleName='description'>
             <textarea
               style={{
-                fontFamily: config.preview.fontFamily,
                 fontSize: parseInt(config.preview.fontSize, 10)
               }}
               ref='description'
