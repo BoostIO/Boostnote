@@ -20,6 +20,7 @@ import InfoPanel from './InfoPanel'
 import { formatDate } from 'browser/lib/date-formatter'
 
 
+
 const electron = require('electron')
 const { remote } = electron
 const { Menu, MenuItem, dialog } = remote
