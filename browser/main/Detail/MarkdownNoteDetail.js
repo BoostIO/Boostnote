@@ -234,6 +234,7 @@ class MarkdownNoteDetail extends React.Component {
 
   handleInfoButtonClick (e) {
     const infoPanel = document.querySelector('.infoPanel')
+    console.log('hoge')
     if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
