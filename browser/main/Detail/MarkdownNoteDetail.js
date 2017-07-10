@@ -1,9 +1,13 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+
+
 import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import TodoListPercentage from 'browser/components/TodoListPercentage'
+
 import StarButton from './StarButton'
+
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
@@ -18,6 +22,8 @@ import TrashButton from './TrashButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
 import { formatDate } from 'browser/lib/date-formatter'
+
+
 
 const electron = require('electron')
 const { remote } = electron
