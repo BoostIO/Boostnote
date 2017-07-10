@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+
 import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import TodoListPercentage from 'browser/components/TodoListPercentage'
