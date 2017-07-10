@@ -4,6 +4,7 @@ import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import TodoListPercentage from 'browser/components/TodoListPercentage'
 import StarButton from './StarButton'
+
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
