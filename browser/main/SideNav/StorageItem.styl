@@ -9,6 +9,10 @@
   margin-bottom 5px
   transition 0.15s
 
+.header--active-focused
+  background-color $ui-button--focus-backgroundColor
+  transition color background-color  0.15s
+
 .header--active
   margin-bottom 5px
   background-color $ui-button--active-backgroundColor
@@ -116,7 +120,7 @@ body[data-theme="dark"]
       background-color $ui-dark-button--active-backgroundColor
       &:active
         color $ui-dark-text-color
-        background-color $ui-dark-button--active-backgroundColor  
+        background-color $ui-dark-button--active-backgroundColor
 
   .header--active
     .header-addFolderButton

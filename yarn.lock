@@ -2717,6 +2717,10 @@ fn-name@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/fn-name/-/fn-name-2.0.1.tgz#5214d7537a4d06a4a301c0cc262feb84188002e7"
 
+folktale@^2.0.0-rc1:
+  version "2.0.0-rc1"
+  resolved "https://registry.yarnpkg.com/folktale/-/folktale-2.0.0-rc1.tgz#887a54095612e65d597c1b3ba3d3a4707488f672"
+
 font-awesome@^4.3.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"

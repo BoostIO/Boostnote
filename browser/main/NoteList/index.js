@@ -8,6 +8,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
+import { focusSideNav, focusNoteList, unfocusNoteList } from 'browser/ducks/focus'
 import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import { hashHistory } from 'react-router'
@@ -34,14 +35,13 @@ class NoteList extends React.Component {
     super(props)
 
     this.selectNextNoteHandler = () => {
-      console.log('fired next')
       this.selectNextNote()
     }
     this.selectPriorNoteHandler = () => {
       this.selectPriorNote()
     }
     this.focusHandler = () => {
-      this.refs.list.focus()
+      this.list.focus()
     }
     this.alertIfSnippetHandler = () => {
       this.alertIfSnippet()
@@ -55,6 +55,10 @@ class NoteList extends React.Component {
 
     this.state = {
     }
+
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.handleBlur = this.handleBlur.bind(this)
+    this.handleFocus = this.handleFocus.bind(this)
   }
 
   componentDidMount () {
@@ -76,7 +80,7 @@ class NoteList extends React.Component {
   }
 
   resetScroll () {
-    this.refs.list.scrollTop = 0
+    this.list.scrollTop = 0
   }
 
   componentWillUnmount () {
@@ -112,7 +116,7 @@ class NoteList extends React.Component {
         return note != null && note.storage + '-' + note.key === location.query.key
       })
       if (targetIndex > -1) {
-        let list = this.refs.list
+        let list = this.list
         let item = list.childNodes[targetIndex]
 
         if (item == null) return false
@@ -140,11 +144,8 @@ class NoteList extends React.Component {
       return note.storage + '-' + note.key === location.query.key
     })
 
-    if (targetIndex === 0) {
-      return
-    }
     targetIndex--
-    if (targetIndex < 0) targetIndex = 0
+    if (targetIndex < 0) targetIndex = this.notes.length - 1
 
     router.push({
       pathname: location.pathname,
@@ -207,32 +208,26 @@ class NoteList extends React.Component {
     ee.emit('list:moved')
   }
 
-  handleNoteListKeyDown (e) {
-    if (e.metaKey || e.ctrlKey) return true
-
+  handleKeyDown (e) {
     if (e.keyCode === 65 && !e.shiftKey) {
       e.preventDefault()
       ee.emit('top:new-note')
-    }
-
-    if (e.keyCode === 68) {
+    } else if (e.keyCode === 68) {
       e.preventDefault()
       ee.emit('detail:delete')
-    }
-
-    if (e.keyCode === 69) {
+    } else if (e.keyCode === 69) {
       e.preventDefault()
       ee.emit('detail:focus')
-    }
-
-    if (e.keyCode === 38) {
+    } else if (e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')) {
       e.preventDefault()
       this.selectPriorNote()
-    }
-
-    if (e.keyCode === 40) {
+    } else if (e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'n')) {
       e.preventDefault()
       this.selectNextNote()
+    } else if (e.key === 'ArrowLeft' || (e.ctrlKey && e.key === 'b')) {
+      e.preventDefault()
+      this.props.dispatch(unfocusNoteList())
+      this.props.dispatch(focusSideNav())
     }
   }
 
@@ -407,8 +402,17 @@ class NoteList extends React.Component {
     })
   }
 
+  handleFocus () {
+    this.props.dispatch(focusNoteList())
+  }
+
+  handleBlur () {
+    this.props.dispatch(unfocusNoteList())
+  }
+
   render () {
-    let { location, notes, config, dispatch } = this.props
+    let notes = this.props.notes
+    const { location, config, dispatch, noteListIsFocused } = this.props
     let sortFunc = config.sortBy === 'CREATED_AT'
       ? sortByCreatedAt
       : config.sortBy === 'ALPHABETICAL'
@@ -421,7 +425,7 @@ class NoteList extends React.Component {
         if (note.isTrashed !== true || location.pathname === '/trashed') return true
       })
 
-    let noteList = notes
+    const noteList = notes
       .map(note => {
         if (note == null) {
           return null
@@ -439,6 +443,8 @@ class NoteList extends React.Component {
           return (
             <NoteItem
               isActive={isActive}
+              isFocused={isActive && noteListIsFocused}
+              handleKeyDown={this.handleKeyDown}
               note={note}
               dateDisplay={dateDisplay}
               key={key}
@@ -451,6 +457,8 @@ class NoteList extends React.Component {
         return (
           <NoteItemSimple
             isActive={isActive}
+            isFocused={isActive && noteListIsFocused}
+            handleKeyDown={this.handleKeyDown}
             note={note}
             key={key}
             handleNoteClick={this.handleNoteClick.bind(this)}
@@ -463,6 +471,8 @@ class NoteList extends React.Component {
       <div className='NoteList'
         styleName='root'
         style={this.props.style}
+        onBlur={this.handleBlur}
+        onFocus={this.handleFocus}
       >
         <div styleName='control'>
           <div styleName='control-sortBy'>
@@ -496,9 +506,8 @@ class NoteList extends React.Component {
           </div>
         </div>
         <div styleName='list'
-          ref='list'
+          ref={list => { this.list = list }}
           tabIndex='-1'
-          onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         >
           {noteList}
         </div>
@@ -511,6 +520,7 @@ NoteList.contextTypes = {
 }
 
 NoteList.propTypes = {
+  noteListIsFocused: PropTypes.bool,
   dispatch: PropTypes.func,
   repositories: PropTypes.array,
   style: PropTypes.shape({

@@ -32,6 +32,15 @@
     color $ui-text-color
     background-color $ui-button--active-backgroundColor
 
+.folderList-item--active-focused
+  @extend .folderList-item
+  color $ui-text-color
+  background-color $ui-button--focus-backgroundColor
+
+  &:hover
+    color $ui-text-color
+    background-color $ui-button--active-backgroundColor
+
 .folderList-item-name
   display block
   flex 1
