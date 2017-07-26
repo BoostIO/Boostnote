@@ -60,6 +60,24 @@ $control-height = 30px
   &:hover
     background-color $ui-button--active-backgroundColor
 
+.item--active-focused
+  @extend .item
+  background-color $ui-button--focus-backgroundColor
+  color $ui-text-color
+  .item-title
+  .item-title-empty
+  .item-bottom-tagList-empty
+  .item-bottom-time
+  .item-title-icon
+    color $ui-text-color
+  .item-bottom-tagList-item
+    background-color alpha(white, 0.6)
+    color $ui-text-color
+  .item-wrapper
+    border-color transparent
+  &:hover
+    background-color $ui-button--active-backgroundColor
+
 .item-title-icon
   position relative
   font-size 12px
@@ -156,7 +174,7 @@ body[data-theme="dark"]
       .item-bottom-tagList-item
         transition 0.15s
         background-color alpha(white, 10%)
-        color $ui-dark-text-color  
+        color $ui-dark-text-color
 
   .item-wrapper
     border-color alpha($ui-dark-button--active-backgroundColor, 60%)

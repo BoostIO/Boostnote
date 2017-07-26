@@ -2,6 +2,7 @@ import { combineReducers, createStore } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import { Map, Set } from 'browser/lib/Mutable'
+import focus from 'browser/ducks/focus'
 import _ from 'lodash'
 
 function defaultDataMap () {
@@ -528,13 +529,14 @@ function status (state = defaultStatus, action) {
   return state
 }
 
-let reducer = combineReducers({
+const reducer = combineReducers({
   data,
   config,
   status,
+  focus,
   routing: routerReducer
 })
 
-let store = createStore(reducer)
+const store = createStore(reducer)
 
 export default store

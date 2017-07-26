@@ -27,10 +27,45 @@
     .menu-button-label
       color $ui-text-color
 
+.menu-button--active-focused
+  @extend .menu-button
+  color #e74c3c
+  background-color $ui-button--focus-backgroundColor
+  .menu-button-label
+    color $ui-text-color
+  &:hover
+    background-color $ui-button--active-backgroundColor
+    color #e74c3c
+    .menu-button-label
+      color $ui-text-color
+  &:active, &:active:hover
+    background-color $ui-button--active-backgroundColor
+    color #e74c3c
+    .menu-button-label
+      color $ui-text-color
+
 .menu-button-star--active
   @extend .menu-button
   color #F9BF3B
   background-color $ui-button--active-backgroundColor
+  .menu-button-label
+    color $ui-text-color
+  &:hover
+    background-color $ui-button--active-backgroundColor
+    color #F9BF3B
+    .menu-button-label
+      color $ui-text-color
+  &:active, &:active:hover
+    background-color $ui-button--active-backgroundColor
+    color #F9BF3B
+    .menu-button-label
+      color $ui-text-color
+
+.menu-button-star--active-focused,
+.menu-button-trash--active-focused
+  @extend .menu-button
+  color #F9BF3B
+  background-color $ui-button--focus-backgroundColor
   .menu-button-label
     color $ui-text-color
   &:hover

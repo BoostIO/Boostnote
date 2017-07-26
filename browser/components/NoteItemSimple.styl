@@ -39,6 +39,19 @@ $control-height = 30px
   &:hover
     background-color $ui-button--active-backgroundColor
 
+.item-simple--active-focused
+  @extend .item-simple
+  background-color $ui-button--focus-backgroundColor
+  color $ui-text-color
+  .item-simple-title
+  .item-simple-title-empty
+    border-color transparent
+    color $ui-text-color
+  .item-simple-title-icon
+    color $ui-text-color
+  &:hover
+    background-color $ui-button--active-backgroundColor
+
 .item-simple-title
   font-size 13px
   height 40px
