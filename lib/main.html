@@ -104,6 +104,14 @@
     scriptEl.setAttribute('src', scriptUrl)
     document.body.appendChild(scriptEl)
   </script>
+  <script type='text/javascript'>
+    const ipc = require('electron').ipcRenderer
+    ipc.on('load-plugins', (event, msg) => {
+      console.log('aaaaaaaaaaaa')
+      const PluginManager = require('../plugin/PluginManager')
+      new PluginManager().load()
+    })
+  </script>
   <style>
     .ace_search {
       background-color: #d9d9d9;

@@ -15,6 +15,9 @@ import mixpanel from 'browser/main/lib/mixpanel'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 
+const electron = require('electron')
+const { ipcMain } = electron
+
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
 }
@@ -49,6 +52,17 @@ class Main extends React.Component {
       status,
       config
     }
+  }
+
+  componentWillMount () {
+    //const Boostnote = require('../../plugin/boostnote')
+    //global.boostnote = new Boostnote(['/Users/ryouta/.boostnote_plugins/hoge'])
+    //console.log(global.boostnote)
+
+    //const paths = [{path:'/Users/ryouta/Boostnote/hoge'}].map(plugin => { return plugin.path })
+    //paths.forEach(pluginPath => {
+    //  require(`plugins/${pluginPath}/package.json`)
+    //})
   }
 
   componentDidMount () {
