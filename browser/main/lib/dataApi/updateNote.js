@@ -4,6 +4,8 @@ const path = require('path')
 const CSON = require('@rokt33r/season')
 const { findStorage } = require('browser/lib/findStorage')
 
+import eventEmitter from 'browser/main/lib/eventEmitter'
+
 function validateInput (input) {
   let validatedInput = {}
 
@@ -118,6 +120,7 @@ function updateNote (storageKey, noteKey, input) {
 
       CSON.writeFileSync(path.join(storage.path, 'notes', noteKey + '.cson'), _.omit(noteData, ['key', 'storage']))
 
+      eventEmitter.emit('note-updated')
       return noteData
     })
 }

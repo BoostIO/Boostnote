@@ -6,6 +6,7 @@ class Boostnote {
     this.currentNote = ''
     this.document = window.document
     this.eventEmitter = eventEmitter
+    this.CodeMirror = window.CodeMirror
   }
 
   nextNote () {
@@ -18,5 +19,9 @@ class Boostnote {
 
   setCurrentNote (note) {
     this.currentNote = note
+  }
+
+  onNoteUpdated (func) {
+    eventEmitter.emit('note-updated', func)
   }
 }
