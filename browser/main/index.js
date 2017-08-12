@@ -98,4 +98,10 @@ ReactDOM.render((
       ipcRenderer.send('update-check', 'check-update')
     }
   })
+
+  const Boostnote = require('../../plugin/boostnote')
+  global.boostnote = new Boostnote()
+  // TODO: error handling
+  ipcRenderer.send('boostnote-loaded')
+  console.log('bbbbbbbbbbbbb')
 })
