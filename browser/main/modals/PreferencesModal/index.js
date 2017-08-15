@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import HotkeyTab from './HotkeyTab'
+import ShortcutsTab from './ShortcutsTab'
 import UiTab from './UiTab'
 import InfoTab from './InfoTab'
 import StoragesTab from './StoragesTab'
@@ -64,6 +65,12 @@ class Preferences extends React.Component {
             config={config}
           />
         )
+      case 'SHORTCUTS':
+        return (
+          <ShortcutsTab
+            dispatch={dispatch}
+          />
+        )
       case 'STORAGES':
       default:
         return (
@@ -94,6 +101,7 @@ class Preferences extends React.Component {
       {target: 'STORAGES', label: 'Storages'},
       {target: 'HOTKEY', label: 'Hotkey'},
       {target: 'UI', label: 'UI'},
+      {target: 'SHORTCUTS', label: 'Shortcuts'},
       {target: 'INFO', label: 'Info'}
     ]
 
