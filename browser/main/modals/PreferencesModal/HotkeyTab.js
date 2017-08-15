@@ -13,7 +13,8 @@ class HotkeyTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      config: props.config
+      config: props.config,
+      shortcuts: ConfigManager.getShortcuts()
     }
   }
 
@@ -43,7 +44,7 @@ class HotkeyTab extends React.Component {
     let newConfig = {
       hotkey: this.state.config.hotkey
     }
-
+    ConfigManager.setShortcuts(this.state.shortcuts)
     ConfigManager.set(newConfig)
 
     store.dispatch({
@@ -59,14 +60,24 @@ class HotkeyTab extends React.Component {
   }
 
   handleHotkeyChange (e) {
-    let { config } = this.state
+    let { config, shortcuts } = this.state
     config.hotkey = {
       toggleFinder: this.refs.toggleFinder.value,
       toggleMain: this.refs.toggleMain.value
     }
+    shortcuts = {
+      newNote: this.refs.newNote.value,
+      focusNote: this.refs.focusNote.value,
+      nextNote: this.refs.nextNote.value,
+      previousNote: this.refs.previousNote.value,
+      focusSearch: this.refs.focusSearch.value,
+      print: this.refs.print.value
+    }
     this.setState({
-      config
+      config,
+      shortcuts
     })
+
   }
 
   render () {
@@ -76,7 +87,7 @@ class HotkeyTab extends React.Component {
         {keymapAlert.message}
       </p>
       : null
-    let { config } = this.state
+    let { config, shortcuts } = this.state
 
     return (
       <div styleName='root'>
@@ -104,6 +115,73 @@ class HotkeyTab extends React.Component {
               />
             </div>
           </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>New Note</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleShortcutsChange(e)}
+                ref='newNote'
+                value={shortcuts.newNote}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>Focus Note</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleShortcutsChange(e)}
+                ref='focusNote'
+                value={shortcuts.focusNote}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>Next Note</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleShortcutsChange(e)}
+                ref='nextNote'
+                value={shortcuts.nextNote}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>Previous Note</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleShortcutsChange(e)}
+                ref='previousNote'
+                value={shortcuts.previousNote}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>Focus Search</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleShortcutsChange(e)}
+                ref='focusSearch'
+                value={shortcuts.focusSearch}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>Print</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleShortcutsChange(e)}
+                ref='print'
+                value={shortcuts.print}
+                type='text'
+              />
+            </div>
+          </div>
+
           <div styleName='group-control'>
             <button styleName='group-control-leftButton'
               onClick={(e) => this.handleHintToggleButtonClick(e)}
