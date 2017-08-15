@@ -19,7 +19,7 @@ const DEFAULT_SHORTCUTS = {
 }
 
 function setKeys (newShortcuts) {
-  const currentShortcuts = getShortcuts()
+  const currentShortcuts = getKeys()
   const config = new Config()
   const shortcuts = Object.assign({}, currentShortcuts, newShortcuts)
   ipcRenderer.send('config-renew', {config: shortcuts})

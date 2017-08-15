@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import store from 'browser/main/store'
+import ConfigManager from 'browser/main/lib/ConfigManager'
 import KeysManager from 'browser/main/lib/KeysManager'
 
 const electron = require('electron')
@@ -13,7 +14,7 @@ class KeysTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      keys: KeysManager.getShortcuts()
+      keys: KeysManager.getKeys()
     }
   }
 
@@ -32,6 +33,12 @@ class KeysTab extends React.Component {
     }
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
+
+    // For compatibility
+    const Config = require('electron-config')
+    const config = new Config()
+    const shortcuts = config.get('menuShortcuts')
+    if (!shortcuts) this.setState({keys: Object.assign({}, this.state.keys, ConfigManager.get())})
   }
 
   componentWillUnmount () {
@@ -40,7 +47,7 @@ class KeysTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    KeysManager.setShortcuts(this.state.keys)
+    KeysManager.setKeys(this.state.keys)
 
     store.dispatch({
       type: 'SET_KEYS',
@@ -91,7 +98,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleMain'
-                value={keys.toggleMain}
+                value={keys.hotkey.toggleMain}
                 type='text'
               />
             </div>
@@ -102,7 +109,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleFinder'
-                value={keys.toggleFinder}
+                value={keys.hotkey.toggleFinder}
                 type='text'
               />
             </div>
