@@ -118,7 +118,7 @@ class HotkeyTab extends React.Component {
             <div styleName='group-section-label'>New Note</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
-                onChange={(e) => this.handleShortcutsChange(e)}
+                onChange={(e) => this.handleHotkeyChange(e)}
                 ref='newNote'
                 value={shortcuts.newNote}
                 type='text'
@@ -129,7 +129,7 @@ class HotkeyTab extends React.Component {
             <div styleName='group-section-label'>Focus Note</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
-                onChange={(e) => this.handleShortcutsChange(e)}
+                onChange={(e) => this.handleHotkeyChange(e)}
                 ref='focusNote'
                 value={shortcuts.focusNote}
                 type='text'
@@ -140,7 +140,7 @@ class HotkeyTab extends React.Component {
             <div styleName='group-section-label'>Next Note</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
-                onChange={(e) => this.handleShortcutsChange(e)}
+                onChange={(e) => this.handleHotkeyChange(e)}
                 ref='nextNote'
                 value={shortcuts.nextNote}
                 type='text'
@@ -151,7 +151,7 @@ class HotkeyTab extends React.Component {
             <div styleName='group-section-label'>Previous Note</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
-                onChange={(e) => this.handleShortcutsChange(e)}
+                onChange={(e) => this.handleHotkeyChange(e)}
                 ref='previousNote'
                 value={shortcuts.previousNote}
                 type='text'
@@ -162,7 +162,7 @@ class HotkeyTab extends React.Component {
             <div styleName='group-section-label'>Focus Search</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
-                onChange={(e) => this.handleShortcutsChange(e)}
+                onChange={(e) => this.handleHotkeyChange(e)}
                 ref='focusSearch'
                 value={shortcuts.focusSearch}
                 type='text'
@@ -173,7 +173,7 @@ class HotkeyTab extends React.Component {
             <div styleName='group-section-label'>Print</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
-                onChange={(e) => this.handleShortcutsChange(e)}
+                onChange={(e) => this.handleHotkeyChange(e)}
                 ref='print'
                 value={shortcuts.print}
                 type='text'

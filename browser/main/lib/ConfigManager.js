@@ -20,22 +20,6 @@ const DEFAULT_SHORTCUTS = {
   focusSearch: 'Control+S'
 }
 
-function setShortcuts (newShortcuts) {
-  const config = new Config()
-  const shortcuts = Object.assign({}, DEFAULT_SHORTCUTS, newShortcuts)
-  config.set('menuShortcuts', shortcuts)
-}
-
-function getShortcuts () {
-  const config = new Config()
-  const shortcuts = config.get('menuShortcuts')
-  if (shortcuts) {
-    return shortcuts
-  } else {
-    return DEFAULT_SHORTCUTS
-  }
-}
-
 let isInitialized = false
 
 export const DEFAULT_CONFIG = {
@@ -164,6 +148,23 @@ function assignConfigValues (originalConfig, rcConfig) {
   config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
   config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)
   return config
+}
+
+function setShortcuts (newShortcuts) {
+  const currentShortcuts = getShortcuts()
+  const config = new Config()
+  const shortcuts = Object.assign({}, currentShortcuts, newShortcuts)
+  config.set('menuShortcuts', shortcuts)
+}
+
+function getShortcuts () {
+  const config = new Config()
+  const shortcuts = config.get('menuShortcuts')
+  if (shortcuts) {
+    return shortcuts
+  } else {
+    return DEFAULT_SHORTCUTS
+  }
 }
 
 export default {
