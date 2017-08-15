@@ -22,7 +22,7 @@ class HotkeyTab extends React.Component {
     this.handleSettingDone = () => {
       this.setState({keymapAlert: {
         type: 'success',
-        message: 'Successfully applied!'
+        message: 'Successfully applied! Please restart Boostnote.'
       }})
     }
     this.handleSettingError = (err) => {
@@ -77,7 +77,6 @@ class HotkeyTab extends React.Component {
       config,
       shortcuts
     })
-
   }
 
   render () {
