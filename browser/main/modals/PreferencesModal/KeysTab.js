@@ -7,13 +7,13 @@ import MenuManager from 'browser/main/lib/MenuManager'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 
-class HotkeyTab extends React.Component {
+class KeysTab extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
       isHotkeyHintOpen: false,
-      shortcuts: MenuManager.getShortcuts()
+      keys: MenuManager.getShortcuts()
     }
   }
 
@@ -40,11 +40,11 @@ class HotkeyTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    MenuManager.setShortcuts(this.state.shortcuts)
+    MenuManager.setShortcuts(this.state.keys)
 
     store.dispatch({
       type: 'SET_KEYS',
-      keys: this.state.shortcuts
+      keys: this.state.keys
     })
   }
 
@@ -55,8 +55,8 @@ class HotkeyTab extends React.Component {
   }
 
   handleHotkeyChange (e) {
-    let { shortcuts } = this.state
-    shortcuts = {
+    let { keys } = this.state
+    keys = {
       newNote: this.refs.newNote.value,
       focusNote: this.refs.focusNote.value,
       nextNote: this.refs.nextNote.value,
@@ -64,11 +64,11 @@ class HotkeyTab extends React.Component {
       focusSearch: this.refs.focusSearch.value,
       print: this.refs.print.value,
     }
-    shortcuts.hotkey = {
+    keys.hotkey = {
       toggleFinder: this.refs.toggleFinder.value,
       toggleMain: this.refs.toggleMain.value
     }
-    this.setState({shortcuts: shortcuts})
+    this.setState({keys: keys})
   }
 
   render () {
@@ -78,7 +78,7 @@ class HotkeyTab extends React.Component {
         {keymapAlert.message}
       </p>
       : null
-    let { config, shortcuts } = this.state
+    let { keys } = this.state
 
     return (
       <div styleName='root'>
@@ -91,7 +91,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleMain'
-                value={shortcuts.toggleMain}
+                value={keys.toggleMain}
                 type='text'
               />
             </div>
@@ -102,7 +102,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleFinder'
-                value={shortcuts.toggleFinder}
+                value={keys.toggleFinder}
                 type='text'
               />
             </div>
@@ -114,7 +114,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='newNote'
-                value={shortcuts.newNote}
+                value={keys.newNote}
                 type='text'
               />
             </div>
@@ -125,7 +125,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='focusNote'
-                value={shortcuts.focusNote}
+                value={keys.focusNote}
                 type='text'
               />
             </div>
@@ -136,7 +136,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='nextNote'
-                value={shortcuts.nextNote}
+                value={keys.nextNote}
                 type='text'
               />
             </div>
@@ -147,7 +147,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='previousNote'
-                value={shortcuts.previousNote}
+                value={keys.previousNote}
                 type='text'
               />
             </div>
@@ -158,7 +158,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='focusSearch'
-                value={shortcuts.focusSearch}
+                value={keys.focusSearch}
                 type='text'
               />
             </div>
@@ -169,7 +169,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='print'
-                value={shortcuts.print}
+                value={keys.print}
                 type='text'
               />
             </div>
@@ -220,8 +220,8 @@ class HotkeyTab extends React.Component {
   }
 }
 
-HotkeyTab.propTypes = {
+KeysTab.propTypes = {
   dispatch: PropTypes.func
 }
 
-export default CSSModules(HotkeyTab, styles)
+export default CSSModules(KeysTab, styles)
