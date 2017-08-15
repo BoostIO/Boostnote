@@ -19,10 +19,6 @@ export const DEFAULT_CONFIG = {
   sortBy: 'UPDATED_AT', // 'CREATED_AT', 'UPDATED_AT', 'APLHABETICAL'
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   amaEnabled: true,
-  hotkey: {
-    toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
-  },
   ui: {
     theme: 'default',
     showCopyNotification: true,
@@ -132,7 +128,6 @@ function set (updates) {
 
 function assignConfigValues (originalConfig, rcConfig) {
   let config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
-  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, originalConfig.hotkey, rcConfig.hotkey)
   config.ui = Object.assign({}, DEFAULT_CONFIG.ui, originalConfig.ui, rcConfig.ui)
   config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
   config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)

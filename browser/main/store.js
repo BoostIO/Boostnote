@@ -517,6 +517,8 @@ function config (state = defaultConfig, action) {
       return Object.assign({}, state, action.config)
     case 'SET_UI':
       return Object.assign({}, state, action.config)
+    case 'SET_KEYS':
+      return Object.assign({}, state, action.keys)
   }
   return state
 }

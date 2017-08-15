@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
-import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import MenuManager from 'browser/main/lib/MenuManager'
 
@@ -14,7 +13,6 @@ class HotkeyTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      config: props.config,
       shortcuts: MenuManager.getShortcuts()
     }
   }
@@ -42,15 +40,11 @@ class HotkeyTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    let newConfig = {
-      hotkey: this.state.config.hotkey
-    }
     MenuManager.setShortcuts(this.state.shortcuts)
-    ConfigManager.set(newConfig)
 
     store.dispatch({
-      type: 'SET_UI',
-      config: newConfig
+      type: 'SET_KEYS',
+      keys: this.state.shortcuts
     })
   }
 
@@ -61,23 +55,20 @@ class HotkeyTab extends React.Component {
   }
 
   handleHotkeyChange (e) {
-    let { config, shortcuts } = this.state
-    config.hotkey = {
-      toggleFinder: this.refs.toggleFinder.value,
-      toggleMain: this.refs.toggleMain.value
-    }
+    let { shortcuts } = this.state
     shortcuts = {
       newNote: this.refs.newNote.value,
       focusNote: this.refs.focusNote.value,
       nextNote: this.refs.nextNote.value,
       previousNote: this.refs.previousNote.value,
       focusSearch: this.refs.focusSearch.value,
-      print: this.refs.print.value
+      print: this.refs.print.value,
     }
-    this.setState({
-      config,
-      shortcuts
-    })
+    shortcuts.hotkey = {
+      toggleFinder: this.refs.toggleFinder.value,
+      toggleMain: this.refs.toggleMain.value
+    }
+    this.setState({shortcuts: shortcuts})
   }
 
   render () {
@@ -100,7 +91,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleMain'
-                value={config.hotkey.toggleMain}
+                value={shortcuts.toggleMain}
                 type='text'
               />
             </div>
@@ -111,7 +102,7 @@ class HotkeyTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleFinder'
-                value={config.hotkey.toggleFinder}
+                value={shortcuts.toggleFinder}
                 type='text'
               />
             </div>
