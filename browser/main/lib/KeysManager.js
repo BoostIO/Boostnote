@@ -23,12 +23,12 @@ function setKeys (newShortcuts) {
   const config = new Config()
   const shortcuts = Object.assign({}, currentShortcuts, newShortcuts)
   ipcRenderer.send('config-renew', {config: shortcuts})
-  config.set('menuShortcuts', shortcuts)
+  config.set('shortcutKeys', shortcuts)
 }
 
 function getKeys () {
   const config = new Config()
-  const shortcuts = config.get('menuShortcuts')
+  const shortcuts = config.get('shortcutKeys')
   if (shortcuts) {
     return Object.assign({}, DEFAULT_SHORTCUTS, shortcuts)
   } else {

@@ -37,7 +37,7 @@ class KeysTab extends React.Component {
     // For compatibility
     const Config = require('electron-config')
     const config = new Config()
-    const shortcuts = config.get('menuShortcuts')
+    const shortcuts = config.get('shortcutKeys')
     if (!shortcuts) this.setState({keys: Object.assign({}, this.state.keys, ConfigManager.get())})
   }
 
