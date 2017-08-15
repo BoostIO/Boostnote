@@ -92,7 +92,8 @@ class HotkeyTab extends React.Component {
     return (
       <div styleName='root'>
         <div styleName='group'>
-          <div styleName='group-header'>Hotkey</div>
+          <div styleName='group-header'>Keys</div>
+          <h1>Hotkeys</h1><hr />
           <div styleName='group-section'>
             <div styleName='group-section-label'>Toggle Main</div>
             <div styleName='group-section-control'>
@@ -115,6 +116,7 @@ class HotkeyTab extends React.Component {
               />
             </div>
           </div>
+          <h1>Shortcuts</h1><hr />
           <div styleName='group-section'>
             <div styleName='group-section-label'>New Note</div>
             <div styleName='group-section-control'>
