@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import store from 'browser/main/store'
-import MenuManager from 'browser/main/lib/MenuManager'
+import KeysManager from 'browser/main/lib/KeysManager'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -13,7 +13,7 @@ class KeysTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      keys: MenuManager.getShortcuts()
+      keys: KeysManager.getShortcuts()
     }
   }
 
@@ -40,7 +40,7 @@ class KeysTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    MenuManager.setShortcuts(this.state.keys)
+    KeysManager.setShortcuts(this.state.keys)
 
     store.dispatch({
       type: 'SET_KEYS',

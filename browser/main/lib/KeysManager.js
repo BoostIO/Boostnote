@@ -18,7 +18,7 @@ const DEFAULT_SHORTCUTS = {
   }
 }
 
-function setShortcuts (newShortcuts) {
+function setKeys (newShortcuts) {
   const currentShortcuts = getShortcuts()
   const config = new Config()
   const shortcuts = Object.assign({}, currentShortcuts, newShortcuts)
@@ -26,7 +26,7 @@ function setShortcuts (newShortcuts) {
   config.set('menuShortcuts', shortcuts)
 }
 
-function getShortcuts () {
+function getKeys () {
   const config = new Config()
   const shortcuts = config.get('menuShortcuts')
   if (shortcuts) {
@@ -38,6 +38,6 @@ function getShortcuts () {
 
 module.exports = {
   DEFAULT_SHORTCUTS,
-  setShortcuts,
-  getShortcuts
+  setKeys,
+  getKeys
 }
