@@ -8,17 +8,6 @@ const { ipcRenderer } = electron
 const consts = require('browser/lib/consts')
 const path = require('path')
 const fs = require('fs')
-const Config = require('electron-config')
-
-const DEFAULT_SHORTCUTS = {
-  newNote: 'CommandOrControl+N',
-  focusNote: 'Control+E',
-  deleteNote: OSX? 'Control+Backspace' : 'Control+Delete',
-  print: 'CommandOrControl+P',
-  nextNote: 'Control+J',
-  previousNote: 'Control+K',
-  focusSearch: 'Control+S'
-}
 
 let isInitialized = false
 
@@ -150,27 +139,8 @@ function assignConfigValues (originalConfig, rcConfig) {
   return config
 }
 
-function setShortcuts (newShortcuts) {
-  const currentShortcuts = getShortcuts()
-  const config = new Config()
-  const shortcuts = Object.assign({}, currentShortcuts, newShortcuts)
-  config.set('menuShortcuts', shortcuts)
-}
-
-function getShortcuts () {
-  const config = new Config()
-  const shortcuts = config.get('menuShortcuts')
-  if (shortcuts) {
-    return shortcuts
-  } else {
-    return DEFAULT_SHORTCUTS
-  }
-}
-
 export default {
   get,
   set,
-  validate,
-  setShortcuts,
-  getShortcuts
+  validate
 }

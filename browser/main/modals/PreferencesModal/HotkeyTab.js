@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
+import MenuManager from 'browser/main/lib/MenuManager'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -14,7 +15,7 @@ class HotkeyTab extends React.Component {
     this.state = {
       isHotkeyHintOpen: false,
       config: props.config,
-      shortcuts: ConfigManager.getShortcuts()
+      shortcuts: MenuManager.getShortcuts()
     }
   }
 
@@ -44,7 +45,7 @@ class HotkeyTab extends React.Component {
     let newConfig = {
       hotkey: this.state.config.hotkey
     }
-    ConfigManager.setShortcuts(this.state.shortcuts)
+    MenuManager.setShortcuts(this.state.shortcuts)
     ConfigManager.set(newConfig)
 
     store.dispatch({
