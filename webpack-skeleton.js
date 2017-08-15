@@ -42,6 +42,7 @@ var config = {
     'devtron',
     'mixpanel',
     '@rokt33r/season',
+    'electron-config',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',
