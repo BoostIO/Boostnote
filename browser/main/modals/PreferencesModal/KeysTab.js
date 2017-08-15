@@ -71,10 +71,10 @@ class KeysTab extends React.Component {
       deleteNote: this.refs.deleteNote.value,
       focusSearch: this.refs.focusSearch.value,
       print: this.refs.print.value,
-    }
-    keys.hotkey = {
-      toggleFinder: this.refs.toggleFinder.value,
-      toggleMain: this.refs.toggleMain.value
+      hotkey: {
+        toggleFinder: this.refs.toggleFinder.value,
+        toggleMain: this.refs.toggleMain.value
+      }
     }
     this.setState({keys: keys})
   }
