@@ -4,6 +4,7 @@ import styles from './ConfigTab.styl'
 import store from 'browser/main/store'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import KeysManager from 'browser/main/lib/KeysManager'
+import _ from 'lodash'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -14,7 +15,8 @@ class KeysTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      keys: KeysManager.getKeys()
+      shortcuts: KeysManager.getShortcuts(),
+      hotkey: KeysManager.getHotkey()
     }
   }
 
@@ -33,12 +35,6 @@ class KeysTab extends React.Component {
     }
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
-
-    // For compatibility
-    const Config = require('electron-config')
-    const config = new Config()
-    const shortcuts = config.get('shortcutKeys')
-    if (!shortcuts) this.setState({keys: Object.assign({}, this.state.keys, ConfigManager.get())})
   }
 
   componentWillUnmount () {
@@ -47,11 +43,15 @@ class KeysTab extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    KeysManager.setKeys(this.state.keys)
+    const previousHotkey = KeysManager.getHotkey()
+    if (!_.isEqual(previousHotkey, this.state.hotkey)) {
+      KeysManager.setHotkey(this.state.hotkey)
+    }
+    KeysManager.setShortcuts(this.state.shortcuts)
 
     store.dispatch({
       type: 'SET_KEYS',
-      keys: this.state.keys
+      keys: this.state.shortcuts
     })
   }
 
@@ -62,8 +62,8 @@ class KeysTab extends React.Component {
   }
 
   handleKeysChange (e) {
-    let { keys } = this.state
-    keys = {
+    let { shortcuts, hotkey } = this.state
+    shortcuts = {
       newNote: this.refs.newNote.value,
       focusNote: this.refs.focusNote.value,
       nextNote: this.refs.nextNote.value,
@@ -71,12 +71,13 @@ class KeysTab extends React.Component {
       deleteNote: this.refs.deleteNote.value,
       focusSearch: this.refs.focusSearch.value,
       print: this.refs.print.value,
-      hotkey: {
-        toggleFinder: this.refs.toggleFinder.value,
-        toggleMain: this.refs.toggleMain.value
-      }
     }
-    this.setState({keys: keys})
+
+    hotkey = {
+      toggleFinder: this.refs.toggleFinder.value,
+      toggleMain: this.refs.toggleMain.value
+    }
+    this.setState({shortcuts: shortcuts, hotkey: hotkey})
   }
 
   render () {
@@ -86,7 +87,7 @@ class KeysTab extends React.Component {
         {keymapAlert.message}
       </p>
       : null
-    let { keys } = this.state
+    let { shortcuts, hotkey } = this.state
 
     return (
       <div styleName='root'>
@@ -99,7 +100,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='toggleMain'
-                value={keys.hotkey.toggleMain}
+                value={hotkey.toggleMain}
                 type='text'
               />
             </div>
@@ -110,7 +111,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='toggleFinder'
-                value={keys.hotkey.toggleFinder}
+                value={hotkey.toggleFinder}
                 type='text'
               />
             </div>
@@ -122,7 +123,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='newNote'
-                value={keys.newNote}
+                value={shortcuts.newNote}
                 type='text'
               />
             </div>
@@ -133,7 +134,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='focusNote'
-                value={keys.focusNote}
+                value={shortcuts.focusNote}
                 type='text'
               />
             </div>
@@ -144,7 +145,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='nextNote'
-                value={keys.nextNote}
+                value={shortcuts.nextNote}
                 type='text'
               />
             </div>
@@ -155,7 +156,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='previousNote'
-                value={keys.previousNote}
+                value={shortcuts.previousNote}
                 type='text'
               />
             </div>
@@ -166,7 +167,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='deleteNote'
-                value={keys.deleteNote}
+                value={shortcuts.deleteNote}
                 type='text'
               />
             </div>
@@ -177,7 +178,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='focusSearch'
-                value={keys.focusSearch}
+                value={shortcuts.focusSearch}
                 type='text'
               />
             </div>
@@ -188,7 +189,7 @@ class KeysTab extends React.Component {
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleKeysChange(e)}
                 ref='print'
-                value={keys.print}
+                value={shortcuts.print}
                 type='text'
               />
             </div>
