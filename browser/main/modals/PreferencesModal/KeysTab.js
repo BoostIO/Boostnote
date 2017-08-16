@@ -21,17 +21,12 @@ class KeysTab extends React.Component {
   }
 
   componentDidMount () {
-    this.handleSettingDone = () => {
-      this.setState({keymapAlert: {
-        type: 'success',
-        message: 'Successfully applied! Please restart Boostnote.'
-      }})
+    this.handleSettingDone = (e, payload) => {
+      this.setMessage('success', 'Successfully applied!')
     }
     this.handleSettingError = (err) => {
-      this.setState({keymapAlert: {
-        type: 'error',
-        message: err.message != null ? err.message : 'Error occurs!'
-      }})
+      const message = err.message ? err.message : 'Error occurs!'
+      this.setMessage('error', message)
     }
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
@@ -44,14 +39,32 @@ class KeysTab extends React.Component {
 
   handleSaveButtonClick (e) {
     const previousHotkey = KeysManager.getHotkey()
+    const previousShortcuts = KeysManager.getShortcuts()
     if (!_.isEqual(previousHotkey, this.state.hotkey)) {
       KeysManager.setHotkey(this.state.hotkey)
     }
-    KeysManager.setShortcuts(this.state.shortcuts)
+    if (!_.isEqual(previousShortcuts, this.state.shortcuts)) {
+      try {
+        KeysManager.setShortcuts(this.state.shortcuts)
+        this.setMessage('success', 'Success! Please restart Boostnote')
+      } catch (err) {
+        this.setMessage('error', `Failure! ${err ? '' : err.message}`)
+      }
+    }
 
     store.dispatch({
       type: 'SET_KEYS',
       keys: this.state.shortcuts
+    })
+  }
+
+  setMessage (status, message) {
+    // status: ['success', 'error']
+    this.setState({
+      keymapAlert: {
+        type: status,
+        message: message
+      }
     })
   }
 
