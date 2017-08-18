@@ -5,6 +5,7 @@ import store from 'browser/main/store'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import KeysManager from 'browser/main/lib/KeysManager'
 import _ from 'lodash'
+import RcParser from 'browser/lib/RcParser'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -16,7 +17,11 @@ class KeysTab extends React.Component {
     this.state = {
       isHotkeyHintOpen: false,
       shortcuts: KeysManager.getShortcuts(),
-      hotkey: KeysManager.getHotkey()
+      hotkey: {},
+      keymapAlert: {
+        type: '',
+        message: ''
+      }
     }
   }
 
@@ -25,11 +30,15 @@ class KeysTab extends React.Component {
       this.setMessage('success', 'Successfully applied!')
     }
     this.handleSettingError = (err) => {
-      const message = err.message ? err.message : 'Error occurs!'
+      const message = err.message ? err.message : 'An error occured!'
       this.setMessage('error', message)
     }
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
+
+    // For compatibility
+    const hotkey = RcParser.parse().hotkey || KeysManager.getHotkey()
+    this.setState({hotkey: hotkey})
   }
 
   componentWillUnmount () {
@@ -94,13 +103,12 @@ class KeysTab extends React.Component {
   }
 
   render () {
-    let keymapAlert = this.state.keymapAlert
-    let keymapAlertElement = keymapAlert != null
-      ? <p className={`alert ${keymapAlert.type}`}>
+    const { shortcuts, hotkey, keymapAlert } = this.state
+    const keymapAlertElement = keymapAlert.message === ''
+      ? ''
+      : <p className={`alert ${keymapAlert.type}`}>
         {keymapAlert.message}
       </p>
-      : null
-    let { shortcuts, hotkey } = this.state
 
     return (
       <div styleName='root'>

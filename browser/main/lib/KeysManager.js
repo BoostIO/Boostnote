@@ -1,14 +1,14 @@
 const electron = require('electron')
 const ipcRenderer = electron.ipcRenderer
 
-const OSX = global.process.platform === 'darwin'
+const isOSX = global.process.platform === 'darwin'
 const Config = require('electron-config')
 const config = new Config()
 
 const DEFAULT_SHORTCUTS = {
   newNote: 'CommandOrControl+N',
   focusNote: 'Control+E',
-  deleteNote: OSX? 'Control+Backspace' : 'Control+Delete',
+  deleteNote: isOSX? 'Control+Backspace' : 'Control+Delete',
   print: 'CommandOrControl+P',
   nextNote: 'Control+J',
   previousNote: 'Control+K',
@@ -16,8 +16,8 @@ const DEFAULT_SHORTCUTS = {
 }
 
 const DEFAULT_HOTKEY = {
-  toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-  toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
+  toggleFinder: isOSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
+  toggleMain: isOSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
 }
 
 function setShortcuts (newShortcuts) {
@@ -51,18 +51,15 @@ function setHotkey (newHotkey) {
 
 function getHotkey () {
   // For compatibility
-  let hotkey
   if (window && window.localStorage) {
-    const cachedConfig = JSON.parse(window.localStorage.getItem('config'))
-    hotkey = cachedConfig ? cachedConfig.hotkey : cachedConfig
-  } else {
-    hotkey = config.get('hotkey')
+    const cachedHotkey = JSON.parse(window.localStorage.getItem('config')).hotkey
   }
 
+  const hotkey = config.get('hotkey')
   if (hotkey) {
     return Object.assign({}, DEFAULT_HOTKEY, hotkey)
   } else {
-    return DEFAULT_HOTKEY
+    return object.assign({}, DEFAULT_HOTKEY, cachedHotkey)
   }
 }
 
