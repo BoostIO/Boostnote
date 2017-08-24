@@ -104,6 +104,7 @@ function updateNote (storageKey, noteKey, input) {
         noteData.isStarred = false
         noteData.isTrashed = false
         noteData.tags = []
+        noteData.isPinned = false
       }
 
       if (noteData.type === 'SNIPPET_NOTE') {

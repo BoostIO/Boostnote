@@ -13,6 +13,7 @@ import fs from 'fs'
 import { hashHistory } from 'react-router'
 import markdown from 'browser/lib/markdown'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
+import store from 'browser/main/store'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -271,10 +272,23 @@ class NoteList extends React.Component {
     let folderNoteKeyList = data.folderNoteMap
       .get(storage.key + '-' + folder.key)
 
-    return folderNoteKeyList != null
-      ? folderNoteKeyList
-        .map((uniqueKey) => data.noteMap.get(uniqueKey))
-      : []
+    if (folderNoteKeyList == null) return []
+    return folderNoteKeyList.map((uniqueKey) => data.noteMap.get(uniqueKey))
+  }
+
+  sortByPinn (unorderedNotes) {
+    const { data, params } = this.props
+    let storageKey = params.storageKey
+    let folderKey = params.folderKey
+    let storage = data.storageMap.get(storageKey)
+    if (storage == null) return []
+
+    let folder = _.find(storage.folders, {key: folderKey})
+    const pinnedNotes = unorderedNotes.filter((el) => {
+      return folder.pinnedNotes && folder.pinnedNotes.includes(el.key)
+    })
+
+    return pinnedNotes.concat(unorderedNotes)
   }
 
   handleNoteClick (e, uniqueKey) {
@@ -382,6 +396,56 @@ class NoteList extends React.Component {
     })
   }
 
+  handleNoteContextMenu (e, uniqueKey) {
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Pin to Top',
+      click: (e) => this.handlePinToTop(e, uniqueKey)
+    }))
+    menu.popup()
+  }
+
+  handlePinToTop (e, uniqueKey) {
+    const { data, location } = this.props
+    let splitted = location.pathname.split('/')
+    const storageKey = splitted[2]
+    const folderKey = splitted[4]
+
+    const currentStorage = data.storageMap.get(storageKey)
+    const currentFolder = _.find(currentStorage.folders, {key: folderKey})
+
+    dataApi
+      .updateFolder(storageKey, folderKey, {
+        color: currentFolder.color,
+        name: currentFolder.name,
+        pinnedNote: uniqueKey.split('-').pop()
+      })
+      .then((data) => {
+        store.dispatch({
+          type: 'UPDATE_FOLDER',
+          storage: data.storage
+        })
+        this.setState({
+          status: 'IDLE'
+        })
+      })
+
+    let targetIndex = _.findIndex(this.notes, (note) => {
+      return note != null && note.storage + '-' + note.key === location.query.key
+    })
+    let note = this.notes[targetIndex]
+
+    dataApi
+      .updateNote(note.storage, note.key, note)
+      .then((note) => {
+        note.isPinned = true
+        store.dispatch({
+          type: 'UPDATE_NOTE',
+          note: note
+        })
+      })
+  }
+
   render () {
     let { location, notes, config, dispatch } = this.props
     let sortFunc = config.sortBy === 'CREATED_AT'
@@ -389,8 +453,8 @@ class NoteList extends React.Component {
       : config.sortBy === 'ALPHABETICAL'
       ? sortByAlphabetical
       : sortByUpdatedAt
-    this.notes = notes = this.getNotes()
-      .sort(sortFunc)
+    const sortedNotes = this.getNotes().sort(sortFunc)
+    this.notes = notes = this.sortByPinn(sortedNotes)
       .filter((note) => {
         // this is for the trash box
         if (note.isTrashed !== true || location.pathname === '/trashed') return true
@@ -418,6 +482,7 @@ class NoteList extends React.Component {
               dateDisplay={dateDisplay}
               key={key}
               handleNoteClick={this.handleNoteClick.bind(this)}
+              handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
               handleDragStart={this.handleDragStart.bind(this)}
             />
           )
