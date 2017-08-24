@@ -44,13 +44,14 @@ const TagElementList = (tags) => {
  * @param {Function} handleDragStart
  * @param {string} dateDisplay
  */
-const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStart }) => (
+const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStart, handleNoteContextMenu }) => (
   <div styleName={isActive
       ? 'item--active'
       : 'item'
     }
     key={`${note.storage}-${note.key}`}
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
+    onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
     onDragStart={e => handleDragStart(e, note)}
     draggable='true'
   >
@@ -69,6 +70,9 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStar
       <div styleName='item-bottom-time'>{dateDisplay}</div>
       {note.isStarred
         ? <i styleName='item-star' className='fa fa-star' /> : ''
+      }
+      {note.isPinned
+        ? <i styleName='item-pin' className='fa fa-map-pin' /> : ''
       }
       {note.type === 'MARKDOWN_NOTE'
         ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
@@ -99,6 +103,7 @@ NoteItem.propTypes = {
     isTrashed: PropTypes.bool.isRequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
+  handleNoteContextMenu: PropTypes.func.isRequired,
   handleDragStart: PropTypes.func.isRequired,
   handleDragEnd: PropTypes.func.isRequired
 }
