@@ -54,6 +54,7 @@ class MarkdownNoteDetail extends React.Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key && !this.isMovingNote) {
       if (this.saveQueue != null) this.saveNow()
+      if (this.sendEventQueue != null) this.sendEditnoteEvent()
       this.setState({
         note: Object.assign({}, nextProps.note)
       }, () => {
@@ -65,6 +66,7 @@ class MarkdownNoteDetail extends React.Component {
 
   componentWillUnmount () {
     if (this.saveQueue != null) this.saveNow()
+    if (this.sendEventQueue != null) this.sendEditnoteEvent()
   }
 
   componentDidUnmount () {
@@ -88,6 +90,12 @@ class MarkdownNoteDetail extends React.Component {
 
   save () {
     clearTimeout(this.saveQueue)
+    clearTimeout(this.sendEventQueue)
+
+    this.sendEventQueue = setTimeout(() => {
+      this.sendEditnoteEvent()
+    }, 30000)
+
     this.saveQueue = setTimeout(() => {
       this.saveNow()
     }, 1000)
@@ -105,8 +113,13 @@ class MarkdownNoteDetail extends React.Component {
           type: 'UPDATE_NOTE',
           note: note
         })
-        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
       })
+  }
+
+  sendEditnoteEvent () {
+    clearTimeout(this.saveQueue)
+    this.sendEventQueue = null
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
   }
 
   handleFolderChange (e) {
