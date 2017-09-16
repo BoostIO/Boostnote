@@ -255,6 +255,10 @@ class MarkdownNoteDetail extends React.Component {
     if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
+  handleSpeechButton (e) {
+    speechSynthesis.speak(new SpeechSynthesisUtterance(this.state.note.content))
+  }
+
   render () {
     let { data, config, location } = this.props
     let { note } = this.state
@@ -357,6 +361,13 @@ class MarkdownNoteDetail extends React.Component {
           letterCount={note.content.length}
           type={note.type}
         />
+
+        <button styleName='control-fullScreenButton'
+          onMouseDown={(e) => this.handleSpeechButton(e)}
+        >
+          <i className='fa fa-volume-up' styleName='fullScreen-button' />
+        </button>
+
       </div>
     </div>
 
