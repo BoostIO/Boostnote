@@ -259,6 +259,21 @@ class MarkdownNoteDetail extends React.Component {
     speechSynthesis.speak(new SpeechSynthesisUtterance(this.state.note.content))
   }
 
+  handleUgokuButton (e) {
+    const buruburu = (() => {
+      for (let i = 7; i > 0; i--) {
+        for (let z = 2; z > 0; z--) {
+          window.moveBy(0,i)
+          window.moveBy(i,0)
+          window.moveBy(0,-i)
+          window.moveBy(-i,0)
+        }
+      }
+    })
+
+    setTimeout(buruburu(),10)
+  }
+
   render () {
     let { data, config, location } = this.props
     let { note } = this.state
@@ -366,6 +381,12 @@ class MarkdownNoteDetail extends React.Component {
           onMouseDown={(e) => this.handleSpeechButton(e)}
         >
           <i className='fa fa-volume-up' styleName='fullScreen-button' />
+        </button>
+
+        <button styleName='control-fullScreenButton'
+          onMouseDown={(e) => this.handleUgokuButton(e)}
+        >
+          <i className='fa fa-bolt' styleName='fullScreen-button' />
         </button>
 
       </div>
