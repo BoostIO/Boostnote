@@ -104,6 +104,18 @@
     scriptEl.setAttribute('src', scriptUrl)
     document.body.appendChild(scriptEl)
   </script>
+  <script>
+    const annyang = require('annyang')
+    const commands = {
+      'こんにちは': function() {
+        console.log('こんにちは')
+        CodeMirror.fromTextArea(document.querySelector('textarea')).replaceSelection('こんにちは')
+      }
+    }
+    annyang.addCommands(commands)
+    annyang.setLanguage('ja')
+    annyang.start()
+  </script>
   <style>
     .ace_search {
       background-color: #d9d9d9;

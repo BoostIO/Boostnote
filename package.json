@@ -50,6 +50,7 @@
   "dependencies": {
     "@rokt33r/markdown-it-math": "^4.0.1",
     "@rokt33r/season": "^5.3.0",
+    "annyang": "^2.6.0",
     "aws-sdk": "^2.48.0",
     "aws-sdk-mobile-analytics": "^0.9.2",
     "codemirror": "^5.19.0",
