@@ -104,6 +104,50 @@
     scriptEl.setAttribute('src', scriptUrl)
     document.body.appendChild(scriptEl)
   </script>
+  <script>
+    const annyang = require('annyang')
+    annyang.debug()
+    const commands = {
+      //'こんにちは': function() {
+      //  console.log('こんにちは')
+      //  let speech = new SpeechSynthesisUtterance()
+      //  speech.text = 'こんにちは'
+      //  speech.lang =  'ja-JP'
+      //  speechSynthesis.speak(speech)
+
+      //  const cm = document.querySelector('.CodeMirror').CodeMirror
+      //  const doc = cm.getDoc()
+      //  const cursor = doc.getCursor()
+      //  const line = doc.getLine(cursor.line)
+      //  const pos = {
+      //      line: cursor.line,
+      //      ch: line.length - 1
+      //  }
+      //  doc.replaceRange('こんにちは\n', pos)
+      //},
+      '良い天気ですね': function() {
+        console.log('良い天気ですね')
+        let speech = new SpeechSynthesisUtterance()
+        speech.text = 'そうですね'
+        speech.lang =  'ja-JP'
+        speechSynthesis.speak(speech)
+
+        const cm = document.querySelector('.CodeMirror').CodeMirror
+        const doc = cm.getDoc()
+        const cursor = doc.getCursor()
+        const line = doc.getLine(cursor.line)
+        const pos = {
+            line: cursor.line,
+            ch: line.length - 1
+        }
+        doc.replaceRange('そうですね\n', pos)
+      }
+
+    }
+    annyang.addCommands(commands)
+    annyang.setLanguage('ja')
+    annyang.start()
+  </script>
   <style>
     .ace_search {
       background-color: #d9d9d9;
