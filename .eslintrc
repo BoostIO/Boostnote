@@ -12,7 +12,7 @@
     "react/no-find-dom-node": "warn",
     "react/no-render-return-value": "warn",
     "react/no-deprecated": "warn",
-    "prettier/prettier": ["error", {
+    "prettier/prettier": ["warn", {
       "trailingComma": "all",
       "singleQuote": true
     }]
