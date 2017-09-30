@@ -38,6 +38,18 @@ class SideNav extends React.Component {
     router.push('/trashed')
   }
 
+  handleSwitchFolderButtonClick (e) {
+    console.log('SwitchfolderButton Clicked')
+    let { router } = this.context
+    router.push('/home')
+  }
+
+  handleSwitchTagButtonClick (e) {
+    console.log('SwitchTagButton clicked')
+    let { router } = this.context
+    router.push('/tag')
+  }
+
   render () {
     let { data, location, config, dispatch } = this.props
 
@@ -64,6 +76,10 @@ class SideNav extends React.Component {
         tabIndex='1'
         style={style}
       >
+        <div styleName='SwitchModeButtons'>
+          <button onClick={(e) => this.handleSwitchFolderButtonClick(e)}>Folder</button>
+          <button onClick={(e) => this.handleSwitchTagButtonClick(e)}>Tag</button>
+        </div>
         <div styleName='top'>
           <button styleName='top-menu'
             onClick={(e) => this.handleMenuButtonClick(e)}
