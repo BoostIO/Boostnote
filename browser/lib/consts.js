@@ -1,15 +1,15 @@
-const path = require('path')
-const fs = require('sander')
-const { remote } = require('electron')
-const { app } = remote
+const path = require('path');
+const fs = require('sander');
+const { remote } = require('electron');
+const { app } = remote;
 
-const themePath = process.env.NODE_ENV === 'production'
-  ? path.join(app.getAppPath(), './node_modules/codemirror/theme')
-  : require('path').resolve('./node_modules/codemirror/theme')
-const themes = fs.readdirSync(themePath)
-  .map((themePath) => {
-    return themePath.substring(0, themePath.lastIndexOf('.'))
-  })
+const themePath =
+  process.env.NODE_ENV === 'production'
+    ? path.join(app.getAppPath(), './node_modules/codemirror/theme')
+    : require('path').resolve('./node_modules/codemirror/theme');
+const themes = fs.readdirSync(themePath).map(themePath => {
+  return themePath.substring(0, themePath.lastIndexOf('.'));
+});
 
 const consts = {
   FOLDER_COLORS: [
@@ -19,7 +19,7 @@ const consts = {
     '#3FD941',
     '#30D5C8',
     '#2BA5F7',
-    '#B013A4'
+    '#B013A4',
   ],
   FOLDER_COLOR_NAMES: [
     'Razzmatazz (Red)',
@@ -28,9 +28,12 @@ const consts = {
     'Emerald (Green)',
     'Turquoise',
     'Dodger Blue',
-    'Violet Eggplant'
+    'Violet Eggplant',
   ],
-  THEMES: ['default'].concat(themes)
-}
+  THEMES: ['default'].concat(themes),
+  STORAGE: {
+    NOTE_SUFFIX: 'notes',
+  },
+};
 
-module.exports = consts
+module.exports = consts;
