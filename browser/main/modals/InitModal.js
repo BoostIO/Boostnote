@@ -152,7 +152,7 @@ class InitModal extends React.Component {
               type: 'MARKDOWN_NOTE',
               folder: data.storage.folders[0].key,
               title: 'Welcome to Boostnote!',
-              content: '# Welcome to Boostnote! \n### _Click to edit this note._\n\n---\n\nBoostnote is an *open source* note-taking app. \nRepository is published on [GitHub](https://github.com/BoostIO/Boostnote), and tweeting everyday on [@Boostnoteapp](https://twitter.com/boostnoteapp)!\n\n## Features \n- [x] No Internet and Registration Required. \n- [ ] Quick search and copy the content of note. `macOS: Cmd + Alt + S / windows: Ctrl + Alt + S` \n- [ ] Markdown & Snippet note. \n- [ ] Available for `vim` and `emacs` mode. \n- [ ] Choose your favorite theme on UI, Editor and Code Block! \n--- \n\n- Copy Codeblock on Makrdown Preview.\n```javascript\nvar boostnote = document.getElementById(\'enjoy\').innerHTML\n\nconsole.log(boostnote)\n```'
+              content: '# Welcome to Boostnote! \n### _Click to edit this note._\n\n---\n\nBoostnote is an *open source* note-taking app. \nRepository is published on [GitHub](https://github.com/BoostIO/Boostnote), and tweeting everyday on [@Boostnoteapp](https://twitter.com/boostnoteapp)!\n\n## Features \n- [x] No Internet or registration required. \n- [ ] Quick search and copy the content of note. `macOS: Cmd + Alt + S / windows: Ctrl + Alt + S` \n- [ ] Markdown & Snippet note. \n- [ ] Available for `vim` and `emacs` mode. \n- [ ] Choose your favorite theme on UI, Editor and Code Block! \n--- \n\n- Copy Codeblock on Makrdown Preview.\n```javascript\nvar boostnote = document.getElementById(\'enjoy\').innerHTML\n\nconsole.log(boostnote)\n```'
             })
             .then((note) => {
               store.dispatch({
