@@ -39,6 +39,7 @@ $control-height = 30px
 .item-wrapper
   padding 15px 0
   border-bottom $ui-border
+  position relative
 
 .item--active
   @extend .item
@@ -116,8 +117,8 @@ $control-height = 30px
 
 .item-star
   position absolute
-  right 5px
-  bottom 0px
+  right -20px
+  bottom 2px
   width 34px
   height 34px
   color alpha($ui-favorite-star-button-color, 60%)

@@ -49,7 +49,7 @@ class Detail extends React.Component {
           tabIndex='0'
         >
           <div styleName='empty'>
-            <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br />to create a new post</div>
+            <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br />to create a new note</div>
           </div>
           <StatusBar
             {..._.pick(this.props, ['config', 'location', 'dispatch'])}

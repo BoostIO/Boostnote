@@ -1,10 +1,13 @@
 import _ from 'lodash'
+import RcParser from 'browser/lib/RcParser'
 
 const OSX = global.process.platform === 'darwin'
 const win = global.process.platform === 'win32'
 const electron = require('electron')
 const { ipcRenderer } = electron
 const consts = require('browser/lib/consts')
+const path = require('path')
+const fs = require('fs')
 
 let isInitialized = false
 
@@ -22,6 +25,7 @@ export const DEFAULT_CONFIG = {
   },
   ui: {
     theme: 'default',
+    showCopyNotification: true,
     disableDirectWrite: false,
     defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
   },
@@ -57,17 +61,17 @@ function _save (config) {
 }
 
 function get () {
-  let config = window.localStorage.getItem('config')
+  const rawStoredConfig = window.localStorage.getItem('config')
+  const storedConfig = Object.assign({}, DEFAULT_CONFIG, JSON.parse(rawStoredConfig))
+  let config = storedConfig
 
   try {
-    config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
-    config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, config.hotkey)
-    config.ui = Object.assign({}, DEFAULT_CONFIG.ui, config.ui)
-    config.editor = Object.assign({}, DEFAULT_CONFIG.editor, config.editor)
-    config.preview = Object.assign({}, DEFAULT_CONFIG.preview, config.preview)
+    const boostnotercConfig = RcParser.parse()
+    config = assignConfigValues(storedConfig, boostnotercConfig)
+
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
-    console.warn('Boostnote resets the malformed configuration.')
+    console.warn('Boostnote resets the invalid configuration.')
     config = DEFAULT_CONFIG
     _save(config)
   }
@@ -124,6 +128,15 @@ function set (updates) {
   ipcRenderer.send('config-renew', {
     config: get()
   })
+}
+
+function assignConfigValues (originalConfig, rcConfig) {
+  let config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
+  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, originalConfig.hotkey, rcConfig.hotkey)
+  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, originalConfig.ui, rcConfig.ui)
+  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
+  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)
+  return config
 }
 
 export default {

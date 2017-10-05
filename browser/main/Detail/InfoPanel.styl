@@ -18,6 +18,16 @@
   background-color $ui-noteList-backgroundColor
   border 1px solid $border-color
 
+.control-infoButton-panel-trash
+  z-index 200
+  margin-top 45px
+  margin-left -230px
+  position absolute
+  padding 20px 20px 0 20px
+  width 320px
+  background-color $ui-noteList-backgroundColor
+  border 1px solid $border-color
+
 .group-section
   display flex
   line-height 30px
@@ -39,6 +49,19 @@
 .group-section-control input
   width 160px
   height 25px
+
+.group-section-control text
+  color #EA4447
+  font-weight 600
+  font-size 14px
+  width 70px
+  height 25px
+  background-color rgba(226,33,113,0.1)
+  border none
+  outline none
+  border-radius 2px
+  margin-right 5px
+  padding 2px 5px
 
 [id=export-wrap]
   height 90px
@@ -72,6 +95,10 @@
 
 body[data-theme="dark"]
   .control-infoButton-panel
+    background-color $ui-dark-noteList-backgroundColor
+    border 1px solid $ui-dark-borderColor
+
+  .control-infoButton-panel-trash
     background-color $ui-dark-noteList-backgroundColor
     border 1px solid $ui-dark-borderColor
 

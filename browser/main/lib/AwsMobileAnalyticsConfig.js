@@ -18,9 +18,10 @@ function initAwsMobileAnalytics () {
   AWS.config.credentials.get((err) => {
     if (!err) {
       console.log('Cognito Identity ID: ' + AWS.config.credentials.identityId)
+      recordDynamicCustomEvent('APP_STARTED')
+      recordStaticCustomEvent()
     }
   })
-  recordStaticCustomEvent()
 }
 
 function recordDynamicCustomEvent (type) {

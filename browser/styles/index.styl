@@ -5,7 +5,7 @@ $danger-color = #c9302c
 $danger-lighten-color = lighten(#c9302c, 5%)
 
 // Layouts
-$statusBar-height = 24px
+$statusBar-height = 36px
 $sideNav-width = 200px
 $sideNav--folded-width = 44px
 $topBar-height = 60px
@@ -150,10 +150,13 @@ modal()
   position relative
   z-index $modal-z-index
   width 100%
+  margin-left 80px
+  margin-right 80px
+  margin-bottom 80px
+  margin-top 100px
   background-color $modal-background
   overflow hidden
   border-radius $modal-border-radius
-  box-shadow 0 0 1px rgba(76,86,103,.15), 0 2px 18px rgba(31,37,50,.22)
 
 topBarButtonLight()
   width 34px
@@ -260,4 +263,3 @@ modalDark()
   background-color $ui-dark-backgroundColor
   overflow hidden
   border-radius $modal-border-radius
-  box-shadow 2px 2px 10px black

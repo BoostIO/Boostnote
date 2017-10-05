@@ -114,7 +114,7 @@ class StorageItem extends React.Component {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: 'Delete Folder',
-      detail: 'This work will deletes all notes in the folder and can not be undone.',
+      detail: 'This will delete all notes in the folder and can not be undone.',
       buttons: ['Confirm', 'Cancel']
     })
 

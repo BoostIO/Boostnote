@@ -3,7 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoPanel.styl'
 
 const InfoPanel = ({
-  storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt
+  storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, wordCount, letterCount, type
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
     <div styleName='group-section'>
@@ -24,7 +24,7 @@ const InfoPanel = ({
     </div>
     <div styleName='group-section'>
       <div styleName='group-section-label'>
-        Created at
+        Created
       </div>
       <div styleName='group-section-control'>
         {createdAt}
@@ -32,7 +32,7 @@ const InfoPanel = ({
     </div>
     <div styleName='group-section'>
       <div styleName='group-section-label'>
-        Updated at
+        Updated
       </div>
       <div styleName='group-section-control'>
         {updatedAt}
@@ -46,6 +46,27 @@ const InfoPanel = ({
         <input value={noteLink} onClick={(e) => { e.target.select() }} />
       </div>
     </div>
+    {type === 'SNIPPET_NOTE'
+      ? ''
+      : <div>
+        <div styleName='group-section'>
+          <div styleName='group-section-label'>
+            Words
+          </div>
+          <div styleName='group-section-control'>
+            {wordCount}
+          </div>
+        </div>
+        <div styleName='group-section'>
+          <div styleName='group-section-label'>
+            Letters
+          </div>
+          <div styleName='group-section-control'>
+            {letterCount}
+          </div>
+        </div>
+      </div>
+    }
 
     <div id='export-wrap'>
       <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>
@@ -73,7 +94,10 @@ InfoPanel.propTypes = {
   updatedAt: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   exportAsMd: PropTypes.func.isRequired,
-  exportAsTxt: PropTypes.func.isRequired
+  exportAsTxt: PropTypes.func.isRequired,
+  wordCount: PropTypes.number,
+  letterCount: PropTypes.number,
+  type: PropTypes.string.isRequired
 }
 
 export default CSSModules(InfoPanel, styles)

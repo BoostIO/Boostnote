@@ -17,7 +17,10 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
+import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
+import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoStatus'
+import striptags from 'striptags'
 
 const electron = require('electron')
 const { remote } = electron
@@ -69,30 +72,12 @@ class MarkdownNoteDetail extends React.Component {
     ee.off('topbar:togglelockbutton', this.toggleLockButton)
   }
 
-  getPercentageOfCompleteTodo (noteContent) {
-    let splitted = noteContent.split('\n')
-    let numberOfTodo = 0
-    let numberOfCompletedTodo = 0
-
-    splitted.forEach((line) => {
-      let trimmedLine = line.trim()
-      if (trimmedLine.match(/^[\+\-\*] \[\s|x\] ./)) {
-        numberOfTodo++
-      }
-      if (trimmedLine.match(/^[\+\-\*] \[x\] ./)) {
-        numberOfCompletedTodo++
-      }
-    })
-
-    return Math.floor(numberOfCompletedTodo / numberOfTodo * 100)
-  }
-
   handleChange (e) {
     let { note } = this.state
 
     note.content = this.refs.content.value
     if (this.refs.tags) note.tags = this.refs.tags.value
-    note.title = markdown.strip(findNoteTitle(note.content))
+    note.title = markdown.strip(striptags(findNoteTitle(note.content)))
     note.updatedAt = new Date()
 
     this.setState({
@@ -190,8 +175,8 @@ class MarkdownNoteDetail extends React.Component {
     if (isTrashed) {
       let dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
         type: 'warning',
-        message: 'Delete a note',
-        detail: 'This work cannot be undone.',
+        message: 'Confirm note deletion',
+        detail: 'This will permanently remove this note.',
         buttons: ['Confirm', 'Cancel']
       })
       if (dialogueButtonIndex === 1) return
@@ -300,10 +285,9 @@ class MarkdownNoteDetail extends React.Component {
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
         />
-        <InfoPanel
+        <InfoPanelTrashed
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[${note.title}](${location.query.key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.exportAsMd}
@@ -333,7 +317,7 @@ class MarkdownNoteDetail extends React.Component {
           onChange={(e) => this.handleChange(e)}
         />
         <TodoListPercentage
-          percentageOfTodo={this.getPercentageOfCompleteTodo(note.content)}
+          percentageOfTodo={getTodoPercentageOfCompleted(note.content)}
         />
       </div>
       <div styleName='info-right'>
@@ -357,7 +341,7 @@ class MarkdownNoteDetail extends React.Component {
         <button styleName='control-fullScreenButton'
           onMouseDown={(e) => this.handleFullScreenButton(e)}
         >
-          <i className='fa fa-expand' styleName='fullScreen-button' />
+          <i className='fa fa-window-maximize' styleName='fullScreen-button' />
         </button>
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
@@ -370,6 +354,9 @@ class MarkdownNoteDetail extends React.Component {
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.exportAsMd}
           exportAsTxt={this.exportAsTxt}
+          wordCount={note.content.split(' ').length}
+          letterCount={note.content.replace(/\r?\n/g, '').length}
+          type={note.type}
         />
       </div>
     </div>

@@ -1,6 +1,7 @@
 {
   "name": "boost",
-  "version": "0.8.12",
+  "productName": "Boostnote",
+  "version": "0.8.15",
   "main": "index.js",
   "description": "Boostnote",
   "license": "GPL-3.0",
@@ -65,6 +66,8 @@
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^3.0.0",
     "markdown-it-imsize": "^2.0.1",
+    "markdown-it-multimd-table": "^2.0.1",
+    "markdown-it-named-headers": "^0.0.4",
     "md5": "^2.0.0",
     "mixpanel": "^0.4.1",
     "moment": "^2.10.3",
@@ -76,6 +79,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "sander": "^0.5.1",
+    "striptags": "^2.2.1",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.3"
   },
@@ -99,6 +103,7 @@
     "eslint": "^3.13.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-config-standard-jsx": "^3.2.0",
+    "eslint-plugin-react": "^7.2.0",
     "faker": "^3.1.0",
     "grunt": "^0.4.5",
     "grunt-electron-installer": "^1.2.0",

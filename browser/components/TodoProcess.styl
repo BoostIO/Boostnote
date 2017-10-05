@@ -1,0 +1,45 @@
+.todo-process
+  font-size 12px
+  display flex
+  padding-top 15px
+  width 85%
+
+.todo-process-text
+  display inline-block
+  padding-right 10px
+  white-space nowrap
+  text-overflow ellipsis
+  color $ui-inactive-text-color
+  i
+    color $ui-inactive-text-color
+    padding-right 5px
+
+.todo-process-bar
+  display inline-block
+  margin auto
+  height 4px
+  border-radius 10px
+  background-color #DADFE1
+  border-radius 2px
+  flex-grow 1
+  border 1px solid alpha(#6C7A89, 10%)
+
+.todo-process-bar--inner
+  height 100%
+  border-radius 5px
+  background-color #6C7A89
+  transition 0.3s
+
+
+body[data-theme="dark"]
+  .todo-process
+    color $ui-dark-text-color
+
+  .todo-process-bar
+    background-color #363A3D
+
+  .todo-process-text
+    color $ui-inactive-text-color
+
+  .todo-process-bar--inner
+    background-color: alpha(#939395, 50%)

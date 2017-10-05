@@ -4,7 +4,9 @@
 import React, { PropTypes } from 'react'
 import { isArray } from 'lodash'
 import CSSModules from 'browser/lib/CSSModules'
+import { getTodoStatus } from 'browser/lib/getTodoStatus'
 import styles from './NoteItem.styl'
+import TodoProcess from './TodoProcess'
 
 /**
  * @description Tag element component.
@@ -67,6 +69,10 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStar
       <div styleName='item-bottom-time'>{dateDisplay}</div>
       {note.isStarred
         ? <i styleName='item-star' className='fa fa-star' /> : ''
+      }
+      {note.type === 'MARKDOWN_NOTE'
+        ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
+        : ''
       }
       <div styleName='item-bottom'>
         <div styleName='item-bottom-tagList'>

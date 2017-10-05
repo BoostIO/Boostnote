@@ -36,6 +36,7 @@ class UiTab extends React.Component {
     const newConfig = {
       ui: {
         theme: this.refs.uiTheme.value,
+        showCopyNotification: this.refs.showCopyNotification.checked,
         disableDirectWrite: this.refs.uiD2w != null
           ? this.refs.uiD2w.checked
           : false
@@ -90,9 +91,8 @@ class UiTab extends React.Component {
         <div styleName='group'>
           <div styleName='group-header'>UI</div>
 
-          <div styleName='group-header2'>Theme</div>
-
           <div styleName='group-section'>
+            Color Theme
             <div styleName='group-section-control'>
               <select value={config.ui.theme}
                 onChange={(e) => this.handleUIChange(e)}
@@ -102,6 +102,16 @@ class UiTab extends React.Component {
                 <option value='dark'>Dark</option>
               </select>
             </div>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.showCopyNotification}
+                ref='showCopyNotification'
+                type='checkbox'
+              />&nbsp;
+              Show &quot;Saved to Clipboard&quot; notification when copying
+            </label>
           </div>
           {
             global.process.platform === 'win32'
@@ -192,7 +202,7 @@ class UiTab extends React.Component {
 
           <div styleName='group-section'>
             <div styleName='group-section-label'>
-              Switching Preview
+              Switch to Preview
             </div>
             <div styleName='group-section-control'>
               <select value={config.editor.switchPreview}
@@ -200,7 +210,7 @@ class UiTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
               >
                 <option value='BLUR'>When Editor Blurred</option>
-                <option value='RIGHTCLICK'>When Right Clicking</option>
+                <option value='RIGHTCLICK'>On Right Click</option>
               </select>
             </div>
           </div>
@@ -218,7 +228,7 @@ class UiTab extends React.Component {
                 <option value='vim'>vim</option>
                 <option value='emacs'>emacs</option>
               </select>
-              <span styleName='note-for-keymap'>Please reload boostnote after you change the keymap</span>
+              <span styleName='note-for-keymap'>Please restart boostnote after you change the keymap</span>
             </div>
           </div>
 
@@ -271,7 +281,7 @@ class UiTab extends React.Component {
                 ref='previewLineNumber'
                 type='checkbox'
               />&nbsp;
-              Code block line numbering
+              Show line numbers for preview code blocks
             </label>
           </div>
 
