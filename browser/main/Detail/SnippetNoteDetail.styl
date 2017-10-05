@@ -19,7 +19,7 @@
 
 .body .description
   absolute top left right
-  height 80px
+  height 50px
 
 .body .description textarea
   outline none
@@ -27,14 +27,14 @@
   height 100%
   width 100%
   resize none
-  border none
-  padding 10px
+  border 1px solid $ui-borderColor
+  padding 2px 5px
   line-height 1.6
   background-color $ui-noteDetail-backgroundColor
 
 .tabList
   absolute left right
-  top 80px
+  top 55px
   height 30px
   display flex
   background-color $ui-noteDetail-backgroundColor
@@ -50,16 +50,17 @@
 
 .tabView
   absolute left right bottom
-  top 130px
+  top 100px
 
 .tabView-content
   absolute top left right bottom
 
 .override
   absolute bottom left
+  bottom 30px
   left 60px
   height 23px
-  z-index 1
+  z-index 101
   button
     navButtonColor()
     height 24px
@@ -83,6 +84,7 @@ body[data-theme="dark"]
   .body .description textarea
     background-color $ui-dark-noteDetail-backgroundColor
     color $ui-dark-text-color
+    border 1px solid $ui-dark-borderColor
 
   .tabList
     background-color $ui-button--active-backgroundColor

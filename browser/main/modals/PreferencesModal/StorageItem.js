@@ -298,8 +298,8 @@ class StorageItem extends React.Component {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: 'Unlink Storage',
-      detail: 'This work just detatches a storage from Boostnote. (Any data won\'t be deleted.)',
-      buttons: ['Confirm', 'Cancel']
+      detail: 'Unlinking removes this linked storage from Boostnote. No data is removed, please manually delete the folder from your hard drive if needed.',
+      buttons: ['Unlink', 'Cancel']
     })
 
     if (index === 0) {

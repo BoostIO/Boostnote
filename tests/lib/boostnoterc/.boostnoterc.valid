@@ -1,0 +1,12 @@
+{
+    "editor": {
+        "keyMap": "vim",
+        "switchPreview": "BLUR",
+        "theme": "monokai"
+    },
+    "hotkey": {
+        "toggleMain": "Control + L"
+    },
+    "listWidth": 135,
+    "navWidth": 135
+}

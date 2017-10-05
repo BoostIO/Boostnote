@@ -59,8 +59,6 @@ class StatusBar extends React.Component {
           {Math.floor(config.zoom * 100)}%
         </button>
 
-        <div styleName='blank' />
-
         {status.updateReady
           ? <button onClick={this.updateApp} styleName='update'>
             <i styleName='update-icon' className='fa fa-cloud-download' /> Ready to Update!

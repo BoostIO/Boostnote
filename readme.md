@@ -1,15 +1,12 @@
-<h1 align="center">
-  <a href="https://github.com/BoostIO/Boostnote"><img src="./resources/app.png" alt="Boostnote" width="180"></a>
-  <br>
-  Boostnote
-  <br>
-  <br>
-</h1>
-<h4 align="center">Note-taking app for programmers. </h4>
-<h5 align="center">macOS, Windows and Linux. Android and iOS apps will be released soon!</h5>
-<h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
+New:zap:
+
+[Android and iOS apps](https://github.com/BoostIO/Boostnote-mobile) are released!
 
 ![Boostnote app screenshot](./resources/repository/top.png)
+
+<h4 align="center">Note-taking app for programmers. </h4>
+<h5 align="center">Apps available for Mac, Windows, Linux, Android and iOS!</h5>
+<h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 
 [![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
 
@@ -25,11 +22,11 @@
 
 ## Slack Group
 Let's talk about Boostnote's great features, new feature requests and things like Japanese gourmet. 🍣 <br>
-[Join us](https://join.slack.com/t/boostnote-group/shared_invite/MjE3NDcwODQ3NTkwLTE1MDA4NjQ3ODktM2IxOTk4ZTNjYQ)
+[Join us](https://join.slack.com/t/boostnote-group/shared_invite/enQtMjQ0MjYxNTMxNjY5LTI0NWFkZDEyYWYxYWE0YTMyYjI4NzA2YjBlNmFmOGVhNGFjY2I1MTNmZWJjYmMxYTdkM2VjNWNjYTFiYWQ3ZmQ)
 
 ## More Information
 * [Website](https://boostnote.io)
-* [Boostnote Team](https://boostnote.io/team/) : Boostnote for the creative hacker teams. Share your markdown notes and snippets instantly with your team. **We will release it at August!** 🏃💨
+* [10hz](https://boostnote.io/team/) : Boostnote for the creative hacker teams. Share your markdown notes and snippets instantly with your team. **We will release it at October!** 🏃💨
 * [Support us via Bountysource](https://salt.bountysource.com/teams/boostnote) : Thank you for your support 🎉
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md) : Development configurations for Boostnote 🚀
 * Copyright (C) 2017 Maisin&Co.

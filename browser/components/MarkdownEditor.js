@@ -266,6 +266,7 @@ class MarkdownEditor extends React.Component {
           onMouseUp={(e) => this.handlePreviewMouseUp(e)}
           onMouseDown={(e) => this.handlePreviewMouseDown(e)}
           onCheckboxClick={(e) => this.handleCheckboxClick(e)}
+          showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
         />
       </div>

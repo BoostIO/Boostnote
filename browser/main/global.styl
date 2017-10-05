@@ -64,7 +64,7 @@ textarea.block-input
   fullsize()
 
 modalZIndex= 1000
-modalBackColor = transparentify(white, 65%)
+modalBackColor = white
 .ace_focus
   outline-color rgb(59, 153, 252)
   outline-offset 0px
@@ -86,12 +86,12 @@ modalBackColor = transparentify(white, 65%)
 body[data-theme="dark"]
   .ModalBase
     .modalBack
-      background-color alpha(black, 60%)
+      background-color $ui-dark-backgroundColor
 
 .CodeMirror
   font-family inherit !important
   line-height 1.4em
-  height 100%
+  height 96%
 .CodeMirror > div > textarea
   margin-bottom -1em
 .CodeMirror-focused .CodeMirror-selected

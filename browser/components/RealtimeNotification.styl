@@ -1,0 +1,34 @@
+.notification-area
+  z-index 1000
+  font-size 12px
+  position absolute
+  bottom 0px
+  right 0px
+  background-color #EBEBEB
+  height 30px
+
+.notification-link
+  position absolute
+  right 5px
+  top 5px
+  text-decoration none
+  color #282A36
+  border 1px solid #6FA8E6
+  background-color alpha(#6FA8E6, 0.2)
+  padding 3px 9px
+  border-radius 2px
+  transition 0.2s
+  &:hover
+    color #1378BD
+
+body[data-theme="dark"]
+  .notification-area
+    background-color #1E2124
+
+  .notification-link
+    color #fff
+    border 1px solid alpha(#5CB85C, 0.6)
+    background-color alpha(#5CB85C, 0.2)
+    transition 0.2s
+    &:hover
+      color #5CB85C

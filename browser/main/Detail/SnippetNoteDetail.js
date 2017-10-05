@@ -20,6 +20,7 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
+import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
 
 function pass (name) {
@@ -176,8 +177,8 @@ class SnippetNoteDetail extends React.Component {
     if (isTrashed) {
       let dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
         type: 'warning',
-        message: 'Delete a note',
-        detail: 'This work cannot be undone.',
+        message: 'Confirm note deletion',
+        detail: 'This will permanently remove this note.',
         buttons: ['Confirm', 'Cancel']
       })
       if (dialogueButtonIndex === 1) return
@@ -270,7 +271,7 @@ class SnippetNoteDetail extends React.Component {
     let syntax = CodeMirror.findModeByFileName(name.trim())
     let mode = syntax != null ? syntax.name : null
     if (mode != null) snippets[index].mode = mode
-    this.state.note.snippets = snippets
+    this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
 
     this.setState({
       note: this.state.note
@@ -283,7 +284,7 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       let snippets = this.state.note.snippets.slice()
       snippets[index].mode = name
-      this.state.note.snippets = snippets
+      this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
 
       this.setState({
         note: this.state.note
@@ -297,7 +298,7 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       let snippets = this.state.note.snippets.slice()
       snippets[index].content = this.refs['code-' + index].value
-      this.state.note.snippets = snippets
+      this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
       this.setState({
         note: this.state.note
       }, () => {
@@ -519,6 +520,7 @@ class SnippetNoteDetail extends React.Component {
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
+            storageKey={storageKey}
           />
           : <CodeEditor styleName='tabView-content'
             mode={snippet.mode}
@@ -559,10 +561,9 @@ class SnippetNoteDetail extends React.Component {
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
         />
-        <InfoPanel
+        <InfoPanelTrashed
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[${note.title}](${location.query.key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.showWarning}
@@ -597,7 +598,7 @@ class SnippetNoteDetail extends React.Component {
         <button styleName='control-fullScreenButton'
           onMouseDown={(e) => this.handleFullScreenButton(e)}
         >
-          <i className='fa fa-expand' styleName='fullScreen-button' />
+          <i className='fa fa-window-maximize' styleName='fullScreen-button' />
         </button>
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
@@ -610,6 +611,7 @@ class SnippetNoteDetail extends React.Component {
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.showWarning}
           exportAsTxt={this.showWarning}
+          type={note.type}
         />
       </div>
     </div>

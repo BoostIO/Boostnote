@@ -3,3 +3,7 @@ You can support Boostnote from $ 5 a month!
 
 # Backers
 [Kazu Yokomizo](https://twitter.com/kazup_bot)
+
+kolchan11
+
+RonWalker22

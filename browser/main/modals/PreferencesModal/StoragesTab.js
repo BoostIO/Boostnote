@@ -5,7 +5,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import StorageItem from './StorageItem'
 
 const electron = require('electron')
-const remote = electron.remote
+const { shell, remote } = electron
 
 function browseFolder () {
   let dialog = remote.dialog
@@ -48,6 +48,11 @@ class StoragesTab extends React.Component {
     }, () => {
       this.refs.addStorageName.select()
     })
+  }
+
+  handleLinkClick (e) {
+    shell.openExternal(e.currentTarget.href)
+    e.preventDefault()
   }
 
   renderList () {
@@ -161,7 +166,10 @@ class StoragesTab extends React.Component {
                 <option value='FILESYSTEM'>File System</option>
               </select>
               <div styleName='addStorage-body-section-type-description'>
-                3rd party cloud integration(such as Google Drive and Dropbox) will be available soon.
+                3rd party cloud integration:
+                <a href='https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing'
+                  onClick={(e) => this.handleLinkClick(e)}
+                >Cloud-Syncing</a>
               </div>
             </div>
           </div>

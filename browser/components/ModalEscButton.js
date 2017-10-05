@@ -6,7 +6,7 @@ const ModalEscButton = ({
   handleEscButtonClick
 }) => (
   <button styleName='escButton' onClick={handleEscButtonClick}>
-    <div styleName='esc-mark'>x</div>
+    <div styleName='esc-mark'>×</div>
     <div styleName='esc-text'>esc</div>
   </button>
 )

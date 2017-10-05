@@ -37,6 +37,8 @@ yarn run hot
 
 그래서, 실행파일만을 만드는 스크립트를 준비해 뒀습니다.
 
+This build doesn't work on npm v5.3.0. So you need to use v5.2.0 when you build it.
+
 ```
 grunt pre-build
 ```

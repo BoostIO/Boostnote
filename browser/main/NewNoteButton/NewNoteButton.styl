@@ -1,0 +1,68 @@
+.root
+  position relative
+  background-color $ui-noteList-backgroundColor
+  height $topBar-height - 1
+  margin-left: auto;
+  width: 64px;
+  margin-right: -15px;
+
+.root--expanded
+  @extend .root
+
+$control-height = 34px
+
+.control
+  position absolute
+  top 13px
+  left 8px
+  right 8px
+  height $control-height
+  overflow hidden
+  display flex
+
+.control-newNoteButton
+  display block
+  width 32px
+  height $control-height - 2
+  navButtonColor()
+  font-size 16px
+  line-height 28px
+  padding 0
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover .control-newNoteButton-tooltip
+    opacity 1
+
+.control-newNoteButton-tooltip
+  tooltip()
+  position fixed
+  pointer-events none
+  top 50px
+  left 433px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
+body[data-theme="dark"]
+  .root, .root--expanded
+    background-color $ui-dark-noteList-backgroundColor
+
+  .control
+    border-color $ui-dark-borderColor
+
+  .control-newNoteButton
+    color $ui-inactive-text-color
+    border-color $ui-dark-borderColor
+    background-color $ui-dark-noteList-backgroundColor
+    &:hover
+      transition 0.15s
+      color $ui-dark-text-color
+    &:active
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      border-color $ui-dark-button--active-backgroundColor
+
+  .control-newNoteButton-tooltip
+    darkTooltip()

@@ -13,6 +13,7 @@ import fs from 'fs'
 import { hashHistory } from 'react-router'
 import markdown from 'browser/lib/markdown'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
+import stripgtags from 'striptags'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -347,6 +348,22 @@ class NoteList extends React.Component {
       properties: ['openFile', 'multiSelections']
     }
 
+    dialog.showOpenDialog(remote.getCurrentWindow(), options, (filepaths) => {
+      this.addNotesFromFiles(filepaths)
+    })
+  }
+
+  handleDrop (e) {
+    e.preventDefault()
+    const { location } = this.props
+    const filepaths = Array.from(e.dataTransfer.files).map(file => { return file.path })
+    if (!location.pathname.match(/\/trashed/)) this.addNotesFromFiles(filepaths)
+  }
+
+  // Add notes to the current folder
+  addNotesFromFiles (filepaths) {
+    const { dispatch, location } = this.props
+
     const targetIndex = _.findIndex(this.notes, (note) => {
       return note !== null && `${note.storage}-${note.key}` === location.query.key
     })
@@ -354,28 +371,26 @@ class NoteList extends React.Component {
     const storageKey = this.notes[targetIndex].storage
     const folderKey = this.notes[targetIndex].folder
 
-    dialog.showOpenDialog(remote.getCurrentWindow(), options, (filepaths) => {
-      if (filepaths === undefined) return
-      filepaths.forEach((filepath) => {
-        fs.readFile(filepath, (err, data) => {
-          if (err) throw Error('File reading error: ', err)
-          const content = data.toString()
-          const newNote = {
-            content: content,
-            folder: folderKey,
-            title: markdown.strip(findNoteTitle(content)),
-            type: 'MARKDOWN_NOTE'
-          }
-          dataApi.createNote(storageKey, newNote)
-          .then((note) => {
-            dispatch({
-              type: 'UPDATE_NOTE',
-              note: note
-            })
-            hashHistory.push({
-              pathname: location.pathname,
-              query: {key: `${note.storage}-${note.key}`}
-            })
+    if (filepaths === undefined) return
+    filepaths.forEach((filepath) => {
+      fs.readFile(filepath, (err, data) => {
+        if (err) throw Error('File reading error: ', err)
+        const content = data.toString()
+        const newNote = {
+          content: content,
+          folder: folderKey,
+          title: markdown.strip(findNoteTitle(content)),
+          type: 'MARKDOWN_NOTE'
+        }
+        dataApi.createNote(storageKey, newNote)
+        .then((note) => {
+          dispatch({
+            type: 'UPDATE_NOTE',
+            note: note
+          })
+          hashHistory.push({
+            pathname: location.pathname,
+            query: {key: `${note.storage}-${note.key}`}
           })
         })
       })
@@ -438,6 +453,7 @@ class NoteList extends React.Component {
       <div className='NoteList'
         styleName='root'
         style={this.props.style}
+        onDrop={(e) => this.handleDrop(e)}
       >
         <div styleName='control'>
           <div styleName='control-sortBy'>
@@ -446,9 +462,9 @@ class NoteList extends React.Component {
               value={config.sortBy}
               onChange={(e) => this.handleSortByChange(e)}
             >
-              <option value='UPDATED_AT'>Updated Time</option>
-              <option value='CREATED_AT'>Created Time</option>
-              <option value='ALPHABETICAL'>Alphabetical</option>
+              <option value='UPDATED_AT'>Last Updated</option>
+              <option value='CREATED_AT'>Creation Time</option>
+              <option value='ALPHABETICAL'>Alphabetically</option>
             </select>
           </div>
           <div styleName='control-button-area'>

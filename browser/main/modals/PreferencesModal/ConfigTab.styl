@@ -31,10 +31,15 @@
 
 .group-section-control
   flex 1
+  margin-left 5px
 
 .group-section-control select
   outline none
   border 1px solid $ui-borderColor
+  font-size 16px
+  height 30px
+  width 250px
+  margin-bottom 5px
   background-color transparent
 
 .group-section-control-input
@@ -77,14 +82,16 @@
   margin-right 10px
 
 .group-control-rightButton
-  float right
+  position absolute
+  top 10px
+  right 20px
   colorPrimaryButton()
   border none
   border-radius 2px
   font-size $tab--button-font-size
-  height 35px
-  width 100px
-  margin-right 10px
+  height 40px
+  width 120px
+  padding 0 15px
 
 .group-hint
   border $ui-border
