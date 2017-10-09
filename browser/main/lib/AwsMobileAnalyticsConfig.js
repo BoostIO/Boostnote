@@ -25,12 +25,12 @@ function initAwsMobileAnalytics () {
 }
 
 function recordDynamicCustomEvent (type) {
-  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
+  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled || typeof mobileAnalyticsClient === 'undefined') return
   mobileAnalyticsClient.recordEvent(type)
 }
 
 function recordStaticCustomEvent () {
-  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
+  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled || typeof mobileAnalyticsClient === 'undefined') return
   mobileAnalyticsClient.recordEvent('UI_COLOR_THEME', {
     uiColorTheme: ConfigManager.default.get().ui.theme
   })
