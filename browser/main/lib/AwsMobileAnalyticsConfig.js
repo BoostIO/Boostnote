@@ -25,23 +25,15 @@ function initAwsMobileAnalytics () {
 }
 
 function recordDynamicCustomEvent (type) {
-  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
-  try {
-    mobileAnalyticsClient.recordEvent(type)
-  } catch (analyticsError) {
-    console.error(analyticsError)
-  }
+  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled || typeof mobileAnalyticsClient === 'undefined') return
+  mobileAnalyticsClient.recordEvent(type)
 }
 
 function recordStaticCustomEvent () {
-  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
-  try {
-    mobileAnalyticsClient.recordEvent('UI_COLOR_THEME', {
-      uiColorTheme: ConfigManager.default.get().ui.theme
-    })
-  } catch (analyticsError) {
-    console.error(analyticsError)
-  }
+  if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled || typeof mobileAnalyticsClient === 'undefined') return
+  mobileAnalyticsClient.recordEvent('UI_COLOR_THEME', {
+    uiColorTheme: ConfigManager.default.get().ui.theme
+  })
 }
 
 module.exports = {
