@@ -26,14 +26,22 @@ function initAwsMobileAnalytics () {
 
 function recordDynamicCustomEvent (type) {
   if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
-  mobileAnalyticsClient.recordEvent(type)
+  try {
+    mobileAnalyticsClient.recordEvent(type)
+  } catch (analyticsError) {
+    console.error(analyticsError)
+  }
 }
 
 function recordStaticCustomEvent () {
   if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
-  mobileAnalyticsClient.recordEvent('UI_COLOR_THEME', {
-    uiColorTheme: ConfigManager.default.get().ui.theme
-  })
+  try {
+    mobileAnalyticsClient.recordEvent('UI_COLOR_THEME', {
+      uiColorTheme: ConfigManager.default.get().ui.theme
+    })
+  } catch (analyticsError) {
+    console.error(analyticsError)
+  }
 }
 
 module.exports = {
