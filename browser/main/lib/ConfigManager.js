@@ -43,6 +43,11 @@ export const DEFAULT_CONFIG = {
     fontFamily: win ? 'Segoe UI' : 'Lato',
     codeBlockTheme: 'dracula',
     lineNumber: true
+  },
+  integrations: {
+    gist: {
+      token: ''
+    }
   }
 }
 
