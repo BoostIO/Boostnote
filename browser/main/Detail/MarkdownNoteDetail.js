@@ -16,11 +16,13 @@ import { findNoteTitle } from 'browser/lib/findNoteTitle'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
 import InfoButton from './InfoButton'
+import ShareButton from './ShareButton'
 import InfoPanel from './InfoPanel'
 import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
 import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoStatus'
 import striptags from 'striptags'
+import base64 from 'base-64'
 
 const electron = require('electron')
 const { remote } = electron
@@ -256,6 +258,28 @@ class MarkdownNoteDetail extends React.Component {
     if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
+  handleShareButtonClick (e) {
+    let token = this.props.config.integrations.gist.token
+    let content = {
+      description: '',
+      public: false,
+      files: {
+        [this.state.note.storage]: {
+          content: this.state.note.content
+        }
+      }
+    }
+
+    fetch('https://api.github.com/gists',
+        {
+          method: 'POST',
+          body: JSON.stringify(content),
+          headers: { 'Authorization': 'Basic ' + base64.encode(token) }
+        })
+      .then(response => response.json())
+      .then(json => console.log(json))
+  }
+
   render () {
     let { data, config, location } = this.props
     let { note } = this.state
@@ -358,6 +382,12 @@ class MarkdownNoteDetail extends React.Component {
           letterCount={note.content.replace(/\r?\n/g, '').length}
           type={note.type}
         />
+        { this.props.config.integrations.gist.token
+        ? <ShareButton
+            onClick={(e) => this.handleShareButtonClick(e)}
+          />
+        : ''
+        }
       </div>
     </div>
 

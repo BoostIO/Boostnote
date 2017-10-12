@@ -1,0 +1,21 @@
+.control-shareButton
+  float right
+  topBarButtonLight()
+
+.control-sharePanel
+  position fixed
+  pointer-events none
+  top 50px
+  z-index 200
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
+.shareButton
+  padding 0px
+  margin 15px 0
+
+body[data-theme="dark"]
+  .control-shareButton
+    topBarButtonDark()
