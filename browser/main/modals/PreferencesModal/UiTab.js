@@ -211,6 +211,7 @@ class UiTab extends React.Component {
               >
                 <option value='BLUR'>When Editor Blurred</option>
                 <option value='RIGHTCLICK'>On Right Click</option>
+                <option value='DOUBLECLICK'>On Double Click</option>
               </select>
             </div>
           </div>
