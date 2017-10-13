@@ -5,6 +5,7 @@ import HotkeyTab from './HotkeyTab'
 import UiTab from './UiTab'
 import InfoTab from './InfoTab'
 import StoragesTab from './StoragesTab'
+import IntegrationsTab from './IntegrationsTab'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './PreferencesModal.styl'
@@ -64,6 +65,12 @@ class Preferences extends React.Component {
             config={config}
           />
         )
+      case 'INTEGRATIONS':
+        return (
+          <IntegrationsTab
+            config={config}
+          />
+        )
       case 'STORAGES':
       default:
         return (
@@ -94,7 +101,8 @@ class Preferences extends React.Component {
       {target: 'STORAGES', label: 'Storages'},
       {target: 'HOTKEY', label: 'Hotkey'},
       {target: 'UI', label: 'UI'},
-      {target: 'INFO', label: 'Info'}
+      {target: 'INFO', label: 'Info'},
+      {target: 'INTEGRATIONS', label: 'Integrations'}
     ]
 
     let navButtons = tabs.map((tab) => {
