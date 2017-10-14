@@ -92,7 +92,7 @@ class KeysTab extends React.Component {
       previousNote: this.refs.previousNote.value,
       deleteNote: this.refs.deleteNote.value,
       focusSearch: this.refs.focusSearch.value,
-      print: this.refs.print.value,
+      print: this.refs.print.value
     }
 
     hotkey = {

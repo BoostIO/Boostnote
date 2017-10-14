@@ -8,11 +8,11 @@ const config = new Config()
 const DEFAULT_SHORTCUTS = {
   newNote: 'CommandOrControl+N',
   focusNote: 'Control+E',
-  deleteNote: isOSX? 'Control+Backspace' : 'Control+Delete',
+  deleteNote: isOSX ? 'Control+Backspace' : 'Control+Delete',
   print: 'CommandOrControl+P',
   nextNote: 'Control+J',
   previousNote: 'Control+K',
-  focusSearch: 'Control+S',
+  focusSearch: 'Control+S'
 }
 
 const DEFAULT_HOTKEY = {
