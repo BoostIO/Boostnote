@@ -48,5 +48,5 @@ parts:
   launcher:
     plugin: copy
     files:
-      start: tart.wrapper
+      start: start.wrapper
     after: [desktop-glib-only]
