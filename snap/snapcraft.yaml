@@ -12,9 +12,41 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   asmstnote:
-    command: ls
+    command: desktop-launch $SNAP/start.wrapper
+    plugs:
+     - browser-support
+     - network
+     - unity7
+     - gsettings
+     # - home
+     # - pulseaudio
+     # - opengl
 
 parts:
-  my-part:
-    # See 'snapcraft plugins'
+  src:
+    plugin: nodejs
+    node-packages:
+     - electron
+    source: git://github.com/asmsuechan/Boostnote
+
+  deps:
     plugin: nil
+    stage-packages:
+      - libgconf-2-4
+      - libnss3
+      - libxss1
+      - fontconfig-config
+
+  desktop-integration:
+    plugin: nil
+    stage-packages:
+      - libappindicator1
+      - libdbusmenu-glib4
+      - libnotify4
+      - libunity9
+
+  launcher:
+    plugin: copy
+    files:
+      start: tart.wrapper
+    after: [desktop-glib-only]
