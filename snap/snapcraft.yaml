@@ -12,7 +12,7 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   asmstnote:
-    command: desktop-launch $SNAP/start.wrapper
+    command: desktop-launch $SNAP/etc/boostnote/Boostnote
     plugs:
      - browser-support
      - network
@@ -25,9 +25,7 @@ apps:
 parts:
   src:
     plugin: nodejs
-    node-packages:
-     - electron
-    source: git://github.com/asmsuechan/Boostnote
+    source: .
 
   deps:
     plugin: nil
@@ -46,7 +44,10 @@ parts:
       - libunity9
 
   launcher:
-    plugin: copy
-    files:
-      start: start.wrapper
+    plugin: dump
+    source: .
+    stage:
+      - etc/boostnote
+    organize:
+      dist/Boostnote-linux-x64: etc/boostnote
     after: [desktop-glib-only]
