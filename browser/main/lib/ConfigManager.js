@@ -1,15 +1,21 @@
-import _ from 'lodash'
-import RcParser from 'browser/lib/RcParser'
+import _ from 'lodash';
+import RcParser from 'browser/lib/RcParser';
 
-const OSX = global.process.platform === 'darwin'
-const win = global.process.platform === 'win32'
-const electron = require('electron')
-const { ipcRenderer } = electron
-const consts = require('browser/lib/consts')
-const path = require('path')
-const fs = require('fs')
+const isOSX = global.process.platform === 'darwin';
+const isWindows = global.process.platform === 'win32';
+const electron = require('electron');
+const { ipcRenderer } = electron;
+const consts = require('browser/lib/consts');
+const path = require('path');
+const fs = require('fs');
 
-let isInitialized = false
+let isInitialized = false;
+
+/**
+ * ConfigManager holds a state of the Boostnote configurations in localStorage.
+ * It loads into localStorage on app initialization from disk.
+ * The configuration file is in JSON format.
+ */
 
 export const DEFAULT_CONFIG = {
   zoom: 1,
@@ -20,127 +26,159 @@ export const DEFAULT_CONFIG = {
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   amaEnabled: true,
   hotkey: {
-    toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
+    toggleFinder: isOSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
+    toggleMain: isOSX ? 'Cmd + Alt + L' : 'Super + Alt + E',
   },
   ui: {
     theme: 'default',
     showCopyNotification: true,
     disableDirectWrite: false,
-    defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
+    defaultNote: 'ALWAYS_ASK', // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
   },
   editor: {
     theme: 'base16-light',
     keyMap: 'sublime',
     fontSize: '14',
-    fontFamily: win ? 'Segoe UI' : 'Monaco, Consolas',
+    fontFamily: isWindows ? 'Segoe UI' : 'Monaco, Consolas',
     indentType: 'space',
     indentSize: '2',
-    switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR
+    switchPreview: 'BLUR', // Available value: RIGHTCLICK, BLUR
   },
   preview: {
     fontSize: '14',
-    fontFamily: win ? 'Segoe UI' : 'Lato',
+    fontFamily: isWindows ? 'Segoe UI' : 'Lato',
     codeBlockTheme: 'dracula',
-    lineNumber: true
-  }
+    lineNumber: true,
+  },
+};
+
+function validate(config) {
+  if (!_.isObject(config)) return false;
+  if (!_.isNumber(config.zoom) || config.zoom < 0) return false;
+  if (!_.isBoolean(config.isSideNavFolded)) return false;
+  if (!_.isNumber(config.listWidth) || config.listWidth <= 0) return false;
+
+  return true;
 }
 
-function validate (config) {
-  if (!_.isObject(config)) return false
-  if (!_.isNumber(config.zoom) || config.zoom < 0) return false
-  if (!_.isBoolean(config.isSideNavFolded)) return false
-  if (!_.isNumber(config.listWidth) || config.listWidth <= 0) return false
-
-  return true
+function _save(config) {
+  console.log(config);
+  window.localStorage.setItem('config', JSON.stringify(config));
 }
 
-function _save (config) {
-  console.log(config)
-  window.localStorage.setItem('config', JSON.stringify(config))
-}
-
-function get () {
-  const rawStoredConfig = window.localStorage.getItem('config')
-  const storedConfig = Object.assign({}, DEFAULT_CONFIG, JSON.parse(rawStoredConfig))
-  let config = storedConfig
+function get() {
+  const rawStoredConfig = window.localStorage.getItem('config');
+  const storedConfig = Object.assign(
+    {},
+    DEFAULT_CONFIG,
+    JSON.parse(rawStoredConfig),
+  );
+  let config = storedConfig;
 
   try {
-    const boostnotercConfig = RcParser.parse()
-    config = assignConfigValues(storedConfig, boostnotercConfig)
+    const boostnotercConfig = RcParser.parse();
+    config = assignConfigValues(storedConfig, boostnotercConfig);
 
-    if (!validate(config)) throw new Error('INVALID CONFIG')
+    if (!validate(config)) throw new Error('INVALID CONFIG');
   } catch (err) {
-    console.warn('Boostnote resets the invalid configuration.')
-    config = DEFAULT_CONFIG
-    _save(config)
+    console.warn('Boostnote resets the invalid configuration.');
+    config = DEFAULT_CONFIG;
+    _save(config);
   }
 
   if (!isInitialized) {
-    isInitialized = true
-    let editorTheme = document.getElementById('editorTheme')
+    isInitialized = true;
+    let editorTheme = document.getElementById('editorTheme');
     if (editorTheme == null) {
-      editorTheme = document.createElement('link')
-      editorTheme.setAttribute('id', 'editorTheme')
-      editorTheme.setAttribute('rel', 'stylesheet')
-      document.head.appendChild(editorTheme)
+      editorTheme = document.createElement('link');
+      editorTheme.setAttribute('id', 'editorTheme');
+      editorTheme.setAttribute('rel', 'stylesheet');
+      document.head.appendChild(editorTheme);
     }
 
-    config.editor.theme = consts.THEMES.some((theme) => theme === config.editor.theme)
+    config.editor.theme = consts.THEMES.some(
+      theme => theme === config.editor.theme,
+    )
       ? config.editor.theme
-      : 'default'
+      : 'default';
 
     if (config.editor.theme !== 'default') {
-      editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + config.editor.theme + '.css')
+      editorTheme.setAttribute(
+        'href',
+        '../node_modules/codemirror/theme/' + config.editor.theme + '.css',
+      );
     }
   }
 
-  return config
+  return config;
 }
 
-function set (updates) {
-  let currentConfig = get()
-  let newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, updates)
-  if (!validate(newConfig)) throw new Error('INVALID CONFIG')
-  _save(newConfig)
+function set(updates) {
+  const currentConfig = get();
+  const newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, updates);
+  if (!validate(newConfig)) throw new Error('INVALID CONFIG');
+  _save(newConfig);
 
   if (newConfig.ui.theme === 'dark') {
-    document.body.setAttribute('data-theme', 'dark')
+    document.body.setAttribute('data-theme', 'dark');
   } else {
-    document.body.setAttribute('data-theme', 'default')
+    document.body.setAttribute('data-theme', 'default');
   }
 
-  let editorTheme = document.getElementById('editorTheme')
+  let editorTheme = document.getElementById('editorTheme');
   if (editorTheme == null) {
-    editorTheme = document.createElement('link')
-    editorTheme.setAttribute('id', 'editorTheme')
-    editorTheme.setAttribute('rel', 'stylesheet')
-    document.head.appendChild(editorTheme)
+    editorTheme = document.createElement('link');
+    editorTheme.setAttribute('id', 'editorTheme');
+    editorTheme.setAttribute('rel', 'stylesheet');
+    document.head.appendChild(editorTheme);
   }
-  let newTheme = consts.THEMES.some((theme) => theme === newConfig.editor.theme)
+  const newTheme = consts.THEMES.some(theme => theme === newConfig.editor.theme)
     ? newConfig.editor.theme
-    : 'default'
+    : 'default';
 
   if (newTheme !== 'default') {
-    editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + newTheme + '.css')
+    editorTheme.setAttribute(
+      'href',
+      '../node_modules/codemirror/theme/' + newTheme + '.css',
+    );
   }
 
   ipcRenderer.send('config-renew', {
-    config: get()
-  })
+    config: get(),
+  });
 }
 
-function assignConfigValues (originalConfig, rcConfig) {
-  let config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
-  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, originalConfig.hotkey, rcConfig.hotkey)
-  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, originalConfig.ui, rcConfig.ui)
-  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
-  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)
-  return config
+function assignConfigValues(originalConfig, rcConfig) {
+  const config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig);
+  config.hotkey = Object.assign(
+    {},
+    DEFAULT_CONFIG.hotkey,
+    originalConfig.hotkey,
+    rcConfig.hotkey,
+  );
+  config.ui = Object.assign(
+    {},
+    DEFAULT_CONFIG.ui,
+    originalConfig.ui,
+    rcConfig.ui,
+  );
+  config.editor = Object.assign(
+    {},
+    DEFAULT_CONFIG.editor,
+    originalConfig.editor,
+    rcConfig.editor,
+  );
+  config.preview = Object.assign(
+    {},
+    DEFAULT_CONFIG.preview,
+    originalConfig.preview,
+    rcConfig.preview,
+  );
+  return config;
 }
 
 export default {
   get,
   set,
-  validate
-}
+  validate,
+};
