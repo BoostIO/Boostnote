@@ -10,6 +10,10 @@ description: |
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
+apps:
+  asmstnote:
+    command: yarn run dev-start
+
 parts:
   my-part:
     # See 'snapcraft plugins'
