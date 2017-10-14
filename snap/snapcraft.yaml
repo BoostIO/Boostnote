@@ -12,7 +12,7 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   asmstnote:
-    command: yarn run dev-start
+    command: ls
 
 parts:
   my-part:
