@@ -13,7 +13,6 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 apps:
   asmstnote:
     command: desktop-launch $SNAP/start.wrapper
-    desktop: usr/share/applications/asmstnote.desktop
     plugs:
      - browser-support
      - network
