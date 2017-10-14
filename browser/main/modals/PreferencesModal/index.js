@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
-import HotkeyTab from './HotkeyTab'
+import KeysTab from './KeysTab'
 import UiTab from './UiTab'
 import InfoTab from './InfoTab'
 import StoragesTab from './StoragesTab'
@@ -50,9 +50,9 @@ class Preferences extends React.Component {
             config={config}
           />
         )
-      case 'HOTKEY':
+      case 'KEYS':
         return (
-          <HotkeyTab
+          <KeysTab
             dispatch={dispatch}
             config={config}
           />
@@ -92,7 +92,7 @@ class Preferences extends React.Component {
 
     let tabs = [
       {target: 'STORAGES', label: 'Storages'},
-      {target: 'HOTKEY', label: 'Hotkey'},
+      {target: 'KEYS', label: 'Keys'},
       {target: 'UI', label: 'UI'},
       {target: 'INFO', label: 'Info'}
     ]
