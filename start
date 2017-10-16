@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Electron won't start without this
+unset XDG_CONFIG_DIRS
+
+exec $SNAP/bin/npm run dev-start

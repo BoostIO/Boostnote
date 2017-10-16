@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Electron won't start without this
+unset XDG_CONFIG_DIRS
+
+cd $SNAP/lib/node_modules/Boostnote
+exec $SNAP/bin/npm run dev-start
