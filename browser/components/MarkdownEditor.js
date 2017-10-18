@@ -89,9 +89,9 @@ class MarkdownEditor extends React.Component {
   }
 
   handleDblClick (e) {
-    let { config } = this.props
+    const { config } = this.props
     if (config.editor.switchPreview === 'DOUBLECLICK') {
-      let newStatus = this.state.status === 'PREVIEW'
+      const newStatus = this.state.status === 'PREVIEW'
         ? 'CODE'
         : 'PREVIEW'
       this.setState({
