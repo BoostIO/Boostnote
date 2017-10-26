@@ -11,6 +11,7 @@ import fs from 'fs'
 import htmlTextHelper from 'browser/lib/htmlTextHelper'
 import copy from 'copy-to-clipboard'
 import mdurl from 'mdurl'
+import markdownpdf from 'markdown-pdf'
 
 const { remote } = require('electron')
 const { app } = remote
@@ -107,6 +108,7 @@ export default class MarkdownPreview extends React.Component {
     this.anchorClickHandler = (e) => this.handlePreviewAnchorClick(e)
     this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
     this.saveAsTextHandler = () => this.handleSaveAsText()
+    this.saveAsPdfHandler = () => this.handleSaveAsPdf()
     this.saveAsMdHandler = () => this.handleSaveAsMd()
     this.printHandler = () => this.handlePrint()
 
@@ -159,6 +161,10 @@ export default class MarkdownPreview extends React.Component {
     this.exportAsDocument('txt')
   }
 
+  handleSaveAsPdf () {
+      this.exportAsDocument('pdf')
+  }
+
   handleSaveAsMd () {
     this.exportAsDocument('md')
   }
@@ -177,9 +183,15 @@ export default class MarkdownPreview extends React.Component {
     dialog.showSaveDialog(remote.getCurrentWindow(), options,
     (filename) => {
       if (filename) {
-        fs.writeFile(filename, this.props.value, (err) => {
-          if (err) throw err
-        })
+        if(fileType === 'pdf'){
+          markdownpdf().from.string(this.props.value).to(filename, function () {
+              console.log("done");
+          })
+        } else {
+            fs.writeFile(filename, this.props.value, (err) => {
+                if (err) throw err
+            })
+        }
       }
     })
   }
@@ -210,6 +222,7 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.addEventListener('drop', this.preventImageDroppedHandler)
     this.refs.root.contentWindow.document.addEventListener('dragover', this.preventImageDroppedHandler)
     eventEmitter.on('export:save-text', this.saveAsTextHandler)
+    eventEmitter.on('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.on('export:save-md', this.saveAsMdHandler)
     eventEmitter.on('print', this.printHandler)
   }
@@ -221,6 +234,7 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.removeEventListener('drop', this.preventImageDroppedHandler)
     this.refs.root.contentWindow.document.removeEventListener('dragover', this.preventImageDroppedHandler)
     eventEmitter.off('export:save-text', this.saveAsTextHandler)
+    eventEmitter.off('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.off('export:save-md', this.saveAsMdHandler)
     eventEmitter.off('print', this.printHandler)
   }
