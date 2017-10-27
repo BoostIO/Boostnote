@@ -162,7 +162,7 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handleSaveAsPdf () {
-      this.exportAsDocument('pdf')
+    this.exportAsDocument('pdf')
   }
 
   handleSaveAsMd () {
@@ -183,14 +183,14 @@ export default class MarkdownPreview extends React.Component {
     dialog.showSaveDialog(remote.getCurrentWindow(), options,
     (filename) => {
       if (filename) {
-        if(fileType === 'pdf'){
+        if (fileType === 'pdf') {
           markdownpdf().from.string(this.props.value).to(filename, function () {
-              console.log("done");
+            console.log('done')
           })
         } else {
-            fs.writeFile(filename, this.props.value, (err) => {
-                if (err) throw err
-            })
+          fs.writeFile(filename, this.props.value, (err) => {
+            if (err) throw err
+          })
         }
       }
     })
