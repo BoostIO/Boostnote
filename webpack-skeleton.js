@@ -43,6 +43,7 @@ var config = {
     'devtron',
     'mixpanel',
     '@rokt33r/season',
+    'markdown-pdf',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',

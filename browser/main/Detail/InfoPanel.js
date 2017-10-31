@@ -3,7 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoPanel.styl'
 
 const InfoPanel = ({
-  storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, wordCount, letterCount, type, print
+  storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsPdf, wordCount, letterCount, type, print
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
     <div styleName='group-section'>
@@ -79,6 +79,11 @@ const InfoPanel = ({
         <p>.txt</p>
       </button>
 
+      <button styleName='export--enable' onClick={(e) => exportAsPdf(e)}>
+        <i className='fa fa-file-pdf-o fa-fw' />
+        <p>.pdf</p>
+      </button>
+
       <button styleName='export--enable' onClick={(e) => print(e)}>
         <i className='fa fa-print fa-fw' />
         <p>Print</p>
@@ -95,6 +100,7 @@ InfoPanel.propTypes = {
   createdAt: PropTypes.string.isRequired,
   exportAsMd: PropTypes.func.isRequired,
   exportAsTxt: PropTypes.func.isRequired,
+  exportAsPdf: PropTypes.func.isRequired,
   wordCount: PropTypes.number,
   letterCount: PropTypes.number,
   type: PropTypes.string.isRequired,

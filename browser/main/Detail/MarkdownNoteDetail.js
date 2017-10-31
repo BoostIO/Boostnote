@@ -164,6 +164,10 @@ class MarkdownNoteDetail extends React.Component {
     ee.emit('export:save-md')
   }
 
+  exportAsPdf () {
+    ee.emit('export:save-pdf')
+  }
+
   exportAsTxt () {
     ee.emit('export:save-text')
   }
@@ -296,6 +300,7 @@ class MarkdownNoteDetail extends React.Component {
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.exportAsMd}
           exportAsTxt={this.exportAsTxt}
+          exportAsPdf={this.exportAsPdf}
         />
       </div>
     </div>
@@ -358,6 +363,7 @@ class MarkdownNoteDetail extends React.Component {
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.exportAsMd}
           exportAsTxt={this.exportAsTxt}
+          exportAsPdf={this.exportAsPdf}
           wordCount={note.content.split(' ').length}
           letterCount={note.content.replace(/\r?\n/g, '').length}
           type={note.type}
