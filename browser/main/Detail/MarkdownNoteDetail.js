@@ -334,7 +334,7 @@ class MarkdownNoteDetail extends React.Component {
             >
               <i className={faClassName} styleName='lock-button' />
               <span styleName='control-lockButton-tooltip'>
-                {this.state.isLocked ? 'Unlock' : 'Lock'}
+                {this.state.isLocked ? 'Unlock Editor' : 'Keep Editor Locked'}
               </span>
             </button>
           return (

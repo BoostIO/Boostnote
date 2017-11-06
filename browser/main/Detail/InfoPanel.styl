@@ -10,57 +10,86 @@
 
 .control-infoButton-panel
   z-index 200
-  margin-top 45px
-  margin-left -210px
+  margin-top 38px
+  margin-left -140px
   position absolute
-  padding 20px 20px 0 20px
-  width 340px
+  padding 20px 25px 0 25px
+  width 300px
+  height 500px
+  overflow auto
   background-color $ui-noteList-backgroundColor
-  border 1px solid $border-color
+  box-shadow 2px 12px 15px 2px rgba(0, 0, 0, 0.1), 2px 1px 50px 2px rgba(0, 0, 0, 0.1)
+  border-radius 2px
+
+.modification-date
+  font-size 18px
+  line-height 30px
+  color $ui-text-color
+
+.modification-date-desc
+  font-size 18px
+  color $ui-inactive-text-color
 
 .control-infoButton-panel-trash
   z-index 200
   margin-top 45px
-  margin-left -230px
+  margin-left -190px
   position absolute
-  padding 20px 20px 0 20px
-  width 320px
+  padding 20px 25px 0 25px
+  width 300px
   background-color $ui-noteList-backgroundColor
-  border 1px solid $border-color
+  box-shadow 2px 12px 15px 2px rgba(0, 0, 0, 0.1), 2px 1px 50px 2px rgba(0, 0, 0, 0.1)
+  border-radius 2px
 
-.group-section
-  display flex
+.count-wrap 
+	display flex
+	position relative
+	width 100%
+
+.count-number 
+	position relative
+	display block
+	width 50%
+	overflow hidden
+	margin 0
+	padding 0
+
+.infoPanel-defaul-count
+  font-size 16px
   line-height 30px
-  font-size 13px
-
-.group-section-label
-  width 70px
-  height 20px
-  text-align left
-  margin-right 50px
-  font-size 13px
-  color $ui-inactive-text-color
-
-.group-section-control
-  flex 1
-  font-size 13px
   color $ui-text-color
 
-.group-section-control input
-  width 160px
-  height 25px
+.infoPanel-sub-count
+  font-size 16px
+  color $ui-inactive-text-color
+  padding-bottom 8px
 
-.group-section-control text
-  color #EA4447
-  font-weight 600
+.infoPanel-default
+  font-size 14px
+  line-height 30px
+  color $ui-text-color
+
+.infoPanel-sub
+  font-size 14px
+  color $ui-inactive-text-color
+  padding-bottom 8px
+
+.infoPanel-noteLink
+  padding-right 5px
+  width 200px
+  height 25px
+  margin-bottom 6px
+
+.infoPanel-trash
+  color #EA4447		
+  font-weight 600		
   font-size 14px
   width 70px
-  height 25px
   background-color rgba(226,33,113,0.1)
-  border none
+  border none		
   outline none
-  border-radius 2px
-  margin-right 5px
+  border-radius 2px		
+  margin-right 5px		
   padding 2px 5px
 
 [id=export-wrap]
@@ -96,20 +125,30 @@
 body[data-theme="dark"]
   .control-infoButton-panel
     background-color $ui-dark-noteList-backgroundColor
-    border 1px solid $ui-dark-borderColor
 
   .control-infoButton-panel-trash
     background-color $ui-dark-noteList-backgroundColor
-    border 1px solid $ui-dark-borderColor
 
-  .group-section-label
-    color $ui-inactive-text-color
-
-  .group-section-control
+  .modification-date
     color $ui-dark-text-color
 
-  .group-section-control input
-    background-color alpha($ui-dark-borderColor, 80%)
+  .modification-date-desc
+    color $ui-inactive-text-color
+
+  .infoPanel-defaul-count
+    color $ui-dark-text-color
+
+  .infoPanel-sub-count
+    color $ui-inactive-text-color
+
+  .infoPanel-default
+    color $ui-dark-text-color
+
+  .infoPanel-sub
+    color $ui-inactive-text-color
+
+  .infoPanel-noteLink
+    background-color alpha($ui-dark-borderColor, 60%)
     color $ui-dark-text-color
 
   [id=export-wrap]

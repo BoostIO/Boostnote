@@ -4,6 +4,7 @@ import styles from './InfoTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+import _ from 'lodash'
 
 const electron = require('electron')
 const { shell, remote } = electron
@@ -36,7 +37,20 @@ class InfoTab extends React.Component {
 
     if (!newConfig.amaEnabled) {
       AwsMobileAnalyticsConfig.recordDynamicCustomEvent('DISABLE_AMA')
+      this.setState({
+        amaMessage: 'We hope we will gain your trust'
+      })
+    } else {
+      this.setState({
+        amaMessage: 'Thank\'s for trust us'
+      })
     }
+
+    _.debounce(() => {
+      this.setState({
+        amaMessage: ''
+      })
+    }, 3000)()
 
     ConfigManager.set(newConfig)
 
@@ -44,6 +58,11 @@ class InfoTab extends React.Component {
       type: 'SET_CONFIG',
       config: newConfig
     })
+  }
+
+  infoMessage () {
+    const { amaMessage } = this.state
+    return amaMessage ? <p styleName='policy-confirm'>{amaMessage}</p> : null
   }
 
   render () {
@@ -74,7 +93,7 @@ class InfoTab extends React.Component {
             >Boostnote Shop</a> : Products are shipped to all over the world 🌏
           </li>
           <li>
-            <a href='https://salt.bountysource.com/teams/boostnote'
+            <a href='https://opencollective.com/boostnoteio'
               onClick={(e) => this.handleLinkClick(e)}
             >Crowdfunding</a> : Thank you for your support 🎉
           </li>
@@ -107,6 +126,7 @@ class InfoTab extends React.Component {
         />
         Enable to send analytics to our servers<br />
         <button styleName='policy-submit' onClick={(e) => this.handleSaveButtonClick(e)}>Save</button>
+        {this.infoMessage()}
       </div>
     )
   }

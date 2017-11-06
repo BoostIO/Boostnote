@@ -67,10 +67,17 @@
   text-align right
   :global
     .alert
-      font-size 12px
-      line-height 30px
-      padding 0 5px
-      float right
+      display inline-block
+      position absolute
+      top 60px
+      right 15px
+      font-size 14px
+    .success
+      color #1EC38B
+    .error
+      color red
+
+
 
 .group-control-leftButton
   colorDefaultButton()
@@ -108,7 +115,6 @@
     line-height 1.2
 
 .note-for-keymap
-  margin-left: 10px
   font-size: 12px
 
 .code-mirror

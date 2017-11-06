@@ -104,11 +104,17 @@ class SideNav extends React.Component {
         <TagListItem
           name={tag}
           handleClickTagListItem={this.handleClickTagListItem.bind(this)}
-          isActive={!!location.pathname.match(tag)}
+          isActive={this.getTagActive(location.pathname, tag)}
           key={tag}
         />
       ))
     )
+  }
+
+  getTagActive (path, tag) {
+    const pathSegments = path.split('/')
+    const pathTag = pathSegments[pathSegments.length - 1]
+    return pathTag === tag
   }
 
   handleClickTagListItem (name) {
@@ -142,8 +148,8 @@ class SideNav extends React.Component {
       >
         <div styleName='top'>
           <div styleName='switch-buttons'>
-            <button styleName={isTagActive ? 'non-active-button' : 'active-button'} onClick={this.handleSwitchFoldersButtonClick.bind(this)}>Folders</button>
-            <button styleName={isTagActive ? 'active-button' : 'non-active-button'} onClick={this.handleSwitchTagsButtonClick.bind(this)}>Tags</button>
+            <button styleName={isTagActive ? 'non-active-button' : 'active-button'} onClick={this.handleSwitchFoldersButtonClick.bind(this)}><i className='fa fa-folder fa-fw' /></button>
+            <button styleName={isTagActive ? 'active-button' : 'non-active-button'} onClick={this.handleSwitchTagsButtonClick.bind(this)}><i className='fa fa-tags fa-fw' /></button>
           </div>
           <div>
             <button styleName='top-menu'

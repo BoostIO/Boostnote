@@ -36,7 +36,7 @@ class Crowdfunding extends React.Component {
         <p>Boostnote maintainers.</p>
         <br />
         <button styleName='cf-link'>
-          <a href='https://salt.bountysource.com/teams/boostnote' onClick={(e) => this.handleLinkClick(e)}>Support via Bountysource</a>
+          <a href='https://opencollective.com/boostnoteio' onClick={(e) => this.handleLinkClick(e)}>Support via OpenCollective</a>
         </button>
       </div>
     )

@@ -10,15 +10,17 @@ import styles from './NoteItemSimple.styl'
  * @param {boolean} isActive
  * @param {Object} note
  * @param {Function} handleNoteClick
+ * @param {Function} handleNoteContextMenu
  * @param {Function} handleDragStart
  */
-const NoteItemSimple = ({ isActive, note, handleNoteClick, handleDragStart }) => (
+const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu, handleDragStart }) => (
   <div styleName={isActive
       ? 'item-simple--active'
       : 'item-simple'
     }
     key={`${note.storage}-${note.key}`}
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
+    onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
     onDragStart={e => handleDragStart(e, note)}
     draggable='true'
   >
@@ -44,6 +46,7 @@ NoteItemSimple.propTypes = {
     title: PropTypes.string.isrequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
+  handleNoteContextMenu: PropTypes.func.isRequired,
   handleDragStart: PropTypes.func.isRequired
 }
 

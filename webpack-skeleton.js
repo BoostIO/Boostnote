@@ -39,6 +39,7 @@ var config = {
     'fs-jetpack',
     '@rokt33r/markdown-it-math',
     'markdown-it-checkbox',
+    'markdown-it-kbd',
     'devtron',
     'mixpanel',
     '@rokt33r/season',

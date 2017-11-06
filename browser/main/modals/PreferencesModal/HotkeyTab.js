@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
+import _ from 'lodash'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -50,6 +51,7 @@ class HotkeyTab extends React.Component {
       type: 'SET_UI',
       config: newConfig
     })
+    this.clearMessage()
   }
 
   handleHintToggleButtonClick (e) {
@@ -67,6 +69,14 @@ class HotkeyTab extends React.Component {
     this.setState({
       config
     })
+  }
+
+  clearMessage () {
+    _.debounce(() => {
+      this.setState({
+        keymapAlert: null
+      })
+    }, 2000)()
   }
 
   render () {

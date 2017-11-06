@@ -35,10 +35,8 @@ const StorageItem = ({
   >
     <span styleName={isFolded
       ? 'folderList-item-name--folded' : 'folderList-item-name'
-    }
-      style={{borderColor: folderColor}}
-    >
-      {isFolded ? folderName.substring(0, 1) : folderName}
+    }>
+      <text style={{color: folderColor, paddingRight: '10px'}}>{isActive ? <i className='fa fa-folder-open-o' /> : <i className='fa fa-folder-o' />}</text>{isFolded ? folderName.substring(0, 1) : folderName}
     </span>
     {(!isFolded && isNumber(noteCount)) &&
       <span styleName='folderList-item-noteCount'>{noteCount}</span>

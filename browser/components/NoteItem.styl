@@ -59,7 +59,15 @@ $control-height = 30px
   .item-star
     color $ui-favorite-star-button-color
   &:hover
-    background-color $ui-button--active-backgroundColor
+    background-color alpha($ui-button--active-backgroundColor, 50%)
+    color #e74c3c
+    .menu-button-label
+      color $ui-text-color
+  &:active, &:active:hover
+    background-color alpha($ui-button--active-backgroundColor, 50%)
+    color #e74c3c
+    .menu-button-label
+      color $ui-text-color
 
 .item-title-icon
   position relative
@@ -111,7 +119,7 @@ $control-height = 30px
 
 .item-bottom-time
   color $ui-inactive-text-color
-  font-size 11px
+  font-size 13px
   padding-left 2px
   padding-bottom 2px
 
@@ -148,6 +156,7 @@ body[data-theme="dark"]
     &:hover
       transition 0.15s
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-dark-text-color
       .item-title
       .item-title-icon
       .item-bottom-time
@@ -155,11 +164,12 @@ body[data-theme="dark"]
         color $ui-dark-text-color
       .item-bottom-tagList-item
         transition 0.15s
-        background-color alpha($ui-dark-button--active-backgroundColor, 40%)
+        background-color alpha(#fff, 20%)
         color $ui-dark-text-color
     &:active
       transition 0.15s
       background-color $ui-dark-button--active-backgroundColor
+      color $ui-dark-text-color
       .item-title
       .item-title-icon
       .item-bottom-time
@@ -185,6 +195,11 @@ body[data-theme="dark"]
     .item-bottom-tagList-item
       background-color alpha(white, 10%)
       color $ui-dark-text-color
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 50%)
+      color #c0392b
+      .item-bottom-tagList-item
+        background-color alpha(#fff, 20%)
 
   .item-title
     color $ui-inactive-text-color

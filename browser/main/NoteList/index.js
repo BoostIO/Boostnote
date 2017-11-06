@@ -285,11 +285,18 @@ class NoteList extends React.Component {
   }
 
   sortByPin (unorderedNotes) {
-    const pinnedNotes = unorderedNotes.filter((note) => {
-      return note.isPinned
+    const pinnedNotes = []
+    const unpinnedNotes = []
+
+    unorderedNotes.forEach((note) => {
+      if (note.isPinned) {
+        pinnedNotes.push(note)
+      } else {
+        unpinnedNotes.push(note)
+      }
     })
 
-    return pinnedNotes.concat(unorderedNotes)
+    return pinnedNotes.concat(unpinnedNotes)
   }
 
   handleNoteClick (e, uniqueKey) {
@@ -351,19 +358,23 @@ class NoteList extends React.Component {
 
   handleNoteContextMenu (e, uniqueKey) {
     const { location } = this.props
-    const targetIndex = this.getTargetIndex()
-    let note = this.notes[targetIndex]
-    const label = note.isPinned ? 'Remove pin' : 'Pin to Top'
+    const note = this.notes.find((note) => {
+      const noteKey = `${note.storage}-${note.key}`
+      return noteKey === uniqueKey
+    })
 
-    let menu = new Menu()
+    const pinLabel = note.isPinned ? 'Remove pin' : 'Pin to Top'
+    const deleteLabel = 'Delete Note'
+
+    const menu = new Menu()
     if (!location.pathname.match(/\/home|\/starred|\/trash/)) {
       menu.append(new MenuItem({
-        label: label,
+        label: pinLabel,
         click: (e) => this.pinToTop(e, uniqueKey)
       }))
     }
     menu.append(new MenuItem({
-      label: 'Delete Note',
+      label: deleteLabel,
       click: (e) => this.deleteNote(e, uniqueKey)
     }))
     menu.popup()
@@ -377,6 +388,7 @@ class NoteList extends React.Component {
     const currentStorage = data.storageMap.get(storageKey)
     const currentFolder = _.find(currentStorage.folders, {key: folderKey})
 
+    this.handleNoteClick(e, uniqueKey)
     const targetIndex = this.getTargetIndex()
     let note = this.notes[targetIndex]
     note.isPinned = !note.isPinned
@@ -476,6 +488,25 @@ class NoteList extends React.Component {
       if (note.isTrashed !== true || location.pathname === '/trashed') return true
     })
 
+    moment.locale('en', {
+      relativeTime: {
+        future: 'in %s',
+        past: '%s ago',
+        s: '%ds',
+        ss: '%ss',
+        m: '1m',
+        mm: '%dm',
+        h: 'an hour',
+        hh: '%dh',
+        d: '1d',
+        dd: '%dd',
+        M: '1M',
+        MM: '%dM',
+        y: '1Y',
+        yy: '%dY'
+      }
+    })
+
     let noteList = notes
       .map(note => {
         if (note == null) {
@@ -487,7 +518,7 @@ class NoteList extends React.Component {
         const dateDisplay = moment(
           config.sortBy === 'CREATED_AT'
             ? note.createdAt : note.updatedAt
-        ).fromNow()
+        ).fromNow('D')
         const key = `${note.storage}-${note.key}`
 
         if (isDefault) {
@@ -510,6 +541,7 @@ class NoteList extends React.Component {
             isActive={isActive}
             note={note}
             key={key}
+            handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
             handleNoteClick={this.handleNoteClick.bind(this)}
             handleDragStart={this.handleDragStart.bind(this)}
           />

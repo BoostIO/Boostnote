@@ -6,67 +6,53 @@ const InfoPanel = ({
   storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, wordCount, letterCount, type, print
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Storage
-      </div>
-      <div styleName='group-section-control'>
-        {storageName}
-      </div>
+    <div>
+      <p styleName='modification-date'>{updatedAt}</p>
+      <p styleName='modification-date-desc'>MODIFICATION DATE</p>
     </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Folder
-      </div>
-      <div styleName='group-section-control'>
-        {folderName}
-      </div>
-    </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Created
-      </div>
-      <div styleName='group-section-control'>
-        {createdAt}
-      </div>
-    </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Updated
-      </div>
-      <div styleName='group-section-control'>
-        {updatedAt}
-      </div>
-    </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Note Link
-      </div>
-      <div styleName='group-section-control'>
-        <input value={noteLink} onClick={(e) => { e.target.select() }} />
-      </div>
-    </div>
+
+    <hr />
+
     {type === 'SNIPPET_NOTE'
       ? ''
-      : <div>
-        <div styleName='group-section'>
-          <div styleName='group-section-label'>
-            Words
-          </div>
-          <div styleName='group-section-control'>
-            {wordCount}
-          </div>
+      : <div styleName='count-wrap'>
+        <div styleName='count-number'>
+          <p styleName='infoPanel-defaul-count'>{wordCount}</p>
+          <p styleName='infoPanel-sub-count'>Words</p>
         </div>
-        <div styleName='group-section'>
-          <div styleName='group-section-label'>
-            Letters
-          </div>
-          <div styleName='group-section-control'>
-            {letterCount}
-          </div>
+        <div styleName='count-number'>
+          <p styleName='infoPanel-defaul-count'>{letterCount}</p>
+          <p styleName='infoPanel-sub-count'>Letters</p>
         </div>
       </div>
     }
+
+    {type === 'SNIPPET_NOTE'
+      ? ''
+      : <hr />
+    }
+
+    <div>
+      <p styleName='infoPanel-default'>{storageName}</p>
+      <p styleName='infoPanel-sub'>STORAGE</p>
+    </div>
+
+    <div>
+      <p styleName='infoPanel-default'>{folderName}</p>
+      <p styleName='infoPanel-sub'>FOLDER</p>
+    </div>
+
+    <div>
+      <p styleName='infoPanel-default'>{createdAt}</p>
+      <p styleName='infoPanel-sub'>CREATION DATE</p>
+    </div>
+
+    <div>
+      <input styleName='infoPanel-noteLink' value={noteLink} onClick={(e) => { e.target.select() }} />
+      <p styleName='infoPanel-sub'>NOTE LINK</p>
+    </div>
+
+    <hr />
 
     <div id='export-wrap'>
       <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>

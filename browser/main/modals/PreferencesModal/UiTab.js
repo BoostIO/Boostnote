@@ -9,6 +9,11 @@ import CodeMirror from 'codemirror'
 
 const OSX = global.process.platform === 'darwin'
 
+import _ from 'lodash'
+
+const electron = require('electron')
+const ipc = electron.ipcRenderer
+
 class UiTab extends React.Component {
   constructor (props) {
     super(props)
@@ -18,8 +23,30 @@ class UiTab extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.handleSettingDone = () => {
+      this.setState({UiAlert: {
+        type: 'success',
+        message: 'Successfully applied!'
+      }})
+    }
+    this.handleSettingError = (err) => {
+      this.setState({UiAlert: {
+        type: 'error',
+        message: err.message != null ? err.message : 'Error occurs!'
+      }})
+    }
+    ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
+    ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
+  }
+
   componentWillMount () {
     CodeMirror.autoLoadMode(ReactCodeMirror, 'javascript')
+  }
+
+  componentWillUnmount () {
+    ipc.removeListener('APP_SETTING_DONE', this.handleSettingDone)
+    ipc.removeListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
   handleUIChange (e) {
@@ -80,9 +107,25 @@ class UiTab extends React.Component {
       type: 'SET_UI',
       config: newConfig
     })
+    this.clearMessage()
+  }
+
+  clearMessage () {
+    _.debounce(() => {
+      this.setState({
+        UiAlert: null
+      })
+    }, 2000)()
   }
 
   render () {
+    let UiAlert = this.state.UiAlert
+    let UiAlertElement = UiAlert != null
+      ? <p className={`alert ${UiAlert.type}`}>
+        {UiAlert.message}
+      </p>
+      : null
+
     const themes = consts.THEMES
     const { config, codemirrorTheme } = this.state
     const codemirrorSampleCode = 'function iamHappy (happy) {\n\tif (happy) {\n\t  console.log("I am Happy!")\n\t} else {\n\t  console.log("I am not Happy!")\n\t}\n};'
@@ -228,7 +271,7 @@ class UiTab extends React.Component {
                 <option value='vim'>vim</option>
                 <option value='emacs'>emacs</option>
               </select>
-              <span styleName='note-for-keymap'>Please restart boostnote after you change the keymap</span>
+              <p styleName='note-for-keymap'>⚠️ Please restart boostnote after you change the keymap</p>
             </div>
           </div>
 
@@ -285,12 +328,11 @@ class UiTab extends React.Component {
             </label>
           </div>
 
-          <div className='group-control'>
+          <div styleName='group-control'>
             <button styleName='group-control-rightButton'
-              onClick={(e) => this.handleSaveUIClick(e)}
-            >
-              Save
+              onClick={(e) => this.handleSaveUIClick(e)}>Save
             </button>
+            {UiAlertElement}
           </div>
         </div>
       </div>

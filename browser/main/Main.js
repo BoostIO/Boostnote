@@ -14,7 +14,6 @@ import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import eventEmitter from 'browser/main/lib/eventEmitter'
-import RealtimeNotification from 'browser/components/RealtimeNotification'
 
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
@@ -192,14 +191,6 @@ class Main extends React.Component {
 
     // the width of the navigation bar when it is folded/collapsed
     const foldedNavigationWidth = 44
-    let notificationBarOffsetLeft
-    if (this.state.fullScreen) {
-      notificationBarOffsetLeft = 0
-    } else if (config.isSideNavFolded) {
-      notificationBarOffsetLeft = foldedNavigationWidth
-    } else {
-      notificationBarOffsetLeft = this.state.navWidth
-    }
 
     return (
       <div
@@ -268,9 +259,6 @@ class Main extends React.Component {
             ignorePreviewPointerEvents={this.state.isRightSliderFocused}
           />
         </div>
-        <RealtimeNotification
-          style={{left: notificationBarOffsetLeft}}
-        />
       </div>
     )
   }

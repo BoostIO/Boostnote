@@ -6,37 +6,26 @@ const InfoPanelTrashed = ({
   storageName, folderName, updatedAt, createdAt, exportAsMd, exportAsTxt
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel-trash' style={{display: 'none'}}>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Storage
-      </div>
-      <div styleName='group-section-control'>
-        {storageName}
-      </div>
+    <div>
+      <p styleName='modification-date'>{updatedAt}</p>
+      <p styleName='modification-date-desc'>MODIFICATION DATE</p>
     </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Folder
-      </div>
-      <div styleName='group-section-control'>
-        <text>Trash</text>{folderName}
-      </div>
+
+    <hr />
+
+    <div>
+      <p styleName='infoPanel-default'>{storageName}</p>
+      <p styleName='infoPanel-sub'>STORAGE</p>
     </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Created
-      </div>
-      <div styleName='group-section-control'>
-        {createdAt}
-      </div>
+
+    <div>
+      <p styleName='infoPanel-default'><text styleName='infoPanel-trash'>Trash</text>{folderName}</p>
+      <p styleName='infoPanel-sub'>FOLDER</p>
     </div>
-    <div styleName='group-section'>
-      <div styleName='group-section-label'>
-        Updated
-      </div>
-      <div styleName='group-section-control'>
-        {updatedAt}
-      </div>
+
+    <div>
+      <p styleName='infoPanel-default'>{createdAt}</p>
+      <p styleName='infoPanel-sub'>CREATION DATE</p>
     </div>
 
     <div id='export-wrap'>

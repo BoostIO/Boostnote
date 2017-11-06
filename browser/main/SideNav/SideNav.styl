@@ -26,27 +26,22 @@
 
 .switch-buttons
   background-color transparent
-  border 1px solid $ui-borderColor
-  width 110px
+  border 0
   height 25px
-  margin 20px auto 0px auto
-  border-radius 1px
+  margin 20px auto 0px 8px
 
 .non-active-button
-  navButtonColor()
-  font-weight 600
-  width 54px
-  height 23px
+  color $ui-inactive-text-color
+  font-size 16px
+  border 0
+  background-color transparent
+  transition 0.2s
+  &:hover
+    color alpha(#0B99F1, 60%)
 
 .active-button
   @extend .non-active-button
-  background-color $ui-button--active-backgroundColor
-  color $ui-text-color
-  &:hover
-    background-color alpha($ui-button--active-backgroundColor, 70%)
-    color alpha($ui-text-color, 70%)
-  &:active, &:active:hover
-    background-color $ui-button--active-backgroundColor
+  color #0B99F1
 
 .top-menu-label
   margin-left 5px
@@ -100,7 +95,7 @@
     border-top-right-radius 2px
     border-bottom-right-radius 2px
     pointer-events none
-    font-size 12px
+    font-size 13px
 
 body[data-theme="dark"]
   .root, .root--folded
@@ -118,25 +113,10 @@ body[data-theme="dark"]
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
 
-  .switch-buttons
-    border-color $ui-dark-borderColor
-
   .non-active-button
-    navDarkButtonColor()
-
-  .active-button
-    @extend .non-active-button
-    background-color $ui-dark-button--active-backgroundColor
-    color $ui-dark-text-color
+    color alpha($ui-dark-text-color, 60%)
     &:hover
-      background-color alpha($ui-dark-button--active-backgroundColor, 70%)
-      color alpha($ui-dark-text-color, 70%)
-    &:active
-      color $ui-dark-text-color
-      background-color alpha($ui-dark-button--active-backgroundColor, 60%)
-    &:active, &:active:hover
-      color $ui-dark-text-color
-      background-color $ui-dark-button--active-backgroundColor
+      color alpha(#0B99F1, 60%)
 
   .tag-title
     p

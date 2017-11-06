@@ -92,7 +92,7 @@ const OSX = global.process.platform === 'darwin'
 
 const defaultFontFamily = ['helvetica', 'arial', 'sans-serif']
 if (!OSX) {
-  defaultFontFamily.unshift('\'Microsoft YaHei\'')
+  defaultFontFamily.unshift('Microsoft YaHei')
   defaultFontFamily.unshift('meiryo')
 }
 const defaultCodeBlockFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
@@ -187,11 +187,13 @@ export default class MarkdownPreview extends React.Component {
   }
 
   fixDecodedURI (node) {
-    const { innerText, href } = node
+    if (node && node.children.length === 1 && typeof node.children[0] === 'string') {
+      const { innerText, href } = node
 
-    node.innerText = mdurl.decode(href) === innerText
-      ? href
-      : innerText
+      node.innerText = mdurl.decode(href) === innerText
+        ? href
+        : innerText
+    }
   }
 
   componentDidMount () {
@@ -258,7 +260,7 @@ export default class MarkdownPreview extends React.Component {
     theme = consts.THEMES.some((_theme) => _theme === theme) && theme !== 'default'
       ? theme
       : 'elegant'
-    this.getWindow().document.getElementById('codeTheme').href = `${appPath}/node_modules/codemirror/theme/${theme}.css`
+    this.getWindow().document.getElementById('codeTheme').href = `${appPath}/node_modules/codemirror/theme/${theme.split(' ')[0]}.css`
   }
 
   rewriteIframe () {
@@ -330,7 +332,12 @@ export default class MarkdownPreview extends React.Component {
         }
         el.parentNode.appendChild(copyIcon)
         el.innerHTML = ''
-        el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
+        if (codeBlockTheme.indexOf('solarized') === 0) {
+          const [refThema, color] = codeBlockTheme.split(' ')
+          el.parentNode.className += ` cm-s-${refThema} cm-s-${color} CodeMirror`
+        } else {
+          el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
+        }
         CodeMirror.runMode(content, syntax.mime, el, {
           tabSize: indentSize
         })

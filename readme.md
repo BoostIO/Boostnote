@@ -27,7 +27,7 @@ Let's talk about Boostnote! <br>
 ## More Information
 * [Website](https://boostnote.io)
 * [10hz](https://boostnote.io/team/) : Boostnote for the creative hacker teams. Share your markdown notes and snippets instantly with your team. **We will release it at October!** 🏃💨
-* [Support us via Bountysource](https://salt.bountysource.com/teams/boostnote) : Thank you for your support 🎉
+* [Support us via OpenCollective](https://opencollective.com/boostnoteio) : Thank you for your support 🎉
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md) : Development configurations for Boostnote 🚀
 * Copyright (C) 2017 Maisin&Co.
 
