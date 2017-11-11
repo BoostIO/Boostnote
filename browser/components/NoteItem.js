@@ -70,10 +70,10 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
 
       <div styleName='item-bottom-time'>{dateDisplay}</div>
       {note.isStarred
-        ? <i styleName='item-star' className='fa fa-star' /> : ''
+        ? <i styleName='item-star' className='fa fa-star' /> : <i styleName='item-star--hover' className='fa fa-star' />
       }
       {note.isPinned && !pathname.match(/\/home|\/starred|\/trash/)
-        ? <i styleName='item-pin' className='fa fa-thumb-tack' /> : ''
+        ? <i styleName='item-pin' className='fa fa-thumb-tack' /> : <i styleName='item-pin--hover' className='fa fa-thumb-tack' />
       }
       {note.type === 'MARKDOWN_NOTE'
         ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
