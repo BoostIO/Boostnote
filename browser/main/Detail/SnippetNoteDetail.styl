@@ -14,10 +14,12 @@
   top $info-height + $info-margin-under-border
   bottom $statusBar-height
   background-color $ui-noteDetail-backgroundColor
+  -webkit-app-region no-drag
 
 .body .description
   absolute top left right
   height 50px
+  -webkit-app-region no-drag
 
 .body .description textarea
   outline none
@@ -29,6 +31,7 @@
   padding 2px 5px
   line-height 1.6
   background-color $ui-noteDetail-backgroundColor
+  -webkit-app-region no-drag
 
 .tabList
   absolute left right
