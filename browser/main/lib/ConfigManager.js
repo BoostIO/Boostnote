@@ -36,7 +36,7 @@ export const DEFAULT_CONFIG = {
     fontFamily: win ? 'Segoe UI' : 'Monaco, Consolas',
     indentType: 'space',
     indentSize: '2',
-    switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR
+    switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR, DOUBLECLICK
   },
   preview: {
     fontSize: '14',

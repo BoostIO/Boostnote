@@ -88,6 +88,25 @@ class MarkdownEditor extends React.Component {
     }
   }
 
+  handleDblClick (e) {
+    const { config } = this.props
+    if (config.editor.switchPreview === 'DOUBLECLICK') {
+      const newStatus = this.state.status === 'PREVIEW'
+        ? 'CODE'
+        : 'PREVIEW'
+      this.setState({
+        status: newStatus
+      }, () => {
+        if (newStatus === 'CODE') {
+          this.refs.code.focus()
+        } else {
+          this.refs.preview.focus()
+        }
+        eventEmitter.emit('topbar:togglelockbutton', this.state.status)
+      })
+    }
+  }
+
   handleBlur (e) {
     if (this.state.isLocked) return
     this.setState({ keyPressed: new Set() })
@@ -225,6 +244,7 @@ class MarkdownEditor extends React.Component {
           : `MarkdownEditor ${className}`
         }
         onContextMenu={(e) => this.handleContextMenu(e)}
+        onDblClick={(e) => this.handleDblClick(e)}
         tabIndex='-1'
         onKeyDown={(e) => this.handleKeyDown(e)}
         onKeyUp={(e) => this.handleKeyUp(e)}
@@ -245,6 +265,7 @@ class MarkdownEditor extends React.Component {
           storageKey={storageKey}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
+          onDblClick={(e) => this.handleDblClick(e)}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
@@ -261,6 +282,7 @@ class MarkdownEditor extends React.Component {
           indentSize={editorIndentSize}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
+          onDblClick={(e) => this.handleDblClick(e)}
           tabIndex='0'
           value={this.state.renderValue}
           onMouseUp={(e) => this.handlePreviewMouseUp(e)}

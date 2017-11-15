@@ -109,6 +109,7 @@ export default class MarkdownPreview extends React.Component {
     this.saveAsTextHandler = () => this.handleSaveAsText()
     this.saveAsMdHandler = () => this.handleSaveAsMd()
     this.printHandler = () => this.handlePrint()
+    this.dblClickHandler = (e) => this.handleDblClick(e)
 
     this.linkClickHandler = this.handlelinkClick.bind(this)
   }
@@ -135,6 +136,10 @@ export default class MarkdownPreview extends React.Component {
 
   handleContextMenu (e) {
     this.props.onContextMenu(e)
+  }
+
+  handleDblClick (e) {
+    this.props.onDblClick(e)
   }
 
   handleMouseDown (e) {
@@ -197,6 +202,7 @@ export default class MarkdownPreview extends React.Component {
   componentDidMount () {
     this.refs.root.setAttribute('sandbox', 'allow-scripts')
     this.refs.root.contentWindow.document.body.addEventListener('contextmenu', this.contextMenuHandler)
+    this.refs.root.contentWindow.document.body.addEventListener('dblclick', this.dblClickHandler)
 
     this.refs.root.contentWindow.document.head.innerHTML = `
       <style id='style'></style>
@@ -218,6 +224,7 @@ export default class MarkdownPreview extends React.Component {
 
   componentWillUnmount () {
     this.refs.root.contentWindow.document.body.removeEventListener('contextmenu', this.contextMenuHandler)
+    this.refs.root.contentWindow.document.body.removeEventListener('dblclick', this.dblClickHandler)
     this.refs.root.contentWindow.document.removeEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.removeEventListener('mouseup', this.mouseUpHandler)
     this.refs.root.contentWindow.document.removeEventListener('drop', this.preventImageDroppedHandler)

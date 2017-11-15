@@ -45,6 +45,7 @@ export default class CodeEditor extends React.Component {
     this.loadStyleHandler = (e) => {
       this.editor.refresh()
     }
+    this.dblclickHandler = (e) => this.props.onDblClick(e)
   }
 
   componentDidMount () {
@@ -102,6 +103,7 @@ export default class CodeEditor extends React.Component {
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
     this.editor.on('paste', this.pasteHandler)
+    this.editor.on('dblclick', this.dblclickHandler)
 
     let editorTheme = document.getElementById('editorTheme')
     editorTheme.addEventListener('load', this.loadStyleHandler)
@@ -121,6 +123,7 @@ export default class CodeEditor extends React.Component {
     this.editor.off('blur', this.blurHandler)
     this.editor.off('change', this.changeHandler)
     this.editor.off('paste', this.pasteHandler)
+    this.editor.off('dblclick', this.dblclickHandler)
     let editorTheme = document.getElementById('editorTheme')
     editorTheme.removeEventListener('load', this.loadStyleHandler)
   }
@@ -272,7 +275,8 @@ CodeEditor.propTypes = {
   className: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  onDblClick: PropTypes.func
 }
 
 CodeEditor.defaultProps = {
