@@ -8,3 +8,4 @@ node_modules/*
 /compiled
 /secret
 *.log
+.idea

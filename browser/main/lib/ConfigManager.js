@@ -21,7 +21,8 @@ export const DEFAULT_CONFIG = {
   amaEnabled: true,
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
+    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E',
+    timestamp: OSX ? 'Cmd + Alt + T' : 'Super + Alt + T'
   },
   ui: {
     theme: 'default',

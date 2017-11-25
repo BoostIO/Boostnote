@@ -5,6 +5,7 @@ import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import { findStorage } from 'browser/lib/findStorage'
+import moment from 'moment'
 const _ = require('lodash')
 
 class MarkdownEditor extends React.Component {
@@ -23,13 +24,36 @@ class MarkdownEditor extends React.Component {
       keyPressed: new Set(),
       isLocked: false
     }
-
+    this.makeTimestampInEditor = this.makeTimestampInEditor.bind(this)
     this.lockEditorCode = () => this.handleLockEditor()
+  }
+
+  makeTimestampInEditor () {
+    try {
+      const cursor = this.refs.code.editor.getCursor()
+      const value = this.refs.code.editor.getValue()
+
+      const date = '# ' + moment().format('ll')
+      const time = '## ' + moment().format('HH:mm:ss')
+
+      const insertLines = []
+      if (!value.includes(date)) insertLines.push(date)
+      insertLines.push(time)
+
+      const newValue = value.split('\n')
+      newValue.splice(cursor.line, 0, ...insertLines)
+
+      this.refs.code.editor.setValue(newValue.join('\n'))
+      this.refs.code.editor.setCursor({cursor, line: cursor.line + 1})
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   componentDidMount () {
     this.value = this.refs.code.value
     eventEmitter.on('editor:lock', this.lockEditorCode)
+    eventEmitter.on('editor:timestamp', this.makeTimestampInEditor)
   }
 
   componentDidUpdate () {
@@ -45,6 +69,7 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount () {
     this.cancelQueue()
     eventEmitter.off('editor:lock', this.lockEditorCode)
+    eventEmitter.off('editor:timestamp', this.makeTimestampInEditor)
   }
 
   queueRendering (value) {
