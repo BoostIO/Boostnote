@@ -181,8 +181,6 @@ const markdown = {
   },
   strip,
   normalizeLinkText
-    return md.render(content)
-  }
 }
 
 export default markdown
