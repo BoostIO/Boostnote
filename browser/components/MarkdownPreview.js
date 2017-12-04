@@ -149,9 +149,11 @@ export default class MarkdownPreview extends React.Component {
 
   handleMouseDown (e) {
     if (e.target != null) {
+      console.log(e.target.tagName)
       switch (e.target.tagName) {
         case 'A':
         case 'INPUT':
+        case 'LABEL':
           return null
       }
     }

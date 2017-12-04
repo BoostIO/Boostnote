@@ -75,8 +75,16 @@ body
     border-radius 5px
     justify-content left
 li
-  label.taskListItem
-    margin-left -2em
+  input
+    display none
+    &:checked + label.taskListItem
+      background-color green
+    &+ label.taskListItem
+      display block
+      background-color gray
+      height 20px
+      width 20px
+      text-indent 40px
 div.math-rendered
   text-align center
 .math-failed
