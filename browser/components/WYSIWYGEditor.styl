@@ -1,0 +1,229 @@
+global-reset()
+
+brandColor = #2BAC8F
+brandBorderColor = #3FB399
+
+.root
+  font-family helvetica, arial, sans-serif
+  overflow-x hidden
+  background-color $ui-noteDetail-backgroundColor
+  a
+    color brandColor
+    text-decoration none
+    padding 5px
+    border-radius 5px
+    margin -5px
+    transition .1s
+    display inline-block
+    cursor pointer
+    img
+      vertical-align sub
+    &:hover
+      color lighten(brandColor, 5%)
+      text-decoration underline
+      background-color alpha(#FFC95C, 0.3)
+    &:visited
+      color brandColor
+
+  h1, h2, h3, h4, h5, h6
+    font-weight bold
+    padding 0
+  h1
+    font-size 2.25em
+    line-height 1.2em
+    border-bottom solid 1px borderColor
+    margin 1em 0 0.44em
+    &:first-child
+      margin-top 0
+  h2
+    font-size 1.75em
+    line-height 1.225em
+    border-bottom solid 1px borderColor
+    margin 1em 0 0.57em
+    &:first-child
+      margin-top 0
+  h3
+    font-size 1.5em
+    line-height 1.43em
+    margin 1em 0 0.66em
+  h4
+    font-size 1.25em
+    line-height 1.4em
+    margin 1em 0 0.8em
+  h5
+    font-size 1em
+    line-height 1.4em
+    margin 1em 0 1em
+  h6
+    font-size 1em
+    line-height 1.4em
+    margin 1em 0 1em
+    color #777
+  div
+    line-height 1.6em
+    margin 0 0 1em
+  img
+    max-width 100%
+  strong, b
+    font-weight bold
+  em, i
+    font-style italic
+  s, del, strike
+    text-decoration line-through
+  u
+    text-decoration underline
+  blockquote
+    border-left solid 4px brandBorderColor
+    margin 0 0 1em
+    padding 0 25px
+  ul
+    list-style-type disc
+    padding-left 2em
+    margin-bottom 1em
+    li
+      display list-item
+      p
+        margin 0
+    &>li>ul, &>li>ol
+      margin 0
+    &>li>ul
+      list-style-type circle
+      &>li>ul
+        list-style-type square
+  ol
+    list-style-type decimal
+    padding-left 2em
+    margin-bottom 1em
+    li
+      display list-item
+      p
+        margin 0
+    &>li>ul, &>li>ol
+      margin 0
+  code
+    font-family 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace'
+    color #CC305F
+    padding 0.2em 0.4em
+    background-color #f7f7f7
+    border-radius 3px
+    font-size 1em
+    text-decoration none
+    margin-right 2px
+  pre
+    padding 0.5em !important
+    border solid 1px #D1D1D1
+    border-radius 5px
+    overflow-x auto
+    margin 0 0 1em
+    display flex
+    line-height 1.4em
+    &.flowchart, &.sequence
+      display flex
+      justify-content center
+      background-color white
+    &.CodeMirror
+      height initial
+      &>code
+        flex 1
+        overflow-x auto
+    code
+      background-color inherit
+      margin 0
+      padding 0
+      border none
+      border-radius 0
+    &>span.lineNumber
+      display none
+      font-size 1em
+      padding 0.5em 0
+      margin -0.5em 0.5em -0.5em -0.5em
+      border-right 1px solid
+      text-align right
+      border-top-left-radius 4px
+      border-bottom-left-radius 4px
+      &.CodeMirror-gutters
+        position initial
+        top initial
+        left initial
+        min-height 0 !important
+      &>span
+        display block
+        padding 0 .5em 0
+  table
+    display block
+    width 100%
+    margin 0 0 1em
+    thead
+      tr
+        background-color tableHeadBgColor
+      th
+        border-style solid
+        padding 6px 13px
+        line-height 1.6
+        border-width 1px 0 2px 1px
+        border-color borderColor
+        font-weight bold
+        &:last-child
+          border-right solid 1px borderColor
+    tbody
+      tr:nth-child(2n + 1)
+        background-color tableOddBgColor
+      tr:nth-child(2n)
+        background-color tableEvenBgColor
+      td
+        border-style solid
+        padding 6px 13px
+        line-height 1.6
+        border-width 0 0 1px 1px
+        border-color borderColor
+        &:last-child
+          border-right solid 1px borderColor
+
+themeDarkBackground = darken(#21252B, 10%)
+themeDarkText = #f9f9f9
+themeDarkBorder = lighten(themeDarkBackground, 20%)
+themeDarkPreview = $ui-dark-noteDetail-backgroundColor
+themeDarkTableOdd = themeDarkPreview
+themeDarkTableEven = darken(themeDarkPreview, 10%)
+themeDarkTableHead = themeDarkTableEven
+themeDarkTableBorder = themeDarkBorder
+themeDarkModalButtonDefault = themeDarkPreview
+themeDarkModalButtonDanger = #BF360C
+
+body[data-theme="dark"]
+  .root
+    color themeDarkText
+    border-color themeDarkBorder
+    background-color themeDarkPreview
+    a:hover
+      background-color alpha(lighten(brandColor, 30%), 0.2) !important
+
+    code
+      color #EA6730
+      border-color darken(themeDarkBorder, 10%)
+      background-color lighten(themeDarkPreview, 5%)
+
+    pre
+      border-color lighten(#21252B, 20%)
+      code
+        background-color transparent
+
+    label.taskListItem
+      background-color themeDarkPreview
+    table
+      thead
+        tr
+          background-color themeDarkTableHead
+        th
+          border-color themeDarkTableBorder
+          &:last-child
+            border-right solid 1px themeDarkTableBorder
+      tbody
+        tr:nth-child(2n + 1)
+          background-color themeDarkTableOdd
+        tr:nth-child(2n)
+          background-color themeDarkTableEven
+        td
+          border-color themeDarkTableBorder
+          &:last-child
+            border-right solid 1px themeDarkTableBorder

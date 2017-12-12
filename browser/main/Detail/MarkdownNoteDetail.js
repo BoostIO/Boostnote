@@ -3,6 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
+import WYSIWYGEditor from 'browser/components/WYSIWYGEditor'
 import TodoListPercentage from 'browser/components/TodoListPercentage'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
@@ -60,7 +61,7 @@ class MarkdownNoteDetail extends React.Component {
       this.setState({
         note: Object.assign({}, nextProps.note)
       }, () => {
-        this.refs.content.reload()
+        if (nextProps.config.editor.type === 'DEFAULT') this.refs.content.reload()
         if (this.refs.tags) this.refs.tags.reset()
       })
     }
@@ -74,10 +75,16 @@ class MarkdownNoteDetail extends React.Component {
     ee.off('topbar:togglelockbutton', this.toggleLockButton)
   }
 
-  handleChange (e) {
+  handleChange (content = '') {
     const { note } = this.state
+    const { config } = this.props
 
-    note.content = this.refs.content.value
+    if (config.editor.type === 'WYSIWYG') {
+      note.content = content
+    } else {
+      note.content = this.refs.content.value
+    }
+
     if (this.refs.tags) note.tags = this.refs.tags.value
     note.title = markdown.strip(striptags(findNoteTitle(note.content)))
     note.updatedAt = new Date()
@@ -262,6 +269,27 @@ class MarkdownNoteDetail extends React.Component {
     ee.emit('print')
   }
 
+  renderEditor () {
+    const { config } = this.props
+    const editorType = config.editor.type
+    if (editorType === 'WYSIWYG') {
+      return <WYSIWYGEditor
+        ref='content'
+        value={this.state.note.content}
+        config={config}
+        onChange={(e) => this.handleChange(e)} />
+    } else {
+      return <MarkdownEditor
+        ref='content'
+        styleName='body-noteEditor'
+        config={config}
+        value={this.state.note.content}
+        storageKey={this.state.note.storage}
+        onChange={(e) => this.handleChange(e)}
+        ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents} />
+    }
+  }
+
   render () {
     const { data, config, location } = this.props
     const { note } = this.state
@@ -380,15 +408,7 @@ class MarkdownNoteDetail extends React.Component {
         {location.pathname === '/trashed' ? trashTopBar : detailTopBar}
 
         <div styleName='body'>
-          <MarkdownEditor
-            ref='content'
-            styleName='body-noteEditor'
-            config={config}
-            value={this.state.note.content}
-            storageKey={this.state.note.storage}
-            onChange={(e) => this.handleChange(e)}
-            ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
-          />
+          {this.renderEditor()}
         </div>
 
         <StatusBar
