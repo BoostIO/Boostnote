@@ -382,11 +382,42 @@ class NoteList extends React.Component {
     })
   }
 
-  handleSortByChange (e) {
-    const { dispatch } = this.props
+  getSortByConfig () {
+    const { config, params } = this.props
 
-    const config = {
-      sortBy: e.target.value
+    if (_.isArray(config.sortBy)) {
+      const sortConfig = _.find(config.sortBy, {folderKey: params.folderKey, storageKey: params.storageKey})
+      if (sortConfig) {
+        return sortConfig
+      }
+    }
+
+    return {folderKey: params.folderKey, storageKey: params.storageKey, type: config.sortBy}
+  }
+
+  handleSortByChange (e) {
+    const { dispatch, params } = this.props
+    let {config} = this.props
+
+    if (_.isArray(config.sortBy)) {
+      const existingSortBy = _.find(config.sortBy, {folderKey: params.folderKey, storageKey: params.storageKey})
+      if (existingSortBy) {
+        existingSortBy.type = e.target.value
+      } else {
+        config.sortBy.push({
+          type: e.target.value,
+          folderKey: params.folderKey,
+          storageKey: params.storageKey
+        })
+      }
+    } else {
+      config = {
+        sortBy: [{
+          type: e.target.value,
+          folderKey: params.folderKey,
+          storageKey: params.storageKey
+        }]
+      }
     }
 
     ConfigManager.set(config)
@@ -642,12 +673,15 @@ class NoteList extends React.Component {
   }
 
   render () {
-    let { location, notes, config, dispatch } = this.props
+    let { location, notes, config, params } = this.props
     let { selectedNoteKeys } = this.state
-    let sortFunc = config.sortBy === 'CREATED_AT'
+    const sortByConfig = this.getSortByConfig()
+    const sortFunc = sortByConfig.folderKey === params.folderKey && sortByConfig.storageKey === params.storageKey
+      ? sortByConfig.type === 'CREATED_AT'
       ? sortByCreatedAt
-      : config.sortBy === 'ALPHABETICAL'
+      : sortByConfig.type === 'ALPHABETICAL'
       ? sortByAlphabetical
+      : sortByUpdatedAt
       : sortByUpdatedAt
     const sortedNotes = location.pathname.match(/\/home|\/starred|\/trash/)
         ? this.getNotes().sort(sortFunc)
@@ -686,10 +720,9 @@ class NoteList extends React.Component {
         const uniqueKey = getNoteKey(note)
         const isActive = selectedNoteKeys.includes(uniqueKey)
         const dateDisplay = moment(
-          config.sortBy === 'CREATED_AT'
+          this.getSortByConfig().type === 'CREATED_AT'
             ? note.createdAt : note.updatedAt
         ).fromNow('D')
-        const key = `${note.storage}-${note.key}`
 
         if (isDefault) {
           return (
@@ -729,7 +762,7 @@ class NoteList extends React.Component {
           <div styleName='control-sortBy'>
             <i className='fa fa-angle-down' />
             <select styleName='control-sortBy-select'
-              value={config.sortBy}
+              value={sortByConfig.type}
               onChange={(e) => this.handleSortByChange(e)}
             >
               <option value='UPDATED_AT'>Updated</option>
