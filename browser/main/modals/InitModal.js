@@ -48,7 +48,7 @@ class InitModal extends React.Component {
     this.updatePath(e.target.value)
   }
 
-  updatePath(path) {
+  updatePath (path) {
     const pathAlreadyExists = pathExists(path)
     this.setState({ path, pathAlreadyExists })
   }
@@ -257,12 +257,11 @@ InitModal.propTypes = {
 
 export default CSSModules(InitModal, styles)
 
-
-function pathExists(path) {
+function pathExists (path) {
   try {
     fs.statSync(path)
     return true
-  } catch(e) {
+  } catch (e) {
     if (e.errno === -2) {
       // no such file or dir
       return false
