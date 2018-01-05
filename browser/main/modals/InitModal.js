@@ -5,11 +5,11 @@ import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { hashHistory } from 'react-router'
 import _ from 'lodash'
+import fsHelpers from 'browser/lib/fs-helpers'
 
 const CSON = require('@rokt33r/season')
 const path = require('path')
 const electron = require('electron')
-const fs = require('fs')
 const { remote } = electron
 
 function browseFolder () {
@@ -35,7 +35,7 @@ class InitModal extends React.Component {
     const initPath = path.join(remote.app.getPath('home'), 'Boostnote')
     this.state = {
       path: initPath,
-      pathAlreadyExists: pathExists(initPath),
+      pathAlreadyExists: fsHelpers.pathExists(initPath),
       migrationRequested: true,
       isLoading: true,
       data: null,
@@ -49,7 +49,7 @@ class InitModal extends React.Component {
   }
 
   updatePath (path) {
-    const pathAlreadyExists = pathExists(path)
+    const pathAlreadyExists = fsHelpers.pathExists(path)
     this.setState({ path, pathAlreadyExists })
   }
 
@@ -256,17 +256,3 @@ InitModal.propTypes = {
 }
 
 export default CSSModules(InitModal, styles)
-
-function pathExists (path) {
-  try {
-    fs.statSync(path)
-    return true
-  } catch (e) {
-    if (e.errno === -2) {
-      // no such file or dir
-      return false
-    } else {
-      throw e
-    }
-  }
-}
