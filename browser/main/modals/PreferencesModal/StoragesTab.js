@@ -44,8 +44,7 @@ class StoragesTab extends React.Component {
       newStorage: {
         name: 'Unnamed',
         type: 'FILESYSTEM',
-        path: '',
-        pathAlreadyExists: false,
+        path: ''
       }
     }, () => {
       this.refs.addStorageName.select()
