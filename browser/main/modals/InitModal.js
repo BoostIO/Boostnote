@@ -5,6 +5,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { hashHistory } from 'react-router'
 import _ from 'lodash'
+import fsHelpers from 'browser/lib/fs-helpers'
 
 const CSON = require('@rokt33r/season')
 const path = require('path')
@@ -31,8 +32,10 @@ class InitModal extends React.Component {
   constructor (props) {
     super(props)
 
+    const initPath = path.join(remote.app.getPath('home'), 'Boostnote')
     this.state = {
-      path: path.join(remote.app.getPath('home'), 'Boostnote'),
+      path: initPath,
+      pathAlreadyExists: fsHelpers.pathExists(initPath),
       migrationRequested: true,
       isLoading: true,
       data: null,
@@ -42,9 +45,12 @@ class InitModal extends React.Component {
   }
 
   handlePathChange (e) {
-    this.setState({
-      path: e.target.value
-    })
+    this.updatePath(e.target.value)
+  }
+
+  updatePath (path) {
+    const pathAlreadyExists = fsHelpers.pathExists(path)
+    this.setState({ path, pathAlreadyExists })
   }
 
   componentDidMount () {
@@ -70,9 +76,7 @@ class InitModal extends React.Component {
     browseFolder()
       .then((targetPath) => {
         if (targetPath.length > 0) {
-          this.setState({
-            path: targetPath
-          })
+          this.updatePath(targetPath)
         }
       })
       .catch((err) => {
@@ -237,7 +241,7 @@ class InitModal extends React.Component {
                 ? <span>
                   <i className='fa fa-spin fa-spinner' /> Loading...
                 </span>
-                : 'CREATE'
+                : (this.state.pathAlreadyExists ? 'USE' : 'CREATE')
               }
             </button>
           </div>
