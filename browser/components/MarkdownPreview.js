@@ -306,10 +306,13 @@ export default class MarkdownPreview extends React.Component {
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
 
-    const meta = document.createElement('meta')
-    meta.setAttribute('http-equiv', 'Content-Type')
-    meta.setAttribute('content', 'text/html; charset=UTF-8')
-    this.refs.root.contentWindow.document.head.appendChild(meta)
+    if (!this.refs.root.contentWindow.document.getElementById('encoding')) {
+      const meta = document.createElement('meta')
+      meta.setAttribute('http-equiv', 'Content-Type')
+      meta.setAttribute('content', 'text/html; charset=UTF-8')
+      meta.setAttribute('id', 'encoding')
+      this.refs.root.contentWindow.document.head.appendChild(meta)
+    }
 
     const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
     if (codeBlocks !== null) {
