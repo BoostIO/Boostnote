@@ -4,11 +4,6 @@ const path = require('path')
 
 var error = null
 
-function isFinderCalled () {
-  var argv = process.argv.slice(1)
-  return argv.some((arg) => arg.match(/--finder/))
-}
-
 function execMainApp () {
   const appRootPath = path.join(process.execPath, '../..')
   const updateDotExePath = path.join(appRootPath, 'Update.exe')
@@ -78,8 +73,4 @@ function execMainApp () {
   require('./lib/main-app')
 }
 
-if (isFinderCalled()) {
-  require('./lib/finder-app')
-} else {
-  execMainApp()
-}
+execMainApp()

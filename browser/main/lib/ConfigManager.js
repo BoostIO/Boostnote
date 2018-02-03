@@ -18,7 +18,6 @@ export const DEFAULT_CONFIG = {
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   amaEnabled: true,
   hotkey: {
-    toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
   },
   ui: {

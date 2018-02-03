@@ -66,7 +66,6 @@ class HotkeyTab extends React.Component {
   handleHotkeyChange (e) {
     const { config } = this.state
     config.hotkey = {
-      toggleFinder: this.refs.toggleFinder.value,
       toggleMain: this.refs.toggleMain.value
     }
     this.setState({
@@ -111,17 +110,6 @@ class HotkeyTab extends React.Component {
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleMain'
                 value={config.hotkey.toggleMain}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>Toggle Finder (Quick search)</div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleHotkeyChange(e)}
-                ref='toggleFinder'
-                value={config.hotkey.toggleFinder}
                 type='text'
               />
             </div>

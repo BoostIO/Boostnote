@@ -24,20 +24,6 @@ nodeIpc.connectTo(
     nodeIpc.of.node.on('disconnect', function () {
       console.log('disconnected')
     })
-
-    nodeIpc.of.node.on('request-data-from-finder', function () {
-      console.log('throttle')
-      var { data } = store.getState()
-      console.log(data.starredSet.toJS())
-      nodeIpc.of.node.emit('throttle-data', {
-        storageMap: data.storageMap.toJS(),
-        noteMap: data.noteMap.toJS(),
-        starredSet: data.starredSet.toJS(),
-        storageNoteMap: data.storageNoteMap.toJS(),
-        folderNoteMap: data.folderNoteMap.toJS(),
-        tagNoteMap: data.tagNoteMap.toJS()
-      })
-    })
   }
 )
 

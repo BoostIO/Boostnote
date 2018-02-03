@@ -10,7 +10,6 @@
         "theme": "monokai"
     },
     "hotkey": {
-        "toggleFinder": "Cmd + Alt + S",
         "toggleMain": "Cmd + Alt + L"
     },
     "isSideNavFolded": false,
