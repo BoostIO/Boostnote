@@ -4,8 +4,7 @@ const NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
 
 var config = {
   entry: {
-    main: './browser/main/index.js',
-    finder: './browser/finder/index.js'
+    main: './browser/main/index.js'
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.styl'],
