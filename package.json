@@ -10,7 +10,7 @@
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "grunt compile",
-    "test": "PWD=$(pwd) NODE_ENV=test ava",
+    "test": "PWD=$(pwd) NODE_ENV=test ava --serial",
     "fix": "npm run lint --fix",
     "lint": "eslint .",
     "dev-start": "concurrently --kill-others \"npm run webpack\" \"npm run hot\""
