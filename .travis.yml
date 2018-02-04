@@ -11,6 +11,7 @@ after_success:
 sudo: required
 services:
   - docker
+
 deploy:
   'on':
     branch: master
