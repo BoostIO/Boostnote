@@ -1,5 +1,5 @@
 name: boostnote
-version: '0.1'
+version: BOOSTNOTE_VERSION
 summary: A note-taking app for programmers
 description: |
   Boostnote is an open source note-taking app made for programmers just like you. https://boostnote.io
@@ -10,7 +10,8 @@ confinement: devmode
 
 apps:
   boostnote:
-    command: desktop-launch $SNAP/usr/share/applications/boostnote.desktop
+    command: desktop-launch $SNAP/usr/share/boostnote/Boostnote
+    desktop: usr/share/applications/boostnote.desktop
     plugs:
      - browser-support
      - network
@@ -41,7 +42,7 @@ parts:
 
   boostnote:
     plugin: dump
-    source: ./dist/boostnote_0.9.0_amd64.deb
+    source: ./dist/boostnote_BOOSTNOTE_VERSION_amd64.deb
     source-type: deb
     after: [desktop-glib-only]
     stage-packages:
