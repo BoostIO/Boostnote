@@ -7,7 +7,6 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "electron ./index.js",
-    "build": "grunt pre-build",
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "grunt compile",
@@ -18,10 +17,6 @@
   },
   "config": {
     "electron-version": "1.7.11"
-  },
-  "engines": {
-    "node": "7.10.x",
-    "npm": "4.x.x"
   },
   "repository": {
     "type": "git",
@@ -63,7 +58,6 @@
     "electron-gh-releases": "^2.0.2",
     "flowchart.js": "^1.6.5",
     "font-awesome": "^4.3.0",
-    "grunt-cli": "^1.2.0",
     "immutable": "^3.8.1",
     "js-sequence-diagrams": "^1000000.0.6",
     "katex": "^0.8.3",
@@ -92,8 +86,7 @@
     "sander": "^0.5.1",
     "striptags": "^2.2.1",
     "superagent": "^1.2.0",
-    "superagent-promise": "^1.0.3",
-    "yarn": "^1.3.2"
+    "superagent-promise": "^1.0.3"
   },
   "devDependencies": {
     "ava": "^0.16.0",

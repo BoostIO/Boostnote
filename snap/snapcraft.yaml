@@ -10,7 +10,7 @@ confinement: devmode
 
 apps:
   boostnote:
-    command: desktop-launch $SNAP/etc/boostnote/Boostnote
+    command: desktop-launch $SNAP/usr/share/applications/boostnote.desktop
     plugs:
      - browser-support
      - network
@@ -40,7 +40,9 @@ parts:
 #      - libunity9
 
   boostnote:
-    command: desktop-launch $SNAP/dist/Boostnote-linux-x64/Boostnote
+    plugin: dump
+    source: ./dist/boostnote_0.9.0_amd64.deb
+    source-type: deb
     after: [desktop-glib-only]
     stage-packages:
       - libappindicator1
