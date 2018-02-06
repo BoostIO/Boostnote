@@ -1,5 +1,12 @@
 language: node_js
 node_js: "6"
+
+addons:
+  apt:
+    packages:
+    - fakeroot
+    - rpm
+
 script:
   - npm run lint && npm run test
   - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" ]]; then npm install -g grunt npm@5.2 && grunt pre-build; fi'
