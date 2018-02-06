@@ -6,10 +6,10 @@ description: |
   https://github.com/BoostIO/Boostnote
 
 grade: stable
-confinement: strict
+confinement: devmode
 
 apps:
-  asmstnote:
+  boostnote:
     command: desktop-launch $SNAP/etc/boostnote/Boostnote
     plugs:
      - browser-support
@@ -18,31 +18,36 @@ apps:
      - gsettings
 
 parts:
-  src:
-    plugin: nodejs
-    source: .
+#  src:
+#    plugin: nodejs
+#    # source: .
+#    node-engine: "7.10.1"
+#
+#  deps:
+#    plugin: nil
+#    stage-packages:
+#      - libgconf-2-4
+#      - libnss3
+#      - libxss1
+#      - fontconfig-config
 
-  deps:
-    plugin: nil
-    stage-packages:
-      - libgconf-2-4
-      - libnss3
-      - libxss1
-      - fontconfig-config
+#  desktop-integration:
+#    plugin: nil
+#    stage-packages:
+#      - libappindicator1
+#      - libdbusmenu-glib4
+#      - libnotify4
+#      - libunity9
 
-  desktop-integration:
-    plugin: nil
+  boostnote:
+    command: desktop-launch $SNAP/dist/Boostnote-linux-x64/Boostnote
+    after: [desktop-glib-only]
     stage-packages:
       - libappindicator1
       - libdbusmenu-glib4
       - libnotify4
       - libunity9
-
-  launcher:
-    plugin: dump
-    source: .
-    stage:
-      - etc/boostnote
-    organize:
-      dist/Boostnote-linux-x64: etc/boostnote
-    after: [desktop-glib-only]
+      - libgconf-2-4
+      - libnss3
+      - libxss1
+      - fontconfig-config
