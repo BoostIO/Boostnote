@@ -6,7 +6,7 @@ description: |
   https://github.com/BoostIO/Boostnote
 
 grade: stable
-confinement: devmode
+confinement: strict
 
 apps:
   boostnote:
@@ -19,27 +19,6 @@ apps:
      - gsettings
 
 parts:
-#  src:
-#    plugin: nodejs
-#    # source: .
-#    node-engine: "7.10.1"
-#
-#  deps:
-#    plugin: nil
-#    stage-packages:
-#      - libgconf-2-4
-#      - libnss3
-#      - libxss1
-#      - fontconfig-config
-
-#  desktop-integration:
-#    plugin: nil
-#    stage-packages:
-#      - libappindicator1
-#      - libdbusmenu-glib4
-#      - libnotify4
-#      - libunity9
-
   boostnote:
     plugin: dump
     source: ./dist/boostnote_BOOSTNOTE_VERSION_amd64.deb

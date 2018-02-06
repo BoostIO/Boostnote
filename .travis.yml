@@ -6,7 +6,7 @@ script:
 after_success:
   # Grab the version number from the .deb product and update the snapcraft.yml file
   # not really necessary since the version number in the application is updated anyhow but makes the build process cleaner
-  - sed "s/BOOSTNOTE_VERSION/$(grep -E -o '([0-9]+.[0-9]+.[0-9]+)' <<< "$(find dist -type f -name boostnote_*.deb)")/g" snap/snapcraft.yaml > snap/snapcraft.yaml
+  - sed -i "s/BOOSTNOTE_VERSION/$(grep -E -o '([0-9]+.[0-9]+.[0-9]+)' <<< "$(find dist -type f -name boostnote_*.deb)")/g" snap/snapcraft.yaml
   - openssl aes-256-cbc -K $encrypted_440d7f9a3c38_key -iv $encrypted_440d7f9a3c38_iv
     -in .snapcraft/travis_snapcraft.cfg -out .snapcraft/snapcraft.cfg -d
 sudo: required
