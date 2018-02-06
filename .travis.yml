@@ -1,7 +1,5 @@
 language: node_js
-env: TRAVIS_NODE_VERSION = "stable"
-node_js:
-  - 6
+node_js: "7"
 script:
   - npm run lint && npm run test
   - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" ]]; then npm install -g grunt npm@5.2 && grunt pre-build; fi'
@@ -15,7 +13,6 @@ services:
 deploy:
   'on':
     branch: master
-    condition: $TRAVIS_NODE_VERSION = "stable"
   provider: script
   script: docker run -v $(pwd):$(pwd) -t snapcore/snapcraft sh -c "apt update -qq
     && cd $(pwd) && snapcraft && snapcraft push *.snap --release edge"
