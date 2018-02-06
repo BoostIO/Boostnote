@@ -3,6 +3,7 @@ node_js: "6"
 script:
   - npm run lint && npm run test
   - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" ]]; then npm install -g grunt npm@5.2 && grunt pre-build; fi'
+  - npm install -g grunt npm@5.2 && grunt build
 after_success:
   # Grab the version number from the .deb product and update the snapcraft.yml file
   # not really necessary since the version number in the application is updated anyhow but makes the build process cleaner
