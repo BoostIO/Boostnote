@@ -8,10 +8,11 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 const katex = window.katex
 const config = ConfigManager.get()
 
-function createGutter (str) {
-  const lc = (str.match(/\n/g) || []).length
+function createGutter (str, fc) {
+  if(Number.isNaN(fc)) fc = 1
+  const lc = (str.match(/\n/g) || []).length + fc - 1
   const lines = []
-  for (let i = 1; i <= lc; i++) {
+  for (let i = fc; i <= lc; i++) {
     lines.push('<span class="CodeMirror-linenumber">' + i + '</span>')
   }
   return '<span class="lineNumber CodeMirror-gutters">' + lines.join('') + '</span>'
@@ -24,6 +25,12 @@ var md = markdownit({
   xhtmlOut: true,
   breaks: true,
   highlight: function (str, lang) {
+    let delimiter = ":";
+    let langinfo = lang.split(delimiter);
+    let lang = langinfo[0];
+    let filename = langinfo[1] || "";
+    let fc = parseInt(langinfo[2],10);
+
     if (lang === 'flowchart') {
       return `<pre class="flowchart">${str}</pre>`
     }
@@ -31,7 +38,8 @@ var md = markdownit({
       return `<pre class="sequence">${str}</pre>`
     }
     return '<pre class="code">' +
-      createGutter(str) +
+      '<span class="filename">' + filename + '</span>' +
+      createGutter(str, fc) +
       '<code class="' + lang + '">' +
       str +
       '</code></pre>'
