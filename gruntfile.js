@@ -19,7 +19,7 @@ module.exports = function (grunt) {
   var initConfig = {
     pkg: grunt.file.readJSON('package.json'),
     'create-windows-installer': {
-      x64: {
+      ia32: {
         appDirectory: path.join(__dirname, 'dist', 'Boostnote-win32-x64'),
         outputDirectory: path.join(__dirname, 'dist'),
         authors: 'MAISIN&CO., Inc.',
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
     var done = this.async()
     var opts = {
       name: 'Boostnote',
-      arch: 'x64',
+      arch: 'ia32',
       dir: __dirname,
       version: grunt.config.get('pkg.config.electron-version'),
       'app-version': grunt.config.get('pkg.version'),
