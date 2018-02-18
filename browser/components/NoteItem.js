@@ -46,51 +46,69 @@ const TagElementList = (tags) => {
  * @param {Function} handleDragStart
  * @param {string} dateDisplay
  */
-const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteContextMenu, handleDragStart, pathname }) => (
-  <div styleName={isActive
+const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteContextMenu, handleDragStart, pathname, storage, folder, isAllNotes }) => {
+  return (
+    <div styleName={isActive
       ? 'item--active'
       : 'item'
     }
-    key={`${note.storage}-${note.key}`}
-    onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
-    onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
-    onDragStart={e => handleDragStart(e, note)}
-    draggable='true'
-  >
-    <div styleName='item-wrapper'>
-      {note.type === 'SNIPPET_NOTE'
-        ? <i styleName='item-title-icon' className='fa fa-fw fa-code' />
-        : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />
-      }
-      <div styleName='item-title'>
-        {note.title.trim().length > 0
-          ? note.title
-          : <span styleName='item-title-empty'>Empty</span>
+      key={`${note.storage}-${note.key}`}
+      onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
+      onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
+      onDragStart={e => handleDragStart(e, note)}
+      draggable='true'
+    >
+      <div styleName='item-wrapper'>
+        {note.type === 'SNIPPET_NOTE'
+          ? <i styleName='item-title-icon' className='fa fa-fw fa-code' />
+          : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />
         }
-      </div>
-
-      <div styleName='item-bottom-time'>{dateDisplay}</div>
-      {note.isStarred
-        ? <img styleName='item-star' src='../resources/icon/icon-starred.svg' /> : ''
-      }
-      {note.isPinned && !pathname.match(/\/home|\/starred|\/trash/)
-        ? <i styleName='item-pin' className='fa fa-thumb-tack' /> : ''
-      }
-      {note.type === 'MARKDOWN_NOTE'
-        ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
-        : ''
-      }
-      <div styleName='item-bottom'>
-        <div styleName='item-bottom-tagList'>
-          {note.tags.length > 0
-            ? TagElementList(note.tags)
-            : <span styleName='item-bottom-tagList-empty' />
+        <div styleName='item-title'>
+          {note.title.trim().length > 0
+            ? note.title
+            : <span styleName='item-title-empty'>Empty</span>
           }
+        </div>
+
+        <div styleName='item-middle'>
+          <div styleName='item-middle-time'>{dateDisplay}</div>
+          <div styleName='item-middle-app-meta'>
+            <div style={{ display: 'inline-block' }}>
+              <i style={{ color: !isAllNotes && folder.color, filter: 'brightness(150%)', opacity: isAllNotes && 0 }}
+                className={`fa fa-${isAllNotes ? 'folder-open-o' : 'folder-o'}`}
+              />
+              <span styleName='item-middle-app-meta-label'
+                style={{ color: isAllNotes ? storage.color : folder.color, filter: 'brightness(170%)' }}
+              >
+                {isAllNotes && storage.name}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div styleName='item-bottom'>
+          <div styleName='item-bottom-tagList'>
+            {note.tags.length > 0
+              ? TagElementList(note.tags)
+              : <span style={{ fontStyle: 'italic', opacity: 0.5 }} styleName='item-bottom-tagList-empty'>No tags</span>
+            }
+          </div>
+          <div styleName='item-bottom-reminders'>
+            {note.isStarred
+              ? <img styleName='item-star' src='../resources/icon/icon-starred.svg' /> : ''
+            }
+            {note.isPinned && !pathname.match(/\/home|\/starred|\/trash/)
+              ? <i styleName='item-pin' className='fa fa-thumb-tack' /> : ''
+            }
+            {note.type === 'MARKDOWN_NOTE'
+              ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
+              : ''
+            }
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 NoteItem.propTypes = {
   isActive: PropTypes.bool.isRequired,

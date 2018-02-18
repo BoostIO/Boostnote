@@ -12,17 +12,6 @@
   display flex
   align-items center
 
-.header--active
-  margin-bottom 5px
-  background-color alpha($ui-button-default--active-backgroundColor, 20%)
-  transition color background-color  0.15s
-  display flex
-  align-items center
-  .header-toggleButton
-  .header-info
-  .header-addFolderButton
-    color #1EC38B
-
 .header-toggleButton
   navButtonColor()
   position absolute
@@ -34,7 +23,6 @@
   border-radius 50%
   &:hover
     transition 0.2s
-    background-color alpha($ui-button-default--hover-backgroundColor, 40%)
     color $ui-text-color
 
 .header-info
@@ -76,6 +64,18 @@
   &:hover
     transition 0.2s
 
+.header-applyStorageColorButton
+  navButtonColor()
+  position absolute
+  right 26px
+  width 25px
+  height 25px
+  padding 0
+  border none
+  border-radius 50%
+  &:hover
+    transition 0.2s
+
 .root--folded
   @extend .root
   .header
@@ -107,7 +107,6 @@
 
 body[data-theme="white"]
   .header--active
-    background-color $ui-button--active-backgroundColor
     transition color background-color  0.15s
     .header-toggleButton
       color $ui-text-color
@@ -134,7 +133,6 @@ body[data-theme="white"]
 
 body[data-theme="dark"]
   .header--active
-    background-color $ui-dark-button--active-backgroundColor
     transition color background-color  0.15s
 
   .header--active
@@ -147,7 +145,7 @@ body[data-theme="dark"]
       background-color $ui-dark-button--active-backgroundColor
       &:active
         color $ui-dark-text-color
-        background-color $ui-dark-button--active-backgroundColor  
+        background-color $ui-dark-button--active-backgroundColor
 
   .header--active
     .header-addFolderButton
@@ -180,7 +178,3 @@ body[data-theme="dark"]
     &:active, &:active:hover
       color $ui-dark-text-color
       background-color $ui-dark-button--active-backgroundColor
-      
-
-
-

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+import { SketchPicker } from 'react-color'
 import styles from './Main.styl'
 import { connect } from 'react-redux'
 import SideNav from './SideNav'
@@ -8,6 +9,8 @@ import TopBar from './TopBar'
 import NoteList from './NoteList'
 import Detail from './Detail'
 import dataApi from 'browser/main/lib/dataApi'
+import modal from 'browser/main/lib/modal'
+import ColorPickerModal from 'browser/main/modals/ColorPickerModal'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
@@ -40,6 +43,8 @@ class Main extends React.Component {
     }
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
+    this.getColorPicker = this.getColorPicker.bind(this)
+    this.ColorPicker = this.ColorPicker.bind(this)
   }
 
   getChildContext () {
@@ -272,6 +277,18 @@ class Main extends React.Component {
     noteList.style.display = 'inline'
   }
 
+  getColorPicker (storageColor, childCallback) {
+    this.setState({ showColorPicker: true }, () => {
+      return this.ColorPicker(storageColor, function (colorObj) {
+        childCallback(colorObj.hex)
+      })
+    })
+  }
+
+  ColorPicker (color, cb) {
+    modal.open(ColorPickerModal, { color, onChangeComplete: cb }, { noOverlay: true })
+  }
+
   render () {
     const { config } = this.props
 
@@ -293,6 +310,7 @@ class Main extends React.Component {
             'location'
           ])}
           width={this.state.navWidth}
+          getColorPicker={this.getColorPicker}
         />
         {!config.isSideNavFolded &&
           <div styleName={this.state.isLeftSliderFocused ? 'slider--active' : 'slider'}

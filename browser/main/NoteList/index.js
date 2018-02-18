@@ -66,6 +66,8 @@ class NoteList extends React.Component {
     this.deleteNote = this.deleteNote.bind(this)
     this.focusNote = this.focusNote.bind(this)
     this.pinToTop = this.pinToTop.bind(this)
+    this.getNoteStorage = this.getNoteStorage.bind(this)
+    this.getNoteFolder = this.getNoteFolder.bind(this)
 
     // TODO: not Selected noteKeys but SelectedNote(for reusing)
     this.state = {
@@ -678,6 +680,19 @@ class NoteList extends React.Component {
     })
   }
 
+  getNoteStorage (note) {
+    const { data } = this.props
+    const storage = data.storageMap.toJS()[note.storage]
+    return storage
+  }
+
+  getNoteFolder (note) {
+    const { data } = this.props
+    const storage = data.storageMap.toJS()[note.storage]
+    const folder = storage.folders.find(({ key }) => key === note.folder)
+    return folder
+  }
+
   render () {
     const { location, config } = this.props
     let { notes } = this.props
@@ -732,6 +747,7 @@ class NoteList extends React.Component {
           return (
             <NoteItem
               isActive={isActive}
+              isAllNotes={location.pathname === '/home'}
               note={note}
               dateDisplay={dateDisplay}
               key={uniqueKey}
@@ -739,6 +755,8 @@ class NoteList extends React.Component {
               handleNoteClick={this.handleNoteClick.bind(this)}
               handleDragStart={this.handleDragStart.bind(this)}
               pathname={location.pathname}
+              storage={this.getNoteStorage(note)}
+              folder={this.getNoteFolder(note)}
             />
           )
         }
@@ -746,12 +764,15 @@ class NoteList extends React.Component {
         return (
           <NoteItemSimple
             isActive={isActive}
+            isAllNotes={location.pathname === '/home'}
             note={note}
             key={uniqueKey}
             handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
             handleNoteClick={this.handleNoteClick.bind(this)}
             handleDragStart={this.handleDragStart.bind(this)}
             pathname={location.pathname}
+            storage={this.getNoteStorage(note)}
+            folder={this.getNoteFolder(note)}
           />
         )
       })

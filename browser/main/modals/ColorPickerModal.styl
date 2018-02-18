@@ -1,0 +1,29 @@
+.root
+  modal()
+  max-width 540px
+  overflow hidden
+  position relative
+
+.header
+  height 50px
+  font-size 18px
+  line-height 50px
+  padding 0 15px
+  color $ui-text-color
+  margin-bottom 20px
+
+.colorPicker-wrapper
+  position relative
+  display inline-block
+
+.title
+  font-size 36px
+  font-weight 600
+
+body[data-theme="dark"]
+  .header
+    color $ui-dark-text-color
+
+body[data-theme="solarized-dark"]
+  .header
+    color $ui-solarized-dark-text-color

@@ -9,7 +9,10 @@ class ModalBase extends React.Component {
     this.state = {
       component: null,
       componentProps: {},
-      isHidden: true
+      isHidden: true,
+      config: {
+        noOverlay: false
+      }
     }
   }
 
@@ -22,7 +25,7 @@ class ModalBase extends React.Component {
 
   render () {
     return (
-      <div className={'ModalBase' + (this.state.isHidden ? ' hide' : '')}>
+      <div className={!this.state.config.noOverlay && 'ModalBase' + (this.state.isHidden ? ' hide' : '')}>
         <div onClick={(e) => this.close(e)} className='modalBack' />
         {this.state.component == null ? null : (
           <Provider store={store}>
@@ -38,13 +41,13 @@ const el = document.createElement('div')
 document.body.appendChild(el)
 const modalBase = ReactDOM.render(<ModalBase />, el)
 
-export function openModal (component, props) {
+export function openModal (component, props, config) {
   if (modalBase == null) { return }
   // Hide scrollbar by removing overflow when modal opens
   const list = document.querySelector('.NoteList__list___browser-main-NoteList-')
   list.style.overflow = 'hidden'
   document.body.setAttribute('data-modal', 'open')
-  modalBase.setState({component: component, componentProps: props, isHidden: false})
+  modalBase.setState({component: component, componentProps: props, isHidden: false, config: Object.assign({}, config)})
 }
 
 export function closeModal () {
