@@ -8,12 +8,8 @@ addons:
 
 script:
   - npm run lint && npm run test
-  # only run 'grunt build' on master branch
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == false ]; then npm install -g grunt npm@5.2 && grunt build; fi
+  - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" ]]; then npm install -g grunt npm@5.2 && grunt pre-build; fi'
 after_success:
-  # Grab the version number from the .deb product and update the snapcraft.yml file
-  # not really necessary since the version number in the application is updated anyhow but makes the build process cleaner
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST == false ]; then sed -i "s/BOOSTNOTE_VERSION/$(grep -E -o '([0-9]+.[0-9]+.[0-9]+)' <<< "$(find dist -type f -name boostnote_*.deb)")/g" snap/snapcraft.yaml; fi
   # Decrypt the snapcraft login information
   - openssl aes-256-cbc -K $encrypted_440d7f9a3c38_key -iv $encrypted_440d7f9a3c38_iv
     -in .snapcraft/travis_snapcraft.cfg -out .snapcraft/snapcraft.cfg -d

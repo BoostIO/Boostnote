@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=9.0.0
+Type=Application
+Name=boostnote
+Comment=A note-taking app for programmers
+Exec=pats-boostnote
+Icon=${SNAP}/meta/gui/app.png
+MimeType=image/x-foo;
