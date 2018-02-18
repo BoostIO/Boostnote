@@ -86,7 +86,7 @@ class SideNav extends React.Component {
             isTrashedActive={isTrashedActive}
             handleStarredButtonClick={(e) => this.handleStarredButtonClick(e)}
             handleTrashedButtonClick={(e) => this.handleTrashedButtonClick(e)}
-            counterTotalNote={data.noteMap._map.size}
+            counterTotalNote={data.noteMap._map.size - data.trashedSet._set.size}
             counterStarredNote={data.starredSet._set.size}
             counterDelNote={data.trashedSet._set.size}
           />

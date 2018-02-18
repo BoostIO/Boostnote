@@ -30,7 +30,7 @@ const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu
         ? <i styleName='item-simple-title-icon' className='fa fa-fw fa-code' />
         : <i styleName='item-simple-title-icon' className='fa fa-fw fa-file-text-o' />
       }
-      {note.isPinned && !pathname.match(/\/home|\/starred|\/trash/)
+      {note.isPinned && !pathname.match(/\/starred|\/trash/)
         ? <i styleName='item-pin' className='fa fa-thumb-tack' />
         : ''
       }

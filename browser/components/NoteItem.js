@@ -69,7 +69,6 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
             : <span styleName='item-title-empty'>Empty</span>
           }
         </div>
-
         <div styleName='item-middle'>
           <div styleName='item-middle-time'>{dateDisplay}</div>
           <div styleName='item-middle-app-meta'>

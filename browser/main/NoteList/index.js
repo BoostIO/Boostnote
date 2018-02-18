@@ -444,7 +444,7 @@ class NoteList extends React.Component {
     const cloneNote = 'Clone Note'
 
     const menu = new Menu()
-    if (!location.pathname.match(/\/home|\/starred|\/trash/)) {
+    if (!location.pathname.match(/\/starred|\/trash/)) {
       menu.append(new MenuItem({
         label: pinLabel,
         click: this.pinToTop
@@ -702,7 +702,7 @@ class NoteList extends React.Component {
       : config.sortBy === 'ALPHABETICAL'
       ? sortByAlphabetical
       : sortByUpdatedAt
-    const sortedNotes = location.pathname.match(/\/home|\/starred|\/trash/)
+    const sortedNotes = location.pathname.match(/\/starred|\/trash/)
         ? this.getNotes().sort(sortFunc)
         : this.sortByPin(this.getNotes().sort(sortFunc))
     this.notes = notes = sortedNotes.filter((note) => {
