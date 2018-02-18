@@ -23,12 +23,12 @@ module.exports = function (grunt) {
     var execPath = path.join('node_modules', '.bin', 'webpack') + ' --config webpack-production.config.js'
     grunt.log.writeln(execPath)
     ChildProcess.exec(execPath,
-        {
-          env: Object.assign({}, process.env, {
-            BABEL_ENV: 'production',
-            NODE_ENV: 'production'
-          })
-        },
+      {
+        env: Object.assign({}, process.env, {
+          BABEL_ENV: 'production',
+          NODE_ENV: 'production'
+        })
+      },
         function (err, stdout, stderr) {
           grunt.log.writeln(stdout)
 
