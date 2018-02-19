@@ -14,11 +14,11 @@ import styles from './NoteItemSimple.styl'
  * @param {Function} handleNoteContextMenu
  * @param {Function} handleDragStart
  */
-const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu, handleDragStart, pathname }) => (
+const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu, handleDragStart, pathname, isAllNotes, storage, folder }) => (
   <div styleName={isActive
-      ? 'item-simple--active'
-      : 'item-simple'
-    }
+    ? 'item-simple--active'
+    : 'item-simple'
+  }
     key={`${note.storage}-${note.key}`}
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
@@ -38,6 +38,12 @@ const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu
         ? note.title
         : <span styleName='item-simple-title-empty'>Empty</span>
       }
+      <div styleName='item-simple-right' style={{ filter: 'brightness(210%)' }}>
+        <i style={{ color: isAllNotes ? storage.color : folder.color }} className={`fa fa-${isAllNotes ? 'folder-open-o' : 'folder-o'}`} />
+        <span style={{ color: isAllNotes ? storage.color : folder.color }} styleName='item-simple-right-storageName'>
+          {isAllNotes && storage.name}
+        </span>
+      </div>
     </div>
   </div>
 )

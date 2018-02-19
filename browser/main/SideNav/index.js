@@ -140,19 +140,22 @@ class SideNav extends React.Component {
   }
 
   render () {
-    const { data, location, config, dispatch } = this.props
+    const { data, location, config, dispatch, getColorPicker } = this.props
 
     const isFolded = config.isSideNavFolded
 
     const storageList = data.storageMap.map((storage, key) => {
-      return <StorageItem
-        key={storage.key}
-        storage={storage}
-        data={data}
-        location={location}
-        isFolded={isFolded}
-        dispatch={dispatch}
-      />
+      return (
+        <StorageItem
+          key={storage.key}
+          storage={storage}
+          data={data}
+          location={location}
+          isFolded={isFolded}
+          dispatch={dispatch}
+          getColorPicker={getColorPicker}
+        />
+      )
     })
     const style = {}
     if (!isFolded) style.width = this.props.width

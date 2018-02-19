@@ -37,7 +37,8 @@ function addStorage (input) {
     key,
     name: input.name,
     type: input.type,
-    path: input.path
+    path: input.path,
+    color: input.color
   }
 
   return Promise.resolve(newStorage)
@@ -48,7 +49,8 @@ function addStorage (input) {
         key: newStorage.key,
         type: newStorage.type,
         name: newStorage.name,
-        path: newStorage.path
+        path: newStorage.path,
+        color: newStorage.color
       })
 
       localStorage.setItem('storages', JSON.stringify(rawStorages))

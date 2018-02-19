@@ -18,8 +18,10 @@ class StorageItem extends React.Component {
     super(props)
 
     this.state = {
-      isOpen: true
+      isOpen: true,
+      color: props.storage.color
     }
+    this.handleStorageColorChosen = this.handleStorageColorChosen.bind(this)
   }
 
   handleHeaderContextMenu (e) {
@@ -75,6 +77,18 @@ class StorageItem extends React.Component {
     modal.open(CreateFolderModal, {
       storage
     })
+  }
+
+  handleStorageColorChosen (color) {
+    const { storage } = this.props
+    dataApi.changeStorageColor(storage.key, color)
+      .then((newStorage) => {
+        return this.setState({ color: newStorage.color })
+      })
+      .catch((err) => {
+        console.error(err)
+        return this.setState({ showColorPicker: false })
+      })
   }
 
   handleHeaderInfoClick (e) {
@@ -234,7 +248,7 @@ class StorageItem extends React.Component {
   }
 
   render () {
-    const { storage, location, isFolded, data, dispatch } = this.props
+    const { storage, location, isFolded, data, dispatch, getColorPicker } = this.props
     const { folderNoteMap, trashedSet } = data
     const folderList = storage.folders.map((folder) => {
       const isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
@@ -272,10 +286,8 @@ class StorageItem extends React.Component {
       <div styleName={isFolded ? 'root--folded' : 'root'}
         key={storage.key}
       >
-        <div styleName={isActive
-            ? 'header--active'
-            : 'header'
-          }
+        <div styleName='header'
+          style={{ backgroundColor: this.state.color }}
           onContextMenu={(e) => this.handleHeaderContextMenu(e)}
         >
           <button styleName='header-toggleButton'
@@ -284,7 +296,7 @@ class StorageItem extends React.Component {
             <img src={this.state.isOpen
               ? '../resources/icon/icon-down.svg'
               : '../resources/icon/icon-right.svg'
-              }
+            }
             />
           </button>
 
@@ -296,10 +308,17 @@ class StorageItem extends React.Component {
             </button>
           }
 
+          {!isFolded &&
+            <button title='Apply color to storage label' styleName='header-applyStorageColorButton'
+              onClick={() => getColorPicker(this.state.color, this.handleStorageColorChosen)}>
+              <i className='fa fa-paint-brush' />
+            </button>
+          }
+
           <button styleName='header-info'
             onClick={(e) => this.handleHeaderInfoClick(e)}
           >
-            <span styleName='header-info-name'>
+            <span styleName='header-info-name' style={{ color: this.state.color && 'white' }}>
               {isFolded ? _.truncate(storage.name, {length: 1, omission: ''}) : storage.name}
             </span>
             {isFolded &&
@@ -320,7 +339,8 @@ class StorageItem extends React.Component {
 }
 
 StorageItem.propTypes = {
-  isFolded: PropTypes.bool
+  isFolded: PropTypes.bool,
+  colorPicker: PropTypes.func
 }
 
 export default CSSModules(StorageItem, styles)
