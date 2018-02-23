@@ -12,10 +12,23 @@ function defaultDataMap () {
     storageNoteMap: new Map(),
     folderNoteMap: new Map(),
     tagNoteMap: new Map(),
-    trashedSet: new Set()
+    trashedSet: new Set(),
+    treeVisibilityMap: new Map()
   }
 }
 
+function closeAll(state,treeObj,parentPath) {
+  state.set(parentPath, false)
+  Object.keys(treeObj).map(k => {
+    let pathToMe = parentPath + '/' + k
+    state.set(pathToMe,false) 
+    if (Array.isArray(treeObj[k])) {
+      return state 
+    } else {
+      closeAll(state, treeObj[k], pathToMe)
+    }
+  }) 
+}
 function data (state = defaultDataMap(), action) {
   switch (action.type) {
     case 'INIT_ALL':
@@ -25,6 +38,7 @@ function data (state = defaultDataMap(), action) {
         state.storageMap.set(storage.key, storage)
       })
 
+    
       action.notes.some((note) => {
         if (note === undefined) return true
         const uniqueKey = note.storage + '-' + note.key
@@ -61,6 +75,33 @@ function data (state = defaultDataMap(), action) {
           }
           tagNoteList.add(uniqueKey)
         })
+
+        let noteTreeData = {};
+        action.notes.forEach((note) => {
+          const myDate = new Date(note.createdAt)
+          // getMonth() is zero-based
+          const [yyyy, mm, dd] = [myDate.getFullYear(), myDate.getMonth() + 1, myDate.getDate()]
+          if (!noteTreeData[yyyy]) {
+            noteTreeData[yyyy] = {}
+            noteTreeData[yyyy][mm] = {}
+            noteTreeData[yyyy][mm][dd] = []
+          } else {
+            if (!noteTreeData[yyyy][mm]) {
+              noteTreeData[yyyy][mm] = {}
+              noteTreeData[yyyy][mm][dd] = []
+            } else {
+              if (!noteTreeData[yyyy][mm][dd]) {
+                noteTreeData[yyyy][mm][dd] = []
+              }
+            }
+          }
+          noteTreeData[yyyy][mm][dd].push(note);
+      })
+ 
+        const myDate = new Date(note.createdAt)
+        const [yyyy, mm, dd] = [myDate.getFullYear(), myDate.getMonth() + 1, myDate.getDate()]
+        state.treeVisibilityMap.set('/', true)
+        // state.treeVisibilityMap.set('//' + yyyy + '/'+mm+'/'+dd, false)
       })
       return state
     case 'UPDATE_NOTE':
@@ -498,6 +539,11 @@ function data (state = defaultDataMap(), action) {
       state = Object.assign({}, state)
       state.storageMap = new Map(state.storageMap)
       state.storageMap.set(action.storage.key, action.storage)
+      return state
+    case 'TOGGLE_TREE':
+      state = Object.assign({}, state)
+      state.treeVisibilityMap = new Map(state.treeVisibilityMap) 
+      state.treeVisibilityMap.set(action.path, !state.treeVisibilityMap.get(action.path))
       return state
   }
   return state
