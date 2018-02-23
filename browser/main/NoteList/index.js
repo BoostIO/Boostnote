@@ -9,6 +9,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
+import NoteTree from 'browser/components/NoteTree'
 import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import path from 'path'
@@ -727,35 +728,51 @@ class NoteList extends React.Component {
       }
     })
 
-    const noteList = notes
-      .map(note => {
-        if (note == null) {
-          return null
+    const noteTreeData = {}
+    notes.forEach((note) => {
+      const myDate = new Date(note.createdAt)
+        // getMonth() is zero-based
+      const [yyyy, mm, dd] = [myDate.getFullYear(), myDate.getMonth() + 1, myDate.getDate()]
+      if (!noteTreeData[yyyy]) {
+        noteTreeData[yyyy] = {}
+        noteTreeData[yyyy][mm] = {}
+        noteTreeData[yyyy][mm][dd] = []
+      } else {
+        if (!noteTreeData[yyyy][mm]) {
+          noteTreeData[yyyy][mm] = {}
+          noteTreeData[yyyy][mm][dd] = []
+        } else {
+          if (!noteTreeData[yyyy][mm][dd]) {
+            noteTreeData[yyyy][mm][dd] = []
+          }
         }
+      }
+      noteTreeData[yyyy][mm][dd].push(note)
+    })
 
-        const isDefault = config.listStyle === 'DEFAULT'
-        const uniqueKey = getNoteKey(note)
-        const isActive = selectedNoteKeys.includes(uniqueKey)
-        const dateDisplay = moment(
-          config.sortBy === 'CREATED_AT'
-            ? note.createdAt : note.updatedAt
-        ).fromNow('D')
+    const noteList = (config.listStyle === 'DATETREE') ? (
+      <NoteTree
+        label=''
+        fullpath='/'
+        key='/'
+        childrenNode={noteTreeData}
+        selectedNoteKeys={this.state.selectedNoteKeys}
+        location={this.props.location}
+        handleNoteClick={this.handleNoteClick.bind(this)}
+      />
+    )
+    : notes.map(note => {
+      if (note == null) {
+        return null
+      }
+      const uniqueKey = getNoteKey(note)
+      const isActive = selectedNoteKeys.includes(uniqueKey)
+      const dateDisplay = moment(
+            config.sortBy === 'CREATED_AT'
+              ? note.createdAt : note.updatedAt
+          ).fromNow('D')
 
-        if (isDefault) {
-          return (
-            <NoteItem
-              isActive={isActive}
-              note={note}
-              dateDisplay={dateDisplay}
-              key={uniqueKey}
-              handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
-              handleNoteClick={this.handleNoteClick.bind(this)}
-              handleDragStart={this.handleDragStart.bind(this)}
-              pathname={location.pathname}
-            />
-          )
-        }
-
+      if (config.listStyle === 'SMALL') {
         return (
           <NoteItemSimple
             isActive={isActive}
@@ -767,7 +784,21 @@ class NoteList extends React.Component {
             pathname={location.pathname}
           />
         )
-      })
+      } else {  // DEFAULT
+        return (
+          <NoteItem
+            isActive={isActive}
+            note={note}
+            dateDisplay={dateDisplay}
+            key={uniqueKey}
+            handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
+            handleNoteClick={this.handleNoteClick.bind(this)}
+            handleDragStart={this.handleDragStart.bind(this)}
+            pathname={location.pathname}
+          />
+        )
+      }
+    })
 
     return (
       <div className='NoteList'
@@ -789,6 +820,14 @@ class NoteList extends React.Component {
             </select>
           </div>
           <div styleName='control-button-area'>
+            <button title='Tree View' styleName={config.listStyle === 'DATETREE'
+                ? 'control-button--active'
+                : 'control-button'
+              }
+              onClick={(e) => this.handleListStyleButtonClick(e, 'DATETREE')}
+            >
+              <img styleName='iconTag' src='../resources/icon/icon-column-tree.svg' />
+            </button>
             <button title='Default View' styleName={config.listStyle === 'DEFAULT'
                 ? 'control-button--active'
                 : 'control-button'
