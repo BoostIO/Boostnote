@@ -1,5 +1,5 @@
 # Build
-Cette page est également disponible en [Japonais](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Coréen](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russe](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), et en [Chinois Simplifié](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md).
+Cette page est également disponible en [Angalis](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md), [Japonais](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Coréen](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russe](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Chinois Simplifié](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md) et en [Allemand](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md)
 
 ## Environnements
 * npm: 4.x
