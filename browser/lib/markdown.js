@@ -9,10 +9,11 @@ import {lastFindInArray} from './utils'
 const katex = window.katex
 const config = ConfigManager.get()
 
-function createGutter (str) {
-  const lc = (str.match(/\n/g) || []).length
+function createGutter (str, firstLineNumber) {
+  if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
+  const lastLineNumber = (str.match(/\n/g) || []).length + firstLineNumber - 1
   const lines = []
-  for (let i = 1; i <= lc; i++) {
+  for (let i = firstLineNumber; i <= lastLineNumber; i++) {
     lines.push('<span class="CodeMirror-linenumber">' + i + '</span>')
   }
   return '<span class="lineNumber CodeMirror-gutters">' + lines.join('') + '</span>'
@@ -25,15 +26,22 @@ var md = markdownit({
   xhtmlOut: true,
   breaks: true,
   highlight: function (str, lang) {
-    if (lang === 'flowchart') {
+    const delimiter = ':'
+    const langInfo = lang.split(delimiter)
+    const langType = langInfo[0]
+    const fileName = langInfo[1] || ''
+    const firstLineNumber = parseInt(langInfo[2], 10)
+
+    if (langType === 'flowchart') {
       return `<pre class="flowchart">${str}</pre>`
     }
-    if (lang === 'sequence') {
+    if (langType === 'sequence') {
       return `<pre class="sequence">${str}</pre>`
     }
     return '<pre class="code">' +
-      createGutter(str) +
-      '<code class="' + lang + '">' +
+      '<span class="filename">' + fileName + '</span>' +
+      createGutter(str, firstLineNumber) +
+      '<code class="' + langType + '">' +
       str +
       '</code></pre>'
   }

@@ -35,14 +35,16 @@ class NewNoteModal extends React.Component {
         content: ''
       })
       .then((note) => {
+        const noteHash = `${note.storage}-${note.key}`
         dispatch({
           type: 'UPDATE_NOTE',
           note: note
         })
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: note.storage + '-' + note.key}
+          query: {key: noteHash}
         })
+        ee.emit('list:jump', noteHash)
         ee.emit('detail:focus')
         this.props.close()
       })
@@ -73,14 +75,16 @@ class NewNoteModal extends React.Component {
         }]
       })
       .then((note) => {
+        const noteHash = `${note.storage}-${note.key}`
         dispatch({
           type: 'UPDATE_NOTE',
           note: note
         })
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: note.storage + '-' + note.key}
+          query: {key: noteHash}
         })
+        ee.emit('list:jump', noteHash)
         ee.emit('detail:focus')
         this.props.close()
       })

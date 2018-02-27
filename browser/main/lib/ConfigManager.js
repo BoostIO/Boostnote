@@ -36,7 +36,8 @@ export const DEFAULT_CONFIG = {
     displayLineNumbers: true,
     switchPreview: 'BLUR', // Available value: RIGHTCLICK, BLUR
     scrollPastEnd: false,
-    type: 'SPLIT'
+    type: 'SPLIT',
+    fetchUrlTitle: true
   },
   preview: {
     fontSize: '14',

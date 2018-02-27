@@ -17,7 +17,7 @@ import styles from './SideNavFilter.styl'
 const SideNavFilter = ({
   isFolded, isHomeActive, handleAllNotesButtonClick,
   isStarredActive, handleStarredButtonClick, isTrashedActive, handleTrashedButtonClick, counterDelNote,
-  counterTotalNote, counterStarredNote
+  counterTotalNote, counterStarredNote, handleFilterButtonContextMenu
 }) => (
   <div styleName={isFolded ? 'menu--folded' : 'menu'}>
 
@@ -26,9 +26,9 @@ const SideNavFilter = ({
     >
       <div styleName='iconWrap'>
         <img src={isHomeActive
-            ? '../resources/icon/icon-all-active.svg'
-            : '../resources/icon/icon-all.svg'
-          }
+          ? '../resources/icon/icon-all-active.svg'
+          : '../resources/icon/icon-all.svg'
+        }
         />
       </div>
       <span styleName='menu-button-label'>All Notes</span>
@@ -40,9 +40,9 @@ const SideNavFilter = ({
     >
       <div styleName='iconWrap'>
         <img src={isStarredActive
-            ? '../resources/icon/icon-star-active.svg'
-            : '../resources/icon/icon-star-sidenav.svg'
-          }
+          ? '../resources/icon/icon-star-active.svg'
+          : '../resources/icon/icon-star-sidenav.svg'
+        }
         />
       </div>
       <span styleName='menu-button-label'>Starred</span>
@@ -54,12 +54,12 @@ const SideNavFilter = ({
     >
       <div styleName='iconWrap'>
         <img src={isTrashedActive
-            ? '../resources/icon/icon-trash-active.svg'
-            : '../resources/icon/icon-trash-sidenav.svg'
-          }
+          ? '../resources/icon/icon-trash-active.svg'
+          : '../resources/icon/icon-trash-sidenav.svg'
+        }
         />
       </div>
-      <span styleName='menu-button-label'>Trash</span>
+      <span onContextMenu={handleFilterButtonContextMenu} styleName='menu-button-label'>Trash</span>
       <span styleName='counters'>{counterDelNote}</span>
     </button>
 

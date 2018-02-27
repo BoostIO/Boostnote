@@ -12,10 +12,11 @@ import CSSModules from 'browser/lib/CSSModules'
 * @param {bool} isActive
 */
 
-const TagListItem = ({name, handleClickTagListItem, isActive}) => (
+const TagListItem = ({name, handleClickTagListItem, isActive, count}) => (
   <button styleName={isActive ? 'tagList-item-active' : 'tagList-item'} onClick={() => handleClickTagListItem(name)}>
     <span styleName='tagList-item-name'>
       {`# ${name}`}
+      <span styleName='tagList-item-count'> {count}</span>
     </span>
   </button>
 )

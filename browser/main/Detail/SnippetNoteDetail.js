@@ -20,6 +20,7 @@ import _ from 'lodash'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
+import RestoreButton from './RestoreButton'
 import PermanentDeleteButton from './PermanentDeleteButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
@@ -568,6 +569,7 @@ class SnippetNoteDetail extends React.Component {
             displayLineNumbers={config.editor.displayLineNumbers}
             keyMap={config.editor.keyMap}
             scrollPastEnd={config.editor.scrollPastEnd}
+            fetchUrlTitle={config.editor.fetchUrlTitle}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
           />
@@ -588,10 +590,7 @@ class SnippetNoteDetail extends React.Component {
 
     const trashTopBar = <div styleName='info'>
       <div styleName='info-left'>
-        <i styleName='undo-button'
-          className='fa fa-undo fa-fw'
-          onClick={(e) => this.handleUndoButtonClick(e)}
-        />
+        <RestoreButton onClick={(e) => this.handleUndoButtonClick(e)} />
       </div>
       <div styleName='info-right'>
         <PermanentDeleteButton onClick={(e) => this.handleTrashButtonClick(e)} />

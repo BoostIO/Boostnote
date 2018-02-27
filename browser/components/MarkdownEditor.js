@@ -5,7 +5,7 @@ import styles from './MarkdownEditor.styl'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import eventEmitter from 'browser/main/lib/eventEmitter'
-import { findStorage } from 'browser/lib/findStorage'
+import {findStorage} from 'browser/lib/findStorage'
 
 class MarkdownEditor extends React.Component {
   constructor (props) {
@@ -92,7 +92,9 @@ class MarkdownEditor extends React.Component {
     if (this.state.isLocked) return
     this.setState({ keyPressed: new Set() })
     const { config } = this.props
-    if (config.editor.switchPreview === 'BLUR') {
+    if (config.editor.switchPreview === 'BLUR' ||
+        (config.editor.switchPreview === 'DBL_CLICK' && this.state.status === 'CODE')
+    ) {
       const cursorPosition = this.refs.code.editor.getCursor()
       this.setState({
         status: 'PREVIEW'
@@ -101,6 +103,20 @@ class MarkdownEditor extends React.Component {
         this.refs.preview.scrollTo(cursorPosition.line)
       })
       eventEmitter.emit('topbar:togglelockbutton', this.state.status)
+    }
+  }
+
+  handleDoubleClick (e) {
+    if (this.state.isLocked) return
+    this.setState({keyPressed: new Set()})
+    const { config } = this.props
+    if (config.editor.switchPreview === 'DBL_CLICK') {
+      this.setState({
+        status: 'CODE'
+      }, () => {
+        this.refs.code.focus()
+        eventEmitter.emit('topbar:togglelockbutton', this.state.status)
+      })
     }
   }
 
@@ -245,6 +261,7 @@ class MarkdownEditor extends React.Component {
           displayLineNumbers={config.editor.displayLineNumbers}
           scrollPastEnd={config.editor.scrollPastEnd}
           storageKey={storageKey}
+          fetchUrlTitle={config.editor.fetchUrlTitle}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
         />
@@ -264,6 +281,7 @@ class MarkdownEditor extends React.Component {
           scrollPastEnd={config.preview.scrollPastEnd}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
+          onDoubleClick={(e) => this.handleDoubleClick(e)}
           tabIndex='0'
           value={this.state.renderValue}
           onMouseUp={(e) => this.handlePreviewMouseUp(e)}

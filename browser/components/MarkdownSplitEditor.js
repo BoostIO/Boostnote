@@ -2,6 +2,7 @@ import React from 'react'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import { findStorage } from 'browser/lib/findStorage'
+import _ from 'lodash'
 
 import styles from './MarkdownSplitEditor.styl'
 import CSSModules from 'browser/lib/CSSModules'
@@ -12,11 +13,55 @@ class MarkdownSplitEditor extends React.Component {
     this.value = props.value
     this.focus = () => this.refs.code.focus()
     this.reload = () => this.refs.code.reload()
+    this.userScroll = true
   }
 
   handleOnChange () {
     this.value = this.refs.code.value
     this.props.onChange()
+  }
+
+  handleScroll (e) {
+    const previewDoc = _.get(this, 'refs.preview.refs.root.contentWindow.document')
+    const codeDoc = _.get(this, 'refs.code.editor.doc')
+    let srcTop, srcHeight, targetTop, targetHeight
+
+    if (this.userScroll) {
+      if (e.doc) {
+        srcTop = _.get(e, 'doc.scrollTop')
+        srcHeight = _.get(e, 'doc.height')
+        targetTop = _.get(previewDoc, 'body.scrollTop')
+        targetHeight = _.get(previewDoc, 'body.scrollHeight')
+      } else {
+        srcTop = _.get(previewDoc, 'body.scrollTop')
+        srcHeight = _.get(previewDoc, 'body.scrollHeight')
+        targetTop = _.get(codeDoc, 'scrollTop')
+        targetHeight = _.get(codeDoc, 'height')
+      }
+
+      const distance = (targetHeight * srcTop / srcHeight) - targetTop
+      const framerate = 1000 / 60
+      const frames = 20
+      const refractory = frames * framerate
+
+      this.userScroll = false
+
+      let frame = 0
+      let scrollPos, time
+      const timer = setInterval(() => {
+        time = frame / frames
+        scrollPos = time < 0.5
+                  ? 2 * time * time // ease in
+                  : -1 + (4 - 2 * time) * time // ease out
+        if (e.doc) _.set(previewDoc, 'body.scrollTop', targetTop + scrollPos * distance)
+        else _.get(this, 'refs.code.editor').scrollTo(0, targetTop + scrollPos * distance)
+        if (frame >= frames) {
+          clearInterval(timer)
+          setTimeout(() => { this.userScroll = true }, refractory)
+        }
+        frame++
+      }, framerate)
+    }
   }
 
   handleCheckboxClick (e) {
@@ -66,8 +111,10 @@ class MarkdownSplitEditor extends React.Component {
           indentType={config.editor.indentType}
           indentSize={editorIndentSize}
           scrollPastEnd={config.editor.scrollPastEnd}
+          fetchUrlTitle={config.editor.fetchUrlTitle}
           storageKey={storageKey}
           onChange={this.handleOnChange.bind(this)}
+          onScroll={this.handleScroll.bind(this)}
        />
         <MarkdownPreview
           style={previewStyle}
@@ -84,6 +131,7 @@ class MarkdownSplitEditor extends React.Component {
           tabInde='0'
           value={value}
           onCheckboxClick={(e) => this.handleCheckboxClick(e)}
+          onScroll={this.handleScroll.bind(this)}
           showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
        />

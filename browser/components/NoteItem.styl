@@ -90,6 +90,26 @@ $control-height = 30px
   font-weight normal
   color $ui-inactive-text-color
 
+.item-middle
+  font-size 13px
+  padding-left 2px
+  padding-bottom 2px
+
+.item-middle-time
+  color $ui-inactive-text-color
+  display inline-block
+
+.item-middle-app-meta
+  float right
+  .item-middle-app-meta-label
+    opacity 0.4
+    color $ui-inactive-text-color
+    padding 0 3px
+    white-space nowrap
+    text-overflow ellipsis
+    overflow hidden
+    max-width 200px
+
 .item-bottom
   position relative
   bottom 0px
@@ -124,9 +144,7 @@ $control-height = 30px
   padding-bottom 2px
 
 .item-star
-  position absolute
-  right -6px
-  bottom 23px
+  position relative
   width 16px
   height 16px
   color alpha($ui-favorite-star-button-color, 60%)
@@ -135,9 +153,7 @@ $control-height = 30px
   border-radius 17px
 
 .item-pin
-  position absolute
-  right 0px
-  bottom 2px
+  position relative
   width 34px
   height 34px
   color #E54D42
@@ -192,7 +208,7 @@ body[data-theme="dark"]
       .item-bottom-tagList-item
         transition 0.15s
         background-color alpha(white, 10%)
-        color $ui-dark-text-color  
+        color $ui-dark-text-color
 
   .item-wrapper
     border-color alpha($ui-dark-button--active-backgroundColor, 60%)
@@ -266,7 +282,7 @@ body[data-theme="solarized-dark"]
       .item-bottom-tagList-item
         transition 0.15s
         background-color alpha($ui-solarized-dark-noteList-backgroundColor, 10%)
-        color $ui-solarized-dark-text-color  
+        color $ui-solarized-dark-text-color
 
   .item-wrapper
     border-color alpha($ui-solarized-dark-button--active-backgroundColor, 60%)

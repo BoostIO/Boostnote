@@ -14,11 +14,20 @@ import styles from './NoteItemSimple.styl'
  * @param {Function} handleNoteContextMenu
  * @param {Function} handleDragStart
  */
-const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu, handleDragStart, pathname }) => (
+const NoteItemSimple = ({
+  isActive,
+  isAllNotesView,
+  note,
+  handleNoteClick,
+  handleNoteContextMenu,
+  handleDragStart,
+  pathname,
+  storage
+}) => (
   <div styleName={isActive
-      ? 'item-simple--active'
-      : 'item-simple'
-    }
+    ? 'item-simple--active'
+    : 'item-simple'
+  }
     key={`${note.storage}-${note.key}`}
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
@@ -30,7 +39,7 @@ const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu
         ? <i styleName='item-simple-title-icon' className='fa fa-fw fa-code' />
         : <i styleName='item-simple-title-icon' className='fa fa-fw fa-file-text-o' />
       }
-      {note.isPinned && !pathname.match(/\/home|\/starred|\/trash/)
+      {note.isPinned && !pathname.match(/\/starred|\/trash/)
         ? <i styleName='item-pin' className='fa fa-thumb-tack' />
         : ''
       }
@@ -38,6 +47,11 @@ const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu
         ? note.title
         : <span styleName='item-simple-title-empty'>Empty</span>
       }
+      {isAllNotesView && <div styleName='item-simple-right'>
+        <span styleName='item-simple-right-storageName'>
+          {storage.name}
+        </span>
+      </div>}
     </div>
   </div>
 )

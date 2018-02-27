@@ -7,6 +7,7 @@ import path from 'path'
 import copyImage from 'browser/main/lib/dataApi/copyImage'
 import { findStorage } from 'browser/lib/findStorage'
 import fs from 'fs'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -47,6 +48,40 @@ export default class CodeEditor extends React.Component {
     this.loadStyleHandler = (e) => {
       this.editor.refresh()
     }
+    this.searchHandler = (e, msg) => this.handleSearch(msg)
+    this.searchState = null
+  }
+
+  handleSearch (msg) {
+    const cm = this.editor
+    const component = this
+
+    if (component.searchState) cm.removeOverlay(component.searchState)
+    if (msg.length < 3) return
+
+    cm.operation(function () {
+      component.searchState = makeOverlay(msg, 'searching')
+      cm.addOverlay(component.searchState)
+
+      function makeOverlay (query, style) {
+        query = new RegExp(query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), 'gi')
+        return {
+          token: function (stream) {
+            query.lastIndex = stream.pos
+            var match = query.exec(stream.string)
+            if (match && match.index === stream.pos) {
+              stream.pos += match[0].length || 1
+              return style
+            } else if (match) {
+              stream.pos = match.index
+            } else {
+              stream.skipToEnd()
+            }
+          }
+        }
+      }
+    })
+    this.scrollHandler = _.debounce(this.handleScroll.bind(this), 100, {leading: false, trailing: true})
   }
 
   componentDidMount () {
@@ -107,6 +142,10 @@ export default class CodeEditor extends React.Component {
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
     this.editor.on('paste', this.pasteHandler)
+    eventEmitter.on('top:search', this.searchHandler)
+
+    eventEmitter.emit('code:init')
+    this.editor.on('scroll', this.scrollHandler)
 
     const editorTheme = document.getElementById('editorTheme')
     editorTheme.addEventListener('load', this.loadStyleHandler)
@@ -126,6 +165,8 @@ export default class CodeEditor extends React.Component {
     this.editor.off('blur', this.blurHandler)
     this.editor.off('change', this.changeHandler)
     this.editor.off('paste', this.pasteHandler)
+    eventEmitter.off('top:search', this.searchHandler)
+    this.editor.off('scroll', this.scrollHandler)
     const editorTheme = document.getElementById('editorTheme')
     editorTheme.removeEventListener('load', this.loadStyleHandler)
   }
@@ -231,27 +272,67 @@ export default class CodeEditor extends React.Component {
   }
 
   handlePaste (editor, e) {
-    const dataTransferItem = e.clipboardData.items[0]
-    if (!dataTransferItem.type.match('image')) return
-
-    const blob = dataTransferItem.getAsFile()
-    const reader = new window.FileReader()
-    let base64data
-
-    reader.readAsDataURL(blob)
-    reader.onloadend = () => {
-      base64data = reader.result.replace(/^data:image\/png;base64,/, '')
-      base64data += base64data.replace('+', ' ')
-      const binaryData = new Buffer(base64data, 'base64').toString('binary')
-      const imageName = Math.random().toString(36).slice(-16)
-      const storagePath = findStorage(this.props.storageKey).path
-      const imageDir = path.join(storagePath, 'images')
-      if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir)
-      const imagePath = path.join(imageDir, `${imageName}.png`)
-      fs.writeFile(imagePath, binaryData, 'binary')
-      const imageMd = `![${imageName}](${path.join('/:storage', `${imageName}.png`)})`
-      this.insertImageMd(imageMd)
+    const clipboardData = e.clipboardData
+    const dataTransferItem = clipboardData.items[0]
+    const pastedTxt = clipboardData.getData('text')
+    const isURL = (str) => {
+      const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
+      return matcher.test(str)
     }
+    if (dataTransferItem.type.match('image')) {
+      const blob = dataTransferItem.getAsFile()
+      const reader = new FileReader()
+      let base64data
+
+      reader.readAsDataURL(blob)
+      reader.onloadend = () => {
+        base64data = reader.result.replace(/^data:image\/png;base64,/, '')
+        base64data += base64data.replace('+', ' ')
+        const binaryData = new Buffer(base64data, 'base64').toString('binary')
+        const imageName = Math.random().toString(36).slice(-16)
+        const storagePath = findStorage(this.props.storageKey).path
+        const imageDir = path.join(storagePath, 'images')
+        if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir)
+        const imagePath = path.join(imageDir, `${imageName}.png`)
+        fs.writeFile(imagePath, binaryData, 'binary')
+        const imageMd = `![${imageName}](${path.join('/:storage', `${imageName}.png`)})`
+        this.insertImageMd(imageMd)
+      }
+    } else if (this.props.fetchUrlTitle && isURL(pastedTxt)) {
+      this.handlePasteUrl(e, editor, pastedTxt)
+    }
+  }
+
+  handleScroll (e) {
+    if (this.props.onScroll) {
+      this.props.onScroll(e)
+    }
+  }
+
+  handlePasteUrl (e, editor, pastedTxt) {
+    e.preventDefault()
+    const taggedUrl = `<${pastedTxt}>`
+    editor.replaceSelection(taggedUrl)
+
+    fetch(pastedTxt, {
+      method: 'get'
+    }).then((response) => {
+      return (response.text())
+    }).then((response) => {
+      const parsedResponse = (new window.DOMParser()).parseFromString(response, 'text/html')
+      const value = editor.getValue()
+      const cursor = editor.getCursor()
+      const LinkWithTitle = `[${parsedResponse.title}](${pastedTxt})`
+      const newValue = value.replace(taggedUrl, LinkWithTitle)
+      editor.setValue(newValue)
+      editor.setCursor(cursor)
+    }).catch((e) => {
+      const value = editor.getValue()
+      const newValue = value.replace(taggedUrl, pastedTxt)
+      const cursor = editor.getCursor()
+      editor.setValue(newValue)
+      editor.setCursor(cursor)
+    })
   }
 
   render () {

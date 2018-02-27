@@ -220,6 +220,7 @@ pre
     background-color white
   &.CodeMirror
     height initial
+    flex-wrap wrap
     &>code
       flex 1
       overflow-x auto
@@ -229,6 +230,13 @@ pre
     padding 0
     border none
     border-radius 0
+  &>span.filename
+    width 100%
+    border-radius: 5px 0px 0px 0px
+    margin -8px 100% 8px -8px
+    padding 0px 6px
+    background-color #777;
+    color white
   &>span.lineNumber
     display none
     font-size 1em

@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+const { remote } = require('electron')
+const { Menu } = remote
+import dataApi from 'browser/main/lib/dataApi'
 import styles from './SideNav.styl'
 import { openModal } from 'browser/main/lib/modal'
 import PreferencesModal from '../modals/PreferencesModal'
@@ -86,9 +89,10 @@ class SideNav extends React.Component {
             isTrashedActive={isTrashedActive}
             handleStarredButtonClick={(e) => this.handleStarredButtonClick(e)}
             handleTrashedButtonClick={(e) => this.handleTrashedButtonClick(e)}
-            counterTotalNote={data.noteMap._map.size}
+            counterTotalNote={data.noteMap._map.size - data.trashedSet._set.size}
             counterStarredNote={data.starredSet._set.size}
             counterDelNote={data.trashedSet._set.size}
+            handleFilterButtonContextMenu={this.handleFilterButtonContextMenu.bind(this)}
           />
 
           <StorageList storageList={storageList} />
@@ -113,18 +117,21 @@ class SideNav extends React.Component {
 
   tagListComponent () {
     const { data, location } = this.props
-    const tagList = data.tagNoteMap.map((tag, key) => {
-      return key
+    const tagList = data.tagNoteMap.map((tag, name) => {
+      return { name, size: tag.size }
     })
     return (
-      tagList.map(tag => (
-        <TagListItem
-          name={tag}
-          handleClickTagListItem={this.handleClickTagListItem.bind(this)}
-          isActive={this.getTagActive(location.pathname, tag)}
-          key={tag}
-        />
-      ))
+      tagList.map(tag => {
+        return (
+          <TagListItem
+            name={tag.name}
+            handleClickTagListItem={this.handleClickTagListItem.bind(this)}
+            isActive={this.getTagActive(location.pathname, tag)}
+            key={tag.name}
+            count={tag.size}
+          />
+        )
+      })
     )
   }
 
@@ -137,6 +144,34 @@ class SideNav extends React.Component {
   handleClickTagListItem (name) {
     const { router } = this.context
     router.push(`/tags/${name}`)
+  }
+
+  emptyTrash (entries) {
+    const { dispatch } = this.props
+    const deletionPromises = entries.map((storageAndNoteKey) => {
+      const storageKey = storageAndNoteKey.split('-')[0]
+      const noteKey = storageAndNoteKey.split('-')[1]
+      return dataApi.deleteNote(storageKey, noteKey)
+    })
+    Promise.all(deletionPromises)
+    .then((arrayOfStorageAndNoteKeys) => {
+      arrayOfStorageAndNoteKeys.forEach(({ storageKey, noteKey }) => {
+        dispatch({ type: 'DELETE_NOTE', storageKey, noteKey })
+      })
+    })
+    .catch((err) => {
+      console.error('Cannot Delete note: ' + err)
+    })
+    console.log('Trash emptied')
+  }
+
+  handleFilterButtonContextMenu (event) {
+    const { data } = this.props
+    const entries = data.trashedSet.toJS()
+    const menu = Menu.buildFromTemplate([
+      { label: 'Empty Trash', click: () => this.emptyTrash(entries) }
+    ])
+    menu.popup()
   }
 
   render () {

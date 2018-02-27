@@ -22,14 +22,18 @@ class TopBar extends React.Component {
     this.focusSearchHandler = () => {
       this.handleOnSearchFocus()
     }
+
+    this.codeInitHandler = this.handleCodeInit.bind(this)
   }
 
   componentDidMount () {
     ee.on('top:focus-search', this.focusSearchHandler)
+    ee.on('code:init', this.codeInitHandler)
   }
 
   componentWillUnmount () {
     ee.off('top:focus-search', this.focusSearchHandler)
+    ee.off('code:init', this.codeInitHandler)
   }
 
   handleKeyDown (e) {
@@ -73,14 +77,16 @@ class TopBar extends React.Component {
 
   handleSearchChange (e) {
     const { router } = this.context
+    const keyword = this.refs.searchInput.value
     if (this.state.isAlphabet || this.state.isConfirmTranslation) {
       router.push('/searched')
     } else {
       e.preventDefault()
     }
     this.setState({
-      search: this.refs.searchInput.value
+      search: keyword
     })
+    ee.emit('top:search', keyword)
   }
 
   handleSearchFocus (e) {
@@ -113,6 +119,10 @@ class TopBar extends React.Component {
     } else {
       this.refs.search.childNodes[0].focus()
     }
+  }
+
+  handleCodeInit () {
+    ee.emit('top:search', this.refs.searchInput.value)
   }
 
   render () {

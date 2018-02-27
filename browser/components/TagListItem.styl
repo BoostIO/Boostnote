@@ -48,6 +48,9 @@
   overflow hidden
   text-overflow ellipsis
 
+.tagList-item-count
+  padding 0 3px
+
 body[data-theme="white"]
   .tagList-item
     color $ui-inactive-text-color
@@ -63,6 +66,8 @@ body[data-theme="white"]
     color $ui-text-color
     &:hover
       background-color alpha($ui-button--active-backgroundColor, 60%)
+  .tagList-item-count
+    color $ui-text-color
 
 body[data-theme="dark"]
   .tagList-item
@@ -82,3 +87,5 @@ body[data-theme="dark"]
     &:hover
       color $ui-dark-text-color
       background-color alpha($ui-dark-button--active-backgroundColor, 50%)
+  .tagList-item-count
+    color $ui-dark-button--active-color

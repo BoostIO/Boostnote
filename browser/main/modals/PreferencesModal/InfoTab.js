@@ -83,7 +83,7 @@ class InfoTab extends React.Component {
               >GitHub</a>
             </li>
             <li>
-              <a href='https://medium.com/boostnote'
+              <a href='https://boostlog.io/@junp1234'
                 onClick={(e) => this.handleLinkClick(e)}
               >Blog</a>
             </li>
@@ -128,7 +128,7 @@ class InfoTab extends React.Component {
             >Development</a> : Development configurations for Boostnote.
           </li>
           <li styleName='cc'>
-            Copyright (C) 2017 Maisin&Co.
+            Copyright (C) 2017 - 2018 BoostIO
           </li>
           <li styleName='cc'>
             License: GPL v3
