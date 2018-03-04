@@ -262,6 +262,7 @@ class MarkdownEditor extends React.Component {
           scrollPastEnd={config.editor.scrollPastEnd}
           storageKey={storageKey}
           fetchUrlTitle={config.editor.fetchUrlTitle}
+          previewImage={config.editor.previewImage}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
         />
