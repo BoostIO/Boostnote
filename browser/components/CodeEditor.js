@@ -209,6 +209,7 @@ export default class CodeEditor extends React.Component {
     if (needRefresh) {
       this.editor.refresh()
     }
+    setTimeout(this.previewImage(this.editor, this.props), 500)
   }
 
   setMode (mode) {
@@ -224,6 +225,8 @@ export default class CodeEditor extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(e)
     }
+    // setTimeout(this.previewImage(this.editor, this.editor.props), 500)
+    setTimeout(this.previewImage(this.editor, this.props), 500)
   }
 
   moveCursorTo (row, col) {
@@ -332,6 +335,49 @@ export default class CodeEditor extends React.Component {
       const cursor = editor.getCursor()
       editor.setValue(newValue)
       editor.setCursor(cursor)
+    })
+  }
+
+  previewImage (editor, props) {
+    editor.operation(function () {
+      const storagePath = findStorage(props.storageKey).path
+      const lastline = editor.lineCount()
+
+      for (let i = 0; i < lastline; ++i) {
+        const lineValue = editor.getLine(i)
+        var imageMdRe = /\!\[.+\]\(\\:storage\\(.+?)\)/g
+        var imageMd = imageMdRe.exec(lineValue)
+        if (!imageMd) {
+          editor.lineInfo(i).handle.widgets = null
+          continue
+        }
+
+        var div = document.createElement('div')
+        var img = div.appendChild(document.createElement('img'))
+        const imageDir = `${path.join(storagePath, '\\images\\', path.basename(imageMd[1]))}`
+        img.setAttribute('src', imageDir)
+        img.setAttribute('style', 'max-width:100%')
+        div.className = 'inline-image'
+        var widgetNode
+        try {
+          widgetNode = editor.lineInfo(i).handle.widgets[0].node
+        } catch (e) {
+          widgetNode = undefined
+        }
+        if (typeof widgetNode !== 'undefined') {
+          var widgetSrc = widgetNode.childNodes[0].getAttribute('src')
+          if (widgetSrc !== imageDir) {
+            editor.lineInfo(i).handle.widgets = null
+            editor.addLineWidget(i, div, {coverGutter: false, noHScroll: true})
+          }
+        } else {
+          editor.addLineWidget(i, div, {coverGutter: false, noHScroll: true})
+          var evt = document.createEvent('UIEvent')
+          evt.initUIEvent('resize', true, true, window, 1)
+          document.dispatchEvent(evt)
+        }
+        editor.refresh()
+      }
     })
   }
 
