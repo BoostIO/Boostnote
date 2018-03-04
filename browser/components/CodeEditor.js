@@ -209,7 +209,9 @@ export default class CodeEditor extends React.Component {
     if (needRefresh) {
       this.editor.refresh()
     }
-    setTimeout(this.previewImage(this.editor, this.props), 500)
+    if (this.props.previewImage) {
+      setTimeout(this.previewImage(this.editor, this.props), 500)
+    }
   }
 
   setMode (mode) {
@@ -225,8 +227,9 @@ export default class CodeEditor extends React.Component {
     if (this.props.onChange) {
       this.props.onChange(e)
     }
-    // setTimeout(this.previewImage(this.editor, this.editor.props), 500)
-    setTimeout(this.previewImage(this.editor, this.props), 500)
+    if (this.props.previewImage) {
+      setTimeout(this.previewImage(this.editor, this.props), 500)
+    }
   }
 
   moveCursorTo (row, col) {
@@ -272,6 +275,9 @@ export default class CodeEditor extends React.Component {
 
   insertImageMd (imageMd) {
     this.editor.replaceSelection(imageMd)
+    if (this.props.previewImage) {
+      setTimeout(this.previewImage(this.editor, this.props), 500)
+    }
   }
 
   handlePaste (editor, e) {
@@ -342,7 +348,6 @@ export default class CodeEditor extends React.Component {
     editor.operation(function () {
       const storagePath = findStorage(props.storageKey).path
       const lastline = editor.lineCount()
-
       for (let i = 0; i < lastline; ++i) {
         const lineValue = editor.getLine(i)
         var imageMdRe = /\!\[.+\]\(\\:storage\\(.+?)\)/g
