@@ -4,7 +4,7 @@ import {findStorage} from 'browser/lib/findStorage'
 const fs = require('fs')
 const path = require('path')
 
-const LOCAL_STORED_REGEX = /!\[(.*?)\]\(\s*?\/:storage\/(.*\.\S*?)\)/gi
+const LOCAL_STORED_REGEX = /!\[(.*?)]\(\s*?\/:storage\/(.*\.\S*?)\)/gi
 const IMAGES_FOLDER_NAME = 'images'
 
 /**

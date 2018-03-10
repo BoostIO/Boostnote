@@ -58,6 +58,7 @@
     "electron-gh-releases": "^2.0.2",
     "flowchart.js": "^1.6.5",
     "font-awesome": "^4.3.0",
+    "iconv-lite": "^0.4.19",
     "immutable": "^3.8.1",
     "js-sequence-diagrams": "^1000000.0.6",
     "katex": "^0.8.3",
@@ -84,6 +85,7 @@
     "react-sortable-hoc": "^0.6.7",
     "redux": "^3.5.2",
     "sander": "^0.5.1",
+    "sanitize-html": "^1.18.2",
     "striptags": "^2.2.1",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.3"

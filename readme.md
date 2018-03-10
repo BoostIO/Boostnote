@@ -1,4 +1,4 @@
-:mega: Open sourcing our [Android and iOS apps](https://github.com/BoostIO/Boostnote-mobile)!
+:mega: We've launched a blogging platform with markdown called **[Boostlog](https://boostlog.io/)**.
 
 ![Boostnote app screenshot](./resources/repository/top.png)
 
@@ -25,8 +25,8 @@ Boostnote is an open source project. It's an independent project with its ongoin
 ## Community
 - [Facebook Group](https://www.facebook.com/groups/boostnote/)
 - [Twitter](https://twitter.com/boostnoteapp)
-- [Slack Group](https://join.slack.com/t/boostnote-group/shared_invite/enQtMzAzMjI1MTIyNTQ3LTc2MjNiYWU3NTc1YjZlMTk3NzFmOWE1ZWU1MGRhMzBkMGIwMWFjOWMxMDRiM2I2NzkzYzc4OGZhNmVhZjYzZTM)
-- [Blog](https://boostlog.io/@junp1234)
+- [Slack Group](https://join.slack.com/t/boostnote-group/shared_invite/enQtMzI3NTIxMTQzMTQzLTUyYWZmZWM1YzcwYzQ5OWQ5YzA3Y2M2NzUzNmIwNzYzMjg5NmQyOGJlNzcyZDJhMGY0ZDc0ZjdlZDFhMDdiMWE)
+- [Blog](https://boostlog.io/tags/boostnote)
 - [Reddit](https://www.reddit.com/r/Boostnote/)
 
 

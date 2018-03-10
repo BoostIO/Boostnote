@@ -30,6 +30,9 @@ function validateInput (input) {
     validatedInput.isPinned = !!input.isPinned
   }
 
+  if (!_.isNil(input.blog)) {
+    validatedInput.blog = input.blog
+  }
   validatedInput.type = input.type
   switch (input.type) {
     case 'MARKDOWN_NOTE':

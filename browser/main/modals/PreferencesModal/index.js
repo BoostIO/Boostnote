@@ -6,6 +6,7 @@ import UiTab from './UiTab'
 import InfoTab from './InfoTab'
 import Crowdfunding from './Crowdfunding'
 import StoragesTab from './StoragesTab'
+import Blog from './Blog'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './PreferencesModal.styl'
@@ -19,7 +20,8 @@ class Preferences extends React.Component {
     this.state = {
       currentTab: 'STORAGES',
       UIAlert: '',
-      HotkeyAlert: ''
+      HotkeyAlert: '',
+      BlogAlert: ''
     }
   }
 
@@ -75,6 +77,14 @@ class Preferences extends React.Component {
         return (
           <Crowdfunding />
         )
+      case 'BLOG':
+        return (
+          <Blog
+            dispatch={dispatch}
+            config={config}
+            haveToSave={alert => this.setState({BlogAlert: alert})}
+          />
+        )
       case 'STORAGES':
       default:
         return (
@@ -111,7 +121,8 @@ class Preferences extends React.Component {
       {target: 'HOTKEY', label: 'Hotkeys', Hotkey: this.state.HotkeyAlert},
       {target: 'UI', label: 'Interface', UI: this.state.UIAlert},
       {target: 'INFO', label: 'About'},
-      {target: 'CROWDFUNDING', label: 'Crowdfunding'}
+      {target: 'CROWDFUNDING', label: 'Crowdfunding'},
+      {target: 'BLOG', label: 'Blog', Blog: this.state.BlogAlert}
     ]
 
     const navButtons = tabs.map((tab) => {

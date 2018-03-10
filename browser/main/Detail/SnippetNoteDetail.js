@@ -343,6 +343,7 @@ class SnippetNoteDetail extends React.Component {
 
   handleKeyDown (e) {
     switch (e.keyCode) {
+      // tab key
       case 9:
         if (e.ctrlKey && !e.shiftKey) {
           e.preventDefault()
@@ -355,6 +356,7 @@ class SnippetNoteDetail extends React.Component {
           this.focusEditor()
         }
         break
+      // L key
       case 76:
         {
           const isSuper = global.process.platform === 'darwin'
@@ -366,6 +368,7 @@ class SnippetNoteDetail extends React.Component {
           }
         }
         break
+      // T key
       case 84:
         {
           const isSuper = global.process.platform === 'darwin'

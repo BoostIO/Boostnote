@@ -89,7 +89,8 @@ class UiTab extends React.Component {
         latexInlineClose: this.refs.previewLatexInlineClose.value,
         latexBlockOpen: this.refs.previewLatexBlockOpen.value,
         latexBlockClose: this.refs.previewLatexBlockClose.value,
-        scrollPastEnd: this.refs.previewScrollPastEnd.checked
+        scrollPastEnd: this.refs.previewScrollPastEnd.checked,
+        smartQuotes: this.refs.previewSmartQuotes.checked
       }
     }
 
@@ -412,6 +413,16 @@ class UiTab extends React.Component {
                 type='checkbox'
               />&nbsp;
               Show line numbers for preview code blocks
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.preview.smartQuotes}
+                ref='previewSmartQuotes'
+                type='checkbox'
+              />&nbsp;
+              Enable smart quotes
             </label>
           </div>
           <div styleName='group-section'>

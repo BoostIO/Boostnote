@@ -1,4 +1,5 @@
 import markdownit from 'markdown-it'
+import sanitize from './markdown-it-sanitize-html'
 import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
 import _ from 'lodash'
@@ -19,171 +20,187 @@ function createGutter (str, firstLineNumber) {
   return '<span class="lineNumber CodeMirror-gutters">' + lines.join('') + '</span>'
 }
 
-var md = markdownit({
-  typographer: true,
-  linkify: true,
-  html: true,
-  xhtmlOut: true,
-  breaks: true,
-  highlight: function (str, lang) {
-    const delimiter = ':'
-    const langInfo = lang.split(delimiter)
-    const langType = langInfo[0]
-    const fileName = langInfo[1] || ''
-    const firstLineNumber = parseInt(langInfo[2], 10)
+class Markdown {
+  constructor (options = {}) {
+    const defaultOptions = {
+      typographer: true,
+      linkify: true,
+      html: true,
+      xhtmlOut: true,
+      breaks: true,
+      highlight: function (str, lang) {
+        const delimiter = ':'
+        const langInfo = lang.split(delimiter)
+        const langType = langInfo[0]
+        const fileName = langInfo[1] || ''
+        const firstLineNumber = parseInt(langInfo[2], 10)
 
-    if (langType === 'flowchart') {
-      return `<pre class="flowchart">${str}</pre>`
-    }
-    if (langType === 'sequence') {
-      return `<pre class="sequence">${str}</pre>`
-    }
-    return '<pre class="code">' +
-      '<span class="filename">' + fileName + '</span>' +
-      createGutter(str, firstLineNumber) +
-      '<code class="' + langType + '">' +
-      str +
-      '</code></pre>'
-  }
-})
-md.use(emoji, {
-  shortcuts: {}
-})
-md.use(math, {
-  inlineOpen: config.preview.latexInlineOpen,
-  inlineClose: config.preview.latexInlineClose,
-  blockOpen: config.preview.latexBlockOpen,
-  blockClose: config.preview.latexBlockClose,
-  inlineRenderer: function (str) {
-    let output = ''
-    try {
-      output = katex.renderToString(str.trim())
-    } catch (err) {
-      output = `<span class="katex-error">${err.message}</span>`
-    }
-    return output
-  },
-  blockRenderer: function (str) {
-    let output = ''
-    try {
-      output = katex.renderToString(str.trim(), { displayMode: true })
-    } catch (err) {
-      output = `<div class="katex-error">${err.message}</div>`
-    }
-    return output
-  }
-})
-md.use(require('markdown-it-imsize'))
-md.use(require('markdown-it-footnote'))
-md.use(require('markdown-it-multimd-table'))
-md.use(require('markdown-it-named-headers'), {
-  slugify: (header) => {
-    return encodeURI(header.trim()
-      .replace(/[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '')
-      .replace(/\s+/g, '-'))
-      .replace(/\-+$/, '')
-  }
-})
-md.use(require('markdown-it-kbd'))
-
-const deflate = require('markdown-it-plantuml/lib/deflate')
-md.use(require('markdown-it-plantuml'), '', {
-  generateSource: function (umlCode) {
-    const s = unescape(encodeURIComponent(umlCode))
-    const zippedCode = deflate.encode64(
-      deflate.zip_deflate(`@startuml\n${s}\n@enduml`, 9)
-    )
-    return `http://www.plantuml.com/plantuml/svg/${zippedCode}`
-  }
-})
-
-// Override task item
-md.block.ruler.at('paragraph', function (state, startLine/*, endLine */) {
-  let content, terminate, i, l, token
-  let nextLine = startLine + 1
-  const terminatorRules = state.md.block.ruler.getRules('paragraph')
-  const endLine = state.lineMax
-
-  // jump line-by-line until empty one or EOF
-  for (; nextLine < endLine && !state.isEmpty(nextLine); nextLine++) {
-    // this would be a code block normally, but after paragraph
-    // it's considered a lazy continuation regardless of what's there
-    if (state.sCount[nextLine] - state.blkIndent > 3) { continue }
-
-    // quirk for blockquotes, this line should already be checked by that rule
-    if (state.sCount[nextLine] < 0) { continue }
-
-    // Some tags can terminate paragraph without empty line.
-    terminate = false
-    for (i = 0, l = terminatorRules.length; i < l; i++) {
-      if (terminatorRules[i](state, nextLine, endLine, true)) {
-        terminate = true
-        break
-      }
-    }
-    if (terminate) { break }
-  }
-
-  content = state.getLines(startLine, nextLine, state.blkIndent, false).trim()
-
-  state.line = nextLine
-
-  token = state.push('paragraph_open', 'p', 1)
-  token.map = [startLine, state.line]
-
-  if (state.parentType === 'list') {
-    const match = content.match(/^\[( |x)\] ?(.+)/i)
-    if (match) {
-      const liToken = lastFindInArray(state.tokens, token => token.type === 'list_item_open')
-      if (liToken) {
-        if (!liToken.attrs) {
-          liToken.attrs = []
+        if (langType === 'flowchart') {
+          return `<pre class="flowchart">${str}</pre>`
         }
-        liToken.attrs.push(['class', 'taskListItem'])
+        if (langType === 'sequence') {
+          return `<pre class="sequence">${str}</pre>`
+        }
+        return '<pre class="code">' +
+          '<span class="filename">' + fileName + '</span>' +
+          createGutter(str, firstLineNumber) +
+          '<code class="' + langType + '">' +
+          str +
+          '</code></pre>'
       }
-      content = `<label class='taskListItem${match[1] !== ' ' ? ' checked' : ''}' for='checkbox-${startLine + 1}'><input type='checkbox'${match[1] !== ' ' ? ' checked' : ''} id='checkbox-${startLine + 1}'/> ${content.substring(4, content.length)}</label>`
     }
+
+    const updatedOptions = Object.assign(defaultOptions, options)
+    this.md = markdownit(updatedOptions)
+
+    // Sanitize use rinput before other plugins
+    this.md.use(sanitize, {
+      allowedTags: ['img', 'iframe'],
+      allowedAttributes: {
+        '*': ['alt', 'style'],
+        'img': ['src', 'width', 'height'],
+        'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
+      },
+      allowedIframeHostnames: ['www.youtube.com']
+    })
+
+    this.md.use(emoji, {
+      shortcuts: {}
+    })
+    this.md.use(math, {
+      inlineOpen: config.preview.latexInlineOpen,
+      inlineClose: config.preview.latexInlineClose,
+      blockOpen: config.preview.latexBlockOpen,
+      blockClose: config.preview.latexBlockClose,
+      inlineRenderer: function (str) {
+        let output = ''
+        try {
+          output = katex.renderToString(str.trim())
+        } catch (err) {
+          output = `<span class="katex-error">${err.message}</span>`
+        }
+        return output
+      },
+      blockRenderer: function (str) {
+        let output = ''
+        try {
+          output = katex.renderToString(str.trim(), { displayMode: true })
+        } catch (err) {
+          output = `<div class="katex-error">${err.message}</div>`
+        }
+        return output
+      }
+    })
+    this.md.use(require('markdown-it-imsize'))
+    this.md.use(require('markdown-it-footnote'))
+    this.md.use(require('markdown-it-multimd-table'))
+    this.md.use(require('markdown-it-named-headers'), {
+      slugify: (header) => {
+        return encodeURI(header.trim()
+          .replace(/[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '')
+          .replace(/\s+/g, '-'))
+          .replace(/\-+$/, '')
+      }
+    })
+    this.md.use(require('markdown-it-kbd'))
+
+    const deflate = require('markdown-it-plantuml/lib/deflate')
+    this.md.use(require('markdown-it-plantuml'), '', {
+      generateSource: function (umlCode) {
+        const s = unescape(encodeURIComponent(umlCode))
+        const zippedCode = deflate.encode64(
+          deflate.zip_deflate(`@startuml\n${s}\n@enduml`, 9)
+        )
+        return `http://www.plantuml.com/plantuml/svg/${zippedCode}`
+      }
+    })
+
+    // Override task item
+    this.md.block.ruler.at('paragraph', function (state, startLine/*, endLine */) {
+      let content, terminate, i, l, token
+      let nextLine = startLine + 1
+      const terminatorRules = state.md.block.ruler.getRules('paragraph')
+      const endLine = state.lineMax
+
+      // jump line-by-line until empty one or EOF
+      for (; nextLine < endLine && !state.isEmpty(nextLine); nextLine++) {
+        // this would be a code block normally, but after paragraph
+        // it's considered a lazy continuation regardless of what's there
+        if (state.sCount[nextLine] - state.blkIndent > 3) { continue }
+
+        // quirk for blockquotes, this line should already be checked by that rule
+        if (state.sCount[nextLine] < 0) { continue }
+
+        // Some tags can terminate paragraph without empty line.
+        terminate = false
+        for (i = 0, l = terminatorRules.length; i < l; i++) {
+          if (terminatorRules[i](state, nextLine, endLine, true)) {
+            terminate = true
+            break
+          }
+        }
+        if (terminate) { break }
+      }
+
+      content = state.getLines(startLine, nextLine, state.blkIndent, false).trim()
+
+      state.line = nextLine
+
+      token = state.push('paragraph_open', 'p', 1)
+      token.map = [startLine, state.line]
+
+      if (state.parentType === 'list') {
+        const match = content.match(/^\[( |x)\] ?(.+)/i)
+        if (match) {
+          const liToken = lastFindInArray(state.tokens, token => token.type === 'list_item_open')
+          if (liToken) {
+            if (!liToken.attrs) {
+              liToken.attrs = []
+            }
+            liToken.attrs.push(['class', 'taskListItem'])
+          }
+          content = `<label class='taskListItem${match[1] !== ' ' ? ' checked' : ''}' for='checkbox-${startLine + 1}'><input type='checkbox'${match[1] !== ' ' ? ' checked' : ''} id='checkbox-${startLine + 1}'/> ${content.substring(4, content.length)}</label>`
+        }
+      }
+
+      token = state.push('inline', '', 0)
+      token.content = content
+      token.map = [startLine, state.line]
+      token.children = []
+
+      token = state.push('paragraph_close', 'p', -1)
+
+      return true
+    })
+
+    // Add line number attribute for scrolling
+    const originalRender = this.md.renderer.render
+    this.md.renderer.render = (tokens, options, env) => {
+      tokens.forEach((token) => {
+        switch (token.type) {
+          case 'heading_open':
+          case 'paragraph_open':
+          case 'blockquote_open':
+          case 'table_open':
+            token.attrPush(['data-line', token.map[0]])
+        }
+      })
+      const result = originalRender.call(this.md.renderer, tokens, options, env)
+      return result
+    }
+    // FIXME We should not depend on global variable.
+    window.md = this.md
   }
 
-  token = state.push('inline', '', 0)
-  token.content = content
-  token.map = [startLine, state.line]
-  token.children = []
-
-  token = state.push('paragraph_close', 'p', -1)
-
-  return true
-})
-
-// Add line number attribute for scrolling
-const originalRender = md.renderer.render
-md.renderer.render = function render (tokens, options, env) {
-  tokens.forEach((token) => {
-    switch (token.type) {
-      case 'heading_open':
-      case 'paragraph_open':
-      case 'blockquote_open':
-      case 'table_open':
-        token.attrPush(['data-line', token.map[0]])
-    }
-  })
-  const result = originalRender.call(md.renderer, tokens, options, env)
-  return result
-}
-// FIXME We should not depend on global variable.
-window.md = md
-
-function normalizeLinkText (linkText) {
-  return md.normalizeLinkText(linkText)
-}
-
-const markdown = {
-  render: function markdown (content) {
+  render (content) {
     if (!_.isString(content)) content = ''
-    const renderedContent = md.render(content)
-    return renderedContent
-  },
-  normalizeLinkText
+    return this.md.render(content)
+  }
+
+  normalizeLinkText (linkText) {
+    return this.md.normalizeLinkText(linkText)
+  }
 }
 
-export default markdown
+export default Markdown
+

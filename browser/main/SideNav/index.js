@@ -17,6 +17,7 @@ import EventEmitter from 'browser/main/lib/eventEmitter'
 import PreferenceButton from './PreferenceButton'
 import ListButton from './ListButton'
 import TagButton from './TagButton'
+import {SortableContainer} from 'react-sortable-hoc'
 
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
@@ -68,6 +69,17 @@ class SideNav extends React.Component {
     router.push('/alltags')
   }
 
+  onSortEnd (storage) {
+    return ({oldIndex, newIndex}) => {
+      const { dispatch } = this.props
+      dataApi
+        .reorderFolder(storage.key, oldIndex, newIndex)
+        .then((data) => {
+          dispatch({ type: 'REORDER_FOLDER', storage: data.storage })
+        })
+    }
+  }
+
   SideNavComponent (isFolded, storageList) {
     const { location, data } = this.props
 
@@ -117,9 +129,9 @@ class SideNav extends React.Component {
 
   tagListComponent () {
     const { data, location } = this.props
-    const tagList = data.tagNoteMap.map((tag, name) => {
+    const tagList = _.sortBy(data.tagNoteMap.map((tag, name) => {
       return { name, size: tag.size }
-    })
+    }), ['name'])
     return (
       tagList.map(tag => {
         return (
@@ -180,13 +192,16 @@ class SideNav extends React.Component {
     const isFolded = config.isSideNavFolded
 
     const storageList = data.storageMap.map((storage, key) => {
-      return <StorageItem
+      const SortableStorageItem = SortableContainer(StorageItem)
+      return <SortableStorageItem
         key={storage.key}
         storage={storage}
         data={data}
         location={location}
         isFolded={isFolded}
         dispatch={dispatch}
+        onSortEnd={this.onSortEnd.bind(this)(storage)}
+        useDragHandle
       />
     })
     const style = {}

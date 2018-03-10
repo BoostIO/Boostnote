@@ -6,6 +6,7 @@ import React from 'react'
 import styles from './StorageItem.styl'
 import CSSModules from 'browser/lib/CSSModules'
 import _ from 'lodash'
+import { SortableHandle } from 'react-sortable-hoc'
 
 /**
  * @param {boolean} isActive
@@ -23,32 +24,35 @@ import _ from 'lodash'
 const StorageItem = ({
   isActive, handleButtonClick, handleContextMenu, folderName,
   folderColor, isFolded, noteCount, handleDrop, handleDragEnter, handleDragLeave
-}) => (
-  <button styleName={isActive
+}) => {
+  const FolderDragger = SortableHandle(({ className }) => <i className={className} />)
+  return (
+    <button styleName={isActive
       ? 'folderList-item--active'
       : 'folderList-item'
     }
-    onClick={handleButtonClick}
-    onContextMenu={handleContextMenu}
-    onDrop={handleDrop}
-    onDragEnter={handleDragEnter}
-    onDragLeave={handleDragLeave}
-  >
-    <span styleName={isFolded
-      ? 'folderList-item-name--folded' : 'folderList-item-name'
-    }>
-      <text style={{color: folderColor, paddingRight: '10px'}}>{isActive ? <i className='fa fa-folder-open-o' /> : <i className='fa fa-folder-o' />}</text>{isFolded ? _.truncate(folderName, {length: 1, omission: ''}) : folderName}
-    </span>
-    {(!isFolded && _.isNumber(noteCount)) &&
-      <span styleName='folderList-item-noteCount'>{noteCount}</span>
-    }
-    {isFolded &&
-      <span styleName='folderList-item-tooltip'>
-        {folderName}
+      onClick={handleButtonClick}
+      onContextMenu={handleContextMenu}
+      onDrop={handleDrop}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+    >
+      <span styleName={isFolded
+        ? 'folderList-item-name--folded' : 'folderList-item-name'
+      }>
+        <text style={{color: folderColor, paddingRight: '10px'}}>{isActive ? <FolderDragger className='fa fa-folder-open-o' /> : <FolderDragger className='fa fa-folder-o' />}</text>{isFolded ? _.truncate(folderName, {length: 1, omission: ''}) : folderName}
       </span>
-    }
-  </button>
-)
+      {(!isFolded && _.isNumber(noteCount)) &&
+        <span styleName='folderList-item-noteCount'>{noteCount}</span>
+      }
+      {isFolded &&
+        <span styleName='folderList-item-tooltip'>
+          {folderName}
+        </span>
+      }
+    </button>
+  )
+}
 
 StorageItem.propTypes = {
   isActive: PropTypes.bool.isRequired,

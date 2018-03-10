@@ -123,7 +123,11 @@ NoteItem.propTypes = {
     title: PropTypes.string.isrequired,
     tags: PropTypes.array,
     isStarred: PropTypes.bool.isRequired,
-    isTrashed: PropTypes.bool.isRequired
+    isTrashed: PropTypes.bool.isRequired,
+    blog: {
+      blogLink: PropTypes.string,
+      blogId: PropTypes.number
+    }
   }),
   handleNoteClick: PropTypes.func.isRequired,
   handleNoteContextMenu: PropTypes.func.isRequired,

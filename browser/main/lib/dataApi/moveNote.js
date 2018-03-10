@@ -1,10 +1,12 @@
 const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
+const fs = require('fs')
 const CSON = require('@rokt33r/season')
 const keygen = require('browser/lib/keygen')
 const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
+const copyImage = require('./copyImage')
 
 function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
   let oldStorage, newStorage
@@ -64,6 +66,27 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
           noteData.updatedAt = new Date()
 
           return noteData
+        })
+        .then(function moveImages (noteData) {
+          const searchImagesRegex = /!\[.*?]\(\s*?\/:storage\/(.*\.\S*?)\)/gi
+          let match = searchImagesRegex.exec(noteData.content)
+
+          const moveTasks = []
+          while (match != null) {
+            const [, filename] = match
+            const oldPath = path.join(oldStorage.path, 'images', filename)
+            moveTasks.push(
+                copyImage(oldPath, noteData.storage, false)
+                .then(() => {
+                  fs.unlinkSync(oldPath)
+                })
+            )
+
+            // find next occurence
+            match = searchImagesRegex.exec(noteData.content)
+          }
+
+          return Promise.all(moveTasks).then(() => noteData)
         })
         .then(function writeAndReturn (noteData) {
           CSON.writeFileSync(path.join(newStorage.path, 'notes', noteData.key + '.cson'), _.omit(noteData, ['key', 'storage']))

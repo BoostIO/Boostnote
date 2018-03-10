@@ -40,6 +40,32 @@ $control-height = 34px
     padding-bottom 2px
     background-color $ui-noteList-backgroundColor
 
+.control-search-input-clear
+  height 16px
+  width 16px
+  position absolute
+  right 40px
+  top 10px
+  z-index 300
+  border none
+  background-color transparent
+  color #999
+  &:hover .control-search-input-clear-tooltip
+    opacity 1
+
+.control-search-input-clear-tooltip
+  tooltip()
+  position fixed
+  pointer-events none
+  top 50px
+  left 433px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
 .control-search-optionList
   position fixed
   z-index 200
