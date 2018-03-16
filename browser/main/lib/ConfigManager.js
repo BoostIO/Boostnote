@@ -15,7 +15,7 @@ export const DEFAULT_CONFIG = {
   listWidth: 280,
   navWidth: 200,
   sortBy: 'UPDATED_AT', // 'CREATED_AT', 'UPDATED_AT', 'APLHABETICAL'
-  listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
+  listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL', 'DATETREE'
   amaEnabled: true,
   hotkey: {
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
@@ -71,7 +71,6 @@ function validate (config) {
 }
 
 function _save (config) {
-  console.log(config)
   window.localStorage.setItem('config', JSON.stringify(config))
 }
 

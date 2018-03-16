@@ -43,7 +43,8 @@ function createFolder (storageKey, input) {
       const newFolder = {
         key,
         color: input.color,
-        name: input.name
+        name: input.name,
+        type: input.type
       }
 
       storage.folders.push(newFolder)

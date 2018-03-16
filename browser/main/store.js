@@ -12,7 +12,8 @@ function defaultDataMap () {
     storageNoteMap: new Map(),
     folderNoteMap: new Map(),
     tagNoteMap: new Map(),
-    trashedSet: new Set()
+    trashedSet: new Set(),
+    treeVisibilityMap: new Map()
   }
 }
 
@@ -61,6 +62,8 @@ function data (state = defaultDataMap(), action) {
           }
           tagNoteList.add(uniqueKey)
         })
+
+        state.treeVisibilityMap.set('/', true)
       })
       return state
     case 'UPDATE_NOTE':
@@ -498,6 +501,11 @@ function data (state = defaultDataMap(), action) {
       state = Object.assign({}, state)
       state.storageMap = new Map(state.storageMap)
       state.storageMap.set(action.storage.key, action.storage)
+      return state
+    case 'TOGGLE_TREE':
+      state = Object.assign({}, state)
+      state.treeVisibilityMap = new Map(state.treeVisibilityMap)
+      state.treeVisibilityMap.set(action.path, !state.treeVisibilityMap.get(action.path))
       return state
   }
   return state

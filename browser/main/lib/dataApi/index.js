@@ -9,6 +9,7 @@ const dataApi = {
   reorderFolder: require('./reorderFolder'),
   exportFolder: require('./exportFolder'),
   createNote: require('./createNote'),
+  createJournalNote: require('./createJournalNote'),
   updateNote: require('./updateNote'),
   deleteNote: require('./deleteNote'),
   moveNote: require('./moveNote'),

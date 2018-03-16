@@ -192,10 +192,12 @@ class FolderSelect extends React.Component {
     let options = []
     data.storageMap.forEach((storage, index) => {
       storage.folders.forEach((folder) => {
-        options.push({
-          storage: storage,
-          folder: folder
-        })
+        if (folder.type !== 'JOURNAL') {
+          options.push({
+            storage: storage,
+            folder: folder
+          })
+        }
       })
     })
 

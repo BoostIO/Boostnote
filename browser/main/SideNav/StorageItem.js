@@ -179,12 +179,14 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleDragEnter (e) {
+  handleDragEnter (e, folder) {
+    if (folder.type === 'JOURNAL') return null
     e.dataTransfer.setData('defaultColor', e.target.style.backgroundColor)
     e.target.style.backgroundColor = 'rgba(129, 130, 131, 0.08)'
   }
 
-  handleDragLeave (e) {
+  handleDragLeave (e, folder) {
+    if (folder.type === 'JOURNAL') return null
     e.target.style.opacity = '1'
     e.target.style.backgroundColor = e.dataTransfer.getData('defaultColor')
   }
@@ -211,6 +213,15 @@ class StorageItem extends React.Component {
   }
 
   handleDrop (e, storage, folder, dispatch, location) {
+    if (folder.type === 'JOURNAL') {
+      dialog.showMessageBox(remote.getCurrentWindow(), {
+        type: 'warning',
+        message: 'Notes cannot be moved into Journal folder.',
+        detail: 'If you want to create a journal entry, please select a date.',
+        buttons: ['OK']
+      })
+      return null
+    }
     e.target.style.opacity = '1'
     e.target.style.backgroundColor = e.dataTransfer.getData('defaultColor')
     const noteData = JSON.parse(e.dataTransfer.getData('note'))
@@ -242,12 +253,13 @@ class StorageItem extends React.Component {
           handleButtonClick={(e) => this.handleFolderButtonClick(folder.key)(e)}
           handleContextMenu={(e) => this.handleFolderButtonContextMenu(e, folder)}
           folderName={folder.name}
+          folderType={folder.type}
           folderColor={folder.color}
           isFolded={isFolded}
           noteCount={noteCount}
           handleDrop={(e) => this.handleDrop(e, storage, folder, dispatch, location)}
-          handleDragEnter={this.handleDragEnter}
-          handleDragLeave={this.handleDragLeave}
+          handleDragEnter={(e) => { this.handleDragEnter(e, folder) }}
+          handleDragLeave={(e) => { this.handleDragLeave(e, folder) }}
         />
       )
     })

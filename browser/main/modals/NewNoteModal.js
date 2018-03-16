@@ -10,7 +10,6 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 class NewNoteModal extends React.Component {
   constructor (props) {
     super(props)
-
     this.state = {
     }
   }
@@ -141,7 +140,6 @@ class NewNoteModal extends React.Component {
 
         </div>
         <div styleName='description'><i className='fa fa-arrows-h' /> Tab to switch format</div>
-
       </div>
     )
   }

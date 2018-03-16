@@ -12,10 +12,11 @@ const DraggableIcon = SortableHandle(({ className }) => (
   <i className={`fa ${className}`} />
 ))
 
-const FolderIcon = ({ className, color, isActive }) => {
-  const iconStyle = isActive ? 'fa-folder-open-o' : 'fa-folder-o'
+const FolderIcon = ({ folderType, color, isActive }) => {
+  const className = (folderType === 'JOURNAL')
+  ? 'fa-calendar-o' : (isActive ? 'fa-folder-open-o' : 'fa-folder-o')
   return (
-    <i className={`fa ${iconStyle} ${className}`} style={{ color: color }} />
+    <text style={{color: color, paddingRight: '10px'}}><i className={`fa ${className}`} /></text>
   )
 }
 
@@ -38,6 +39,7 @@ const StorageItem = ({
   handleButtonClick,
   handleContextMenu,
   folderName,
+  folderType,
   folderColor,
   isFolded,
   noteCount,
@@ -63,7 +65,7 @@ const StorageItem = ({
         }
       >
         <FolderIcon
-          styleName='folderList-item-icon'
+          folderType={folderType}
           color={folderColor}
           isActive={isActive}
         />
@@ -87,6 +89,7 @@ StorageItem.propTypes = {
   handleButtonClick: PropTypes.func,
   handleContextMenu: PropTypes.func,
   folderName: PropTypes.string.isRequired,
+  folderType: PropTypes.string.isRequired,
   folderColor: PropTypes.string,
   isFolded: PropTypes.bool.isRequired,
   handleDragEnter: PropTypes.func.isRequired,

@@ -10,6 +10,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
+import NoteTree from 'browser/components/NoteTree'
 import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import path from 'path'
@@ -32,6 +33,12 @@ function sortByAlphabetical (a, b) {
 
 function sortByUpdatedAt (a, b) {
   return new Date(b.updatedAt) - new Date(a.updatedAt)
+}
+
+function sortByJournaledAt (a, b) {
+  const aV = a.journaledAt ? new Date(a.journaledAt) : new Date(a.createdAt)
+  const bV = b.journaledAt ? new Date(b.journaledAt) : new Date(b.createdAt)
+  return bV - aV
 }
 
 function findNoteByKey (notes, noteKey) {
@@ -903,6 +910,8 @@ class NoteList extends React.Component {
       ? sortByCreatedAt
       : config.sortBy === 'ALPHABETICAL'
       ? sortByAlphabetical
+      : config.sortBy === 'JOURNALED_AT'
+      ? sortByJournaledAt
       : sortByUpdatedAt
     const sortedNotes = location.pathname.match(/\/starred|\/trash/)
         ? this.getNotes().sort(sortFunc)
@@ -933,38 +942,53 @@ class NoteList extends React.Component {
 
     const viewType = this.getViewType()
 
-    const noteList = notes
-      .map(note => {
-        if (note == null) {
-          return null
+    const noteTreeData = {}
+    notes.forEach((note) => {
+      const myDate = (config.sortBy === 'JOURNALED_AT' && note.journaledAt)
+      ? new Date(note.journaledAt)
+      : new Date(note.createdAt)
+        // getMonth() is zero-based
+      const [yyyy, mm, dd] = [myDate.getFullYear(), myDate.getMonth() + 1, myDate.getDate()]
+      if (!noteTreeData[yyyy]) {
+        noteTreeData[yyyy] = {}
+        noteTreeData[yyyy][mm] = {}
+        noteTreeData[yyyy][mm][dd] = []
+      } else {
+        if (!noteTreeData[yyyy][mm]) {
+          noteTreeData[yyyy][mm] = {}
+          noteTreeData[yyyy][mm][dd] = []
+        } else {
+          if (!noteTreeData[yyyy][mm][dd]) {
+            noteTreeData[yyyy][mm][dd] = []
+          }
         }
+      }
+      noteTreeData[yyyy][mm][dd].push(note)
+    })
 
-        const isDefault = config.listStyle === 'DEFAULT'
-        const uniqueKey = getNoteKey(note)
-        const isActive = selectedNoteKeys.includes(uniqueKey)
-        const dateDisplay = moment(
-          config.sortBy === 'CREATED_AT'
-            ? note.createdAt : note.updatedAt
-        ).fromNow('D')
+    const noteList = (config.listStyle === 'DATETREE') ? (
+      <NoteTree
+        label=''
+        fullpath='/'
+        key='/'
+        subTree={noteTreeData}
+        selectedNoteKeys={this.state.selectedNoteKeys}
+        location={this.props.location}
+        handleNoteClick={this.handleNoteClick.bind(this)}
+      />
+    )
+    : notes.map(note => {
+      if (note == null) {
+        return null
+      }
+      const uniqueKey = getNoteKey(note)
+      const isActive = selectedNoteKeys.includes(uniqueKey)
+      const dateDisplay = moment(
+            config.sortBy === 'CREATED_AT'
+              ? note.createdAt : note.updatedAt
+          ).fromNow('D')
 
-        if (isDefault) {
-          return (
-            <NoteItem
-              isActive={isActive}
-              note={note}
-              dateDisplay={dateDisplay}
-              key={uniqueKey}
-              handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
-              handleNoteClick={this.handleNoteClick.bind(this)}
-              handleDragStart={this.handleDragStart.bind(this)}
-              pathname={location.pathname}
-              folderName={this.getNoteFolder(note).name}
-              storageName={this.getNoteStorage(note).name}
-              viewType={viewType}
-            />
-          )
-        }
-
+      if (config.listStyle === 'SMALL') {
         return (
           <NoteItemSimple
             isActive={isActive}
@@ -979,7 +1003,21 @@ class NoteList extends React.Component {
             viewType={viewType}
           />
         )
-      })
+      } else {  // DEFAULT
+        return (
+          <NoteItem
+            isActive={isActive}
+            note={note}
+            dateDisplay={dateDisplay}
+            key={uniqueKey}
+            handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
+            handleNoteClick={this.handleNoteClick.bind(this)}
+            handleDragStart={this.handleDragStart.bind(this)}
+            pathname={location.pathname}
+          />
+        )
+      }
+    })
 
     return (
       <div className='NoteList'
@@ -995,12 +1033,21 @@ class NoteList extends React.Component {
               value={config.sortBy}
               onChange={(e) => this.handleSortByChange(e)}
             >
-              <option title='Sort by update time' value='UPDATED_AT'>Updated</option>
+              <option title='Sort by journal entry date' value='JOURNALED_AT'>Journal date</option>
               <option title='Sort by create time' value='CREATED_AT'>Created</option>
-              <option title='Sort alphabetically' value='ALPHABETICAL'>Alphabetically</option>
+              {config.listStyle === 'DATETREE' ? '' : (<option title='Sort by update time' value='UPDATED_AT'>Updated</option>)}
+              {config.listStyle === 'DATETREE' ? '' : (<option title='Sort alphabetically' value='ALPHABETICAL'>Alphabetically</option>)}
             </select>
           </div>
           <div styleName='control-button-area'>
+            <button title='Tree View' styleName={config.listStyle === 'DATETREE'
+                ? 'control-button--active'
+                : 'control-button'
+              }
+              onClick={(e) => this.handleListStyleButtonClick(e, 'DATETREE')}
+            >
+              <img styleName='iconTag' src='../resources/icon/icon-column-tree.svg' />
+            </button>
             <button title='Default View' styleName={config.listStyle === 'DEFAULT'
                 ? 'control-button--active'
                 : 'control-button'
@@ -1031,6 +1078,7 @@ class NoteList extends React.Component {
     )
   }
 }
+
 NoteList.contextTypes = {
   router: PropTypes.shape([])
 }

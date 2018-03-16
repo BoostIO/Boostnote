@@ -1,0 +1,76 @@
+// rWidth must be < 8*rWidth
+$rWidth = 250px
+$dayWidth = 32px
+
+.root
+  padding 5px
+  width $rWidth 
+.calendar-control
+  display flex
+  flex-direction row
+  width 100%
+  height 50px
+  align-items center
+  vertical-align middle
+  .previous-month,
+  .next-month {
+    color: #9b9b9b;
+    cursor: pointer;
+    padding: 5px;
+    user-select: none;
+    width: 40px;
+    &:hover {
+      color: #000
+    }
+  }
+  .next-month {
+    text-align: right
+  }
+  .month-year {
+    flex: 2
+    font-weight: bold
+    text-align: center
+    font-size 1.2em
+  }
+.calendar-header
+  display flex
+  flex-direction row
+  height $dayWidth
+  // justify-content center
+.calendar-header-weekday
+  width $dayWidth
+  margin auto
+  align-self center
+  text-align center
+.previous-month
+  flex-basis 1
+.calendar-body
+  display flex
+  flex-direction row
+  flex-wrap wrap 
+  align-items center
+calendar-day-position()
+  width $dayWidth 
+  height $dayWidth
+  margin auto
+  align-self center
+  text-align center
+  vertical-align middle
+  padding-top 7px
+calendar-day()
+  calendar-day-position()
+  &:hover
+    border-radius 50%
+    background-color #b7ffe7
+.calendar-day
+  calendar-day()
+.calendar-day--active
+  calendar-day()
+  background-color #1EC38B
+  border-radius 50%
+.calendar-day--today
+  calendar-day()
+  font-weight bold
+.calendar-day--empty
+  calendar-day-position()
+  cursor default
