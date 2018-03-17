@@ -574,6 +574,7 @@ class SnippetNoteDetail extends React.Component {
             keyMap={config.editor.keyMap}
             scrollPastEnd={config.editor.scrollPastEnd}
             fetchUrlTitle={config.editor.fetchUrlTitle}
+            previewImage={config.editor.previewImage}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
           />

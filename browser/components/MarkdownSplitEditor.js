@@ -112,6 +112,7 @@ class MarkdownSplitEditor extends React.Component {
           indentSize={editorIndentSize}
           scrollPastEnd={config.editor.scrollPastEnd}
           fetchUrlTitle={config.editor.fetchUrlTitle}
+          previewImage={config.editor.previewImage}
           storageKey={storageKey}
           onChange={this.handleOnChange.bind(this)}
           onScroll={this.handleScroll.bind(this)}
