@@ -103,6 +103,7 @@ class StorageItem extends React.Component {
     return (
       <div styleName='root' key={storage.key}>
         <div styleName='header'>
+          <i className='fa fa-folder-open' styleName='header-icon'/>
           {this.state.isLabelEditing
             ? <div styleName='header-label--edit'>
               <input styleName='header-label-input'
@@ -115,9 +116,9 @@ class StorageItem extends React.Component {
             : <div styleName='header-label'
               onClick={(e) => this.handleLabelClick(e)}
             >
-              <i className='fa fa-folder-open' />&nbsp;
-              {storage.name}&nbsp;
-              <span styleName='header-label-path'>({storage.path})</span>&nbsp;
+
+              <span styleName='header-label-name'>{storage.name}</span>
+              <span styleName='header-label-path'>({storage.path})</span>
               <i styleName='header-label-editButton' className='fa fa-pencil' />
             </div>
           }
