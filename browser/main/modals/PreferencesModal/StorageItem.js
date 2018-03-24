@@ -103,7 +103,7 @@ class StorageItem extends React.Component {
     return (
       <div styleName='root' key={storage.key}>
         <div styleName='header'>
-          <i className='fa fa-folder-open' styleName='header-icon' />
+          <i className='fa fa-folder-open' styleName='header-icon'/>
           {this.state.isLabelEditing
             ? <div styleName='header-label--edit'>
               <input styleName='header-label-input'
