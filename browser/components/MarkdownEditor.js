@@ -272,28 +272,29 @@ class MarkdownEditor extends React.Component {
             ? 'preview'
             : 'preview--hide'
           }
-          style={previewStyle}
-          theme={config.ui.theme}
-          keyMap={config.editor.keyMap}
-          fontSize={config.preview.fontSize}
-          fontFamily={config.preview.fontFamily}
-          codeBlockTheme={config.preview.codeBlockTheme}
-          codeBlockFontFamily={config.editor.fontFamily}
-          lineNumber={config.preview.lineNumber}
-          indentSize={editorIndentSize}
-          scrollPastEnd={config.preview.scrollPastEnd}
-          smartQuotes={config.preview.smartQuotes}
-          sanitize={config.preview.sanitize}
-          ref='preview'
-          onContextMenu={(e) => this.handleContextMenu(e)}
-          onDoubleClick={(e) => this.handleDoubleClick(e)}
-          tabIndex='0'
-          value={this.state.renderValue}
-          onMouseUp={(e) => this.handlePreviewMouseUp(e)}
-          onMouseDown={(e) => this.handlePreviewMouseDown(e)}
-          onCheckboxClick={(e) => this.handleCheckboxClick(e)}
-          showCopyNotification={config.ui.showCopyNotification}
-          storagePath={storage.path}
+                         style={previewStyle}
+                         theme={config.ui.theme}
+                         keyMap={config.editor.keyMap}
+                         fontSize={config.preview.fontSize}
+                         fontFamily={config.preview.fontFamily}
+                         codeBlockTheme={config.preview.codeBlockTheme}
+                         codeBlockFontFamily={config.editor.fontFamily}
+                         lineNumber={config.preview.lineNumber}
+                         indentSize={editorIndentSize}
+                         scrollPastEnd={config.preview.scrollPastEnd}
+                         smartQuotes={config.preview.smartQuotes}
+                         sanitize={config.preview.sanitize}
+                         ref='preview'
+                         onContextMenu={(e) => this.handleContextMenu(e)}
+                         onDoubleClick={(e) => this.handleDoubleClick(e)}
+                         tabIndex='0'
+                         value={this.state.renderValue}
+                         onMouseUp={(e) => this.handlePreviewMouseUp(e)}
+                         onMouseDown={(e) => this.handlePreviewMouseDown(e)}
+                         onCheckboxClick={(e) => this.handleCheckboxClick(e)}
+                         showCopyNotification={config.ui.showCopyNotification}
+                         storagePath={storage.path}
+                         noteKey={noteKey}
         />
       </div>
     )

@@ -211,8 +211,9 @@ export default class MarkdownPreview extends React.Component {
       const {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme} = this.getStyleParams()
 
       const inlineStyles = buildStyle(fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, lineNumber)
-      const body = this.markdown.render(escapeHtmlCharacters(noteContent))
+      let body = this.markdown.render(escapeHtmlCharacters(noteContent))
       const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
+      const attachmentsAbsolutePaths = attachmentManagement.getAbsolutePathsOfAttachmentsInContent(noteContent, this.props.storagePath)
 
       files.forEach((file) => {
         file = file.replace('file://', '')
@@ -221,6 +222,13 @@ export default class MarkdownPreview extends React.Component {
           dst: 'css'
         })
       })
+      attachmentsAbsolutePaths.forEach((attachment) => {
+        exportTasks.push({
+          src: attachment,
+          dst: attachmentManagement.DESTINATION_FOLDER
+        })
+      })
+      body = attachmentManagement.removeStorageAndNoteReferences(body, this.props.noteKey)
 
       let styles = ''
       files.forEach((file) => {

@@ -139,6 +139,7 @@ class MarkdownSplitEditor extends React.Component {
           onScroll={this.handleScroll.bind(this)}
           showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
+          noteKey={noteKey}
        />
       </div>
     )
