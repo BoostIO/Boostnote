@@ -191,6 +191,7 @@ class StorageItem extends React.Component {
   }
 
   dropNote (storage, folder, dispatch, location, noteData) {
+    // btw: how high have you been when you produced this nearly impossible to understand gibberish method?
     noteData = noteData.filter((note) => folder.key !== note.folder)
     if (noteData.length === 0) return
 
@@ -201,7 +202,7 @@ class StorageItem extends React.Component {
       createdNoteData.forEach((newNote) => {
         dispatch({
           type: 'MOVE_NOTE',
-          originNote: noteData.find((note) => note.content === newNote.content),
+          originNote: noteData.find((note) => note.content === newNote.oldContent),
           note: newNote
         })
       })
@@ -223,6 +224,7 @@ class StorageItem extends React.Component {
     const { folderNoteMap, trashedSet } = data
     const SortableStorageItemChild = SortableElement(StorageItemChild)
     const folderList = storage.folders.map((folder, index) => {
+      //Todo: This should be platform independent
       const isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
       const noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
 
@@ -253,6 +255,7 @@ class StorageItem extends React.Component {
       )
     })
 
+    //Todo: This should be platform independent
     const isActive = location.pathname.match(new RegExp('\/storages\/' + storage.key + '$'))
 
     return (

@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path')
 const findStorage = require('browser/lib/findStorage')
 const mdurl = require('mdurl')
+const fse = require('fs-extra')
+const escapeStringRegexp = require('escape-string-regexp')
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
@@ -153,12 +155,32 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
   reader.readAsDataURL(blob)
 }
 
+/**
+ * @description Moves the attachments of the current note to the new location.
+ * Returns a modified version of the given content so that the links to the attachments point to the new note key.
+ * @param {String} oldPath Source of the note to be moved
+ * @param {String} newPath Destination of the note to be moved
+ * @param {String} noteKey Old note key
+ * @param {String} newNoteKey New note key
+ * @param {String} noteContent Content of the note to be moved
+ * @returns {String} Modified version of noteContent in which the paths of the attachments are fixed
+ */
+function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
+  let src = path.join(oldPath, DESTINATION_FOLDER, noteKey)
+  let dest = path.join(newPath, DESTINATION_FOLDER, newNoteKey)
+  if (fse.existsSync(src)) {
+    fse.moveSync(src, dest)
+  }
+  return noteContent.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey, 'g'), path.join(STORAGE_FOLDER_PLACEHOLDER, newNoteKey))
+}
+
 module.exports = {
   copyAttachment,
   fixLocalURLS,
   generateAttachmentMarkdown,
   handleAttachmentDrop,
   handlePastImageEvent,
+  moveAttachments,
   STORAGE_FOLDER_PLACEHOLDER,
   DESTINATION_FOLDER
 }

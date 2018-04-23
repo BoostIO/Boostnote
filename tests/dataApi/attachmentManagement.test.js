@@ -7,6 +7,7 @@ const findStorage = require('browser/lib/findStorage')
 jest.mock('unique-slug')
 const uniqueSlug = require('unique-slug')
 const mdurl = require('mdurl')
+const fse = require('fs-extra')
 
 const systemUnderTest = require('browser/main/lib/dataApi/attachmentManagement')
 
@@ -166,3 +167,60 @@ it('should test that generateAttachmentMarkdown works correct both with previews
   actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, false)
   expect(actual).toEqual(expected)
 })
+
+it('should test that moveAttachments moves attachments only if the source folder existed', function () {
+  fse.existsSync = jest.fn(() => false)
+  fse.moveSync = jest.fn()
+
+  let oldPath = 'oldPath'
+  let newPath = 'newPath'
+  let oldNoteKey = 'oldNoteKey'
+  let newNoteKey = 'newNoteKey'
+  let content = ''
+
+  let expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
+
+  systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, content)
+  expect(fse.existsSync).toHaveBeenCalledWith(expectedSource)
+  expect(fse.moveSync).not.toHaveBeenCalled()
+})
+
+it('should test that moveAttachments moves attachments to the right destination', function () {
+  fse.existsSync = jest.fn(() => true)
+  fse.moveSync = jest.fn()
+
+  let oldPath = 'oldPath'
+  let newPath = 'newPath'
+  let oldNoteKey = 'oldNoteKey'
+  let newNoteKey = 'newNoteKey'
+  let content = ''
+
+  let expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
+  let expectedDestination = path.join(newPath, systemUnderTest.DESTINATION_FOLDER, newNoteKey)
+
+  systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, content)
+  expect(fse.existsSync).toHaveBeenCalledWith(expectedSource)
+  expect(fse.moveSync).toHaveBeenCalledWith(expectedSource, expectedDestination)
+})
+
+it('should test that moveAttachments returns a correct modified content version', function () {
+  fse.existsSync = jest.fn()
+  fse.moveSync = jest.fn()
+
+  let oldPath = 'oldPath'
+  let newPath = 'newPath'
+  let oldNoteKey = 'oldNoteKey'
+  let newNoteKey = 'newNoteKey'
+  let testInput =
+    'Test input' +
+    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + oldNoteKey + path.sep + 'image.jpg](imageName}) \n' +
+    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + oldNoteKey + path.sep + 'pdf.pdf](pdf})'
+  let expectedOutput =
+    'Test input' +
+    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'image.jpg](imageName}) \n' +
+    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'pdf.pdf](pdf})'
+
+  let actualContent = systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, testInput)
+  expect(actualContent).toBe(expectedOutput)
+})
+
