@@ -114,8 +114,8 @@ it('should test that copyAttachment don\'t uses a random file name if not intend
 })
 
 it('should replace the all ":storage" path with the actual storage path', function () {
-  let storageFolder = systemUnderTest.DESTINATION_FOLDER
-  let testInput =
+  const storageFolder = systemUnderTest.DESTINATION_FOLDER
+  const testInput =
     '<html>\n' +
     '    <head>\n' +
     '        //header\n' +
@@ -133,8 +133,8 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
-  let storagePath = '<<dummyStoragePath>>'
-  let expectedOutput =
+  const storagePath = '<<dummyStoragePath>>'
+  const expectedOutput =
     '<html>\n' +
     '    <head>\n' +
     '        //header\n' +
@@ -152,13 +152,13 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
-  let actual = systemUnderTest.fixLocalURLS(testInput, storagePath)
+  const actual = systemUnderTest.fixLocalURLS(testInput, storagePath)
   expect(actual).toEqual(expectedOutput)
 })
 
 it('should test that generateAttachmentMarkdown works correct both with previews and without', function () {
-  let fileName = 'fileName'
-  let path = 'path'
+  const fileName = 'fileName'
+  const path = 'path'
   let expected = `![${fileName}](${path})`
   let actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, true)
   expect(actual).toEqual(expected)

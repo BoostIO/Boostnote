@@ -249,24 +249,24 @@ class MarkdownEditor extends React.Component {
             ? 'codeEditor'
             : 'codeEditor--hide'
           }
-                    ref='code'
-                    mode='GitHub Flavored Markdown'
-                    value={value}
-                    theme={config.editor.theme}
-                    keyMap={config.editor.keyMap}
-                    fontFamily={config.editor.fontFamily}
-                    fontSize={editorFontSize}
-                    indentType={config.editor.indentType}
-                    indentSize={editorIndentSize}
-                    enableRulers={config.editor.enableRulers}
-                    rulers={config.editor.rulers}
-                    displayLineNumbers={config.editor.displayLineNumbers}
-                    scrollPastEnd={config.editor.scrollPastEnd}
-                    storageKey={storageKey}
-                    noteKey={noteKey}
-                    fetchUrlTitle={config.editor.fetchUrlTitle}
-                    onChange={(e) => this.handleChange(e)}
-                    onBlur={(e) => this.handleBlur(e)}
+          ref='code'
+          mode='GitHub Flavored Markdown'
+          value={value}
+          theme={config.editor.theme}
+          keyMap={config.editor.keyMap}
+          fontFamily={config.editor.fontFamily}
+          fontSize={editorFontSize}
+          indentType={config.editor.indentType}
+          indentSize={editorIndentSize}
+          enableRulers={config.editor.enableRulers}
+          rulers={config.editor.rulers}
+          displayLineNumbers={config.editor.displayLineNumbers}
+          scrollPastEnd={config.editor.scrollPastEnd}
+          storageKey={storageKey}
+          noteKey={noteKey}
+          fetchUrlTitle={config.editor.fetchUrlTitle}
+          onChange={(e) => this.handleChange(e)}
+          onBlur={(e) => this.handleBlur(e)}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
