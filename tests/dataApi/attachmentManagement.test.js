@@ -142,13 +142,13 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + '\\' + storageFolder + '\\0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + '\\' + storageFolder + '\\0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '        <p data-line="6">\n' +
-    '            <img src="file:///' + storagePath + '\\' + storageFolder + '\\d6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
