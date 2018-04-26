@@ -1,11 +1,12 @@
 import copyFile from 'browser/main/lib/dataApi/copyFile'
-import {findStorage} from 'browser/lib/findStorage'
+import { findStorage } from 'browser/lib/findStorage'
 import filenamify from 'filenamify'
 
 const fs = require('fs')
 const path = require('path')
 
 const LOCAL_STORED_REGEX = /!\[(.*?)]\(\s*?\/:storage\/(.*\.\S*?)\)/gi
+//TODO: ehhc: check this -> attachmentManagement
 const IMAGES_FOLDER_NAME = 'images'
 
 /**

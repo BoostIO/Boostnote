@@ -289,6 +289,7 @@ class MarkdownNoteDetail extends React.Component {
         config={config}
         value={note.content}
         storageKey={note.storage}
+        noteKey={note.key}
         onChange={this.handleUpdateContent.bind(this)}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
       />
@@ -298,6 +299,7 @@ class MarkdownNoteDetail extends React.Component {
         config={config}
         value={note.content}
         storageKey={note.storage}
+        noteKey={note.key}
         onChange={this.handleUpdateContent.bind(this)}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
       />
