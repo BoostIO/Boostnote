@@ -92,6 +92,7 @@
     "striptags": "^2.2.1",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.3",
+    "unique-slug": "2.0.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {

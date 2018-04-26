@@ -3,12 +3,10 @@ import React from 'react'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
-import path from 'path'
-import copyImage from 'browser/main/lib/dataApi/copyImage'
-import { findStorage } from 'browser/lib/findStorage'
-import fs from 'fs'
+import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
+
 const { ipcRenderer } = require('electron')
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
@@ -275,23 +273,13 @@ export default class CodeEditor extends React.Component {
     this.editor.setCursor(cursor)
   }
 
-  handleDropImage (e) {
-    e.preventDefault()
-    const ValidImageTypes = ['image/gif', 'image/jpeg', 'image/png']
-
-    const file = e.dataTransfer.files[0]
-    const filePath = file.path
-    const filename = path.basename(filePath)
-    const fileType = file['type']
-
-    copyImage(filePath, this.props.storageKey).then((imagePath) => {
-      var showPreview = ValidImageTypes.indexOf(fileType) > 0
-      const imageMd = `${showPreview ? '!' : ''}[${filename}](${path.join('/:storage', imagePath)})`
-      this.insertImageMd(imageMd)
-    })
+  handleDropImage (dropEvent) {
+    dropEvent.preventDefault()
+    const {storageKey, noteKey} = this.props
+    attachmentManagement.handleAttachmentDrop(this, storageKey, noteKey, dropEvent)
   }
 
-  insertImageMd (imageMd) {
+  insertAttachmentMd (imageMd) {
     this.editor.replaceSelection(imageMd)
   }
 
@@ -317,24 +305,8 @@ export default class CodeEditor extends React.Component {
       return prevChar === '](' && nextChar === ')'
     }
     if (dataTransferItem.type.match('image')) {
-      const blob = dataTransferItem.getAsFile()
-      const reader = new FileReader()
-      let base64data
-
-      reader.readAsDataURL(blob)
-      reader.onloadend = () => {
-        base64data = reader.result.replace(/^data:image\/png;base64,/, '')
-        base64data += base64data.replace('+', ' ')
-        const binaryData = new Buffer(base64data, 'base64').toString('binary')
-        const imageName = Math.random().toString(36).slice(-16)
-        const storagePath = findStorage(this.props.storageKey).path
-        const imageDir = path.join(storagePath, 'images')
-        if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir)
-        const imagePath = path.join(imageDir, `${imageName}.png`)
-        fs.writeFile(imagePath, binaryData, 'binary')
-        const imageMd = `![${imageName}](${path.join('/:storage', `${imageName}.png`)})`
-        this.insertImageMd(imageMd)
-      }
+      const {storageKey, noteKey} = this.props
+      attachmentManagement.handlePastImageEvent(this, storageKey, noteKey, dataTransferItem)
     } else if (this.props.fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
       this.handlePasteUrl(e, editor, pastedTxt)
     }

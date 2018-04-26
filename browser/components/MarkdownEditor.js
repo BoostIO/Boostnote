@@ -5,7 +5,7 @@ import styles from './MarkdownEditor.styl'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import eventEmitter from 'browser/main/lib/eventEmitter'
-import {findStorage} from 'browser/lib/findStorage'
+import { findStorage } from 'browser/lib/findStorage'
 
 class MarkdownEditor extends React.Component {
   constructor (props) {
@@ -223,7 +223,7 @@ class MarkdownEditor extends React.Component {
   }
 
   render () {
-    const { className, value, config, storageKey } = this.props
+    const {className, value, config, storageKey, noteKey} = this.props
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -249,23 +249,24 @@ class MarkdownEditor extends React.Component {
             ? 'codeEditor'
             : 'codeEditor--hide'
           }
-          ref='code'
-          mode='GitHub Flavored Markdown'
-          value={value}
-          theme={config.editor.theme}
-          keyMap={config.editor.keyMap}
-          fontFamily={config.editor.fontFamily}
-          fontSize={editorFontSize}
-          indentType={config.editor.indentType}
-          indentSize={editorIndentSize}
-          enableRulers={config.editor.enableRulers}
-          rulers={config.editor.rulers}
-          displayLineNumbers={config.editor.displayLineNumbers}
-          scrollPastEnd={config.editor.scrollPastEnd}
-          storageKey={storageKey}
-          fetchUrlTitle={config.editor.fetchUrlTitle}
-          onChange={(e) => this.handleChange(e)}
-          onBlur={(e) => this.handleBlur(e)}
+                    ref='code'
+                    mode='GitHub Flavored Markdown'
+                    value={value}
+                    theme={config.editor.theme}
+                    keyMap={config.editor.keyMap}
+                    fontFamily={config.editor.fontFamily}
+                    fontSize={editorFontSize}
+                    indentType={config.editor.indentType}
+                    indentSize={editorIndentSize}
+                    enableRulers={config.editor.enableRulers}
+                    rulers={config.editor.rulers}
+                    displayLineNumbers={config.editor.displayLineNumbers}
+                    scrollPastEnd={config.editor.scrollPastEnd}
+                    storageKey={storageKey}
+                    noteKey={noteKey}
+                    fetchUrlTitle={config.editor.fetchUrlTitle}
+                    onChange={(e) => this.handleChange(e)}
+                    onBlur={(e) => this.handleBlur(e)}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'

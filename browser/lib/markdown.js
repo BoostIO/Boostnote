@@ -5,7 +5,7 @@ import math from '@rokt33r/markdown-it-math'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import katex from 'katex'
-import {lastFindInArray} from './utils'
+import { lastFindInArray } from './utils'
 
 function createGutter (str, firstLineNumber) {
   if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
@@ -233,10 +233,6 @@ class Markdown {
   render (content) {
     if (!_.isString(content)) content = ''
     return this.md.render(content)
-  }
-
-  normalizeLinkText (linkText) {
-    return this.md.normalizeLinkText(linkText)
   }
 }
 

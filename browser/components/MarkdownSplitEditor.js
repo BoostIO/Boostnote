@@ -88,7 +88,7 @@ class MarkdownSplitEditor extends React.Component {
   }
 
   render () {
-    const { config, value, storageKey } = this.props
+    const {config, value, storageKey, noteKey} = this.props
     const storage = findStorage(storageKey)
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -115,6 +115,7 @@ class MarkdownSplitEditor extends React.Component {
           scrollPastEnd={config.editor.scrollPastEnd}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           storageKey={storageKey}
+          noteKey={noteKey}
           onChange={this.handleOnChange.bind(this)}
           onScroll={this.handleScroll.bind(this)}
        />
