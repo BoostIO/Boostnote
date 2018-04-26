@@ -142,13 +142,13 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + '\\' + storageFolder + '\\0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + '\\' + storageFolder + '\\0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '        <p data-line="6">\n' +
-    '            <img src="file:///' + storagePath + '\\' + storageFolder + '\\d6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
@@ -165,4 +165,99 @@ it('should test that generateAttachmentMarkdown works correct both with previews
   expected = `[${fileName}](${path})`
   actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, false)
   expect(actual).toEqual(expected)
+})
+
+it('should test that getAttachmentsInContent finds all attachments', function () {
+  let testInput =
+    '<html>\n' +
+    '    <head>\n' +
+    '        //header\n' +
+    '    </head>\n' +
+    '    <body data-theme="default">\n' +
+    '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
+    '        <p data-line="2">\n' +
+    '            <img src=":storage' + mdurl.encode(path.sep) + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + mdurl.encode(path.sep) + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '        </p>\n' +
+    '        <p data-line="4">\n' +
+    '            <a href=":storage' + mdurl.encode(path.sep) + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + mdurl.encode(path.sep) + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '        </p>\n' +
+    '        <p data-line="6">\n' +
+    '            <img src=":storage' + mdurl.encode(path.sep) + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + mdurl.encode(path.sep) + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '        </p>\n' +
+    '    </body>\n' +
+    '</html>'
+  let actual = systemUnderTest.getAttachmentsInContent(testInput)
+  let expected = [':storage' + path.sep + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + path.sep + '0.6r4zdgc22xp', ':storage' + path.sep + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + path.sep + '0.q2i4iw0fyx', ':storage' + path.sep + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + path.sep + 'd6c5ee92.jpg']
+  expect(actual).toEqual(expect.arrayContaining(expected))
+})
+
+it('should test that getAbsolutePathsOfAttachmentsInContent returns all absolute paths', function () {
+  let dummyStoragePath = 'dummyStoragePath'
+  let testInput =
+    '<html>\n' +
+    '    <head>\n' +
+    '        //header\n' +
+    '    </head>\n' +
+    '    <body data-theme="default">\n' +
+    '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
+    '        <p data-line="2">\n' +
+    '            <img src=":storage' + mdurl.encode(path.sep) + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + mdurl.encode(path.sep) + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '        </p>\n' +
+    '        <p data-line="4">\n' +
+    '            <a href=":storage' + mdurl.encode(path.sep) + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + mdurl.encode(path.sep) + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '        </p>\n' +
+    '        <p data-line="6">\n' +
+    '            <img src=":storage' + mdurl.encode(path.sep) + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + mdurl.encode(path.sep) + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '        </p>\n' +
+    '    </body>\n' +
+    '</html>'
+  let actual = systemUnderTest.getAbsolutePathsOfAttachmentsInContent(testInput, dummyStoragePath)
+  let expected = [dummyStoragePath + path.sep + systemUnderTest.DESTINATION_FOLDER + path.sep + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + path.sep + '0.6r4zdgc22xp',
+    dummyStoragePath + path.sep + systemUnderTest.DESTINATION_FOLDER + path.sep + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + path.sep + '0.q2i4iw0fyx',
+    dummyStoragePath + path.sep + systemUnderTest.DESTINATION_FOLDER + path.sep + '9c9c4ba3-bc1e-441f-9866-c1e9a806e31c' + path.sep + 'd6c5ee92.jpg']
+  expect(actual).toEqual(expect.arrayContaining(expected))
+})
+
+it('should remove the all ":storage" and noteKey references', function () {
+  let storageFolder = systemUnderTest.DESTINATION_FOLDER
+  let noteKey = 'noteKey'
+  let testInput =
+    '<html>\n' +
+    '    <head>\n' +
+    '        //header\n' +
+    '    </head>\n' +
+    '    <body data-theme="default">\n' +
+    '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
+    '        <p data-line="2">\n' +
+    '            <img src=":storage' + mdurl.encode(path.sep) + noteKey + mdurl.encode(path.sep) + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '        </p>\n' +
+    '        <p data-line="4">\n' +
+    '            <a href=":storage' + mdurl.encode(path.sep) + noteKey + mdurl.encode(path.sep) + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '        </p>\n' +
+    '        <p data-line="6">\n' +
+    '            <img src=":storage' + mdurl.encode(path.sep) + noteKey + mdurl.encode(path.sep) + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '        </p>\n' +
+    '    </body>\n' +
+    '</html>'
+  let storagePath = '<<dummyStoragePath>>'
+  let expectedOutput =
+    '<html>\n' +
+    '    <head>\n' +
+    '        //header\n' +
+    '    </head>\n' +
+    '    <body data-theme="default">\n' +
+    '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
+    '        <p data-line="2">\n' +
+    '            <img src="' + storageFolder + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '        </p>\n' +
+    '        <p data-line="4">\n' +
+    '            <a href="' + storageFolder + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '        </p>\n' +
+    '        <p data-line="6">\n' +
+    '            <img src="' + storageFolder + path.sep + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '        </p>\n' +
+    '    </body>\n' +
+    '</html>'
+  let actual = systemUnderTest.removeStorageAndNoteReferences(testInput, noteKey)
+  expect(actual).toEqual(expectedOutput)
 })
