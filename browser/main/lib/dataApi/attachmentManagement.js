@@ -106,8 +106,8 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
   const fileType = file['type']
 
   copyAttachment(filePath, storageKey, noteKey).then((fileName) => {
-    let showPreview = fileType.startsWith('image')
-    let imageMd = generateAttachmentMarkdown(originalFileName, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName), showPreview)
+    const showPreview = fileType.startsWith('image')
+    const imageMd = generateAttachmentMarkdown(originalFileName, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName), showPreview)
     codeEditor.insertAttachmentMd(imageMd)
   })
 }
@@ -141,7 +141,7 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
   const destinationDir = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
   createAttachmentDestinationFolder(targetStorage.path, noteKey)
 
-  let imageName = `${uniqueSlug()}.png`
+  const imageName = `${uniqueSlug()}.png`
   const imagePath = path.join(destinationDir, imageName)
 
   reader.onloadend = function () {
@@ -149,7 +149,7 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
     base64data += base64data.replace('+', ' ')
     const binaryData = new Buffer(base64data, 'base64').toString('binary')
     fs.writeFile(imagePath, binaryData, 'binary')
-    let imageMd = generateAttachmentMarkdown(imageName, imagePath, true)
+    const imageMd = generateAttachmentMarkdown(imageName, imagePath, true)
     codeEditor.insertAttachmentMd(imageMd)
   }
   reader.readAsDataURL(blob)
@@ -166,8 +166,8 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
  * @returns {String} Modified version of noteContent in which the paths of the attachments are fixed
  */
 function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
-  let src = path.join(oldPath, DESTINATION_FOLDER, noteKey)
-  let dest = path.join(newPath, DESTINATION_FOLDER, newNoteKey)
+  const src = path.join(oldPath, DESTINATION_FOLDER, noteKey)
+  const dest = path.join(newPath, DESTINATION_FOLDER, newNoteKey)
   if (fse.existsSync(src)) {
     fse.moveSync(src, dest)
   }

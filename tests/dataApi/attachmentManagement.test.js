@@ -172,13 +172,13 @@ it('should test that moveAttachments moves attachments only if the source folder
   fse.existsSync = jest.fn(() => false)
   fse.moveSync = jest.fn()
 
-  let oldPath = 'oldPath'
-  let newPath = 'newPath'
-  let oldNoteKey = 'oldNoteKey'
-  let newNoteKey = 'newNoteKey'
-  let content = ''
+  const oldPath = 'oldPath'
+  const newPath = 'newPath'
+  const oldNoteKey = 'oldNoteKey'
+  const newNoteKey = 'newNoteKey'
+  const content = ''
 
-  let expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
+  const expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
 
   systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, content)
   expect(fse.existsSync).toHaveBeenCalledWith(expectedSource)
@@ -189,14 +189,14 @@ it('should test that moveAttachments moves attachments to the right destination'
   fse.existsSync = jest.fn(() => true)
   fse.moveSync = jest.fn()
 
-  let oldPath = 'oldPath'
-  let newPath = 'newPath'
-  let oldNoteKey = 'oldNoteKey'
-  let newNoteKey = 'newNoteKey'
-  let content = ''
+  const oldPath = 'oldPath'
+  const newPath = 'newPath'
+  const oldNoteKey = 'oldNoteKey'
+  const newNoteKey = 'newNoteKey'
+  const content = ''
 
-  let expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
-  let expectedDestination = path.join(newPath, systemUnderTest.DESTINATION_FOLDER, newNoteKey)
+  const expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
+  const expectedDestination = path.join(newPath, systemUnderTest.DESTINATION_FOLDER, newNoteKey)
 
   systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, content)
   expect(fse.existsSync).toHaveBeenCalledWith(expectedSource)
@@ -207,20 +207,20 @@ it('should test that moveAttachments returns a correct modified content version'
   fse.existsSync = jest.fn()
   fse.moveSync = jest.fn()
 
-  let oldPath = 'oldPath'
-  let newPath = 'newPath'
-  let oldNoteKey = 'oldNoteKey'
-  let newNoteKey = 'newNoteKey'
-  let testInput =
+  const oldPath = 'oldPath'
+  const newPath = 'newPath'
+  const oldNoteKey = 'oldNoteKey'
+  const newNoteKey = 'newNoteKey'
+  const testInput =
     'Test input' +
     '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + oldNoteKey + path.sep + 'image.jpg](imageName}) \n' +
     '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + oldNoteKey + path.sep + 'pdf.pdf](pdf})'
-  let expectedOutput =
+  const expectedOutput =
     'Test input' +
     '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'image.jpg](imageName}) \n' +
     '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'pdf.pdf](pdf})'
 
-  let actualContent = systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, testInput)
+  const actualContent = systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, testInput)
   expect(actualContent).toBe(expectedOutput)
 })
 
