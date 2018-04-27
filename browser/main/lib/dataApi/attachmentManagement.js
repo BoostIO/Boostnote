@@ -171,7 +171,10 @@ function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
   if (fse.existsSync(src)) {
     fse.moveSync(src, dest)
   }
-  return noteContent.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey, 'g'), path.join(STORAGE_FOLDER_PLACEHOLDER, newNoteKey))
+  if (noteContent) {
+    return noteContent.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey, 'g'), path.join(STORAGE_FOLDER_PLACEHOLDER, newNoteKey))
+  }
+  return noteContent
 }
 
 module.exports = {
