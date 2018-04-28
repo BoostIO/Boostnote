@@ -14,6 +14,8 @@ import i18n from 'browser/lib/i18n'
 
 const { remote } = require('electron')
 const { Menu, dialog } = remote
+const escapeStringRegexp = require('escape-string-regexp')
+const path = require('path')
 
 class StorageItem extends React.Component {
   constructor (props) {
@@ -191,6 +193,7 @@ class StorageItem extends React.Component {
   }
 
   dropNote (storage, folder, dispatch, location, noteData) {
+    // btw: how high have you been when you produced this nearly impossible to understand gibberish method?
     noteData = noteData.filter((note) => folder.key !== note.folder)
     if (noteData.length === 0) return
 
@@ -201,7 +204,7 @@ class StorageItem extends React.Component {
       createdNoteData.forEach((newNote) => {
         dispatch({
           type: 'MOVE_NOTE',
-          originNote: noteData.find((note) => note.content === newNote.content),
+          originNote: noteData.find((note) => note.content === newNote.oldContent),
           note: newNote
         })
       })
@@ -223,7 +226,8 @@ class StorageItem extends React.Component {
     const { folderNoteMap, trashedSet } = data
     const SortableStorageItemChild = SortableElement(StorageItemChild)
     const folderList = storage.folders.map((folder, index) => {
-      const isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
+      let folderRegex = new RegExp(escapeStringRegexp(path.sep) + 'storages' + escapeStringRegexp(path.sep) + storage.key + escapeStringRegexp(path.sep) + 'folders' + escapeStringRegexp(path.sep) + folder.key)
+      const isActive = !!(location.pathname.match(folderRegex))
       const noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
 
       let noteCount = 0
@@ -253,7 +257,7 @@ class StorageItem extends React.Component {
       )
     })
 
-    const isActive = location.pathname.match(new RegExp('\/storages\/' + storage.key + '$'))
+    const isActive = location.pathname.match(new RegExp(escapeStringRegexp(path.sep) + 'storages' + escapeStringRegexp(path.sep) + storage.key + '$'))
 
     return (
       <div styleName={isFolded ? 'root--folded' : 'root'}

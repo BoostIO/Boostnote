@@ -7,6 +7,7 @@ const findStorage = require('browser/lib/findStorage')
 jest.mock('unique-slug')
 const uniqueSlug = require('unique-slug')
 const mdurl = require('mdurl')
+const fse = require('fs-extra')
 
 const systemUnderTest = require('browser/main/lib/dataApi/attachmentManagement')
 
@@ -142,13 +143,13 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + '\\' + storageFolder + '\\0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + '\\' + storageFolder + '\\0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '        <p data-line="6">\n' +
-    '            <img src="file:///' + storagePath + '\\' + storageFolder + '\\d6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
@@ -166,3 +167,60 @@ it('should test that generateAttachmentMarkdown works correct both with previews
   actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, false)
   expect(actual).toEqual(expected)
 })
+
+it('should test that moveAttachments moves attachments only if the source folder existed', function () {
+  fse.existsSync = jest.fn(() => false)
+  fse.moveSync = jest.fn()
+
+  const oldPath = 'oldPath'
+  const newPath = 'newPath'
+  const oldNoteKey = 'oldNoteKey'
+  const newNoteKey = 'newNoteKey'
+  const content = ''
+
+  const expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
+
+  systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, content)
+  expect(fse.existsSync).toHaveBeenCalledWith(expectedSource)
+  expect(fse.moveSync).not.toHaveBeenCalled()
+})
+
+it('should test that moveAttachments moves attachments to the right destination', function () {
+  fse.existsSync = jest.fn(() => true)
+  fse.moveSync = jest.fn()
+
+  const oldPath = 'oldPath'
+  const newPath = 'newPath'
+  const oldNoteKey = 'oldNoteKey'
+  const newNoteKey = 'newNoteKey'
+  const content = ''
+
+  const expectedSource = path.join(oldPath, systemUnderTest.DESTINATION_FOLDER, oldNoteKey)
+  const expectedDestination = path.join(newPath, systemUnderTest.DESTINATION_FOLDER, newNoteKey)
+
+  systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, content)
+  expect(fse.existsSync).toHaveBeenCalledWith(expectedSource)
+  expect(fse.moveSync).toHaveBeenCalledWith(expectedSource, expectedDestination)
+})
+
+it('should test that moveAttachments returns a correct modified content version', function () {
+  fse.existsSync = jest.fn()
+  fse.moveSync = jest.fn()
+
+  const oldPath = 'oldPath'
+  const newPath = 'newPath'
+  const oldNoteKey = 'oldNoteKey'
+  const newNoteKey = 'newNoteKey'
+  const testInput =
+    'Test input' +
+    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + oldNoteKey + path.sep + 'image.jpg](imageName}) \n' +
+    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + oldNoteKey + path.sep + 'pdf.pdf](pdf})'
+  const expectedOutput =
+    'Test input' +
+    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'image.jpg](imageName}) \n' +
+    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'pdf.pdf](pdf})'
+
+  const actualContent = systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, testInput)
+  expect(actualContent).toBe(expectedOutput)
+})
+

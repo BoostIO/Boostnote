@@ -17,9 +17,7 @@ exports[`TagListItem renders correctly 1`] = `
       # Test
       <span
         className="tagList-item-count"
-      >
-         
-      </span>
+      />
     </span>
   </button>
 </div>

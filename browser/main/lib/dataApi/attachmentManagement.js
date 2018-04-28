@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path')
 const findStorage = require('browser/lib/findStorage')
 const mdurl = require('mdurl')
+const fse = require('fs-extra')
+const escapeStringRegexp = require('escape-string-regexp')
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
@@ -104,8 +106,8 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
   const fileType = file['type']
 
   copyAttachment(filePath, storageKey, noteKey).then((fileName) => {
-    let showPreview = fileType.startsWith('image')
-    let imageMd = generateAttachmentMarkdown(originalFileName, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName), showPreview)
+    const showPreview = fileType.startsWith('image')
+    const imageMd = generateAttachmentMarkdown(originalFileName, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName), showPreview)
     codeEditor.insertAttachmentMd(imageMd)
   })
 }
@@ -139,7 +141,7 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
   const destinationDir = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
   createAttachmentDestinationFolder(targetStorage.path, noteKey)
 
-  let imageName = `${uniqueSlug()}.png`
+  const imageName = `${uniqueSlug()}.png`
   const imagePath = path.join(destinationDir, imageName)
 
   reader.onloadend = function () {
@@ -147,10 +149,32 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
     base64data += base64data.replace('+', ' ')
     const binaryData = new Buffer(base64data, 'base64').toString('binary')
     fs.writeFile(imagePath, binaryData, 'binary')
-    let imageMd = generateAttachmentMarkdown(imageName, imagePath, true)
+    const imageMd = generateAttachmentMarkdown(imageName, imagePath, true)
     codeEditor.insertAttachmentMd(imageMd)
   }
   reader.readAsDataURL(blob)
+}
+
+/**
+ * @description Moves the attachments of the current note to the new location.
+ * Returns a modified version of the given content so that the links to the attachments point to the new note key.
+ * @param {String} oldPath Source of the note to be moved
+ * @param {String} newPath Destination of the note to be moved
+ * @param {String} noteKey Old note key
+ * @param {String} newNoteKey New note key
+ * @param {String} noteContent Content of the note to be moved
+ * @returns {String} Modified version of noteContent in which the paths of the attachments are fixed
+ */
+function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
+  const src = path.join(oldPath, DESTINATION_FOLDER, noteKey)
+  const dest = path.join(newPath, DESTINATION_FOLDER, newNoteKey)
+  if (fse.existsSync(src)) {
+    fse.moveSync(src, dest)
+  }
+  if (noteContent) {
+    return noteContent.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey, 'g'), path.join(STORAGE_FOLDER_PLACEHOLDER, newNoteKey))
+  }
+  return noteContent
 }
 
 module.exports = {
@@ -159,6 +183,7 @@ module.exports = {
   generateAttachmentMarkdown,
   handleAttachmentDrop,
   handlePastImageEvent,
+  moveAttachments,
   STORAGE_FOLDER_PLACEHOLDER,
   DESTINATION_FOLDER
 }
