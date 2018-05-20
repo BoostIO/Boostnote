@@ -17,7 +17,7 @@ import exportNote from 'browser/main/lib/dataApi/exportNote'
 import { escapeHtmlCharacters } from 'browser/lib/utils'
 
 const { remote } = require('electron')
-const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
+const attachmentManagement = require('../main/lib/attachmentManagement/index')
 
 const { app } = remote
 const path = require('path')
@@ -412,7 +412,7 @@ export default class MarkdownPreview extends React.Component {
         value = value.replace(codeBlock, htmlTextHelper.encodeEntities(codeBlock))
       })
     }
-    let renderedHTML = this.markdown.render(value)
+    const renderedHTML = this.markdown.render(value)
     this.refs.root.contentWindow.document.body.innerHTML = attachmentManagement.fixLocalURLS(renderedHTML, storagePath)
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {

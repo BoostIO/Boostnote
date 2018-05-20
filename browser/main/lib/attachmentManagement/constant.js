@@ -1,0 +1,7 @@
+const STORAGE_FOLDER_PLACEHOLDER = ':storage'
+const DESTINATION_FOLDER = 'attachments'
+
+export {
+  STORAGE_FOLDER_PLACEHOLDER,
+  DESTINATION_FOLDER
+}

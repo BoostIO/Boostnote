@@ -185,7 +185,7 @@ class SideNav extends React.Component {
     ).filter(
       note => activeTags.every(tag => note.tags.includes(tag))
     )
-    let relatedTags = new Set()
+    const relatedTags = new Set()
     relatedNotes.forEach(note => note.tags.map(tag => relatedTags.add(tag)))
     return relatedTags
   }
@@ -224,7 +224,7 @@ class SideNav extends React.Component {
   handleClickNarrowToTag (tag) {
     const { router } = this.context
     const { location } = this.props
-    let listOfTags = this.getActiveTags(location.pathname)
+    const listOfTags = this.getActiveTags(location.pathname)
     const indexOfTag = listOfTags.indexOf(tag)
     if (indexOfTag > -1) {
       listOfTags.splice(indexOfTag, 1)
