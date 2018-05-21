@@ -205,5 +205,6 @@
 	"Unnamed": "Unbenannt",
 	"Rename": "Umbenennen",
 	"Folder Name": "Ordnername",
-	"No tags": "Keine Tags"
+	"No tags": "Keine Tags",
+	"Attachment_link_pasted_file_not_found": "⚠ Es wurde ein Link zu einem Anhang eingefügt, der nicht im aktuellen Speicherort gefunden werden kann. Das Einfügen von Links zu Anhängen wird nur für Anhänge des selben Speicherorts unterstützt. Bitte nutze Drag&Drop stattdessen! ⚠"
 }

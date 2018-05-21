@@ -157,5 +157,6 @@
 	"Location": "Hely",
 	"Add": "Hozzáadás",
 	"Unlink Storage": "Tároló Leválasztása",
-	"Unlinking removes this linked storage from Boostnote. No data is removed, please manually delete the folder from your hard drive if needed.": "A leválasztás eltávolítja ezt a tárolót a Boostnote-ból. Az adatok nem lesznek törölve, kérlek manuálisan töröld a könyvtárat a merevlemezről, ha szükséges."
+	"Unlinking removes this linked storage from Boostnote. No data is removed, please manually delete the folder from your hard drive if needed.": "A leválasztás eltávolítja ezt a tárolót a Boostnote-ból. Az adatok nem lesznek törölve, kérlek manuálisan töröld a könyvtárat a merevlemezről, ha szükséges.",
+	"Attachment_link_pasted_file_not_found": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
 }

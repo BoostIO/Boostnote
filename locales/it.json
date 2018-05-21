@@ -153,5 +153,6 @@
 	"Sanitization": "Bonifica",
 	"Only allow secure html tags (recommended)": "Consenti solo tag HTML sicuri (raccomandato)",
 	"Allow styles": "Consenti stili",
-	"Allow dangerous html tags": "Consenti tag HTML pericolosi"
-}"
+	"Allow dangerous html tags": "Consenti tag HTML pericolosi",
+	"Attachment_link_pasted_file_not_found": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
+}

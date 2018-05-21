@@ -156,5 +156,6 @@
 	"Sanitization": "허용 태그 범위",
 	"Only allow secure html tags (recommended)": "안전한 HTML 태그만 허용 (추천)",
 	"Allow styles": "style 태그, 속성까지 허용",
-	"Allow dangerous html tags": "모든 위험한 태그 허용"
+	"Allow dangerous html tags": "모든 위험한 태그 허용",
+	"Attachment_link_pasted_file_not_found": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
 }

@@ -153,5 +153,6 @@
     "Sanitization": "پاکسازی کردن",
     "Only allow secure html tags (recommended)": "(فقط  تگ های امن اچ تی ام ال مجاز اند.(پیشنهاد میشود",
     "Allow styles": "حالت های مجاز",
-    "Allow dangerous html tags": "تگ های خطرناک اچ‌ تی ام ال مجاز اند"
+    "Allow dangerous html tags": "تگ های خطرناک اچ‌ تی ام ال مجاز اند",
+    "Attachment_link_pasted_file_not_found": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
 }
