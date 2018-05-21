@@ -6,7 +6,7 @@ const CSON = require('@rokt33r/season')
 const keygen = require('browser/lib/keygen')
 const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
-const attachmentManagement = require('./attachmentManagement')
+const attachmentManagement = require('../attachmentManagement/index')
 
 function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
   let oldStorage, newStorage

@@ -1,7 +1,7 @@
 const resolveStorageData = require('./resolveStorageData')
 const path = require('path')
 const sander = require('sander')
-const attachmentManagement = require('./attachmentManagement')
+const attachmentManagement = require('../attachmentManagement/index')
 const { findStorage } = require('browser/lib/findStorage')
 
 function deleteNote (storageKey, noteKey) {

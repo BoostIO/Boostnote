@@ -15,7 +15,7 @@ const os = require('os')
 const CSON = require('@rokt33r/season')
 const faker = require('faker')
 const fs = require('fs')
-const attachmentManagement = require('browser/main/lib/dataApi/attachmentManagement')
+const attachmentManagement = require('browser/main/lib/attachmentManagement/index')
 
 const storagePath = path.join(os.tmpdir(), 'test/delete-note')
 

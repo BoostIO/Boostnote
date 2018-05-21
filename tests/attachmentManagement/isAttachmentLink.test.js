@@ -1,0 +1,17 @@
+const path = require('path')
+const constant = require('browser/main/lib/attachmentManagement/constant')
+const methodUnderTest = require('browser/main/lib/attachmentManagement/isAttachmentLink')
+
+it('should test that isAttachmentLink works correctly', function () {
+  expect(methodUnderTest('text')).toBe(false)
+  expect(methodUnderTest('text [linkText](link)')).toBe(false)
+  expect(methodUnderTest('text ![linkText](link)')).toBe(false)
+  expect(methodUnderTest('[linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf)')).toBe(true)
+  expect(methodUnderTest('![linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf )')).toBe(true)
+  expect(methodUnderTest('text [ linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf)')).toBe(true)
+  expect(methodUnderTest('text ![linkText ](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf)')).toBe(true)
+  expect(methodUnderTest('[linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf) test')).toBe(true)
+  expect(methodUnderTest('![linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf) test')).toBe(true)
+  expect(methodUnderTest('text [linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf) test')).toBe(true)
+  expect(methodUnderTest('text ![linkText](' + constant.STORAGE_FOLDER_PLACEHOLDER + path.sep + 'noteKey' + path.sep + 'pdf.pdf) test')).toBe(true)
+})

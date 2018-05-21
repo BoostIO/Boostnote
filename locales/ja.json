@@ -150,5 +150,6 @@
 	"Sanitization": "サニタイズ",
 	"Only allow secure html tags (recommended)": "安全なHTMLタグのみ利用を許可する（推奨）",
 	"Allow styles": "スタイルを許可する",
-	"Allow dangerous html tags": "安全でないHTMLタグの利用を許可する"
+	"Allow dangerous html tags": "安全でないHTMLタグの利用を許可する",
+	"Attachment_link_pasted_file_not_found": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
 }

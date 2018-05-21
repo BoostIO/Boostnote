@@ -3,7 +3,7 @@ import React from 'react'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
-import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
+import attachmentManagement from 'browser/main/lib/attachmentManagement/index'
 import convertModeName from 'browser/lib/convertModeName'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
@@ -276,6 +276,7 @@ export default class CodeEditor extends React.Component {
     const clipboardData = e.clipboardData
     const dataTransferItem = clipboardData.items[0]
     const pastedTxt = clipboardData.getData('text')
+    const {storageKey, noteKey} = this.props
     const isURL = (str) => {
       const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
       return matcher.test(str)
@@ -294,10 +295,16 @@ export default class CodeEditor extends React.Component {
       return prevChar === '](' && nextChar === ')'
     }
     if (dataTransferItem.type.match('image')) {
-      const {storageKey, noteKey} = this.props
       attachmentManagement.handlePastImageEvent(this, storageKey, noteKey, dataTransferItem)
     } else if (this.props.fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
       this.handlePasteUrl(e, editor, pastedTxt)
+    }
+    if (attachmentManagement.isAttachmentLink(pastedTxt)) {
+      attachmentManagement.handleAttachmentLinkPaste(storageKey, noteKey, pastedTxt)
+        .then((modifiedText) => {
+          this.editor.replaceSelection(modifiedText)
+        })
+      e.preventDefault()
     }
   }
 
