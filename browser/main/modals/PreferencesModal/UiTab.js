@@ -51,13 +51,13 @@ class UiTab extends React.Component {
   }
 
   handleEditorAdditionalStylesChange (e) {
-    let { config } = this.state
+    const { config } = this.state
     config.editor.additionalStyles = e
     this.setState({ config })
   }
 
   handlePreviewAdditionalStylesChange (e) {
-    let { config } = this.state
+    const { config } = this.state
     config.preview.additionalStyles = e
     this.setState({ config })
   }
@@ -445,14 +445,14 @@ class UiTab extends React.Component {
               />
             </div>
           </div>
-          <div styleName="group-section">
-            <div styleName="group-section-label">
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
               {i18n.__('Preview Additional CSS Styles')}
             </div>
-            <div styleName="group-section-control">
-              <div styleName="code-mirror">
+            <div styleName='group-section-control'>
+              <div styleName='code-mirror'>
                 <ReactCodeMirror
-                  ref="previewAdditionalStyles"
+                  ref='previewAdditionalStyles'
                   onChange={e => this.handlePreviewAdditionalStylesChange(e)}
                   value={config.preview.additionalStyles}
                   options={{
@@ -600,3 +600,4 @@ UiTab.propTypes = {
 }
 
 export default CSSModules(UiTab, styles)
+
