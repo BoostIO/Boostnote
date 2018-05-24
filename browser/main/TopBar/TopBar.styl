@@ -1,10 +1,15 @@
 .root
-  position relative
+  position absolute
   background-color $ui-noteList-backgroundColor
-  height $topBar-height - 1
+  height $topBar-height + 11
+  top -10px
 
 .root--expanded
   @extend .root
+  height $topBar-height + 32
+  padding-top 20px
+  .control
+    top: 33px
 
 $control-height = 34px
 

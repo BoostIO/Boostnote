@@ -1,6 +1,6 @@
 @import('./Tab')
 
-top-bar--height = 50px
+top-bar--height = 40px
 
 .root
   modal()
@@ -10,15 +10,19 @@ top-bar--height = 50px
   width 100vw
   overflow hidden
   position relative
+  top 0px
+  margin 0px 0px 0px 0px
+  padding-left: 100px
 
 .top-bar
   absolute top left right
   height top-bar--height
   background-color $ui-backgroundColor
   border-bottom solid 1px $ui-borderColor
+  margin-top 0px
   p
     text-align center
-    font-size 18px
+    font-size 16px
     line-height top-bar--height
 
 .nav
@@ -90,7 +94,7 @@ body[data-theme="dark"]
     background-color $dark-primary-button-background--active
     &:hover
       color white
-      
+
 
 body[data-theme="solarized-dark"]
   .root

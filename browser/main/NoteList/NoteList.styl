@@ -5,6 +5,11 @@ $control-height = 30px
   top $topBar-height - 1
   background-color $ui-noteList-backgroundColor
 
+.root--expanded
+  @extend .root
+  margin-top 20px
+
+
 .control
   absolute top left right
   user-select none
@@ -60,14 +65,14 @@ $control-height = 30px
   overflow auto
 
 body[data-theme="white"]
-  .root
+  .root, .root--expanded
     background-color $ui-white-noteList-backgroundColor
 
   .control
     background-color $ui-white-noteList-backgroundColor
 
 body[data-theme="dark"]
-  .root
+  .root, .root--expanded
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
 
@@ -84,7 +89,7 @@ body[data-theme="dark"]
     color $ui-dark-inactive-text-color
     &:hover
       color $ui-dark-text-color
-  
+
   .control-button--active
     color $ui-dark-text-color
     &:active
@@ -92,7 +97,7 @@ body[data-theme="dark"]
 
 
 body[data-theme="solarized-dark"]
-  .root
+  .root, .root--expanded
     border-color $ui-solarized-dark-borderColor
     background-color $ui-solarized-dark-noteList-backgroundColor
 
@@ -109,14 +114,14 @@ body[data-theme="solarized-dark"]
     color $ui-solarized-dark-inactive-text-color
     &:hover
       color $ui-solarized-dark-text-color
-  
+
   .control-button--active
     color $ui-solarized-dark-text-color
     &:active
       color $ui-solarized-dark-text-color
 
 body[data-theme="monokai"]
-  .root
+  .root, .root--expanded
     border-color $ui-monokai-borderColor
     background-color $ui-monokai-noteList-backgroundColor
 

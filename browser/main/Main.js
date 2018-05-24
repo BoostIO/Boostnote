@@ -297,6 +297,7 @@ class Main extends React.Component {
         onMouseMove={(e) => this.handleMouseMove(e)}
         onMouseUp={(e) => this.handleMouseUp(e)}
       >
+      <div className="mac-app-header" styleName="mac-app-header"></div>
         <SideNav
           {..._.pick(this.props, [
             'dispatch',
