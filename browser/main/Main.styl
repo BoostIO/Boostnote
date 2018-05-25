@@ -8,6 +8,47 @@
   top 0px
   z-index 0
   -webkit-app-region drag
+  .toolbar
+    display none
+
+.windows-app-header
+  @extend .mac-app-header
+  height 35px
+  z-index 999
+  .toolbar
+    display block
+    height 35px
+    absolute top left bottom right
+    top 0px
+    left 0px
+    background $ui-backgroundColor
+    border-bottom 1px solid $ui-borderColor
+
+.window-controls
+  absolute right top bottom
+  right 5px
+  height 35px
+  top 0px
+  button
+    height 35px
+    width 35px
+    background transparent
+    border none
+    img
+      height 12px
+      width 12px
+
+.menubar-list
+  height 35px
+  .menu-item
+    height 35px
+    float left
+    line-height 35px
+    padding 0px 10px
+    cursor pointer
+    transition 0.2s background ease-in-out
+  .menu-item:hover
+    background rgba(0, 0, 0, 0.15)
 
 .body
   absolute right top bottom
@@ -16,6 +57,10 @@
 .body--expanded
   @extend .body
   left $sideNav--folded-width
+
+.windows
+  absolute right top bottom left
+  top 35px
 
 .slider
   absolute top bottom
@@ -41,11 +86,37 @@
   z-index 10
   cursor col-resize
 
+body[data-theme="white"]
+.toolbar
+  background-color $ui-backgroundColor
 
 body[data-theme="dark"]
   .root
     absolute top left bottom right
 
+  .toolbar
+    background-color $ui-dark-backgroundColor
+    border-color $ui-dark-borderColor
+
+  .menu-item
+    color $ui-dark-text-color
+
   .slider-right
   .slider-right--active
     box-shadow none
+
+body[data-theme="solarized-dark"]
+  .toolbar
+    background-color $ui-solarized-dark-backgroundColor
+    border-color $ui-solarized-dark-borderColor
+
+  .menu-item
+    color $ui-solarized-dark-text-color
+
+body[data-theme="monokai"]
+  .toolbar
+    background-color $ui-monokai-backgroundColor
+    border-color $ui-monokai-borderColor
+
+  .menu-item
+    color $ui-monokai-text-color

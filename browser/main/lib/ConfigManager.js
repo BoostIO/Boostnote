@@ -68,7 +68,8 @@ export const DEFAULT_CONFIG = {
     token: '',
     username: '',
     password: ''
-  }
+  },
+  is_win: win
 }
 
 function validate (config) {
