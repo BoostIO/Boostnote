@@ -70,6 +70,7 @@
     "lodash": "^4.11.1",
     "lodash-move": "^1.1.1",
     "markdown-it": "^6.0.1",
+    "markdown-it-admonition": "git://github.com/caninodev/markdown-it-admonition",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^3.0.0",

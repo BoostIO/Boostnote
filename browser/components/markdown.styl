@@ -74,6 +74,69 @@ body
     padding 5px
     border-radius 5px
     justify-content left
+  div.admonition 
+    margin 2ex 0ex
+    padding 1ex
+    padding 1ex 1ex 1ex 4ex
+    background-color: #f7f7f7
+    color #555
+    border 1px solid #555
+    /*border-width: 0.5px 0.5px 0.5px 5px;*/
+    border-width 0px 0px 0px 4px
+    border-radius 5px
+    page-break-inside avoid
+    position relative
+  div.admonition p 
+    margin 0 0
+    margin-top 2ex
+    font-family sans-serif
+  div.admonition p.admonition-title
+    margin 0ex 0ex
+    display block
+    font-weight bold
+    font-family sans-serif
+  div.admonition p.admonition-title:after
+    /*content: ":";*/
+  div.note
+    background-color #eef
+    border-color #005
+    color #005
+  div.hint, div.tip
+    background-color #dff
+    border-color #066
+    color #066
+  div.attention, div.important
+    background-color #ffffd0
+    border-color #770
+    color #770
+  div.caution, div.warning
+    background-color: #fec
+    border-color: #950
+    color #950
+  div.danger, div.error
+    background-color: #fdd
+    border-color #900
+    color #900
+  div.admonition:before 
+    fontily: 'FiraCode'
+    content "\2297"
+    position absolute
+    left: 0
+    top: 0
+    padding-top 1.4ex
+    padding-left 1ex
+  div.note:before
+    content "\0233D"
+  div.hint:before, div.tip:before
+    content "\02713"
+  div.attention:before, div.important:before
+    content "\26A0"
+  div.caution:before, div.warning:before
+    content "\270B"
+  div.danger:before
+    content "\02A37"
+  div.error:before 
+    content "\02717" 
 li
   label.taskListItem
     margin-left -1.8em
@@ -197,7 +260,7 @@ ol
     p
       margin 0
   &>li>ul, &>li>ol
-    margin 0
+    margin 0                                                                                                                     
 code
   padding 0.2em 0.4em
   background-color #f7f7f7

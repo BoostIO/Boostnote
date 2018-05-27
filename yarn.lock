@@ -5650,6 +5650,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+"markdown-it-admonition@git://github.com/caninodev/markdown-it-admonition":
+  version "1.0.2"
+  resolved "git://github.com/caninodev/markdown-it-admonition#2ca33600ff0283c7e47d8bd836d38fd742bfe42e"
+
 markdown-it-checkbox@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/markdown-it-checkbox/-/markdown-it-checkbox-1.1.0.tgz#20cff97f33d77d172f9dcf1bcfc92cecc5330fac"
