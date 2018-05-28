@@ -7,6 +7,8 @@ import ee from 'browser/main/lib/eventEmitter'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import i18n from 'browser/lib/i18n'
+import { openModal } from 'browser/main/lib/modal'
+import CreateMarkdownFromURLModal from '../modals/CreateMarkdownFromURLModal'
 
 class NewNoteModal extends React.Component {
   constructor (props) {
@@ -22,6 +24,18 @@ class NewNoteModal extends React.Component {
 
   handleCloseButtonClick (e) {
     this.props.close()
+  }
+
+  handleCreateMarkdownFromUrlClick(e) {
+    this.props.close()
+
+    const { storage, folder, dispatch, location } = this.props
+    openModal(CreateMarkdownFromURLModal, {
+      storage: storage,
+      folder: folder,
+      dispatch,
+      location
+    });
   }
 
   handleMarkdownNoteButtonClick (e) {
@@ -142,6 +156,7 @@ class NewNoteModal extends React.Component {
 
         </div>
         <div styleName='description'><i className='fa fa-arrows-h' />{i18n.__('Tab to switch format')}</div>
+        <div styleName='from-url' onClick={(e) => this.handleCreateMarkdownFromUrlClick(e)}>Or, create a new markdown note from a URL</div>
 
       </div>
     )

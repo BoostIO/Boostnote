@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+   <title>icon-external</title>
+   <defs>
+       <filter x="0.0%" y="0.0%" width="100.0%" height="100.0%" filterUnits="objectBoundingBox" id="filter-1">
+           <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+           <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowOffsetOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+           <feMerge>
+               <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+               <feMergeNode in="SourceGraphic"></feMergeNode>
+           </feMerge>
+       </filter>
+   </defs>
+  <g id="Artboard-4" stroke="none" stroke-width="1" fill="#c7c7c7" fill-rule="evenodd" transform="" stroke-linecap="round" stroke-linejoin="round">
+    <g>
+    	<g>
+    		<path d="M412.88,261.464c-11.423,0-20.682,9.259-20.682,20.682v156.879c0,17.43-14.181,31.611-31.612,31.611H72.975
+    			c-17.43,0-31.611-14.181-31.611-31.611V151.414c0-17.43,14.181-31.611,31.611-31.611h156.879c11.422,0,20.682-9.26,20.682-20.682
+    			c0-11.422-9.26-20.682-20.682-20.682H72.975C32.737,78.439,0,111.176,0,151.414v287.611C0,479.264,32.737,512,72.975,512h287.61
+    			c40.239,0,72.976-32.736,72.977-72.975V282.146C433.562,270.723,424.303,261.464,412.88,261.464z"/>
+    	</g>
+    </g>
+    <g>
+    	<g>
+    		<path d="M491.318,0H334.439c-11.423,0-20.682,9.26-20.682,20.682c0,11.422,9.259,20.682,20.682,20.682h136.197v136.197
+    			c0,11.422,9.259,20.682,20.682,20.682c11.423,0,20.682-9.26,20.682-20.682V20.682C512,9.26,502.741,0,491.318,0z"/>
+    	</g>
+    </g>
+    <g>
+    	<g>
+    		<path d="M505.942,6.058c-8.077-8.076-21.172-8.076-29.249,0L189.082,293.668c-8.077,8.077-8.077,21.172,0,29.249
+    			c4.038,4.039,9.332,6.058,14.625,6.058c5.294,0,10.587-2.02,14.625-6.058L505.942,35.307
+    			C514.019,27.23,514.019,14.135,505.942,6.058z"/>
+    	</g>
+    </g>
+  </g>
+</svg>

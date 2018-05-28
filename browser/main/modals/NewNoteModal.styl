@@ -47,6 +47,12 @@
   text-align center
   margin-bottom 25px
 
+.from-url
+  color $ui-inactive-text-color
+  text-align center
+  margin-bottom 25px
+  cursor pointer
+
 body[data-theme="dark"]
   .root
     modalDark()
@@ -61,7 +67,7 @@ body[data-theme="dark"]
     &:focus
       colorDarkPrimaryButton()
 
-  .description
+  .description, .from-url
     color $ui-inactive-text-color
 
 body[data-theme="solarized-dark"]
@@ -78,7 +84,7 @@ body[data-theme="solarized-dark"]
     &:focus
       colorDarkPrimaryButton()
 
-  .description
+  .description, .from-url
     color $ui-solarized-dark-text-color
 
 body[data-theme="monokai"]
@@ -95,5 +101,5 @@ body[data-theme="monokai"]
     &:focus
       colorDarkPrimaryButton()
 
-  .description
+  .description, .from-url
     color $ui-monokai-text-color
