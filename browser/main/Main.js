@@ -48,7 +48,7 @@ class Main extends React.Component {
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
     const isWin = global.process.platform === 'win32'
-    ConfigManager.set({isWin: !isWin})
+    ConfigManager.set({isWin: isWin})
   }
 
   getChildContext () {
