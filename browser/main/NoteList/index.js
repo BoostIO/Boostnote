@@ -1003,7 +1003,7 @@ class NoteList extends React.Component {
         onDrop={(e) => this.handleDrop(e)}
       >
         <div className='windows-check'
-          styleName={config.is_win ? 'windows' : 'not-windows'}
+          styleName={config.isWin ? 'windows' : 'not-windows'}
           >
           <div styleName='control'>
             <div styleName='control-sortBy'>

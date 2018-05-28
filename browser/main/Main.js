@@ -47,8 +47,8 @@ class Main extends React.Component {
     }
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
-    const is_win = global.process.platform == 'win32';
-    ConfigManager.set({is_win: !is_win})
+    const isWin = global.process.platform === 'win32'
+    ConfigManager.set({isWin: !isWin})
   }
 
   getChildContext () {
@@ -219,7 +219,7 @@ class Main extends React.Component {
       })
     }
 
-    if(this.state.openmenu !== -1) {
+    if (this.state.openmenu !== -1) {
       this.setState({
         openmenu: -1
       })
@@ -296,33 +296,35 @@ class Main extends React.Component {
     noteList.style.display = 'inline'
   }
 
-  minimizeWindow(e) {
-    remote.getCurrentWindow().minimize();
+  minimizeWindow (e) {
+    remote.getCurrentWindow().minimize()
   }
 
-  maximizeWindow(e) {
-    remote.getCurrentWindow().isMaximized() ? remote.getCurrentWindow().unmaxmize() : remote.getCurrentWindow().maximize();
+  maximizeWindow (e) {
+    remote.getCurrentWindow().isMaximized() ? remote.getCurrentWindow().unmaxmize() : remote.getCurrentWindow().maximize()
   }
 
-  closeWindow(e) {
-    remote.getCurrentWindow().close();
+  closeWindow (e) {
+    remote.getCurrentWindow().close()
   }
 
-  openSubmenu(key) {
-    let newkey = key;
-    if(newkey == this.state.openmenu)
-      newkey = -1;
+  openSubmenu (key) {
+    let newkey = key
+    if (newkey === this.state.openmenu) {
+      newkey = -1
+    }
 
     this.setState({
       openmenu: newkey
-    });
+    })
   }
 
-  closemenu() {
-    if(this.state.newkey != -1)
+  closemenu () {
+    if (this.state.newkey !== -1) {
       this.setState({
         openmenu: -1
       })
+    }
   }
 
   render () {
@@ -338,45 +340,46 @@ class Main extends React.Component {
         onMouseMove={(e) => this.handleMouseMove(e)}
         onMouseUp={(e) => this.handleMouseUp(e)}
       >
-      <div styleName={config.is_win ? 'windows-app-header' : 'mac-app-header'}>
-        <div styleName='toolbar'>
-          <div styleName='toolbar-controls'>
-            <ul styleName="menubar-list">
-              {Object.keys(this.state.menu).map(key =>
-                <li
-                  styleName="menu-item"
-                  onBlur={this.closemenu}
-                  onClick={() => this.openSubmenu(key)}>
+        <div styleName={config.isWin ? 'windows-app-header' : 'mac-app-header'}>
+          <div styleName='toolbar'>
+            <div styleName='toolbar-controls'>
+              <ul styleName='menubar-list'>
+                {Object.keys(this.state.menu).map(key =>
+                  <li
+                    key={key}
+                    styleName='menu-item'
+                    onBlur={this.closemenu}
+                    onClick={() => this.openSubmenu(key)}>
                     {this.state.menu[key].label}
                     <ApplicationMenuDropdown
                       menu={this.state.menu[key].submenu}
-                      open={this.state.openmenu == key ? true : false} />
+                      open={this.state.openmenu === key} />
                   </li>
-              )}
-            </ul>
-          </div>
+                )}
+              </ul>
+            </div>
 
-          <div className='window-controls'
-            styleName='window-controls'>
-            <button styleName='minimize-button' onClick={this.minimizeWindow}>
-              <img styleName='icon'
-                src='../resources/icon/icon-minus.svg'
-              />
-            </button>
-            <button styleName='maxmize-button' onClick={this.maximizeWindow}>
-              <img styleName='icon'
-                src='../resources/icon/icon-plus.svg'
-              />
-            </button>
-            <button styleName='close-button' onClick={this.closeWindow}>
-              <img styleName='icon'
-                src='../resources/icon/icon-close.svg'
-              />
-            </button>
-          </div>
+            <div className='window-controls'
+              styleName='window-controls'>
+              <button styleName='minimize-button' onClick={this.minimizeWindow}>
+                <img styleName='icon'
+                  src='../resources/icon/icon-minus.svg'
+                />
+              </button>
+              <button styleName='maxmize-button' onClick={this.maximizeWindow}>
+                <img styleName='icon'
+                  src='../resources/icon/icon-plus.svg'
+                />
+              </button>
+              <button styleName='close-button' onClick={this.closeWindow}>
+                <img styleName='icon'
+                  src='../resources/icon/icon-close.svg'
+                />
+              </button>
+            </div>
 
+          </div>
         </div>
-      </div>
         <SideNav
           {..._.pick(this.props, [
             'dispatch',
@@ -401,7 +404,7 @@ class Main extends React.Component {
           style={{left: config.isSideNavFolded ? foldedNavigationWidth : this.state.navWidth}}
         >
           <div className='windows-check'
-            styleName={config.is_win ? 'windows' : 'not-windows'}
+            styleName={config.isWin ? 'windows' : 'not-windows'}
             >
             <TopBar style={{width: this.state.listWidth}}
               {..._.pick(this.props, [
@@ -439,7 +442,7 @@ class Main extends React.Component {
               ])}
               ignorePreviewPointerEvents={this.state.isRightSliderFocused}
             />
-        </div>
+          </div>
         </div>
       </div>
     )

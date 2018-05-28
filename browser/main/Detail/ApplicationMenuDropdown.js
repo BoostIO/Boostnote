@@ -15,10 +15,10 @@ class ApplicationMenuDropdown extends React.Component {
       open: props.open
     }
 
-    console.log(this.state.menu, "submenu");
+    console.log(this.state.menu, 'submenu')
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     this.setState({
       menu: nextProps.menu.items,
       open: nextProps.open
@@ -43,19 +43,26 @@ class ApplicationMenuDropdown extends React.Component {
     })
   }
 
-  clickMenu(key) {
-    this.state.menu[key].click();
+  clickMenu (key) {
+    this.state.menu[key].click()
   }
 
   render () {
     const { className } = this.props
 
     return (
-      <div className="ApplicationMenuDropdown"
-        styleName={this.state.open == true ? "root" : "root-hidden"}>
+      <div className='ApplicationMenuDropdown'
+        styleName={this.state.open === true ? 'root' : 'root-hidden'}>
         <ul
-          styleName="dropdown-items">
-          {Object.keys(this.state.menu).map(key =>  <li className="submenu-item" styleName="submenu-item" onClick={() => this.state.menu[key].click()}>{this.state.menu[key].label}</li>)}
+          styleName='dropdown-items'>
+          {Object.keys(this.state.menu).map(key =>
+            <li
+              key={key}
+              styleName='submenu-item'
+              onClick={() => this.state.menu[key].click()}>
+              {this.state.menu[key].label}
+            </li>
+          )}
         </ul>
       </div>
     )
