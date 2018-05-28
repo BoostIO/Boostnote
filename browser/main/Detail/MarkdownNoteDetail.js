@@ -417,7 +417,7 @@ class MarkdownNoteDetail extends React.Component {
     return (
       <div className='NoteDetail'
         style={this.props.style}
-        styleName='root'
+        styleName={this.props.config.is_win ? 'root-windows' : 'root'}
       >
 
         {location.pathname === '/trashed' ? trashTopBar : detailTopBar}

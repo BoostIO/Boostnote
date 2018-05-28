@@ -998,49 +998,53 @@ class NoteList extends React.Component {
 
     return (
       <div className='NoteList'
-        styleName='root'
+        styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
         style={this.props.style}
         onDrop={(e) => this.handleDrop(e)}
       >
-        <div styleName='control'>
-          <div styleName='control-sortBy'>
-            <i className='fa fa-angle-down' />
-            <select styleName='control-sortBy-select'
-              title={i18n.__('Select filter mode')}
-              value={config.sortBy}
-              onChange={(e) => this.handleSortByChange(e)}
-            >
-              <option title='Sort by update time' value='UPDATED_AT'>{i18n.__('Updated')}</option>
-              <option title='Sort by create time' value='CREATED_AT'>{i18n.__('Created')}</option>
-              <option title='Sort alphabetically' value='ALPHABETICAL'>{i18n.__('Alphabetically')}</option>
-            </select>
+        <div className='windows-check'
+          styleName={config.is_win ? 'windows' : 'not-windows'}
+          >
+          <div styleName='control'>
+            <div styleName='control-sortBy'>
+              <i className='fa fa-angle-down' />
+              <select styleName='control-sortBy-select'
+                title={i18n.__('Select filter mode')}
+                value={config.sortBy}
+                onChange={(e) => this.handleSortByChange(e)}
+              >
+                <option title='Sort by update time' value='UPDATED_AT'>{i18n.__('Updated')}</option>
+                <option title='Sort by create time' value='CREATED_AT'>{i18n.__('Created')}</option>
+                <option title='Sort alphabetically' value='ALPHABETICAL'>{i18n.__('Alphabetically')}</option>
+              </select>
+            </div>
+            <div styleName='control-button-area'>
+              <button title={i18n.__('Default View')} styleName={config.listStyle === 'DEFAULT'
+                  ? 'control-button--active'
+                  : 'control-button'
+                }
+                onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
+              >
+                <img styleName='iconTag' src='../resources/icon/icon-column.svg' />
+              </button>
+              <button title={i18n.__('Compressed View')} styleName={config.listStyle === 'SMALL'
+                  ? 'control-button--active'
+                  : 'control-button'
+                }
+                onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
+              >
+                <img styleName='iconTag' src='../resources/icon/icon-column-list.svg' />
+              </button>
+            </div>
           </div>
-          <div styleName='control-button-area'>
-            <button title={i18n.__('Default View')} styleName={config.listStyle === 'DEFAULT'
-                ? 'control-button--active'
-                : 'control-button'
-              }
-              onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
-            >
-              <img styleName='iconTag' src='../resources/icon/icon-column.svg' />
-            </button>
-            <button title={i18n.__('Compressed View')} styleName={config.listStyle === 'SMALL'
-                ? 'control-button--active'
-                : 'control-button'
-              }
-              onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
-            >
-              <img styleName='iconTag' src='../resources/icon/icon-column-list.svg' />
-            </button>
+          <div styleName='list'
+            ref='list'
+            tabIndex='-1'
+            onKeyDown={(e) => this.handleNoteListKeyDown(e)}
+            onKeyUp={this.handleNoteListKeyUp}
+          >
+            {noteList}
           </div>
-        </div>
-        <div styleName='list'
-          ref='list'
-          tabIndex='-1'
-          onKeyDown={(e) => this.handleNoteListKeyDown(e)}
-          onKeyUp={this.handleNoteListKeyUp}
-        >
-          {noteList}
         </div>
       </div>
     )

@@ -7,6 +7,7 @@ import SideNav from './SideNav'
 import TopBar from './TopBar'
 import NoteList from './NoteList'
 import Detail from './Detail'
+import ApplicationMenuDropdown from './Detail/ApplicationMenuDropdown'
 import dataApi from 'browser/main/lib/dataApi'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
@@ -20,6 +21,7 @@ import applyShortcuts from 'browser/main/lib/shortcutManager'
 const path = require('path')
 const electron = require('electron')
 const { remote } = electron
+const Menu = remote.Menu
 
 class Main extends React.Component {
 
@@ -39,10 +41,14 @@ class Main extends React.Component {
       isLeftSliderFocused: false,
       fullScreen: false,
       noteDetailWidth: 0,
-      mainBodyWidth: 0
+      mainBodyWidth: 0,
+      menu: Menu.getApplicationMenu().items,
+      openmenu: -1
     }
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
+    const is_win = global.process.platform == 'win32';
+    ConfigManager.set({is_win: is_win})
   }
 
   getChildContext () {
@@ -213,6 +219,12 @@ class Main extends React.Component {
       })
     }
 
+    if(this.state.openmenu !== -1) {
+      this.setState({
+        openmenu: -1
+      })
+    }
+
     // Change width of SideNav component.
     if (this.state.isLeftSliderFocused) {
       this.setState({
@@ -284,6 +296,35 @@ class Main extends React.Component {
     noteList.style.display = 'inline'
   }
 
+  minimizeWindow(e) {
+    remote.getCurrentWindow().minimize();
+  }
+
+  maximizeWindow(e) {
+    remote.getCurrentWindow().isMaximized() ? remote.getCurrentWindow().unmaxmize() : remote.getCurrentWindow().maximize();
+  }
+
+  closeWindow(e) {
+    remote.getCurrentWindow().close();
+  }
+
+  openSubmenu(key) {
+    let newkey = key;
+    if(newkey == this.state.openmenu)
+      newkey = -1;
+
+    this.setState({
+      openmenu: newkey
+    });
+  }
+
+  closemenu() {
+    if(this.state.newkey != -1)
+      this.setState({
+        openmenu: -1
+      })
+  }
+
   render () {
     const { config } = this.props
 
@@ -297,6 +338,39 @@ class Main extends React.Component {
         onMouseMove={(e) => this.handleMouseMove(e)}
         onMouseUp={(e) => this.handleMouseUp(e)}
       >
+      <div className={config.is_win ? 'windows-app-header' : 'mac-app-header'} styleName={config.is_win ? 'windows-app-header' : 'mac-app-header'}>
+        <div className='toolbar'
+          styleName='toolbar'>
+          <div className='toolbar-controls'
+            styleName='toolbar-controls'>
+            <ul className="menubar-list" styleName="menubar-list">
+              {Object.keys(this.state.menu).map(key => {
+                return <li className="menuItem" styleName="menu-item" onBlur={this.closemenu} onClick={() => this.openSubmenu(key)}>{this.state.menu[key].label}<ApplicationMenuDropdown menu={this.state.menu[key].submenu} open={this.state.openmenu == key ? true : false}></ApplicationMenuDropdown></li>;
+              })}
+            </ul>
+          </div>
+
+          <div className='window-controls'
+            styleName='window-controls'>
+            <button className='minimize-button' styleName='minimize-button' onClick={this.minimizeWindow}>
+              <img styleName='icon'
+                src='../resources/icon/icon-minus.svg'
+              />
+            </button>
+            <button className='maximize-button' styleName='maxmize-button' onClick={this.maximizeWindow}>
+              <img styleName='icon'
+                src='../resources/icon/icon-plus.svg'
+              />
+            </button>
+            <button className='close-button' styleName='close-button' onClick={this.closeWindow}>
+              <img styleName='icon'
+                src='../resources/icon/icon-close.svg'
+              />
+            </button>
+          </div>
+
+        </div>
+      </div>
         <SideNav
           {..._.pick(this.props, [
             'dispatch',
@@ -320,42 +394,46 @@ class Main extends React.Component {
           ref='body'
           style={{left: config.isSideNavFolded ? foldedNavigationWidth : this.state.navWidth}}
         >
-          <TopBar style={{width: this.state.listWidth}}
-            {..._.pick(this.props, [
-              'dispatch',
-              'config',
-              'data',
-              'params',
-              'location'
-            ])}
-          />
-          <NoteList style={{width: this.state.listWidth}}
-            {..._.pick(this.props, [
-              'dispatch',
-              'data',
-              'config',
-              'params',
-              'location'
-            ])}
-          />
-          <div styleName={this.state.isRightSliderFocused ? 'slider-right--active' : 'slider-right'}
-            style={{left: this.state.listWidth - 1}}
-            onMouseDown={(e) => this.handleRightSlideMouseDown(e)}
-            draggable='false'
-          >
-            <div styleName='slider-hitbox' />
-          </div>
-          <Detail
-            style={{left: this.state.listWidth}}
-            {..._.pick(this.props, [
-              'dispatch',
-              'data',
-              'config',
-              'params',
-              'location'
-            ])}
-            ignorePreviewPointerEvents={this.state.isRightSliderFocused}
-          />
+          <div className='windows-check'
+            styleName={config.is_win ? 'windows' : 'not-windows'}
+            >
+            <TopBar style={{width: this.state.listWidth}}
+              {..._.pick(this.props, [
+                'dispatch',
+                'config',
+                'data',
+                'params',
+                'location'
+              ])}
+            />
+            <NoteList style={{width: this.state.listWidth}}
+              {..._.pick(this.props, [
+                'dispatch',
+                'data',
+                'config',
+                'params',
+                'location'
+              ])}
+            />
+            <div styleName={this.state.isRightSliderFocused ? 'slider-right--active' : 'slider-right'}
+              style={{left: this.state.listWidth - 1}}
+              onMouseDown={(e) => this.handleRightSlideMouseDown(e)}
+              draggable='false'
+            >
+              <div styleName='slider-hitbox' />
+            </div>
+            <Detail
+              style={{left: this.state.listWidth}}
+              {..._.pick(this.props, [
+                'dispatch',
+                'data',
+                'config',
+                'params',
+                'location'
+              ])}
+              ignorePreviewPointerEvents={this.state.isRightSliderFocused}
+            />
+        </div>
         </div>
       </div>
     )
