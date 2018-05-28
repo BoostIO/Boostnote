@@ -53,11 +53,9 @@ class ApplicationMenuDropdown extends React.Component {
     return (
       <div className="ApplicationMenuDropdown"
         styleName={this.state.open == true ? "root" : "root-hidden"}>
-        <ul className="dropdown-items"
+        <ul
           styleName="dropdown-items">
-          {Object.keys(this.state.menu).map(key => {
-            return <li className="submenu-item" styleName="submenu-item" onClick={() => this.state.menu[key].click()}>{this.state.menu[key].label}</li>
-          })}
+          {Object.keys(this.state.menu).map(key =>  <li className="submenu-item" styleName="submenu-item" onClick={() => this.state.menu[key].click()}>{this.state.menu[key].label}</li>)}
         </ul>
       </div>
     )

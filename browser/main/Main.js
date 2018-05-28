@@ -48,7 +48,7 @@ class Main extends React.Component {
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
     const is_win = global.process.platform == 'win32';
-    ConfigManager.set({is_win: is_win})
+    ConfigManager.set({is_win: !is_win})
   }
 
   getChildContext () {
@@ -338,31 +338,37 @@ class Main extends React.Component {
         onMouseMove={(e) => this.handleMouseMove(e)}
         onMouseUp={(e) => this.handleMouseUp(e)}
       >
-      <div className={config.is_win ? 'windows-app-header' : 'mac-app-header'} styleName={config.is_win ? 'windows-app-header' : 'mac-app-header'}>
-        <div className='toolbar'
-          styleName='toolbar'>
-          <div className='toolbar-controls'
-            styleName='toolbar-controls'>
-            <ul className="menubar-list" styleName="menubar-list">
-              {Object.keys(this.state.menu).map(key => {
-                return <li className="menuItem" styleName="menu-item" onBlur={this.closemenu} onClick={() => this.openSubmenu(key)}>{this.state.menu[key].label}<ApplicationMenuDropdown menu={this.state.menu[key].submenu} open={this.state.openmenu == key ? true : false}></ApplicationMenuDropdown></li>;
-              })}
+      <div styleName={config.is_win ? 'windows-app-header' : 'mac-app-header'}>
+        <div styleName='toolbar'>
+          <div styleName='toolbar-controls'>
+            <ul styleName="menubar-list">
+              {Object.keys(this.state.menu).map(key =>
+                <li
+                  styleName="menu-item"
+                  onBlur={this.closemenu}
+                  onClick={() => this.openSubmenu(key)}>
+                    {this.state.menu[key].label}
+                    <ApplicationMenuDropdown
+                      menu={this.state.menu[key].submenu}
+                      open={this.state.openmenu == key ? true : false} />
+                  </li>
+              )}
             </ul>
           </div>
 
           <div className='window-controls'
             styleName='window-controls'>
-            <button className='minimize-button' styleName='minimize-button' onClick={this.minimizeWindow}>
+            <button styleName='minimize-button' onClick={this.minimizeWindow}>
               <img styleName='icon'
                 src='../resources/icon/icon-minus.svg'
               />
             </button>
-            <button className='maximize-button' styleName='maxmize-button' onClick={this.maximizeWindow}>
+            <button styleName='maxmize-button' onClick={this.maximizeWindow}>
               <img styleName='icon'
                 src='../resources/icon/icon-plus.svg'
               />
             </button>
-            <button className='close-button' styleName='close-button' onClick={this.closeWindow}>
+            <button styleName='close-button' onClick={this.closeWindow}>
               <img styleName='icon'
                 src='../resources/icon/icon-close.svg'
               />
