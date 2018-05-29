@@ -526,7 +526,7 @@ export default class MarkdownPreview extends React.Component {
     e.stopPropagation()
 
     const href = e.target.href
-    if (href.match(/^http/i)) {
+    if (href.match(/^(http|file)/i)) {
       shell.openExternal(href)
       return
     }
