@@ -28,6 +28,7 @@ class UiTab extends React.Component {
 
   componentDidMount () {
     CodeMirror.autoLoadMode(this.codeMirrorInstance.getCodeMirror(), 'javascript')
+    CodeMirror.autoLoadMode(this.refs.previewAdditionalStyles.getCodeMirror(), 'css')
     this.handleSettingDone = () => {
       this.setState({UiAlert: {
         type: 'success',
@@ -47,6 +48,18 @@ class UiTab extends React.Component {
   componentWillUnmount () {
     ipc.removeListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.removeListener('APP_SETTING_ERROR', this.handleSettingError)
+  }
+
+  handleEditorAdditionalStylesChange (e) {
+    const { config } = this.state
+    config.editor.additionalStyles = e
+    this.setState({ config })
+  }
+
+  handlePreviewAdditionalStylesChange (e) {
+    const { config } = this.state
+    config.preview.additionalStyles = e
+    this.setState({ config })
   }
 
   handleUIChange (e) {
@@ -75,6 +88,7 @@ class UiTab extends React.Component {
         theme: this.refs.editorTheme.value,
         fontSize: this.refs.editorFontSize.value,
         fontFamily: this.refs.editorFontFamily.value,
+        additionalStyles: this.state.config.editor.additionalStyles,
         indentType: this.refs.editorIndentType.value,
         indentSize: this.refs.editorIndentSize.value,
         enableRulers: this.refs.enableEditorRulers.value === 'true',
@@ -88,6 +102,7 @@ class UiTab extends React.Component {
       preview: {
         fontSize: this.refs.previewFontSize.value,
         fontFamily: this.refs.previewFontFamily.value,
+        additionalStyles: this.state.config.preview.additionalStyles,
         codeBlockTheme: this.refs.previewCodeBlockTheme.value,
         lineNumber: this.refs.previewLineNumber.checked,
         latexInlineOpen: this.refs.previewLatexInlineOpen.value,
@@ -433,6 +448,25 @@ class UiTab extends React.Component {
             </div>
           </div>
           <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Preview Additional CSS Styles')}
+            </div>
+            <div styleName='group-section-control'>
+              <div styleName='code-mirror'>
+                <ReactCodeMirror
+                  ref='previewAdditionalStyles'
+                  onChange={e => this.handlePreviewAdditionalStylesChange(e)}
+                  value={config.preview.additionalStyles}
+                  options={{
+                    lineNumbers: true,
+                    mode: 'css',
+                    theme: codemirrorTheme
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div styleName='group-section'>
             <div styleName='group-section-label'>{i18n.__('Code block Theme')}</div>
             <div styleName='group-section-control'>
               <select value={config.preview.codeBlockTheme}
@@ -591,3 +625,4 @@ UiTab.propTypes = {
 }
 
 export default CSSModules(UiTab, styles)
+

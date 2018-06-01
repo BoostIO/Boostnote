@@ -49,6 +49,7 @@ export const DEFAULT_CONFIG = {
   preview: {
     fontSize: '14',
     fontFamily: win ? 'Segoe UI' : 'Lato',
+    additionalStyles: 'body {\n  \n\}',
     codeBlockTheme: 'dracula',
     lineNumber: true,
     latexInlineOpen: '$',
@@ -81,7 +82,6 @@ function validate (config) {
 }
 
 function _save (config) {
-  console.log(config)
   window.localStorage.setItem('config', JSON.stringify(config))
 }
 
