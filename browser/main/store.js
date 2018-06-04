@@ -310,6 +310,7 @@ function data (state = defaultDataMap(), action) {
         }
         folderNoteSet.add(uniqueKey)
 
+        if (note.tags === undefined) return 
         note.tags.forEach((tag) => {
           const tagNoteSet = getOrInitItem(state.tagNoteMap, tag)
           tagNoteSet.add(uniqueKey)
@@ -347,6 +348,7 @@ function data (state = defaultDataMap(), action) {
           const noteKey = note.key
           state.noteMap.delete(noteKey)
           state.starredSet.delete(noteKey)
+          if (note.tags === undefined) return
           note.tags.forEach((tag) => {
             let tagNoteSet = state.tagNoteMap.get(tag)
             tagNoteSet = new Set(tagNoteSet)
@@ -442,6 +444,7 @@ function updateTagChanges (oldNote, note, state, uniqueKey) {
 
 function assignToTags (tags, state, uniqueKey) {
   state.tagNoteMap = new Map(state.tagNoteMap)
+  if (tags === undefined) return
   tags.forEach((tag) => {
     const tagNoteList = getOrInitItem(state.tagNoteMap, tag)
     tagNoteList.add(uniqueKey)
