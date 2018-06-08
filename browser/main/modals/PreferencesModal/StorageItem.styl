@@ -3,6 +3,7 @@
   margin-bottom 15px
 
 .header
+  display flex
   height 35px
   line-height 30px
   padding 0 10px 5px
@@ -10,12 +11,23 @@
   border-bottom $default-border
   margin-bottom 5px
 
+.header-icon
+  margin-top 6px
+  margin-left 2px
+
 .header-label
-  float left
+  display flex
+  flex 1
+  padding-top 0px
+  line-height 25px
+  overflow-y auto
   cursor pointer
   &:hover
     .header-label-editButton
       opacity 1
+
+.header-label-name
+  margin-left 10px
 
 .header-label-path
   color $ui-inactive-text-color
@@ -29,16 +41,19 @@
   @extend .header-label
 
 .header-label-input
+  display flex
+  flex 1
   height 25px
   box-sizing border-box
   vertical-align middle
   border $ui-border
   border-radius 2px
-  padding 0 5px
+  padding 10px 5px
+  margin 0 10px 0 10px
   outline none
 
 .header-control
-  float right
+  display flex
 
 .header-control-button
   width 30px

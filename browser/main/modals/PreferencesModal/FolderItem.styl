@@ -1,4 +1,5 @@
 .folderItem
+  display flex
   height 35px
   box-sizing border-box
   padding 2.5px 15px
@@ -8,7 +9,7 @@
 .folderItem-drag-handle
   height 35px
   border none
-  padding 0 10px
+  padding-left 10px
   line-height 35px
   float left
   cursor row-resize
@@ -18,7 +19,10 @@
   border-left solid 2px transparent
   padding 0 10px
   line-height 30px
-  float left
+  display flex
+  overflow-y hidden
+  flex 1
+
 .folderItem-left-danger
   color $danger-color
   font-weight bold
@@ -39,8 +43,7 @@
   vertical-align middle
   border $ui-border
   border-radius 2px
-  margin-right 5px
-  margin-left -15px
+  margin 2px 5px 0 -10px
 
 .folderItem-left-nameInput
   height 25px
@@ -48,11 +51,12 @@
   vertical-align middle
   border $ui-border
   border-radius 2px
-  padding 0 5px
+  margin-top 2px
   outline none
+  width 100%
 
 .folderItem-right
-  float right
+  display flex
 
 .folderItem-right-button
   vertical-align middle
