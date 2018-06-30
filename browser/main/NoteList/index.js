@@ -539,7 +539,7 @@ class NoteList extends React.Component {
         }
       }
     }
-    menu.popup()
+    menu.popup({})
   }
 
   updateSelectedNotes (updateFunc, cleanSelection = true) {

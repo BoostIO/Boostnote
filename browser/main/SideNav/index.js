@@ -257,7 +257,7 @@ class SideNav extends React.Component {
     const menu = Menu.buildFromTemplate([
       { label: i18n.__('Empty Trash'), click: () => this.emptyTrash(trashedNotes) }
     ])
-    menu.popup()
+    menu.popup({})
   }
 
   render () {

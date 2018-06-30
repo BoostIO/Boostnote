@@ -32,7 +32,7 @@ class SnippetList extends React.Component {
         this.deleteSnippet(snippet)
       }
     }))
-    menu.popup()
+    menu.popup({})
   }
 
   deleteSnippet (snippet) {

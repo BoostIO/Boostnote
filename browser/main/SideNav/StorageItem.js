@@ -41,7 +41,7 @@ class StorageItem extends React.Component {
       }
     ])
 
-    menu.popup()
+    menu.popup({})
   }
 
   handleUnlinkStorageClick (e) {
@@ -124,7 +124,7 @@ class StorageItem extends React.Component {
       }
     ])
 
-    menu.popup()
+    menu.popup({})
   }
 
   handleRenameFolderClick (e, folder) {
