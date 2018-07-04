@@ -153,8 +153,69 @@ export default class CodeEditor extends React.Component {
         'Cmd-T': function (cm) {
           // Do nothing
         },
+        'Ctrl-I': function(cm) {
+          if(cm.somethingSelected()) {
+            let selection = cm.getSelection()
+            let str = selection.trim()
+            let index = selection.indexOf(str)
+
+            if(str.length === 0 || str.match(/\n\s*\n/) !== null)
+              return
+
+            let newString 
+            let boldAndItalic = str.match(/^\*\*\*(.*)\*\*\*$/)
+            let bold = str.match(/^\*\*(.*)\*\*$/)
+            let italic = str.match(/^\*(.*)\*$/)
+            if(boldAndItalic !== null) {
+              newString = boldAndItalic[1]
+              newString = `**${newString}**`
+            } else if(bold !== null) {
+              newString = bold[1]
+              newString = `***${newString}***`
+            } else if(italic !== null) {
+              newString = italic[1]
+              newString = newString
+            } else {
+              newString = `*${str}*`
+            }
+
+            let newSelection = selection.substr(0, index) + newString + selection.substr(index + selection.length)
+            cm.replaceSelection(newSelection)
+          }
+        },
+        'Ctrl-B': function(cm) {
+          if(cm.somethingSelected()) {
+            let selection = cm.getSelection()
+            let str = selection.trim()
+            let index = selection.indexOf(str)
+
+            if(str.length === 0 || str.match(/\n\s*\n/) !== null)
+              return
+
+            let newString 
+            let boldAndItalic = str.match(/^\*\*\*(.*)\*\*\*$/)
+            let bold = str.match(/^\*\*(.*)\*\*$/)
+            let italic = str.match(/^\*(.*)\*$/)
+            if(boldAndItalic !== null) {
+              newString = boldAndItalic[1]
+              newString = `*${newString}*`
+            } else if(bold !== null) {
+              newString = bold[1]
+              newString = newString
+            } else if(italic !== null) {
+              newString = italic[1]
+              newString = `***${newString}***`
+            } else {
+              newString = `**${str}**`
+            }
+
+            let newSelection = selection.substr(0, index) + newString + selection.substr(index + selection.length)
+            cm.replaceSelection(newSelection)
+          }
+        },
         Enter: 'boostNewLineAndIndentContinueMarkdownList',
         'Ctrl-C': (cm) => {
+          console.log('here', cm)
           if (cm.getOption('keyMap').substr(0, 3) === 'vim') {
             document.execCommand('copy')
           }
