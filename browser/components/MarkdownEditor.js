@@ -267,6 +267,7 @@ class MarkdownEditor extends React.Component {
           fetchUrlTitle={config.editor.fetchUrlTitle}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
+          spellCheck
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'

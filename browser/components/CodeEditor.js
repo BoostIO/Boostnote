@@ -9,9 +9,12 @@ import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
 import crypto from 'crypto'
 import consts from 'browser/lib/consts'
+import styles from '../components/CodeEditor.styl'
 import fs from 'fs'
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, remote } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
+const spellcheck = require('browser/lib/spellcheck')
+const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -23,7 +26,7 @@ export default class CodeEditor extends React.Component {
     super(props)
 
     this.scrollHandler = _.debounce(this.handleScroll.bind(this), 100, {leading: false, trailing: true})
-    this.changeHandler = (e) => this.handleChange(e)
+    this.changeHandler = (editor, changeObject) => this.handleChange(editor, changeObject)
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
     }
@@ -48,6 +51,13 @@ export default class CodeEditor extends React.Component {
     }
     this.searchHandler = (e, msg) => this.handleSearch(msg)
     this.searchState = null
+
+    this.contextMenuHandler = function (editor, event) {
+      const menu = buildEditorContextMenu(editor, event)
+      if (menu != null) {
+        setTimeout(() => menu.popup(remote.getCurrentWindow()), 30)
+      }
+    }
   }
 
   handleSearch (msg) {
@@ -174,6 +184,7 @@ export default class CodeEditor extends React.Component {
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
     this.editor.on('paste', this.pasteHandler)
+    this.editor.on('contextmenu', this.contextMenuHandler)
     eventEmitter.on('top:search', this.searchHandler)
 
     eventEmitter.emit('code:init')
@@ -187,6 +198,10 @@ export default class CodeEditor extends React.Component {
     CodeMirror.Vim.defineEx('wq', 'wq', this.quitEditor)
     CodeMirror.Vim.defineEx('qw', 'qw', this.quitEditor)
     CodeMirror.Vim.map('ZZ', ':q', 'normal')
+
+    if (this.props.spellCheck) {
+      this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+    }
   }
 
   expandSnippet (line, cursor, cm, snippets) {
@@ -267,8 +282,10 @@ export default class CodeEditor extends React.Component {
     this.editor.off('paste', this.pasteHandler)
     eventEmitter.off('top:search', this.searchHandler)
     this.editor.off('scroll', this.scrollHandler)
+    this.editor.off('contextmenu', this.contextMenuHandler)
     const editorTheme = document.getElementById('editorTheme')
     editorTheme.removeEventListener('load', this.loadStyleHandler)
+    spellcheck.setLanguage(null, spellcheck.SPELLCHECK_DISABLED)
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -324,10 +341,11 @@ export default class CodeEditor extends React.Component {
     CodeMirror.autoLoadMode(this.editor, syntax.mode)
   }
 
-  handleChange (e) {
-    this.value = this.editor.getValue()
+  handleChange (editor, changeObject) {
+    spellcheck.liveSpellcheck(editor, changeObject)
+    this.value = editor.getValue()
     if (this.props.onChange) {
-      this.props.onChange(e)
+      this.props.onChange(editor)
     }
   }
 
@@ -426,7 +444,7 @@ export default class CodeEditor extends React.Component {
       const value = editor.getValue()
       const cursor = editor.getCursor()
       const newValue = value.replace(taggedUrl, replacement)
-      const newCursor = Object.assign({}, cursor, { ch: cursor.ch + newValue.length - value.length })
+      const newCursor = Object.assign({}, cursor, {ch: cursor.ch + newValue.length - value.length})
       editor.setValue(newValue)
       editor.setCursor(newCursor)
     }
@@ -519,6 +537,24 @@ export default class CodeEditor extends React.Component {
       />
     )
   }
+
+  createSpellCheckPanel () {
+    const panel = document.createElement('div')
+    panel.className = 'panel bottom'
+    const dropdown = document.createElement('select')
+    dropdown.title = 'Spellcheck'
+    dropdown.className = styles['spellcheck-select']
+    dropdown.addEventListener('change', (e) => spellcheck.setLanguage(this.editor, dropdown.value))
+    const options = spellcheck.getAvailableDictionaries()
+    for (const op of options) {
+      const option = document.createElement('option')
+      option.value = op.value
+      option.innerHTML = op.label
+      dropdown.appendChild(option)
+    }
+    panel.appendChild(dropdown)
+    return panel
+  }
 }
 
 CodeEditor.propTypes = {
@@ -529,7 +565,8 @@ CodeEditor.propTypes = {
   className: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  spellCheck: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {
@@ -539,5 +576,6 @@ CodeEditor.defaultProps = {
   fontSize: 14,
   fontFamily: 'Monaco, Consolas',
   indentSize: 4,
-  indentType: 'space'
+  indentType: 'space',
+  spellCheck: false
 }

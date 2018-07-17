@@ -81,6 +81,9 @@ function createAttachmentDestinationFolder (destinationStoragePath, noteKey) {
  * @param noteKey Key of the current note
  */
 function migrateAttachments (renderedHTML, storagePath, noteKey) {
+  if (renderedHTML == null || storagePath == null || noteKey == null) {
+    return
+  }
   if (sander.existsSync(path.join(storagePath, 'images'))) {
     const attachments = getAttachmentsInContent(renderedHTML) || []
     if (attachments !== []) {

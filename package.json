@@ -96,6 +96,7 @@
     "sander": "^0.5.1",
     "sanitize-html": "^1.18.2",
     "striptags": "^2.2.1",
+    "typo-js": "^1.0.3",
     "unique-slug": "2.0.0",
     "uuid": "^3.2.1"
   },

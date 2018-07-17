@@ -152,5 +152,6 @@
 	"Allow styles": "Accepter les styles",
 	"Allow dangerous html tags": "Accepter les tags html dangereux",
 	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convertir des flèches textuelles en jolis signes. ⚠ Cela va interferérer avec les éventuels commentaires HTML dans votre Markdown.",
-	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ Vous avez collé un lien qui référence une pièce-jointe qui n'a pas pu être récupéré dans le dossier de stockage de la note. Coller des liens qui font référence à des pièces-jointes ne fonctionne que si la source et la destination et la même. Veuillez plutôt utiliser du Drag & Drop ! ⚠"
+	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ Vous avez collé un lien qui référence une pièce-jointe qui n'a pas pu être récupéré dans le dossier de stockage de la note. Coller des liens qui font référence à des pièces-jointes ne fonctionne que si la source et la destination et la même. Veuillez plutôt utiliser du Drag & Drop ! ⚠",
+    "Disabled": "Disabled"
 }
