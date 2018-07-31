@@ -444,7 +444,7 @@ export default class MarkdownPreview extends React.Component {
     let { value, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
-    
+
     const renderedHTML = this.markdown.render(value)
     attachmentManagement.migrateAttachments(value, storagePath, noteKey)
     this.refs.root.contentWindow.document.body.innerHTML = attachmentManagement.fixLocalURLS(renderedHTML, storagePath)
