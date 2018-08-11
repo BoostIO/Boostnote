@@ -142,6 +142,7 @@ class MarkdownEditor extends React.Component {
     const idMatch = /checkbox-([0-9]+)/
     const checkedMatch = /\[x\]/i
     const uncheckedMatch = /\[ \]/
+    const doneMatch = /\*@done(.*)\)\*/
     if (idMatch.test(e.target.getAttribute('id'))) {
       const lineIndex = parseInt(e.target.getAttribute('id').match(idMatch)[1], 10) - 1
       const lines = this.refs.code.value
@@ -151,9 +152,12 @@ class MarkdownEditor extends React.Component {
 
       if (targetLine.match(checkedMatch)) {
         lines[lineIndex] = targetLine.replace(checkedMatch, '[ ]')
+        lines[lineIndex] = lines[lineIndex].replace(doneMatch, '')
       }
       if (targetLine.match(uncheckedMatch)) {
+        const currentDate = new Date()
         lines[lineIndex] = targetLine.replace(uncheckedMatch, '[x]')
+        lines[lineIndex] += ' *@done (' + currentDate.toLocaleString() + ')*'
       }
       this.refs.code.setValue(lines.join('\n'))
     }
