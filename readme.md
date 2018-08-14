@@ -1,4 +1,4 @@
-:mega: We've launched a blogging platform with markdown called **[Boostlog](https://boostlog.io/)**.
+:mega: The Boostnote team launches [IssueHunt](https://issuehunt.io/) for sustainable open-source ecosystem.
 
 ![Boostnote app screenshot](./resources/repository/top.png)
 
@@ -19,13 +19,15 @@ Thank you to all the people who already contributed to Boostnote!
 <a href="https://github.com/BoostIO/Boostnote/graphs/contributors"><img src="https://opencollective.com/boostnoteio/contributors.svg?width=890" /></a>
 
 ## Supporting Boostnote
-Boostnote is an open source project. It's an independent project with its ongoing development made possible entirely thanks to the support by these awesome [backers](https://github.com/BoostIO/Boostnote/blob/master/Backers.md). If you'd like to join them, please consider:
-- [Become a backer or sponsor on Open Collective.](https://opencollective.com/boostnoteio)
+Boostnote is an open source project. It's an independent project with its ongoing development made possible entirely thanks to the support by these awesome backers. 
+
+Any issues on Boostnote can be funded by anyone and that money will be distributed to contributors and maintainers. If you'd like to join them, please consider:
+- [Become a backer on IssueHunt](https://issuehunt.io/repos/53266139).
 
 ## Community
 - [Facebook Group](https://www.facebook.com/groups/boostnote/)
 - [Twitter](https://twitter.com/boostnoteapp)
-- [Slack Group](https://join.slack.com/t/boostnote-group/shared_invite/enQtMzUxODgwMTc2MDg3LTgwZjA2Zjg3NjFlMzczNTVjNGMzZTk0MmIyNmE3ZjEwYTNhMTA0Y2Y4NDNlNWU4YjZlNmJiNGZhNDViOTA1ZjM)
+- [Slack Group](https://join.slack.com/t/boostnote-group/shared_invite/enQtMzkxOTk4ODkyNzc0LThkNmMzY2VlZjVhYTNiYjE5YjQyZGVjNTJlYTY1OGMyZTFjNGU5YTUyYjUzOWZhYTU4OTVlNDYyNDFjYWMzNDM)
 - [Blog](https://boostlog.io/tags/boostnote)
 - [Reddit](https://www.reddit.com/r/Boostnote/)
 

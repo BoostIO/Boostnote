@@ -69,3 +69,14 @@ body[data-theme="dark"]
     navDarkButtonColor()
     border-color $ui-dark-borderColor
     border-left 1px solid $ui-dark-borderColor
+
+body[data-theme="monokai"]
+   navButtonColor()
+  .zoom
+    border-color $ui-dark-borderColor
+    color $ui-monokai-text-color
+    &:hover
+      transition 0.15s
+      color $ui-monokai-active-color
+    &:active
+      color $ui-monokai-active-color

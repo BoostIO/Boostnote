@@ -55,10 +55,14 @@ class MarkdownNoteDetail extends React.Component {
 
   componentDidMount () {
     ee.on('topbar:togglelockbutton', this.toggleLockButton)
+    ee.on('topbar:togglemodebutton', () => {
+      const reversedType = this.state.editorType === 'SPLIT' ? 'EDITOR_PREVIEW' : 'SPLIT'
+      this.handleSwitchMode(reversedType)
+    })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.note.key !== this.props.note.key && !this.isMovingNote) {
+    if (nextProps.note.key !== this.props.note.key && !this.state.isMovingNote) {
       if (this.saveQueue != null) this.saveNow()
       this.setState({
         note: Object.assign({}, nextProps.note)
@@ -273,6 +277,7 @@ class MarkdownNoteDetail extends React.Component {
 
   handleSwitchMode (type) {
     this.setState({ editorType: type }, () => {
+      this.focus()
       const newConfig = Object.assign({}, this.props.config)
       newConfig.editor.type = type
       ConfigManager.set(newConfig)
@@ -289,6 +294,7 @@ class MarkdownNoteDetail extends React.Component {
         config={config}
         value={note.content}
         storageKey={note.storage}
+        noteKey={note.key}
         onChange={this.handleUpdateContent.bind(this)}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
       />
@@ -298,6 +304,7 @@ class MarkdownNoteDetail extends React.Component {
         config={config}
         value={note.content}
         storageKey={note.storage}
+        noteKey={note.key}
         onChange={this.handleUpdateContent.bind(this)}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
       />

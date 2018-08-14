@@ -48,10 +48,13 @@ const checkboxes = `
 
 const smartQuotes = 'This is a "QUOTE".'
 
+const breaks = 'This is the first line.\nThis is the second line.'
+
 export default {
   basic,
   codeblock,
   katex,
   checkboxes,
-  smartQuotes
+  smartQuotes,
+  breaks
 }

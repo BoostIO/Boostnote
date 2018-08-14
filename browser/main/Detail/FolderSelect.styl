@@ -133,3 +133,29 @@ body[data-theme="dark"]
       color $ui-dark-button--active-color
   .search-optionList-item-name-surfix
     color $ui-dark-inactive-text-color
+
+body[data-theme="monokai"]
+ .root
+    color $ui-dark-text-color
+    &:hover
+      color white
+      background-color $ui-monokai-button--hover-backgroundColor
+      border-color $ui-monokai-borderColor
+
+  .search-optionList
+    color white
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-button-backgroundColor
+
+  .search-optionList-item
+    &:hover
+      background-color lighten($ui-monokai-button--hover-backgroundColor, 15%)
+
+  .search-optionList-item--active
+    background-color $ui-monokai-button--active-backgroundColor
+    color $ui-monokai-button--active-color
+    &:hover
+      background-color $ui-monokai-button--active-backgroundColor
+      color $ui-monokai-button--active-color
+  .search-optionList-item-name-surfix
+    color $ui-monokai-inactive-text-color

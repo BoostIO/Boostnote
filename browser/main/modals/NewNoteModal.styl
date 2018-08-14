@@ -81,3 +81,19 @@ body[data-theme="solarized-dark"]
   .description
     color $ui-solarized-dark-text-color
 
+body[data-theme="monokai"]
+  .root
+    background-color transparent
+
+  .header
+    color $ui-monokai-text-color
+
+  .control-button
+    border-color $ui-monokai-borderColor
+    color $ui-monokai-text-color
+    background-color transparent
+    &:focus
+      colorDarkPrimaryButton()
+
+  .description
+    color $ui-monokai-text-color

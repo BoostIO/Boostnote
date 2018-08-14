@@ -1,19 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TagListItem renders correctly 1`] = `
-<button
-  className="tagList-item"
-  onClick={[Function]}
+<div
+  className="tagList-itemContainer"
 >
-  <span
-    className="tagList-item-name"
+  <div
+    className="tagList-itemNarrow"
+  />
+  <button
+    className="tagList-item"
+    onClick={[Function]}
   >
-    # Test
     <span
-      className="tagList-item-count"
+      className="tagList-item-name"
     >
-       
+      # Test
+      <span
+        className="tagList-item-count"
+      />
     </span>
-  </span>
-</button>
+  </button>
+</div>
 `;

@@ -126,3 +126,26 @@ body[data-theme="solarized-dark"]
 
   .folderItem-right-dangerButton
     colorSolarizedDarkPrimaryButton()
+
+body[data-theme="monokai"]
+  .folderItem
+    &:hover
+      background-color $ui-monokai-button-backgroundColor
+
+  .folderItem-left-danger
+    color $danger-color
+
+  .folderItem-left-key
+    color $ui-dark-inactive-text-color
+
+  .folderItem-left-colorButton
+    colorMonokaiPrimaryButton()
+
+  .folderItem-right-button
+    colorMonokaiPrimaryButton()
+
+  .folderItem-right-confirmButton
+    colorMonokaiPrimaryButton()
+
+  .folderItem-right-dangerButton
+    colorMonokaiPrimaryButton()

@@ -156,8 +156,7 @@ class TopBar extends React.Component {
     if (this.state.isSearching) {
       el.blur()
     } else {
-      el.focus()
-      el.setSelectionRange(0, el.value.length)
+      el.select()
     }
   }
 

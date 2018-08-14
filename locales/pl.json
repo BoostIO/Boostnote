@@ -62,6 +62,7 @@
 	"LaTeX Inline Close Delimiter": "LaTeX Inline Close Delimiter",
 	"LaTeX Block Open Delimiter": "LaTeX Block Open Delimiter",
 	"LaTeX Block Close Delimiter": "LaTeX Block Close Delimiter",
+	"PlantUML Server": "PlantUML Server",
 	"Community": "Community",
 	"Subscribe to Newsletter": "Subscribe to Newsletter",
 	"GitHub": "GitHub",
@@ -148,5 +149,7 @@
 	"Sanitization": "Sanitization",
 	"Only allow secure html tags (recommended)": "Only allow secure html tags (recommended)",
 	"Allow styles": "Allow styles",
-	"Allow dangerous html tags": "Allow dangerous html tags"
+	"Allow dangerous html tags": "Allow dangerous html tags",
+	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.",
+	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
 }

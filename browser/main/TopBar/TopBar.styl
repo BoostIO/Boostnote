@@ -234,3 +234,25 @@ body[data-theme="solarized-dark"]
     input
       background-color $ui-solarized-dark-noteList-backgroundColor
       color $ui-solarized-dark-text-color
+
+body[data-theme="monokai"]
+  .root, .root--expanded
+    background-color $ui-monokai-noteList-backgroundColor
+
+  .control
+    border-color $ui-monokai-borderColor
+  .control-search
+    background-color $ui-monokai-noteList-backgroundColor
+
+  .control-search-icon
+    absolute top bottom left
+    line-height 32px
+    width 35px
+    color $ui-monokai-inactive-text-color
+    background-color $ui-monokai-noteList-backgroundColor
+
+  .control-search-input
+    background-color $ui-monokai-noteList-backgroundColor
+    input
+      background-color $ui-monokai-noteList-backgroundColor
+      color $ui-monokai-text-color

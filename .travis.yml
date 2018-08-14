@@ -1,8 +1,9 @@
 language: node_js
 node_js:
-  - 6
+  - 7
 script:
   - npm run lint && npm run test
+  - yarn jest
   - 'if [[ ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} = "master" ]]; then npm install -g grunt npm@5.2 && grunt pre-build; fi'
 after_success:
   - openssl aes-256-cbc -K $encrypted_440d7f9a3c38_key -iv $encrypted_440d7f9a3c38_iv

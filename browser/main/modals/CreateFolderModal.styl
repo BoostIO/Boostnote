@@ -102,3 +102,29 @@ body[data-theme="solarized-dark"]
 
   .control-confirmButton
     colorSolarizedDarkPrimaryButton()
+
+body[data-theme="monokai"]
+  .root
+    modalMonokai()
+    width 500px
+    height 270px
+    overflow hidden
+    position relative
+
+  .header
+    background-color transparent
+    border-color $ui-dark-borderColor
+    color $ui-monokai-text-color
+
+  .control-folder-label
+    color $ui-monokai-text-color
+
+  .control-folder-input
+    border 1px solid $ui-input--create-folder-modal
+    color white
+
+   .description
+    color $ui-inactive-text-color
+
+  .control-confirmButton
+    colorMonokaiPrimaryButton()

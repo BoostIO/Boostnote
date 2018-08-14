@@ -62,6 +62,7 @@
 	"LaTeX Inline Close Delimiter": "LaTeX 인라인 블록 닫기 기호",
 	"LaTeX Block Open Delimiter": "LaTeX 블록 열기 기호",
 	"LaTeX Block Close Delimiter": "LaTeX 블록 닫기 기호",
+	"PlantUML Server": "PlantUML Server",
 	"Community": "커뮤니티",
 	"Subscribe to Newsletter": "뉴스레터 구독",
 	"GitHub": "깃허브",
@@ -143,7 +144,7 @@
 	"You have to save!": "저장해주세요!",
 	"Russian": "Russian",
 	"Command(⌘)": "Command(⌘)",
-	"Delete Folder": "폴더 삭게",
+	"Delete Folder": "폴더 삭제",
 	"This will delete all notes in the folder and can not be undone.": "폴더의 모든 노트를 지우게 되고, 되돌릴 수 없습니다.",
 	"UserName": "유저명",
 	"Password": "패스워드",
@@ -155,5 +156,7 @@
 	"Sanitization": "허용 태그 범위",
 	"Only allow secure html tags (recommended)": "안전한 HTML 태그만 허용 (추천)",
 	"Allow styles": "style 태그, 속성까지 허용",
-	"Allow dangerous html tags": "모든 위험한 태그 허용"
+	"Allow dangerous html tags": "모든 위험한 태그 허용",
+	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.",
+	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
 }

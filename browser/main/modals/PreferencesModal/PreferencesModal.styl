@@ -116,3 +116,26 @@ body[data-theme="solarized-dark"]
     &:hover
       color white
 
+body[data-theme="monokai"]
+  .root
+    background-color transparent
+  .top-bar
+    background-color transparent
+    border-color $ui-monokai-borderColor
+    p
+      color $ui-monokai-text-color
+  .nav
+    background-color transparent
+    border-color $ui-monokai-borderColor
+  .nav-button
+    background-color transparent
+    color $ui-monokai-text-color
+    &:hover
+      color $ui-monokai-text-color
+
+  .nav-button--active
+    @extend .nav-button
+    color $ui-monokai-button--active-color
+    background-color $ui-monokai-button--active-backgroundColor
+    &:hover
+      color white

@@ -34,3 +34,12 @@ test('Markdown.render() should text with quotes correctly', t => {
   const renderedNonSmartQuotes = newmd.render(markdownFixtures.smartQuotes)
   t.snapshot(renderedNonSmartQuotes)
 })
+
+test('Markdown.render() should render line breaks correctly', t => {
+  const renderedBreaks = md.render(markdownFixtures.breaks)
+  t.snapshot(renderedBreaks)
+
+  const newmd = new Markdown({ breaks: false })
+  const renderedNonBreaks = newmd.render(markdownFixtures.breaks)
+  t.snapshot(renderedNonBreaks)
+})

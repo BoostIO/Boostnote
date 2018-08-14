@@ -51,7 +51,7 @@ const SideNavFilter = ({
     </button>
 
     <button styleName={isTrashedActive ? 'menu-button-trash--active' : 'menu-button'}
-      onClick={handleTrashedButtonClick}
+      onClick={handleTrashedButtonClick} onContextMenu={handleFilterButtonContextMenu}
     >
       <div styleName='iconWrap'>
         <img src={isTrashedActive
@@ -60,7 +60,7 @@ const SideNavFilter = ({
         }
         />
       </div>
-      <span onContextMenu={handleFilterButtonContextMenu} styleName='menu-button-label'>{i18n.__('Trash')}</span>
+      <span styleName='menu-button-label'>{i18n.__('Trash')}</span>
       <span styleName='counters'>{counterDelNote}</span>
     </button>
 

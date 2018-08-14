@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
-const { remote } = require('electron')
-const { Menu } = remote
 import dataApi from 'browser/main/lib/dataApi'
 import styles from './SideNav.styl'
 import { openModal } from 'browser/main/lib/modal'
@@ -19,6 +17,7 @@ import ListButton from './ListButton'
 import TagButton from './TagButton'
 import {SortableContainer} from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
+import context from 'browser/lib/context'
 
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
@@ -145,12 +144,19 @@ class SideNav extends React.Component {
 
   tagListComponent () {
     const { data, location, config } = this.props
+    const relatedTags = this.getRelatedTags(this.getActiveTags(location.pathname), data.noteMap)
     let tagList = _.sortBy(data.tagNoteMap.map(
-      (tag, name) => ({name, size: tag.size})),
-      ['name']
+      (tag, name) => ({ name, size: tag.size, related: relatedTags.has(name) })
+    ), ['name']).filter(
+      tag => tag.size > 0
     )
     if (config.sortTagsBy === 'COUNTER') {
       tagList = _.sortBy(tagList, item => (0 - item.size))
+    }
+    if (config.ui.showOnlyRelatedTags && (relatedTags.size > 0)) {
+      tagList = tagList.filter(
+        tag => tag.related
+      )
     }
     return (
       tagList.map(tag => {
@@ -158,7 +164,9 @@ class SideNav extends React.Component {
           <TagListItem
             name={tag.name}
             handleClickTagListItem={this.handleClickTagListItem.bind(this)}
+            handleClickNarrowToTag={this.handleClickNarrowToTag.bind(this)}
             isActive={this.getTagActive(location.pathname, tag.name)}
+            isRelated={tag.related}
             key={tag.name}
             count={tag.size}
           />
@@ -167,10 +175,30 @@ class SideNav extends React.Component {
     )
   }
 
+  getRelatedTags (activeTags, noteMap) {
+    if (activeTags.length === 0) {
+      return new Set()
+    }
+    const relatedNotes = noteMap.map(
+      note => ({key: note.key, tags: note.tags})
+    ).filter(
+      note => activeTags.every(tag => note.tags.includes(tag))
+    )
+    const relatedTags = new Set()
+    relatedNotes.forEach(note => note.tags.map(tag => relatedTags.add(tag)))
+    return relatedTags
+  }
+
   getTagActive (path, tag) {
+    return this.getActiveTags(path).includes(tag)
+  }
+
+  getActiveTags (path) {
     const pathSegments = path.split('/')
-    const pathTag = pathSegments[pathSegments.length - 1]
-    return pathTag === tag
+    const tags = pathSegments[pathSegments.length - 1]
+    return (tags === 'alltags')
+      ? []
+      : tags.split(' ')
   }
 
   handleClickTagListItem (name) {
@@ -190,6 +218,19 @@ class SideNav extends React.Component {
       type: 'SET_CONFIG',
       config
     })
+  }
+
+  handleClickNarrowToTag (tag) {
+    const { router } = this.context
+    const { location } = this.props
+    const listOfTags = this.getActiveTags(location.pathname)
+    const indexOfTag = listOfTags.indexOf(tag)
+    if (indexOfTag > -1) {
+      listOfTags.splice(indexOfTag, 1)
+    } else {
+      listOfTags.push(tag)
+    }
+    router.push(`/tags/${listOfTags.join(' ')}`)
   }
 
   emptyTrash (entries) {
@@ -212,10 +253,9 @@ class SideNav extends React.Component {
   handleFilterButtonContextMenu (event) {
     const { data } = this.props
     const trashedNotes = data.trashedSet.toJS().map((uniqueKey) => data.noteMap.get(uniqueKey))
-    const menu = Menu.buildFromTemplate([
+    context.popup([
       { label: i18n.__('Empty Trash'), click: () => this.emptyTrash(trashedNotes) }
     ])
-    menu.popup()
   }
 
   render () {

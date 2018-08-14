@@ -104,6 +104,7 @@ body[data-theme="dark"]
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
       color $ui-dark-text-color
       .item-simple-title
+      .item-simple-title-empty
       .item-simple-title-icon
       .item-simple-bottom-time
         transition 0.15s
@@ -117,6 +118,7 @@ body[data-theme="dark"]
       background-color $ui-dark-button--active-backgroundColor
       color $ui-dark-text-color
       .item-simple-title
+      .item-simple-title-empty
       .item-simple-title-icon
       .item-simple-bottom-time
         transition 0.15s
@@ -132,6 +134,7 @@ body[data-theme="dark"]
     .item-simple-wrapper
       border-color transparent
     .item-simple-title
+    .item-simple-title-empty
     .item-simple-title-icon
     .item-simple-bottom-time
       color $ui-dark-text-color
@@ -165,9 +168,10 @@ body[data-theme="solarized-dark"]
     background-color $ui-solarized-dark-noteList-backgroundColor
     &:hover
       transition 0.15s
-      // background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      background-color alpha($ui-dark-button--active-backgroundColor, 60%)
       color $ui-solarized-dark-text-color
       .item-simple-title
+      .item-simple-title-empty
       .item-simple-title-icon
       .item-simple-bottom-time
         transition 0.15s
@@ -178,9 +182,10 @@ body[data-theme="solarized-dark"]
         color $ui-solarized-dark-text-color
     &:active
       transition 0.15s
-      background-color $ui-solarized-dark-button--active-backgroundColor
-      color $ui-solarized-dark-text-color
+      // background-color $ui-solarized-dark-button--active-backgroundColor
+      color $ui-dark-text-color
       .item-simple-title
+      .item-simple-title-empty
       .item-simple-title-icon
       .item-simple-bottom-time
         transition 0.15s
@@ -192,11 +197,13 @@ body[data-theme="solarized-dark"]
 
   .item-simple--active
     border-color $ui-solarized-dark-borderColor
-    background-color $ui-solarized-dark-button--active-backgroundColor
+    background-color $ui-solarized-dark-tag-backgroundColor
     .item-simple-wrapper
       border-color transparent
     .item-simple-title
+    .item-simple-title-empty
     .item-simple-title-icon
+       color $ui-dark-text-color
     .item-simple-bottom-time
       color $ui-solarized-dark-text-color
     .item-simple-bottom-tagList-item
@@ -207,8 +214,75 @@ body[data-theme="solarized-dark"]
       color #c0392b
       .item-simple-bottom-tagList-item
         background-color alpha(#fff, 20%)
-.item-simple-right
-  float right
-  .item-simple-right-storageName
-    padding-left 4px
-    opacity 0.4
+  .item-simple-title
+    color $ui-dark-text-color
+    border-bottom $ui-dark-borderColor
+  .item-simple-right
+    float right
+    .item-simple-right-storageName
+      padding-left 4px
+      opacity 0.4
+
+body[data-theme="monokai"]
+  .root
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-noteList-backgroundColor
+
+  .item-simple
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-noteList-backgroundColor
+    &:hover
+      transition 0.15s
+      background-color alpha($ui-monokai-button-backgroundColor, 60%)
+      color $ui-monokai-text-color
+      .item-simple-title
+      .item-simple-title-empty
+      .item-simple-title-icon
+      .item-simple-bottom-time
+        transition 0.15s
+        color $ui-solarized-dark-text-color
+      .item-simple-bottom-tagList-item
+        transition 0.15s
+        background-color alpha(#fff, 20%)
+        color $ui-monokai-text-color
+    &:active
+      transition 0.15s
+      background-color $ui-monokai-button--active-backgroundColor
+      color $ui-monokai-text-color
+      .item-simple-title
+      .item-simple-title-empty
+      .item-simple-title-icon
+      .item-simple-bottom-time
+        transition 0.15s
+        color $ui-monokai-text-color
+      .item-simple-bottom-tagList-item
+        transition 0.15s
+        background-color alpha(white, 10%)
+        color $ui-monokai-text-color
+
+  .item-simple--active
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-button--active-backgroundColor
+    .item-simple-wrapper
+      border-color transparent
+    .item-simple-title
+    .item-simple-title-empty
+    .item-simple-title-icon
+    .item-simple-bottom-time
+      color $ui-monokai-text-color
+    .item-simple-bottom-tagList-item
+      background-color alpha(white, 10%)
+      color $ui-monokai-text-color
+    &:hover
+      // background-color alpha($ui-dark-button--active-backgroundColor, 60%)
+      color #c0392b
+      .item-simple-bottom-tagList-item
+        background-color alpha(#fff, 20%)
+  .item-simple-title
+    color $ui-dark-text-color
+    border-bottom $ui-dark-borderColor
+  .item-simple-right
+    float right
+    .item-simple-right-storageName
+      padding-left 4px
+      opacity 0.4

@@ -18,6 +18,7 @@ import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
 import {findNoteTitle} from 'browser/lib/findNoteTitle'
+import convertModeName from 'browser/lib/convertModeName'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
 import RestoreButton from './RestoreButton'
@@ -29,24 +30,9 @@ import { formatDate } from 'browser/lib/date-formatter'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 
-function pass (name) {
-  switch (name) {
-    case 'ejs':
-      return 'Embedded Javascript'
-    case 'html_ruby':
-      return 'Embedded Ruby'
-    case 'objectivec':
-      return 'Objective C'
-    case 'text':
-      return 'Plain Text'
-    default:
-      return name
-  }
-}
-
 const electron = require('electron')
 const { remote } = electron
-const { Menu, MenuItem, dialog } = remote
+const { dialog } = remote
 
 class SnippetNoteDetail extends React.Component {
   constructor (props) {
@@ -82,7 +68,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.note.key !== this.props.note.key && !this.isMovingNote) {
+    if (nextProps.note.key !== this.props.note.key && !this.state.isMovingNote) {
       if (this.saveQueue != null) this.saveNow()
       const nextNote = Object.assign({
         description: ''
@@ -382,11 +368,11 @@ class SnippetNoteDetail extends React.Component {
         name: mode
       })
     }
-    this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
+    this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
 
-    this.setState({
-      note: this.state.note
-    }, () => {
+    this.setState(state => ({
+      note: state.note
+    }), () => {
       this.save()
     })
   }
@@ -395,11 +381,11 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       const snippets = this.state.note.snippets.slice()
       snippets[index].mode = name
-      this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
+      this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
 
-      this.setState({
-        note: this.state.note
-      }, () => {
+      this.setState(state => ({
+        note: state.note
+      }), () => {
         this.save()
       })
 
@@ -413,10 +399,10 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       const snippets = this.state.note.snippets.slice()
       snippets[index].content = this.refs['code-' + index].value
-      this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
-      this.setState({
-        note: this.state.note
-      }, () => {
+      this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
+      this.setState(state => ({
+        note: state.note
+      }), () => {
         this.save()
       })
     }
@@ -455,7 +441,7 @@ class SnippetNoteDetail extends React.Component {
           const isSuper = global.process.platform === 'darwin'
             ? e.metaKey
             : e.ctrlKey
-          if (isSuper) {
+          if (isSuper && !e.shiftKey) {
             e.preventDefault()
             this.addSnippet()
           }
@@ -465,14 +451,14 @@ class SnippetNoteDetail extends React.Component {
   }
 
   handleModeButtonClick (e, index) {
-    const menu = new Menu()
+    const templetes = []
     CodeMirror.modeInfo.sort(function (a, b) { return a.name.localeCompare(b.name) }).forEach((mode) => {
-      menu.append(new MenuItem({
+      templetes.push({
         label: mode.name,
         click: (e) => this.handleModeOptionClick(index, mode.name)(e)
-      }))
+      })
     })
-    menu.popup(remote.getCurrentWindow())
+    context.popup(templetes)
   }
 
   handleIndentTypeButtonClick (e) {
@@ -611,17 +597,17 @@ class SnippetNoteDetail extends React.Component {
   }
 
   jumpNextTab () {
-    this.setState({
-      snippetIndex: (this.state.snippetIndex + 1) % this.state.note.snippets.length
-    }, () => {
+    this.setState(state => ({
+      snippetIndex: (state.snippetIndex + 1) % state.note.snippets.length
+    }), () => {
       this.focusEditor()
     })
   }
 
   jumpPrevTab () {
-    this.setState({
-      snippetIndex: (this.state.snippetIndex - 1 + this.state.note.snippets.length) % this.state.note.snippets.length
-    }, () => {
+    this.setState(state => ({
+      snippetIndex: (state.snippetIndex - 1 + state.note.snippets.length) % state.note.snippets.length
+    }), () => {
       this.focusEditor()
     })
   }
@@ -677,7 +663,7 @@ class SnippetNoteDetail extends React.Component {
     const viewList = note.snippets.map((snippet, index) => {
       const isActive = this.state.snippetIndex === index
 
-      let syntax = CodeMirror.findModeByName(pass(snippet.mode))
+      let syntax = CodeMirror.findModeByName(convertModeName(snippet.mode))
       if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
 
       return <div styleName='tabView'

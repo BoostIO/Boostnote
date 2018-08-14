@@ -68,7 +68,7 @@ body
     padding 5px
     margin -5px
     border-radius 5px
-  .flowchart-error, .sequence-error
+  .flowchart-error, .sequence-error .chart-error
     background-color errorBackgroundColor
     color errorTextColor
     padding 5px
@@ -199,7 +199,6 @@ ol
   &>li>ul, &>li>ol
     margin 0
 code
-  color #CC305F
   padding 0.2em 0.4em
   background-color #f7f7f7
   border-radius 3px
@@ -214,7 +213,7 @@ pre
   margin 0 0 1em
   display flex
   line-height 1.4em
-  &.flowchart, &.sequence
+  &.flowchart, &.sequence, &.chart
     display flex
     justify-content center
     background-color white
@@ -294,6 +293,84 @@ kbd
   line-height 1
   padding 3px 5px
 
+$admonition
+    box-shadow 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12),0 3px 1px -2px rgba(0,0,0,.2)
+    position relative
+    margin 1.5625em 0
+    padding 0 1.2rem
+    border-left .4rem solid #448aff
+    border-radius .2rem
+    overflow auto
+
+html .admonition>:last-child
+    margin-bottom 1.2rem
+
+.admonition .admonition
+    margin 1em 0
+
+.admonition p
+    margin-top: 0.5em
+
+$admonition-icon
+    position absolute
+    left 1.2rem
+    font-family: "Material Icons"
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+
+$admonition-title
+    margin 0 -1.2rem
+    padding .8rem 1.2rem .8rem 4rem
+    border-bottom .1rem solid rgba(68,138,255,.1)
+    background-color rgba(68,138,255,.1)
+    font-weight 700
+
+.admonition>.admonition-title:last-child
+    margin-bottom 0
+
+admonition_types = {
+    note: {color: #0288D1, icon: "note"},
+    hint: {color: #009688, icon: "info_outline"},
+    danger: {color: #c2185b, icon: "block"},
+    caution: {color: #ffa726, icon: "warning"},
+    error: {color: #d32f2f, icon: "error_outline"},
+    attention: {color: #455a64, icon: "priority_high"}
+}
+
+for name, val in admonition_types
+    .admonition.{name}
+        @extend $admonition
+        border-left-color: val[color]
+    
+    .admonition.{name}>.admonition-title
+        @extend $admonition-title
+        border-bottom-color: .1rem solid rgba(val[color], 0.2)
+        background-color: rgba(val[color], 0.2)
+
+    .admonition.{name}>.admonition-title:before
+        @extend $admonition-icon
+        color: val[color]
+        content: val[icon]
+
 themeDarkBackground = darken(#21252B, 10%)
 themeDarkText = #f9f9f9
 themeDarkBorder = lighten(themeDarkBackground, 20%)
@@ -371,3 +448,32 @@ body[data-theme="solarized-dark"]
         border-color themeSolarizedDarkTableBorder
         &:last-child
           border-right solid 1px themeSolarizedDarkTableBorder
+
+themeMonokaiTableOdd = $ui-monokai-noteDetail-backgroundColor
+themeMonokaiTableEven = darken($ui-monokai-noteDetail-backgroundColor, 10%)
+themeMonokaiTableHead = themeMonokaiTableEven
+themeMonokaiTableBorder = themeDarkBorder
+
+body[data-theme="monokai"]
+  color $ui-monokai-text-color
+  border-color themeDarkBorder
+  background-color $ui-monokai-noteDetail-backgroundColor
+  table
+    thead
+      tr
+        background-color themeMonokaiTableHead
+      th
+        border-color themeMonokaiTableBorder
+        &:last-child
+          border-right solid 1px themeMonokaiTableBorder
+    tbody
+      tr:nth-child(2n + 1)
+        background-color themeMonokaiTableOdd
+      tr:nth-child(2n)
+        background-color themeMonokaiTableEven
+      td
+        border-color themeMonokaiTableBorder
+        &:last-child
+          border-right solid 1px themeMonokaiTableBorder
+  kbd
+    background-color themeDarkBackground

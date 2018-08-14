@@ -55,10 +55,10 @@ class SnippetTab extends React.Component {
         this.handleRename()
         break
       case 27:
-        this.setState({
-          name: this.props.snippet.name,
+        this.setState((prevState, props) => ({
+          name: props.snippet.name,
           isRenaming: false
-        })
+        }))
         break
     }
   }

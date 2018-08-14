@@ -2,11 +2,13 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+import debounceRender from 'react-debounce-render'
 import styles from './NoteList.styl'
 import moment from 'moment'
 import _ from 'lodash'
 import ee from 'browser/main/lib/eventEmitter'
 import dataApi from 'browser/main/lib/dataApi'
+import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
@@ -19,9 +21,10 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import Markdown from '../../lib/markdown'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
+import context from 'browser/lib/context'
 
 const { remote } = require('electron')
-const { Menu, MenuItem, dialog } = remote
+const { dialog } = remote
 const WP_POST_PATH = '/wp/v2/posts'
 
 function sortByCreatedAt (a, b) {
@@ -343,11 +346,10 @@ class NoteList extends React.Component {
     }
 
     if (location.pathname.match(/\/tags/)) {
+      const listOfTags = params.tagname.split(' ')
       return data.noteMap.map(note => {
         return note
-      }).filter(note => {
-        return note.tags.includes(params.tagname)
-      })
+      }).filter(note => listOfTags.every(tag => note.tags.includes(tag)))
     }
 
     return this.getContextNotes()
@@ -456,12 +458,19 @@ class NoteList extends React.Component {
   }
 
   handleDragStart (e, note) {
-    const { selectedNoteKeys } = this.state
+    let { selectedNoteKeys } = this.state
+    const noteKey = getNoteKey(note)
+
+    if (!selectedNoteKeys.includes(noteKey)) {
+      selectedNoteKeys = []
+      selectedNoteKeys.push(noteKey)
+    }
+
     const notes = this.notes.map((note) => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
     const noteData = JSON.stringify(selectedNotes)
     e.dataTransfer.setData('note', noteData)
-    this.setState({ selectedNoteKeys: [] })
+    this.selectNextNote()
   }
 
   handleNoteContextMenu (e, uniqueKey) {
@@ -483,55 +492,51 @@ class NoteList extends React.Component {
     const updateLabel = i18n.__('Update Blog')
     const openBlogLabel = i18n.__('Open Blog')
 
-    const menu = new Menu()
+    const templates = []
 
     if (location.pathname.match(/\/trash/)) {
-      menu.append(new MenuItem({
+      templates.push({
         label: restoreNote,
         click: this.restoreNote
-      }))
-      menu.append(new MenuItem({
+      }, {
         label: deleteLabel,
         click: this.deleteNote
-      }))
+      })
     } else {
       if (!location.pathname.match(/\/starred/)) {
-        menu.append(new MenuItem({
+        templates.push({
           label: pinLabel,
           click: this.pinToTop
-        }))
+        })
       }
-      menu.append(new MenuItem({
+      templates.push({
         label: deleteLabel,
         click: this.deleteNote
-      }))
-      menu.append(new MenuItem({
+      }, {
         label: cloneNote,
         click: this.cloneNote.bind(this)
-      }))
-      menu.append(new MenuItem({
+      }, {
         label: copyNoteLink,
         click: this.copyNoteLink(note)
-      }))
+      })
       if (note.type === 'MARKDOWN_NOTE') {
         if (note.blog && note.blog.blogLink && note.blog.blogId) {
-          menu.append(new MenuItem({
+          templates.push({
             label: updateLabel,
             click: this.publishMarkdown.bind(this)
-          }))
-          menu.append(new MenuItem({
+          }, {
             label: openBlogLabel,
             click: () => this.openBlog.bind(this)(note)
-          }))
+          })
         } else {
-          menu.append(new MenuItem({
+          templates.push({
             label: publishLabel,
             click: this.publishMarkdown.bind(this)
-          }))
+          })
         }
       }
     }
-    menu.popup()
+    context.popup(templates)
   }
 
   updateSelectedNotes (updateFunc, cleanSelection = true) {
@@ -655,6 +660,10 @@ class NoteList extends React.Component {
         folder: folder.key,
         title: firstNote.title + ' ' + i18n.__('copy'),
         content: firstNote.content
+      })
+      .then((note) => {
+        attachmentManagement.cloneAttachments(firstNote, note)
+        return note
       })
       .then((note) => {
         dispatch({
@@ -937,15 +946,24 @@ class NoteList extends React.Component {
 
     const viewType = this.getViewType()
 
+    const autoSelectFirst =
+      notes.length === 1 ||
+      selectedNoteKeys.length === 0 ||
+      notes.every(note => !selectedNoteKeys.includes(note.key))
+
     const noteList = notes
-      .map(note => {
+      .map((note, index) => {
         if (note == null) {
           return null
         }
 
         const isDefault = config.listStyle === 'DEFAULT'
         const uniqueKey = getNoteKey(note)
-        const isActive = selectedNoteKeys.includes(uniqueKey)
+
+        const isActive =
+          selectedNoteKeys.includes(uniqueKey) ||
+          notes.length === 1 ||
+          (autoSelectFirst && index === 0)
         const dateDisplay = moment(
           config.sortBy === 'CREATED_AT'
             ? note.createdAt : note.updatedAt
@@ -1047,4 +1065,4 @@ NoteList.propTypes = {
   })
 }
 
-export default CSSModules(NoteList, styles)
+export default debounceRender(CSSModules(NoteList, styles))

@@ -12,8 +12,7 @@ class NewNoteModal extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-    }
+    this.state = {}
   }
 
   componentDidMount () {
@@ -35,19 +34,20 @@ class NewNoteModal extends React.Component {
         title: '',
         content: ''
       })
-      .then((note) => {
+      .then(note => {
         const noteHash = note.key
         dispatch({
           type: 'UPDATE_NOTE',
           note: note
         })
+
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: noteHash}
+          query: { key: noteHash }
         })
         ee.emit('list:jump', noteHash)
         ee.emit('detail:focus')
-        this.props.close()
+        setTimeout(this.props.close, 200)
       })
   }
 
@@ -69,13 +69,15 @@ class NewNoteModal extends React.Component {
         folder: folder,
         title: '',
         description: '',
-        snippets: [{
-          name: '',
-          mode: 'text',
-          content: ''
-        }]
+        snippets: [
+          {
+            name: '',
+            mode: 'text',
+            content: ''
+          }
+        ]
       })
-      .then((note) => {
+      .then(note => {
         const noteHash = note.key
         dispatch({
           type: 'UPDATE_NOTE',
@@ -83,11 +85,11 @@ class NewNoteModal extends React.Component {
         })
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: noteHash}
+          query: { key: noteHash }
         })
         ee.emit('list:jump', noteHash)
         ee.emit('detail:focus')
-        this.props.close()
+        setTimeout(this.props.close, 200)
       })
   }
 
@@ -106,49 +108,65 @@ class NewNoteModal extends React.Component {
 
   render () {
     return (
-      <div styleName='root'
+      <div
+        styleName='root'
         tabIndex='-1'
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
         <div styleName='header'>
           <div styleName='title'>{i18n.__('Make a note')}</div>
         </div>
-        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
+        <ModalEscButton
+          handleEscButtonClick={e => this.handleCloseButtonClick(e)}
+        />
         <div styleName='control'>
-          <button styleName='control-button'
-            onClick={(e) => this.handleMarkdownNoteButtonClick(e)}
-            onKeyDown={(e) => this.handleMarkdownNoteButtonKeyDown(e)}
+          <button
+            styleName='control-button'
+            onClick={e => this.handleMarkdownNoteButtonClick(e)}
+            onKeyDown={e => this.handleMarkdownNoteButtonKeyDown(e)}
             ref='markdownButton'
           >
-            <i styleName='control-button-icon'
-              className='fa fa-file-text-o'
-            /><br />
-            <span styleName='control-button-label'>{i18n.__('Markdown Note')}</span><br />
-            <span styleName='control-button-description'>{i18n.__('This format is for creating text documents. Checklists, code blocks and Latex blocks are available.')}</span>
+            <i styleName='control-button-icon' className='fa fa-file-text-o' />
+            <br />
+            <span styleName='control-button-label'>
+              {i18n.__('Markdown Note')}
+            </span>
+            <br />
+            <span styleName='control-button-description'>
+              {i18n.__(
+                'This format is for creating text documents. Checklists, code blocks and Latex blocks are available.'
+              )}
+            </span>
           </button>
 
-          <button styleName='control-button'
-            onClick={(e) => this.handleSnippetNoteButtonClick(e)}
-            onKeyDown={(e) => this.handleSnippetNoteButtonKeyDown(e)}
+          <button
+            styleName='control-button'
+            onClick={e => this.handleSnippetNoteButtonClick(e)}
+            onKeyDown={e => this.handleSnippetNoteButtonKeyDown(e)}
             ref='snippetButton'
           >
-            <i styleName='control-button-icon'
-              className='fa fa-code'
-            /><br />
-            <span styleName='control-button-label'>{i18n.__('Snippet Note')}</span><br />
-            <span styleName='control-button-description'>{i18n.__('This format is for creating code snippets. Multiple snippets can be grouped into a single note.')}
+            <i styleName='control-button-icon' className='fa fa-code' /><br />
+            <span styleName='control-button-label'>
+              {i18n.__('Snippet Note')}
+            </span>
+            <br />
+            <span styleName='control-button-description'>
+              {i18n.__(
+                'This format is for creating code snippets. Multiple snippets can be grouped into a single note.'
+              )}
             </span>
           </button>
 
         </div>
-        <div styleName='description'><i className='fa fa-arrows-h' />{i18n.__('Tab to switch format')}</div>
+        <div styleName='description'>
+          <i className='fa fa-arrows-h' />{i18n.__('Tab to switch format')}
+        </div>
 
       </div>
     )
   }
 }
 
-NewNoteModal.propTypes = {
-}
+NewNoteModal.propTypes = {}
 
 export default CSSModules(NewNoteModal, styles)

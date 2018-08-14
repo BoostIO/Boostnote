@@ -20,6 +20,6 @@ If your issue is regarding boostnote mobile, move to https://github.com/BoostIO/
 - OS Version and name :
 
 <!--
-Love Boostnote? Please consider supporting us via OpenCollective:
-👉  https://opencollective.com/boostnoteio
+Love Boostnote? Please consider supporting us on IssueHunt:
+👉  https://issuehunt.io/repos/53266139
 -->

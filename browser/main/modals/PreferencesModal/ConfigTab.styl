@@ -133,6 +133,11 @@ colorSolarizedDarkControl()
   background-color $ui-solarized-dark-button-backgroundColor
   color $ui-solarized-dark-text-color
 
+colorMonokaiControl()
+  border none
+  background-color $ui-monokai-button-backgroundColor
+  color $ui-monokai-text-color
+
 
 body[data-theme="dark"]
   .root
@@ -189,4 +194,29 @@ body[data-theme="solarized-dark"]
     select, .group-section-control-input
       colorSolarizedDarkControl()
 
+body[data-theme="monokai"]
+  .root
+    color $ui-monokai-text-color
 
+  .group-header
+    color $ui-monokai-text-color
+    border-color $ui-monokai-borderColor 
+
+  .group-header2
+    color $ui-monokai-text-color
+
+  .group-section-control-input
+    border-color $ui-monokai-borderColor 
+
+  .group-control
+    border-color $ui-monokai-borderColor 
+  .group-control-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-monokai-borderColor 
+  .group-control-rightButton
+    colorMonokaiPrimaryButton()
+  .group-hint
+    colorMonokaiControl()
+  .group-section-control
+    select, .group-section-control-input
+      colorMonokaiControl()

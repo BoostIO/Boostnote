@@ -62,6 +62,7 @@
 	"LaTeX Inline Close Delimiter": "Delimitador de cierre LaTeX en línea",
 	"LaTeX Block Open Delimiter": "Delimitado de apertura bloque LaTeX",
 	"LaTeX Block Close Delimiter": "Delimitador de cierre bloque LaTeX",
+	"PlantUML Server": "PlantUML Server",
 	"Community": "Comunidad",
 	"Subscribe to Newsletter": "Suscribirse al boletín",
 	"GitHub": "GitHub",
@@ -87,7 +88,7 @@
 	"Boostnote is used in about 200 different countries and regions by an awesome community of developers.": "Boostnote es utilizado en alrededor de 200 países y regiones diferentes por una increíble comunidad de desarrolladores.",
 	"To continue supporting this growth, and to satisfy community expectations,": "Para continuar apoyando este crecimiento y satisfacer las expectativas de la comunidad,",
 	"we would like to invest more time and resources in this project.": "nos gustaría invertir más tiempo y recursos en este proyecto.",
-	"If you like this project and see its potential, you can help by supporting us on OpenCollective!": "Si te gusta este proyecto y ves potencial en él, ¡puedes ayudar apoyándonos en OpenCollective!",
+	"If you like this project and see its potential, you can help by supporting us on OpenCollective!": "Si te gusta este proyecto y ves su potencial, ¡puedes ayudar apoyándonos en OpenCollective!",
 	"Thanks,": "Gracias,",
 	"Boostnote maintainers": "Equipo de Boostnote",
 	"Support via OpenCollective": "Contribuir vía OpenCollective",
@@ -149,5 +150,7 @@
 	"Sanitization": "Saneamiento",
 	"Only allow secure html tags (recommended)": "Solo permitir etiquetas html seguras (recomendado)",
 	"Allow styles": "Permitir estilos",
-	"Allow dangerous html tags": "Permitir etiques html peligrosas"
+	"Allow dangerous html tags": "Permitir etiquetas html peligrosas",
+	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠",
+	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown."
 }

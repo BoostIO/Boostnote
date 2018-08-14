@@ -118,6 +118,16 @@ colorSolarizedDarkPrimaryButton()
   &:active:hover
     background-color $dark-primary-button-background--active
 
+colorMonokaiPrimaryButton()
+  color $ui-monokai-text-color
+  background-color $ui-monokai-button-backgroundColor
+  border none
+  &:hover
+    background-color $dark-primary-button-background--hover
+  &:active
+  &:active:hover
+    background-color $dark-primary-button-background--active
+
 
 // Danger button(Brand color)
 $danger-button-background = #c9302c
@@ -346,5 +356,31 @@ modalSolarizedDark()
   z-index $modal-z-index
   width 100%
   background-color $ui-solarized-dark-backgroundColor
+  overflow hidden
+  border-radius $modal-border-radius
+
+/******* Monokai theme ********/
+$ui-monokai-backgroundColor = #272822
+$ui-monokai-noteList-backgroundColor = #272822
+$ui-monokai-noteDetail-backgroundColor = #272822
+
+$ui-monokai-text-color = #f8f8f2
+$ui-monokai-active-color = #f92672
+
+$ui-monokai-borderColor = #373831
+
+$ui-monokai-tag-backgroundColor = #f92672
+
+$ui-monokai-button-backgroundColor = #373831
+$ui-monokai-button--active-color = white
+$ui-monokai-button--active-backgroundColor = #f92672
+$ui-monokai-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
+$ui-monokai-button--focus-borderColor = lighten(#369DCD, 25%)
+
+modalmonokai()
+  position relative
+  z-index $modal-z-index
+  width 100%
+  background-color $ui-monokai-backgroundColor
   overflow hidden
   border-radius $modal-border-radius

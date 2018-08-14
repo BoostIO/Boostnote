@@ -114,3 +114,27 @@ body[data-theme="solarized-dark"]
     color $ui-solarized-dark-text-color
     &:active
       color $ui-solarized-dark-text-color
+
+body[data-theme="monokai"]
+  .root
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-noteList-backgroundColor
+
+  .control
+    background-color $ui-monokai-noteList-backgroundColor
+    border-color $ui-monokai-borderColor
+
+  .control-sortBy-select
+    &:hover
+      transition 0.2s
+      color $ui-monokai-text-color
+
+  .control-button
+    color $ui-monokai-inactive-text-color
+    &:hover
+      color $ui-monokai-text-color
+
+  .control-button--active
+    color $ui-monokai-text-color
+    &:active
+      color $ui-monokai-text-color

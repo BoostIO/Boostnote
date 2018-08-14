@@ -5,6 +5,7 @@ const resolveStorageNotes = require('./resolveStorageNotes')
 const CSON = require('@rokt33r/season')
 const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
+const deleteSingleNote = require('./deleteNote')
 
 /**
  * @param {String} storageKey
@@ -49,11 +50,7 @@ function deleteFolder (storageKey, folderKey) {
 
       const deleteAllNotes = targetNotes
         .map(function deleteNote (note) {
-          const notePath = path.join(storage.path, 'notes', note.key + '.cson')
-          return sander.unlink(notePath)
-            .catch(function (err) {
-              console.warn('Failed to delete', notePath, err)
-            })
+          return deleteSingleNote(storageKey, note.key)
         })
       return Promise.all(deleteAllNotes)
         .then(() => storage)

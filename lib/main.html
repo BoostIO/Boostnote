@@ -77,6 +77,7 @@
   <script src="../node_modules/codemirror/addon/mode/overlay.js"></script>
   <script src="../node_modules/codemirror/addon/mode/loadmode.js"></script>
   <script src="../node_modules/codemirror/addon/mode/simple.js"></script>
+  <script src="../node_modules/codemirror/addon/mode/multiplex.js"></script>
   <script src="../node_modules/codemirror/keymap/sublime.js"></script>
   <script src="../node_modules/codemirror/keymap/vim.js"></script>
   <script src="../node_modules/codemirror/keymap/emacs.js"></script>
@@ -114,7 +115,7 @@
   <script src="../node_modules/react-redux/dist/react-redux.min.js"></script>
   <script type='text/javascript'>
     const electron = require('electron')
-    electron.webFrame.setZoomLevelLimits(1, 1)
+    electron.webFrame.setVisualZoomLevelLimits(1, 1)
     var scriptUrl = window._.find(electron.remote.process.argv, (a) => a === '--hot')
       ? 'http://localhost:8080/assets/main.js'
       : '../compiled/main.js'

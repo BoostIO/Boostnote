@@ -10,6 +10,8 @@ import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
 import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
+import { getLanguages } from 'browser/lib/Languages'
+import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -27,6 +29,8 @@ class UiTab extends React.Component {
 
   componentDidMount () {
     CodeMirror.autoLoadMode(this.codeMirrorInstance.getCodeMirror(), 'javascript')
+    CodeMirror.autoLoadMode(this.customCSSCM.getCodeMirror(), 'css')
+    this.customCSSCM.getCodeMirror().setSize('400px', '400px')
     this.handleSettingDone = () => {
       this.setState({UiAlert: {
         type: 'success',
@@ -65,6 +69,7 @@ class UiTab extends React.Component {
         language: this.refs.uiLanguage.value,
         showCopyNotification: this.refs.showCopyNotification.checked,
         confirmDeletion: this.refs.confirmDeletion.checked,
+        showOnlyRelatedTags: this.refs.showOnlyRelatedTags.checked,
         disableDirectWrite: this.refs.uiD2w != null
           ? this.refs.uiD2w.checked
           : false
@@ -92,9 +97,14 @@ class UiTab extends React.Component {
         latexInlineClose: this.refs.previewLatexInlineClose.value,
         latexBlockOpen: this.refs.previewLatexBlockOpen.value,
         latexBlockClose: this.refs.previewLatexBlockClose.value,
+        plantUMLServerAddress: this.refs.previewPlantUMLServerAddress.value,
         scrollPastEnd: this.refs.previewScrollPastEnd.checked,
         smartQuotes: this.refs.previewSmartQuotes.checked,
-        sanitize: this.refs.previewSanitize.value
+        breaks: this.refs.previewBreaks.checked,
+        smartArrows: this.refs.previewSmartArrows.checked,
+        sanitize: this.refs.previewSanitize.value,
+        allowCustomCSS: this.refs.previewAllowCustomCSS.checked,
+        customCSS: this.customCSSCM.getCodeMirror().getValue()
       }
     }
 
@@ -155,6 +165,7 @@ class UiTab extends React.Component {
     const { config, codemirrorTheme } = this.state
     const codemirrorSampleCode = 'function iamHappy (happy) {\n\tif (happy) {\n\t  console.log("I am Happy!")\n\t} else {\n\t  console.log("I am not Happy!")\n\t}\n};'
     const enableEditRulersStyle = config.editor.enableRulers ? 'block' : 'none'
+    const fontFamily = normalizeEditorFontFamily(config.editor.fontFamily)
     return (
       <div styleName='root'>
         <div styleName='group'>
@@ -170,6 +181,7 @@ class UiTab extends React.Component {
                 <option value='default'>{i18n.__('Default')}</option>
                 <option value='white'>{i18n.__('White')}</option>
                 <option value='solarized-dark'>{i18n.__('Solarized Dark')}</option>
+                <option value='monokai'>{i18n.__('Monokai')}</option>
                 <option value='dark'>{i18n.__('Dark')}</option>
               </select>
             </div>
@@ -182,22 +194,9 @@ class UiTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
                 ref='uiLanguage'
               >
-                <option value='sq'>{i18n.__('Albanian')}</option>
-                <option value='zh-CN'>{i18n.__('Chinese (zh-CN)')}</option>
-                <option value='zh-TW'>{i18n.__('Chinese (zh-TW)')}</option>
-                <option value='da'>{i18n.__('Danish')}</option>
-                <option value='en'>{i18n.__('English')}</option>
-                <option value='fr'>{i18n.__('French')}</option>
-                <option value='de'>{i18n.__('German')}</option>
-                <option value='hu'>{i18n.__('Hungarian')}</option>
-                <option value='ja'>{i18n.__('Japanese')}</option>
-                <option value='ko'>{i18n.__('Korean')}</option>
-                <option value='no'>{i18n.__('Norwegian')}</option>
-                <option value='pl'>{i18n.__('Polish')}</option>
-                <option value='pt-BR'>{i18n.__('Portuguese (Brazil)')}</option>
-                <option value='pt-PT'>{i18n.__('Portuguese (Portugal)')}</option>
-                <option value='ru'>{i18n.__('Russian')}</option>
-                <option value='es-ES'>{i18n.__('Spanish')}</option>
+                {
+                  getLanguages().map((language) => <option value={language.locale} key={language.locale}>{i18n.__(language.name)}</option>)
+                }
               </select>
             </div>
           </div>
@@ -222,6 +221,16 @@ class UiTab extends React.Component {
               {i18n.__('Show a confirmation dialog when deleting notes')}
             </label>
           </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.showOnlyRelatedTags}
+                ref='showOnlyRelatedTags'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Show only related tags')}
+            </label>
+          </div>
           {
             global.process.platform === 'win32'
             ? <div styleName='group-checkBoxSection'>
@@ -232,7 +241,7 @@ class UiTab extends React.Component {
                   disabled={OSX}
                   type='checkbox'
                 />&nbsp;
-                Disable Direct Write(It will be applied after restarting)
+                {i18n.__('Disable Direct Write (It will be applied after restarting)')}
               </label>
             </div>
             : null
@@ -254,8 +263,16 @@ class UiTab extends React.Component {
                   })
                 }
               </select>
-              <div styleName='code-mirror'>
-                <ReactCodeMirror ref={e => (this.codeMirrorInstance = e)} value={codemirrorSampleCode} options={{ lineNumbers: true, readOnly: true, mode: 'javascript', theme: codemirrorTheme }} />
+              <div styleName='code-mirror' style={{fontFamily}}>
+                <ReactCodeMirror
+                  ref={e => (this.codeMirrorInstance = e)}
+                  value={codemirrorSampleCode}
+                  options={{
+                    lineNumbers: true,
+                    readOnly: true,
+                    mode: 'javascript',
+                    theme: codemirrorTheme
+                  }} />
               </div>
             </div>
           </div>
@@ -472,7 +489,27 @@ class UiTab extends React.Component {
                 ref='previewSmartQuotes'
                 type='checkbox'
               />&nbsp;
-              Enable smart quotes
+              {i18n.__('Enable smart quotes')}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.preview.breaks}
+                ref='previewBreaks'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Render newlines in Markdown paragraphs as <br>')}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.preview.smartArrows}
+                ref='previewSmartArrows'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.')}
             </label>
           </div>
 
@@ -542,6 +579,45 @@ class UiTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
                 type='text'
               />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('PlantUML Server')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                ref='previewPlantUMLServerAddress'
+                value={config.preview.plantUMLServerAddress}
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Custom CSS')}
+            </div>
+            <div styleName='group-section-control'>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={config.preview.allowCustomCSS}
+                ref='previewAllowCustomCSS'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Allow custom CSS for preview')}
+              <div style={{fontFamily}}>
+                <ReactCodeMirror
+                  width='400px'
+                  height='400px'
+                  onChange={e => this.handleUIChange(e)}
+                  ref={e => (this.customCSSCM = e)}
+                  value={config.preview.customCSS}
+                  options={{
+                    lineNumbers: true,
+                    mode: 'css',
+                    theme: codemirrorTheme
+                  }} />
+              </div>
             </div>
           </div>
 

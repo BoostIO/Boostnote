@@ -8,6 +8,8 @@ import SnippetNoteDetail from './SnippetNoteDetail'
 import ee from 'browser/main/lib/eventEmitter'
 import StatusBar from '../StatusBar'
 import i18n from 'browser/lib/i18n'
+import debounceRender from 'react-debounce-render'
+import searchFromNotes from 'browser/lib/search'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -34,11 +36,38 @@ class Detail extends React.Component {
   }
 
   render () {
-    const { location, data, config } = this.props
+    const { location, data, params, config } = this.props
     let note = null
+
     if (location.query.key != null) {
       const noteKey = location.query.key
-      note = data.noteMap.get(noteKey)
+      const allNotes = data.noteMap.map(note => note)
+      const trashedNotes = data.trashedSet.toJS().map(uniqueKey => data.noteMap.get(uniqueKey))
+      let displayedNotes = allNotes
+
+      if (location.pathname.match(/\/searched/)) {
+        const searchStr = params.searchword
+        displayedNotes = searchStr === undefined || searchStr === '' ? allNotes
+          : searchFromNotes(allNotes, searchStr)
+      }
+
+      if (location.pathname.match(/\/tags/)) {
+        const listOfTags = params.tagname.split(' ')
+        displayedNotes = data.noteMap.map(note => note).filter(note =>
+          listOfTags.every(tag => note.tags.includes(tag))
+        )
+      }
+
+      if (location.pathname.match(/\/trashed/)) {
+        displayedNotes = trashedNotes
+      } else {
+        displayedNotes = _.differenceWith(displayedNotes, trashedNotes, (note, trashed) => note.key === trashed.key)
+      }
+
+      const noteKeys = displayedNotes.map(note => note.key)
+      if (noteKeys.includes(noteKey)) {
+        note = data.noteMap.get(noteKey)
+      }
     }
 
     if (note == null) {
@@ -99,4 +128,4 @@ Detail.propTypes = {
   ignorePreviewPointerEvents: PropTypes.bool
 }
 
-export default CSSModules(Detail, styles)
+export default debounceRender(CSSModules(Detail, styles))

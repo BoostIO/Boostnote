@@ -14,6 +14,10 @@ class MarkdownSplitEditor extends React.Component {
     this.focus = () => this.refs.code.focus()
     this.reload = () => this.refs.code.reload()
     this.userScroll = true
+    this.state = {
+      isSliderFocused: false,
+      codeEditorWidthInPercent: 50
+    }
   }
 
   handleOnChange () {
@@ -87,20 +91,60 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
+  handleMouseMove (e) {
+    if (this.state.isSliderFocused) {
+      const rootRect = this.refs.root.getBoundingClientRect()
+      const rootWidth = rootRect.width
+      const offset = rootRect.left
+      let newCodeEditorWidthInPercent = (e.pageX - offset) / rootWidth * 100
+
+      // limit minSize to 10%, maxSize to 90%
+      if (newCodeEditorWidthInPercent <= 10) {
+        newCodeEditorWidthInPercent = 10
+      }
+
+      if (newCodeEditorWidthInPercent >= 90) {
+        newCodeEditorWidthInPercent = 90
+      }
+
+      this.setState({
+        codeEditorWidthInPercent: newCodeEditorWidthInPercent
+      })
+    }
+  }
+
+  handleMouseUp (e) {
+    e.preventDefault()
+    this.setState({
+      isSliderFocused: false
+    })
+  }
+
+  handleMouseDown (e) {
+    e.preventDefault()
+    this.setState({
+      isSliderFocused: true
+    })
+  }
+
   render () {
-    const { config, value, storageKey } = this.props
+    const {config, value, storageKey, noteKey} = this.props
     const storage = findStorage(storageKey)
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
     const previewStyle = {}
-    if (this.props.ignorePreviewPointerEvents) previewStyle.pointerEvents = 'none'
+    previewStyle.width = (100 - this.state.codeEditorWidthInPercent) + '%'
+    if (this.props.ignorePreviewPointerEvents || this.state.isSliderFocused) previewStyle.pointerEvents = 'none'
     return (
-      <div styleName='root'>
+      <div styleName='root' ref='root'
+        onMouseMove={e => this.handleMouseMove(e)}
+        onMouseUp={e => this.handleMouseUp(e)}>
         <CodeEditor
           styleName='codeEditor'
           ref='code'
+          width={this.state.codeEditorWidthInPercent + '%'}
           mode='GitHub Flavored Markdown'
           value={value}
           theme={config.editor.theme}
@@ -115,9 +159,13 @@ class MarkdownSplitEditor extends React.Component {
           scrollPastEnd={config.editor.scrollPastEnd}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           storageKey={storageKey}
+          noteKey={noteKey}
           onChange={this.handleOnChange.bind(this)}
           onScroll={this.handleScroll.bind(this)}
        />
+        <div styleName='slider' style={{left: this.state.codeEditorWidthInPercent + '%'}} onMouseDown={e => this.handleMouseDown(e)} >
+          <div styleName='slider-hitbox' />
+        </div>
         <MarkdownPreview
           style={previewStyle}
           styleName='preview'
@@ -130,6 +178,8 @@ class MarkdownSplitEditor extends React.Component {
           lineNumber={config.preview.lineNumber}
           scrollPastEnd={config.preview.scrollPastEnd}
           smartQuotes={config.preview.smartQuotes}
+          smartArrows={config.preview.smartArrows}
+          breaks={config.preview.breaks}
           sanitize={config.preview.sanitize}
           ref='preview'
           tabInde='0'
@@ -138,6 +188,9 @@ class MarkdownSplitEditor extends React.Component {
           onScroll={this.handleScroll.bind(this)}
           showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
+          noteKey={noteKey}
+          customCSS={config.preview.customCSS}
+          allowCustomCSS={config.preview.allowCustomCSS}
        />
       </div>
     )

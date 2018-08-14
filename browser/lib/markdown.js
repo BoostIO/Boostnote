@@ -2,10 +2,11 @@ import markdownit from 'markdown-it'
 import sanitize from './markdown-it-sanitize-html'
 import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
+import smartArrows from 'markdown-it-smartarrows'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import katex from 'katex'
-import {lastFindInArray} from './utils'
+import { lastFindInArray } from './utils'
 
 function createGutter (str, firstLineNumber) {
   if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
@@ -25,7 +26,7 @@ class Markdown {
       linkify: true,
       html: true,
       xhtmlOut: true,
-      breaks: true,
+      breaks: config.preview.breaks,
       highlight: function (str, lang) {
         const delimiter = ':'
         const langInfo = lang.split(delimiter)
@@ -38,6 +39,12 @@ class Markdown {
         }
         if (langType === 'sequence') {
           return `<pre class="sequence">${str}</pre>`
+        }
+        if (langType === 'chart') {
+          return `<pre class="chart">${str}</pre>`
+        }
+        if (langType === 'mermaid') {
+          return `<pre class="mermaid">${str}</pre>`
         }
         return '<pre class="code CodeMirror">' +
           '<span class="filename">' + fileName + '</span>' +
@@ -141,15 +148,34 @@ class Markdown {
       }
     })
     this.md.use(require('markdown-it-kbd'))
+    this.md.use(require('markdown-it-admonition'))
 
     const deflate = require('markdown-it-plantuml/lib/deflate')
     this.md.use(require('markdown-it-plantuml'), '', {
       generateSource: function (umlCode) {
+        const stripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
+        const serverAddress = stripTrailingSlash(config.preview.plantUMLServerAddress) + '/svg'
         const s = unescape(encodeURIComponent(umlCode))
         const zippedCode = deflate.encode64(
           deflate.zip_deflate(`@startuml\n${s}\n@enduml`, 9)
         )
-        return `http://www.plantuml.com/plantuml/svg/${zippedCode}`
+        return `${serverAddress}/${zippedCode}`
+      }
+    })
+
+    // Ditaa support
+    this.md.use(require('markdown-it-plantuml'), {
+      openMarker: '@startditaa',
+      closeMarker: '@endditaa',
+      generateSource: function (umlCode) {
+        const stripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
+        // Currently PlantUML server doesn't support Ditaa in SVG, so we set the format as PNG at the moment.
+        const serverAddress = stripTrailingSlash(config.preview.plantUMLServerAddress) + '/png'
+        const s = unescape(encodeURIComponent(umlCode))
+        const zippedCode = deflate.encode64(
+          deflate.zip_deflate(`@startditaa\n${s}\n@endditaa`, 9)
+        )
+        return `${serverAddress}/${zippedCode}`
       }
     })
 
@@ -211,6 +237,10 @@ class Markdown {
       return true
     })
 
+    if (config.preview.smartArrows) {
+      this.md.use(smartArrows)
+    }
+
     // Add line number attribute for scrolling
     const originalRender = this.md.renderer.render
     this.md.renderer.render = (tokens, options, env) => {
@@ -234,11 +264,6 @@ class Markdown {
     if (!_.isString(content)) content = ''
     return this.md.render(content)
   }
-
-  normalizeLinkText (linkText) {
-    return this.md.normalizeLinkText(linkText)
-  }
 }
 
 export default Markdown
-

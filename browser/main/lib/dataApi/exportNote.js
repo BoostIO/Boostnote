@@ -1,12 +1,8 @@
 import copyFile from 'browser/main/lib/dataApi/copyFile'
-import {findStorage} from 'browser/lib/findStorage'
-import filenamify from 'filenamify'
+import { findStorage } from 'browser/lib/findStorage'
 
 const fs = require('fs')
 const path = require('path')
-
-const LOCAL_STORED_REGEX = /!\[(.*?)]\(\s*?\/:storage\/(.*\.\S*?)\)/gi
-const IMAGES_FOLDER_NAME = 'images'
 
 /**
  * Export note together with images
@@ -28,21 +24,7 @@ function exportNote (storageKey, noteContent, targetPath, outputFormatter) {
     throw new Error('Storage path is not found')
   }
 
-  let exportedData = noteContent.replace(LOCAL_STORED_REGEX, (match, dstFilename, srcFilename) => {
-    dstFilename = filenamify(dstFilename, {replacement: '_'})
-    if (!path.extname(dstFilename)) {
-      dstFilename += path.extname(srcFilename)
-    }
-
-    const dstRelativePath = path.join(IMAGES_FOLDER_NAME, dstFilename)
-
-    exportTasks.push({
-      src: path.join(IMAGES_FOLDER_NAME, srcFilename),
-      dst: dstRelativePath
-    })
-
-    return `![${dstFilename}](${dstRelativePath})`
-  })
+  let exportedData = noteContent
 
   if (outputFormatter) {
     exportedData = outputFormatter(exportedData, exportTasks)

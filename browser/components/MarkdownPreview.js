@@ -7,21 +7,28 @@ import 'codemirror-mode-elixir'
 import consts from 'browser/lib/consts'
 import Raphael from 'raphael'
 import flowchart from 'flowchart'
+import mermaidRender from './render/MermaidRender'
 import SequenceDiagram from 'js-sequence-diagrams'
+import Chart from 'chart.js'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import htmlTextHelper from 'browser/lib/htmlTextHelper'
+import convertModeName from 'browser/lib/convertModeName'
 import copy from 'copy-to-clipboard'
 import mdurl from 'mdurl'
 import exportNote from 'browser/main/lib/dataApi/exportNote'
-import {escapeHtmlCharacters} from 'browser/lib/utils'
+import { escapeHtmlCharacters } from 'browser/lib/utils'
 
 const { remote } = require('electron')
+const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
+
 const { app } = remote
 const path = require('path')
+const fileUrl = require('file-url')
+
 const dialog = remote.dialog
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
-const appPath = 'file://' + (process.env.NODE_ENV === 'production'
+const appPath = fileUrl(process.env.NODE_ENV === 'production'
   ? app.getAppPath()
   : path.resolve())
 const CSS_FILES = [
@@ -29,7 +36,7 @@ const CSS_FILES = [
   `${appPath}/node_modules/codemirror/lib/codemirror.css`
 ]
 
-function buildStyle (fontFamily, fontSize, codeBlockFontFamily, lineNumber, scrollPastEnd) {
+function buildStyle (fontFamily, fontSize, codeBlockFontFamily, lineNumber, scrollPastEnd, theme, allowCustomCSS, customCSS) {
   return `
 @font-face {
   font-family: 'Lato';
@@ -49,7 +56,19 @@ function buildStyle (fontFamily, fontSize, codeBlockFontFamily, lineNumber, scro
   font-weight: 700;
   text-rendering: optimizeLegibility;
 }
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url('${appPath}/resources/fonts/MaterialIcons-Regular.woff2') format('woff2'),
+       url('${appPath}/resources/fonts/MaterialIcons-Regular.woff') format('woff'),
+       url('${appPath}/resources/fonts/MaterialIcons-Regular.ttf') format('truetype');
+}
+${allowCustomCSS ? customCSS : ''}
 ${markdownStyle}
+
 body {
   font-family: '${fontFamily.join("','")}';
   font-size: ${fontSize}px;
@@ -101,8 +120,37 @@ h2 {
 body p {
   white-space: normal;
 }
+
+@media print {
+  body[data-theme="${theme}"] {
+    color: #000;
+    background-color: #fff;
+  }
+  .clipboardButton {
+    display: none
+  }
+}
 `
 }
+
+const scrollBarStyle = `
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+`
+const scrollBarDarkStyle = `
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+`
 
 const { shell } = require('electron')
 const OSX = global.process.platform === 'darwin'
@@ -113,7 +161,6 @@ if (!OSX) {
   defaultFontFamily.unshift('meiryo')
 }
 const defaultCodeBlockFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
-
 export default class MarkdownPreview extends React.Component {
   constructor (props) {
     super(props)
@@ -123,7 +170,6 @@ export default class MarkdownPreview extends React.Component {
     this.mouseUpHandler = (e) => this.handleMouseUp(e)
     this.DoubleClickHandler = (e) => this.handleDoubleClick(e)
     this.scrollHandler = _.debounce(this.handleScroll.bind(this), 100, {leading: false, trailing: true})
-    this.anchorClickHandler = (e) => this.handlePreviewAnchorClick(e)
     this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
     this.saveAsTextHandler = () => this.handleSaveAsText()
     this.saveAsMdHandler = () => this.handleSaveAsMd()
@@ -136,27 +182,12 @@ export default class MarkdownPreview extends React.Component {
   }
 
   initMarkdown () {
-    const { smartQuotes, sanitize } = this.props
+    const { smartQuotes, sanitize, breaks } = this.props
     this.markdown = new Markdown({
       typographer: smartQuotes,
-      sanitize
+      sanitize,
+      breaks
     })
-  }
-
-  handlePreviewAnchorClick (e) {
-    e.preventDefault()
-    e.stopPropagation()
-
-    const anchor = e.target.closest('a')
-    const href = anchor.getAttribute('href')
-    if (_.isString(href) && href.match(/^#/)) {
-      const targetElement = this.refs.root.contentWindow.document.getElementById(href.substring(1, href.length))
-      if (targetElement != null) {
-        this.getWindow().scrollTo(0, targetElement.offsetTop)
-      }
-    } else {
-      shell.openExternal(href)
-    }
   }
 
   handleCheckboxClick (e) {
@@ -201,24 +232,51 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handleSaveAsMd () {
-    this.exportAsDocument('md')
+    this.exportAsDocument('md', (noteContent, exportTasks) => {
+      let result = noteContent
+      if (this.props && this.props.storagePath && this.props.noteKey) {
+        const attachmentsAbsolutePaths = attachmentManagement.getAbsolutePathsOfAttachmentsInContent(noteContent, this.props.storagePath)
+        attachmentsAbsolutePaths.forEach((attachment) => {
+          exportTasks.push({
+            src: attachment,
+            dst: attachmentManagement.DESTINATION_FOLDER
+          })
+        })
+        result = attachmentManagement.removeStorageAndNoteReferences(noteContent, this.props.noteKey)
+      }
+      return result
+    })
   }
 
   handleSaveAsHtml () {
     this.exportAsDocument('html', (noteContent, exportTasks) => {
-      const {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme} = this.getStyleParams()
+      const {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, scrollPastEnd, theme, allowCustomCSS, customCSS} = this.getStyleParams()
 
-      const inlineStyles = buildStyle(fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, lineNumber)
-      const body = this.markdown.render(escapeHtmlCharacters(noteContent))
+      const inlineStyles = buildStyle(fontFamily, fontSize, codeBlockFontFamily, lineNumber, scrollPastEnd, theme, allowCustomCSS, customCSS)
+      let body = this.markdown.render(escapeHtmlCharacters(noteContent, { detectCodeBlock: true }))
+
       const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
+      const attachmentsAbsolutePaths = attachmentManagement.getAbsolutePathsOfAttachmentsInContent(noteContent, this.props.storagePath)
 
       files.forEach((file) => {
-        file = file.replace('file://', '')
+        if (global.process.platform === 'win32') {
+          file = file.replace('file:///', '')
+        } else {
+          file = file.replace('file://', '')
+        }
+
         exportTasks.push({
           src: file,
           dst: 'css'
         })
       })
+      attachmentsAbsolutePaths.forEach((attachment) => {
+        exportTasks.push({
+          src: attachment,
+          dst: attachmentManagement.DESTINATION_FOLDER
+        })
+      })
+      body = attachmentManagement.removeStorageAndNoteReferences(body, this.props.noteKey)
 
       let styles = ''
       files.forEach((file) => {
@@ -276,6 +334,21 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
+  getScrollBarStyle () {
+    const {
+      theme
+    } = this.props
+
+    switch (theme) {
+      case 'dark':
+      case 'solarized-dark':
+      case 'monokai':
+        return scrollBarDarkStyle
+      default:
+        return scrollBarStyle
+    }
+  }
+
   componentDidMount () {
     this.refs.root.setAttribute('sandbox', 'allow-scripts')
     this.refs.root.contentWindow.document.body.addEventListener('contextmenu', this.contextMenuHandler)
@@ -284,6 +357,9 @@ export default class MarkdownPreview extends React.Component {
       <style id='style'></style>
       <link rel="stylesheet" id="codeTheme">
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <style>
+        ${this.getScrollBarStyle()}
+      </style>
     `
 
     CSS_FILES.forEach((file) => {
@@ -322,7 +398,10 @@ export default class MarkdownPreview extends React.Component {
 
   componentDidUpdate (prevProps) {
     if (prevProps.value !== this.props.value) this.rewriteIframe()
-    if (prevProps.smartQuotes !== this.props.smartQuotes || prevProps.sanitize !== this.props.sanitize) {
+    if (prevProps.smartQuotes !== this.props.smartQuotes ||
+        prevProps.sanitize !== this.props.sanitize ||
+        prevProps.smartArrows !== this.props.smartArrows ||
+        prevProps.breaks !== this.props.breaks) {
       this.initMarkdown()
       this.rewriteIframe()
     }
@@ -333,14 +412,16 @@ export default class MarkdownPreview extends React.Component {
       prevProps.lineNumber !== this.props.lineNumber ||
       prevProps.showCopyNotification !== this.props.showCopyNotification ||
       prevProps.theme !== this.props.theme ||
-      prevProps.scrollPastEnd !== this.props.scrollPastEnd) {
+      prevProps.scrollPastEnd !== this.props.scrollPastEnd ||
+      prevProps.allowCustomCSS !== this.props.allowCustomCSS ||
+      prevProps.customCSS !== this.props.customCSS) {
       this.applyStyle()
       this.rewriteIframe()
     }
   }
 
   getStyleParams () {
-    const { fontSize, lineNumber, codeBlockTheme, scrollPastEnd } = this.props
+    const { fontSize, lineNumber, codeBlockTheme, scrollPastEnd, theme, allowCustomCSS, customCSS } = this.props
     let { fontFamily, codeBlockFontFamily } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
         ? fontFamily.split(',').map(fontName => fontName.trim()).concat(defaultFontFamily)
@@ -349,14 +430,14 @@ export default class MarkdownPreview extends React.Component {
         ? codeBlockFontFamily.split(',').map(fontName => fontName.trim()).concat(defaultCodeBlockFontFamily)
         : defaultCodeBlockFontFamily
 
-    return {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, scrollPastEnd}
+    return {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, scrollPastEnd, theme, allowCustomCSS, customCSS}
   }
 
   applyStyle () {
-    const {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, scrollPastEnd} = this.getStyleParams()
+    const {fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, scrollPastEnd, theme, allowCustomCSS, customCSS} = this.getStyleParams()
 
     this.getWindow().document.getElementById('codeTheme').href = this.GetCodeThemeLink(codeBlockTheme)
-    this.getWindow().document.getElementById('style').innerHTML = buildStyle(fontFamily, fontSize, codeBlockFontFamily, lineNumber, scrollPastEnd)
+    this.getWindow().document.getElementById('style').innerHTML = buildStyle(fontFamily, fontSize, codeBlockFontFamily, lineNumber, scrollPastEnd, theme, allowCustomCSS, customCSS)
   }
 
   GetCodeThemeLink (theme) {
@@ -369,9 +450,6 @@ export default class MarkdownPreview extends React.Component {
   }
 
   rewriteIframe () {
-    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      el.removeEventListener('click', this.anchorClickHandler)
-    })
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
       el.removeEventListener('click', this.checkboxClickHandler)
     })
@@ -380,39 +458,21 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', this.linkClickHandler)
     })
 
-    const { theme, indentSize, showCopyNotification, storagePath } = this.props
+    const { theme, indentSize, showCopyNotification, storagePath, noteKey } = this.props
     let { value, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
-
-    const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
-    if (codeBlocks !== null) {
-      codeBlocks.forEach((codeBlock) => {
-        value = value.replace(codeBlock, htmlTextHelper.encodeEntities(codeBlock))
-      })
-    }
-    this.refs.root.contentWindow.document.body.innerHTML = this.markdown.render(value)
-
-    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      this.fixDecodedURI(el)
-      el.href = this.markdown.normalizeLinkText(el.href)
-      if (!/\/:storage/.test(el.href)) return
-      el.href = `file:///${this.markdown.normalizeLinkText(path.join(storagePath, 'images', path.basename(el.href)))}`
-      el.addEventListener('click', this.anchorClickHandler)
-    })
+    const renderedHTML = this.markdown.render(value)
+    attachmentManagement.migrateAttachments(value, storagePath, noteKey)
+    this.refs.root.contentWindow.document.body.innerHTML = attachmentManagement.fixLocalURLS(renderedHTML, storagePath)
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
       el.addEventListener('click', this.checkboxClickHandler)
     })
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+      this.fixDecodedURI(el)
       el.addEventListener('click', this.linkClickHandler)
-    })
-
-    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('img'), (el) => {
-      el.src = this.markdown.normalizeLinkText(el.src)
-      if (!/\/:storage/.test(el.src)) return
-      el.src = `file:///${this.markdown.normalizeLinkText(path.join(storagePath, 'images', path.basename(el.src)))}`
     })
 
     codeBlockTheme = consts.THEMES.some((_theme) => _theme === codeBlockTheme)
@@ -420,7 +480,7 @@ export default class MarkdownPreview extends React.Component {
       : 'default'
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
-      let syntax = CodeMirror.findModeByName(el.className)
+      let syntax = CodeMirror.findModeByName(convertModeName(el.className))
       if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
       CodeMirror.requireMode(syntax.mode, () => {
         const content = htmlTextHelper.decodeEntities(el.innerHTML)
@@ -462,7 +522,7 @@ export default class MarkdownPreview extends React.Component {
         el.innerHTML = ''
         diagram.drawSVG(el, opts)
         _.forEach(el.querySelectorAll('a'), (el) => {
-          el.addEventListener('click', this.anchorClickHandler)
+          el.addEventListener('click', this.linkClickHandler)
         })
       } catch (e) {
         console.error(e)
@@ -478,7 +538,7 @@ export default class MarkdownPreview extends React.Component {
         el.innerHTML = ''
         diagram.drawSVG(el, {theme: 'simple'})
         _.forEach(el.querySelectorAll('a'), (el) => {
-          el.addEventListener('click', this.anchorClickHandler)
+          el.addEventListener('click', this.linkClickHandler)
         })
       } catch (e) {
         console.error(e)
@@ -486,6 +546,30 @@ export default class MarkdownPreview extends React.Component {
         el.innerHTML = 'Sequence diagram parse error: ' + e.message
       }
     })
+
+    _.forEach(
+      this.refs.root.contentWindow.document.querySelectorAll('.chart'),
+      (el) => {
+        try {
+          const chartConfig = JSON.parse(el.innerHTML)
+          el.innerHTML = ''
+          var canvas = document.createElement('canvas')
+          el.appendChild(canvas)
+          /* eslint-disable no-new */
+          new Chart(canvas, chartConfig)
+        } catch (e) {
+          console.error(e)
+          el.className = 'chart-error'
+          el.innerHTML = 'chartjs diagram parse error: ' + e.message
+        }
+      }
+    )
+    _.forEach(
+      this.refs.root.contentWindow.document.querySelectorAll('.mermaid'),
+      (el) => {
+        mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme)
+      }
+    )
   }
 
   focus () {
@@ -527,27 +611,40 @@ export default class MarkdownPreview extends React.Component {
     e.stopPropagation()
 
     const href = e.target.href
-    if (href.match(/^http/i)) {
-      shell.openExternal(href)
+    const linkHash = href.split('/').pop()
+
+    const regexNoteInternalLink = /main.html#(.+)/
+    if (regexNoteInternalLink.test(linkHash)) {
+      const targetId = mdurl.encode(linkHash.match(regexNoteInternalLink)[1])
+      const targetElement = this.refs.root.contentWindow.document.getElementById(targetId)
+
+      if (targetElement != null) {
+        this.getWindow().scrollTo(0, targetElement.offsetTop)
+      }
       return
     }
 
-    const noteHash = e.target.href.split('/').pop()
     // this will match the new uuid v4 hash and the old hash
     // e.g.
     // :note:1c211eb7dcb463de6490 and
     // :note:7dd23275-f2b4-49cb-9e93-3454daf1af9c
     const regexIsNoteLink = /^:note:([a-zA-Z0-9-]{20,36})$/
-    if (regexIsNoteLink.test(noteHash)) {
-      eventEmitter.emit('list:jump', noteHash.replace(':note:', ''))
+    if (regexIsNoteLink.test(linkHash)) {
+      eventEmitter.emit('list:jump', linkHash.replace(':note:', ''))
+      return
     }
+
     // this will match the old link format storage.key-note.key
     // e.g.
     // 877f99c3268608328037-1c211eb7dcb463de6490
     const regexIsLegacyNoteLink = /^(.{20})-(.{20})$/
-    if (regexIsLegacyNoteLink.test(noteHash)) {
-      eventEmitter.emit('list:jump', noteHash.split('-')[1])
+    if (regexIsLegacyNoteLink.test(linkHash)) {
+      eventEmitter.emit('list:jump', linkHash.split('-')[1])
+      return
     }
+
+    // other case
+    shell.openExternal(href)
   }
 
   render () {
@@ -570,9 +667,12 @@ MarkdownPreview.propTypes = {
   onDoubleClick: PropTypes.func,
   onMouseUp: PropTypes.func,
   onMouseDown: PropTypes.func,
+  onContextMenu: PropTypes.func,
   className: PropTypes.string,
   value: PropTypes.string,
   showCopyNotification: PropTypes.bool,
   storagePath: PropTypes.string,
-  smartQuotes: PropTypes.bool
+  smartQuotes: PropTypes.bool,
+  smartArrows: PropTypes.bool,
+  breaks: PropTypes.bool
 }

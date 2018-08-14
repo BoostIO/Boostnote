@@ -5,7 +5,7 @@ import styles from './MarkdownEditor.styl'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import eventEmitter from 'browser/main/lib/eventEmitter'
-import {findStorage} from 'browser/lib/findStorage'
+import { findStorage } from 'browser/lib/findStorage'
 
 class MarkdownEditor extends React.Component {
   constructor (props) {
@@ -223,7 +223,7 @@ class MarkdownEditor extends React.Component {
   }
 
   render () {
-    const { className, value, config, storageKey } = this.props
+    const {className, value, config, storageKey, noteKey} = this.props
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -263,6 +263,7 @@ class MarkdownEditor extends React.Component {
           displayLineNumbers={config.editor.displayLineNumbers}
           scrollPastEnd={config.editor.scrollPastEnd}
           storageKey={storageKey}
+          noteKey={noteKey}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
@@ -282,6 +283,8 @@ class MarkdownEditor extends React.Component {
           indentSize={editorIndentSize}
           scrollPastEnd={config.preview.scrollPastEnd}
           smartQuotes={config.preview.smartQuotes}
+          smartArrows={config.preview.smartArrows}
+          breaks={config.preview.breaks}
           sanitize={config.preview.sanitize}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
@@ -293,6 +296,9 @@ class MarkdownEditor extends React.Component {
           onCheckboxClick={(e) => this.handleCheckboxClick(e)}
           showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
+          noteKey={noteKey}
+          customCSS={config.preview.customCSS}
+          allowCustomCSS={config.preview.allowCustomCSS}
         />
       </div>
     )

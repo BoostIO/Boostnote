@@ -23,7 +23,9 @@ function findByWordOrTag (notes, block) {
       return true
     }
     if (note.type === 'SNIPPET_NOTE') {
-      return note.description.match(wordRegExp)
+      return note.description.match(wordRegExp) || note.snippets.some((snippet) => {
+        return snippet.name.match(wordRegExp) || snippet.content.match(wordRegExp)
+      })
     } else if (note.type === 'MARKDOWN_NOTE') {
       return note.content.match(wordRegExp)
     }
