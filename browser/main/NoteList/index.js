@@ -797,25 +797,25 @@ class NoteList extends React.Component {
     }
   }
 
-  getTagIdList (serverUrl, authToken, tagList = []) {//get tag id
-    if(tagList.length == 0){
+  getTagIdList (serverUrl, authToken, tagList = []) { // get tag id
+    if (tagList.length === 0) {
       return Promise.resolve([])
-    }else{
+    } else {
       return Promise.all(tagList.map(tagName => this.getTagId(serverUrl, authToken, tagName)))
     }
   }
 
-  getTagId (serverUrl, authToken, tagName) {//if tag not exist at server, create this tag
-    tagName = tagName.toLowerCase();
+  getTagId (serverUrl, authToken, tagName) { // if tag not exist at server, create this tag
+    tagName = tagName.toLowerCase()
     return new Promise((resolve, reject) => {
       this.searchTag(serverUrl, tagName).then(id => {
-        if(id === -1){
+        if (id === -1) {
           this.createTag(serverUrl, authToken, tagName).then(newId => {
             resolve(newId)
           }).catch(error => {
             reject(error)
           })
-        }else{
+        } else {
           resolve(id)
         }
       }).catch(error => {
@@ -844,22 +844,21 @@ class NoteList extends React.Component {
     })
   }
 
-  searchTag (serverUrl, tagName){//search tag name
+  searchTag (serverUrl, tagName) { // search tag name
     return new Promise((resolve, reject) => {
       fetch(`${serverUrl}${WP_TAGS_PATH}?search=${tagName}`, {
         method: 'GET'
       }).then(res => res.json()).then(response => {
         const tag = response.find(item => (item.name === tagName))
-        if(tag){
+        if (tag) {
           resolve(tag.id)
-        }else{
+        } else {
           resolve(-1)
         }
       }).catch(error => {
         reject(error)
       })
     })
-
   }
 
   openBlog (note) {
