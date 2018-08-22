@@ -26,6 +26,7 @@ import context from 'browser/lib/context'
 const { remote } = require('electron')
 const { dialog } = remote
 const WP_POST_PATH = '/wp/v2/posts'
+const WP_TAGS_PATH = '/wp/v2/tags'
 
 function sortByCreatedAt (a, b) {
   return new Date(b.createdAt) - new Date(a.createdAt)
@@ -721,47 +722,54 @@ class NoteList extends React.Component {
     } else {
       authToken = `Bearer ${token}`
     }
-    const contentToRender = firstNote.content.replace(`# ${firstNote.title}`, '')
-    const markdown = new Markdown()
-    const data = {
-      title: firstNote.title,
-      content: markdown.render(contentToRender),
-      status: 'publish'
-    }
 
-    let url = ''
-    let method = ''
-    if (firstNote.blog && firstNote.blog.blogId) {
-      url = `${address}${WP_POST_PATH}/${firstNote.blog.blogId}`
-      method = 'PUT'
-    } else {
-      url = `${address}${WP_POST_PATH}`
-      method = 'POST'
-    }
-    // eslint-disable-next-line no-undef
-    fetch(url, {
-      method: method,
-      body: JSON.stringify(data),
-      headers: {
-        'Authorization': authToken,
-        'Content-Type': 'application/json'
+    this.getTagIdList(address, authToken, firstNote.tags).then(tagIdList => {
+      const contentToRender = firstNote.content.replace(`# ${firstNote.title}`, '')
+      const markdown = new Markdown()
+      const data = {
+        title: firstNote.title,
+        content: markdown.render(contentToRender),
+        status: 'publish',
+        tags: tagIdList
       }
-    }).then(res => res.json())
-      .then(response => {
-        if (_.isNil(response.link) || _.isNil(response.id)) {
-          return Promise.reject()
+
+      let url = ''
+      let method = ''
+      if (firstNote.blog && firstNote.blog.blogId) {
+        url = `${address}${WP_POST_PATH}/${firstNote.blog.blogId}`
+        method = 'PUT'
+      } else {
+        url = `${address}${WP_POST_PATH}`
+        method = 'POST'
+      }
+      // eslint-disable-next-line no-undef
+      fetch(url, {
+        method: method,
+        body: JSON.stringify(data),
+        headers: {
+          'Authorization': authToken,
+          'Content-Type': 'application/json'
         }
-        firstNote.blog = {
-          blogLink: response.link,
-          blogId: response.id
-        }
-        this.save(firstNote)
-        this.confirmPublish(firstNote)
-      })
-      .catch((error) => {
-        console.error(error)
-        this.confirmPublishError()
-      })
+      }).then(res => res.json())
+        .then(response => {
+          if (_.isNil(response.link) || _.isNil(response.id)) {
+            return Promise.reject()
+          }
+          firstNote.blog = {
+            blogLink: response.link,
+            blogId: response.id
+          }
+          this.save(firstNote)
+          this.confirmPublish(firstNote)
+        })
+        .catch((error) => {
+          console.error(error)
+          this.confirmPublishError()
+        })
+    }).catch(error => {
+      console.error(error)
+      this.confirmPublishError()
+    })
   }
 
   confirmPublishError () {
@@ -787,6 +795,71 @@ class NoteList extends React.Component {
     if (buttonIndex === 1) {
       this.openBlog(note)
     }
+  }
+
+  getTagIdList (serverUrl, authToken, tagList = []) {//get tag id
+    if(tagList.length == 0){
+      return Promise.resolve([])
+    }else{
+      return Promise.all(tagList.map(tagName => this.getTagId(serverUrl, authToken, tagName)))
+    }
+  }
+
+  getTagId (serverUrl, authToken, tagName) {//if tag not exist at server, create this tag
+    tagName = tagName.toLowerCase();
+    return new Promise((resolve, reject) => {
+      this.searchTag(serverUrl, tagName).then(id => {
+        if(id === -1){
+          this.createTag(serverUrl, authToken, tagName).then(newId => {
+            resolve(newId)
+          }).catch(error => {
+            reject(error)
+          })
+        }else{
+          resolve(id)
+        }
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
+
+  createTag (serverUrl, authToken, tagName) {
+    return new Promise((resolve, reject) => {
+      fetch(`${serverUrl}${WP_TAGS_PATH}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: tagName
+        }),
+        headers: {
+          'Authorization': authToken,
+          'Content-Type': 'application/json'
+        }
+
+      }).then(res => res.json()).then(response => {
+        resolve(response.id)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
+
+  searchTag (serverUrl, tagName){//search tag name
+    return new Promise((resolve, reject) => {
+      fetch(`${serverUrl}${WP_TAGS_PATH}?search=${tagName}`, {
+        method: 'GET'
+      }).then(res => res.json()).then(response => {
+        const tag = response.find(item => (item.name === tagName))
+        if(tag){
+          resolve(tag.id)
+        }else{
+          resolve(-1)
+        }
+      }).catch(error => {
+        reject(error)
+      })
+    })
+
   }
 
   openBlog (note) {
