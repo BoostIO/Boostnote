@@ -3,7 +3,6 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SnippetNoteDetail.styl'
 import CodeEditor from 'browser/components/CodeEditor'
-import MarkdownEditor from 'browser/components/MarkdownEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
@@ -670,31 +669,21 @@ class SnippetNoteDetail extends React.Component {
         key={index}
         style={{zIndex: isActive ? 5 : 4}}
       >
-        {snippet.mode === 'Markdown' || snippet.mode === 'GitHub Flavored Markdown'
-          ? <MarkdownEditor styleName='tabView-content'
-            value={snippet.content}
-            config={config}
-            onChange={(e) => this.handleCodeChange(index)(e)}
-            ref={'code-' + index}
-            ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
-            storageKey={storageKey}
-          />
-          : <CodeEditor styleName='tabView-content'
-            mode={snippet.mode}
-            value={snippet.content}
-            theme={config.editor.theme}
-            fontFamily={config.editor.fontFamily}
-            fontSize={editorFontSize}
-            indentType={config.editor.indentType}
-            indentSize={editorIndentSize}
-            displayLineNumbers={config.editor.displayLineNumbers}
-            keyMap={config.editor.keyMap}
-            scrollPastEnd={config.editor.scrollPastEnd}
-            fetchUrlTitle={config.editor.fetchUrlTitle}
-            onChange={(e) => this.handleCodeChange(index)(e)}
-            ref={'code-' + index}
-          />
-        }
+        <CodeEditor styleName='tabView-content'
+          mode={snippet.mode}
+          value={snippet.content}
+          theme={config.editor.theme}
+          fontFamily={config.editor.fontFamily}
+          fontSize={editorFontSize}
+          indentType={config.editor.indentType}
+          indentSize={editorIndentSize}
+          displayLineNumbers={config.editor.displayLineNumbers}
+          keyMap={config.editor.keyMap}
+          scrollPastEnd={config.editor.scrollPastEnd}
+          fetchUrlTitle={config.editor.fetchUrlTitle}
+          onChange={(e) => this.handleCodeChange(index)(e)}
+          ref={'code-' + index}
+        />
       </div>
     })
 
