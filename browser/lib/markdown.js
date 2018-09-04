@@ -44,7 +44,7 @@ class Markdown {
           return `<pre class="chart">${str}</pre>`
         }
         if (langType === 'mermaid') {
-          return `<pre class="mermaid">${str}</pre>`
+          return `<pre class="mermaid" data-height="${fileName}">${str}</pre>`
         }
         return '<pre class="code CodeMirror">' +
           '<span class="filename">' + fileName + '</span>' +

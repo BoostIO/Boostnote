@@ -28,6 +28,7 @@ function render (element, content, theme) {
     })
     mermaidAPI.render(getId(), content, (svgGraph) => {
       element.innerHTML = svgGraph
+      element.style.height = element.attributes.getNamedItem('data-height').value + 'vh'
     })
   } catch (e) {
     console.error(e)
