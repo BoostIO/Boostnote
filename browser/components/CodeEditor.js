@@ -185,6 +185,18 @@ export default class CodeEditor extends React.Component {
         'Cmd-T': function (cm) {
           // Do nothing
         },
+        'Cmd-I': cm => {
+          if (global.process.platform === 'darwin') this.applyItalic(cm)
+        },
+        'Ctrl-I': cm => {
+          if (global.process.platform !== 'darwin') this.applyItalic(cm)
+        },
+        'Cmd-B': cm => {
+          if (global.process.platform === 'darwin') this.applyBold(cm)
+        },
+        'Ctrl-B': cm => {
+          if (global.process.platform !== 'darwin') this.applyBold(cm)
+        },
         Enter: 'boostNewLineAndIndentContinueMarkdownList',
         'Ctrl-C': cm => {
           if (cm.getOption('keyMap').substr(0, 3) === 'vim') {
@@ -217,6 +229,64 @@ export default class CodeEditor extends React.Component {
 
     this.tableEditor = new TableEditor(new TextEditorInterface(this.editor))
     eventEmitter.on('code:format-table', this.formatTable)
+  }
+
+  applyItalic (cm) {
+    if (cm.somethingSelected()) {
+      const selection = cm.getSelection()
+      const str = selection.trim()
+      const index = selection.indexOf(str)
+
+      if (str.length === 0 || str.match(/\n\s*\n/) !== null) return
+
+      let newString
+      const boldAndItalic = str.match(/^\*\*\*(.*)\*\*\*$/)
+      const bold = str.match(/^\*\*(.*)\*\*$/)
+      const italic = str.match(/^\*(.*)\*$/)
+      if (boldAndItalic !== null) {
+        newString = boldAndItalic[1]
+        newString = `**${newString}**`
+      } else if (bold !== null) {
+        newString = bold[1]
+        newString = `***${newString}***`
+      } else if (italic !== null) {
+        newString = italic[1]
+      } else {
+        newString = `*${str}*`
+      }
+
+      const newSelection = selection.substr(0, index) + newString + selection.substr(index + selection.length)
+      cm.replaceSelection(newSelection)
+    }
+  }
+
+  applyBold (cm) {
+    if (cm.somethingSelected()) {
+      const selection = cm.getSelection()
+      const str = selection.trim()
+      const index = selection.indexOf(str)
+
+      if (str.length === 0 || str.match(/\n\s*\n/) !== null) return
+
+      let newString
+      const boldAndItalic = str.match(/^\*\*\*(.*)\*\*\*$/)
+      const bold = str.match(/^\*\*(.*)\*\*$/)
+      const italic = str.match(/^\*(.*)\*$/)
+      if (boldAndItalic !== null) {
+        newString = boldAndItalic[1]
+        newString = `*${newString}*`
+      } else if (bold !== null) {
+        newString = bold[1]
+      } else if (italic !== null) {
+        newString = italic[1]
+        newString = `***${newString}***`
+      } else {
+        newString = `**${str}**`
+      }
+
+      const newSelection = selection.substr(0, index) + newString + selection.substr(index + selection.length)
+      cm.replaceSelection(newSelection)
+    }
   }
 
   expandSnippet (line, cursor, cm, snippets) {
