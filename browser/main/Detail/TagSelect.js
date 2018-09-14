@@ -119,7 +119,7 @@ class TagSelect extends React.Component {
   }
 
   render () {
-    const { value, className } = this.props
+    const { value, data, className } = this.props
 
     const tagList = _.isArray(value)
       ? value.map((tag) => {
@@ -138,6 +138,14 @@ class TagSelect extends React.Component {
       })
       : []
 
+    const completionList = _.sortBy(data.tagNoteMap.map(
+      (tag, name) => ({ name, size: tag.size })
+    ), ['name']).filter(
+      tag => tag.size > 0
+    ).map(
+      tag => <option key={tag.name} value={tag.name} />
+    )
+
     return (
       <div className={_.isString(className)
           ? 'TagSelect ' + className
@@ -153,7 +161,12 @@ class TagSelect extends React.Component {
           onChange={(e) => this.handleNewTagInputChange(e)}
           onKeyDown={(e) => this.handleNewTagInputKeyDown(e)}
           onBlur={(e) => this.handleNewTagBlur(e)}
+          list='completionList'
+          autoComplete='off'
         />
+        <datalist id='completionList'>
+          {completionList}
+        </datalist>
       </div>
     )
   }
