@@ -16,12 +16,18 @@ class TopBar extends React.Component {
       searchOptions: [],
       isSearching: false,
       isAlphabet: false,
-      isIME: false,
+      isIMEDone: false,
       isConfirmTranslation: false
     }
 
     this.focusSearchHandler = () => {
       this.handleOnSearchFocus()
+    }
+
+    this.handleIMEDone = () => {
+      this.setState({
+        isIMEDone: true
+      })
     }
 
     this.codeInitHandler = this.handleCodeInit.bind(this)
@@ -36,11 +42,13 @@ class TopBar extends React.Component {
         isSearching: true
       })
     }
+    document.addEventListener('compositionend', this.handleIMEDone)
     ee.on('top:focus-search', this.focusSearchHandler)
     ee.on('code:init', this.codeInitHandler)
   }
 
   componentWillUnmount () {
+    document.removeEventListener('compositionend', this.handleIMEDone)
     ee.off('top:focus-search', this.focusSearchHandler)
     ee.off('code:init', this.codeInitHandler)
   }
@@ -60,7 +68,7 @@ class TopBar extends React.Component {
     // reset states
     this.setState({
       isAlphabet: false,
-      isIME: false
+      isIMEDone: false
     })
 
     // Clear search on ESC
@@ -85,11 +93,6 @@ class TopBar extends React.Component {
       this.setState({
         isAlphabet: true
       })
-    // When the key is an IME input (Japanese, Chinese)
-    } else if (e.keyCode === 229) {
-      this.setState({
-        isIME: true
-      })
     }
   }
 
@@ -100,8 +103,8 @@ class TopBar extends React.Component {
       isConfirmTranslation: false
     })
 
-    // When the key is translation confirmation (Enter, Space)
-    if (this.state.isIME && (e.keyCode === 32 || e.keyCode === 13)) {
+    // When IME composition (Chinese, Japanese, Korean) is finished
+    if (this.state.isIMEDone) {
       this.setState({
         isConfirmTranslation: true
       })
