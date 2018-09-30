@@ -659,7 +659,7 @@ class NoteList extends React.Component {
     dataApi
       .createNote(storage.key, {
         type: firstNote.type,
-        folder: folder.key,
+        folder: selectedNotes[0].folder,
         title: firstNote.title + ' ' + i18n.__('copy'),
         content: firstNote.content
       })
