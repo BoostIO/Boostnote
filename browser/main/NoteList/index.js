@@ -648,7 +648,6 @@ class NoteList extends React.Component {
   cloneNote () {
     const { selectedNoteKeys } = this.state
     const { dispatch, location } = this.props
-    const { storage, folder } = this.resolveTargetFolder()
     const notes = this.notes.map((note) => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
     const firstNote = selectedNotes[0]
@@ -657,7 +656,7 @@ class NoteList extends React.Component {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent(eventName)
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
     dataApi
-      .createNote(storage.key, {
+      .createNote(firstNote.storage, {
         type: firstNote.type,
         folder: firstNote.folder,
         title: firstNote.title + ' ' + i18n.__('copy'),
