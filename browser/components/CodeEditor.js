@@ -183,6 +183,9 @@ export default class CodeEditor extends React.Component {
           }
         }
       },
+      'Cmd-Left': function (cm) {
+        cm.execCommand('goLineLeft')
+      },
       'Cmd-T': function (cm) {
         // Do nothing
       },
