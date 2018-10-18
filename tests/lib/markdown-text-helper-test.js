@@ -4,7 +4,7 @@
 const test = require('ava')
 const markdown = require('browser/lib/markdownTextHelper')
 
-test(t => {
+test('markdown-text-helper-test', t => {
   // [input, expected]
   const testCases = [
     // List

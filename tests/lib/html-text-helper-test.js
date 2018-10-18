@@ -39,7 +39,7 @@ test('htmlTextHelper#decodeEntities() should return decoded text (string)', t =>
 })
 
 // Integration test
-test(t => {
+test('html-text-helper-test', t => {
   const testCases = [
     'var test = \'test\'',
     '<a href=\'https://boostnote.io\'>Boostnote',

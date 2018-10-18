@@ -3,7 +3,7 @@ import Main from './Main'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
-require('!!style!css!stylus?sourceMap!./global.styl')
+require('!!style-loader!css-loader!stylus-loader?sourceMap!./global.styl')
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 require('./lib/ipcClient')

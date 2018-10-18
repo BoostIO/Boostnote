@@ -34,7 +34,7 @@ const dialog = remote.dialog
 
 const uri2path = require('file-uri-to-path')
 
-const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
+const markdownStyle = require('!!css-loader!stylus-loader?sourceMap!./markdown.styl')[0][1]
 const appPath = fileUrl(
   process.env.NODE_ENV === 'production' ? app.getAppPath() : path.resolve()
 )

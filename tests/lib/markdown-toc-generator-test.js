@@ -8,7 +8,7 @@ const test = require('ava')
 const markdownToc = require('browser/lib/markdown-toc-generator')
 const EOL = require('os').EOL
 
-test(t => {
+test('markdown-toc-generator-test 1', t => {
   /**
    * Contains array of test cases in format :
    * [
@@ -265,7 +265,7 @@ this is a text
   })
 })
 
-test(t => {
+test('markdown-toc-generator-test 2', t => {
   /**
    * Contains array of test cases in format :
    * [

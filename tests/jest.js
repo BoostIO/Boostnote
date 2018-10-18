@@ -8,5 +8,5 @@ global.Raphael = {
 }
 
 global._ = {
-  extend: jest.genMockFunction()
+  extend: jest.fn()
 }

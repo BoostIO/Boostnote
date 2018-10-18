@@ -4,21 +4,38 @@ const path = require('path')
 const NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
 
 var config = Object.assign({}, skeleton, {
+  mode: 'production',
   module: {
-    loaders: [
+    rules: [
       {
         test: /(\.js|\.jsx)?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel'
+        loader: 'babel-loader'
       },
       {
         test: /\.styl$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'style!css?modules&importLoaders=1&localIdentName=[name]__[local]___[path]!stylus?sourceMap'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json'
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]__[hash:base64:5]'
+            }
+          },
+          {
+            loader: 'stylus-loader',
+            options: {
+              sourceMap: true,
+              use: [require('nib')()],
+              import: [
+                '~nib/lib/nib/index.styl',
+                path.join(__dirname, 'browser/styles/index.styl')
+              ]
+            }
+          }
+        ]
       }
     ]
   },
@@ -30,9 +47,8 @@ var config = Object.assign({}, skeleton, {
     publicPath: 'http://localhost:8080/assets/'
   },
   plugins: [
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new NodeTargetPlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),

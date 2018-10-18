@@ -1,13 +1,30 @@
 {
-  "presets": ["react", "es2015"],
+  "presets": [
+    "@babel/preset-react",
+    [
+      "@babel/preset-env",
+      {
+        "modules": "commonjs"
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-transform-runtime"
+  ],
   "env": {
-    "development": {
-      "presets": ["react-hmre"]
-    },
     "test": {
-      "presets": ["env" ,"react", "es2015"],
+      "presets": [
+        "@babel/preset-env",
+        "@babel/preset-react"
+      ],
       "plugins": [
-        [ "babel-plugin-webpack-alias", { "config": "${PWD}/webpack.config.js" } ]
+        [
+          "babel-plugin-webpack-alias",
+          {
+            "config": "${PWD}/webpack.config.js"
+          }
+        ]
       ]
     }
   }

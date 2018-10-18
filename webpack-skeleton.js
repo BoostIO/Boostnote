@@ -7,8 +7,8 @@ var config = {
     main: ['./browser/main/index.js']
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.styl'],
-    packageMains: [
+    extensions: ['.js', '.jsx', '.styl'],
+    mainFields: [
       'webpack',
       'browser',
       'web',
@@ -21,14 +21,7 @@ var config = {
       browser: path.join(__dirname, 'browser')
     }
   },
-  plugins: [new webpack.NoErrorsPlugin(), new NodeTargetPlugin()],
-  stylus: {
-    use: [require('nib')()],
-    import: [
-      '~nib/lib/nib/index.styl',
-      path.join(__dirname, 'browser/styles/index.styl')
-    ]
-  },
+  plugins: [new webpack.NoEmitOnErrorsPlugin(), new NodeTargetPlugin()],
   externals: [
     'node-ipc',
     'electron',
