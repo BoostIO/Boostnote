@@ -189,6 +189,60 @@ class MarkdownNoteDetail extends React.Component {
     ee.emit('export:save-html')
   }
 
+  handleKeyDown (e) {
+    switch (e.keyCode) {
+      // tab key
+      case 9:
+        if (e.ctrlKey && !e.shiftKey) {
+          e.preventDefault()
+          this.jumpNextTab()
+        } else if (e.ctrlKey && e.shiftKey) {
+          e.preventDefault()
+          this.jumpPrevTab()
+        } else if (!e.ctrlKey && !e.shiftKey && e.target === this.refs.description) {
+          e.preventDefault()
+          this.focusEditor()
+        }
+        break
+      //I key
+      case 73:
+        {
+          const isSuper = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (isSuper){
+            e.preventDefault()
+            this.handleInfoButtonClick(e);
+          }
+        }
+        break;  
+      // L key
+      case 76:
+        {
+          const isSuper = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (isSuper) {
+            e.preventDefault()
+            this.focus()
+          }
+        }
+        break
+      // T key
+      case 84:
+        {
+          const isSuper = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (isSuper && !e.shiftKey && !e.altKey) {
+            e.preventDefault()
+            this.addSnippet()
+          }
+        }
+        break
+    }
+  }
+ 
   handleTrashButtonClick (e) {
     const { note } = this.state
     const { isTrashed } = note
@@ -451,6 +505,7 @@ class MarkdownNoteDetail extends React.Component {
       <div className='NoteDetail'
         style={this.props.style}
         styleName='root'
+        onKeyDown={(e) => this.handleKeyDown(e)}
       >
 
         {location.pathname === '/trashed' ? trashTopBar : detailTopBar}
