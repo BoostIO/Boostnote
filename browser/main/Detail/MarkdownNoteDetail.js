@@ -505,6 +505,7 @@ class MarkdownNoteDetail extends React.Component {
       <div className='NoteDetail'
         style={this.props.style}
         styleName='root'
+        onKeyDown={(e) => this.handleKeyDown(e)}
       >
 
         {location.pathname === '/trashed' ? trashTopBar : detailTopBar}
