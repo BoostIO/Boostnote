@@ -270,6 +270,7 @@ class MarkdownEditor extends React.Component {
           noteKey={noteKey}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           enableTableEditor={config.editor.enableTableEditor}
+		  enableAutoClose={config.editor.enableAutoClose}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
         />
