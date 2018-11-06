@@ -49,6 +49,7 @@ export const DEFAULT_CONFIG = {
     type: 'SPLIT',
     fetchUrlTitle: true,
     enableTableEditor: false,
+    enableAutoClose: true,
     enableFrontMatterTitle: true,
     frontMatterTitleField: 'title'
   },
