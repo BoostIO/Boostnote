@@ -200,31 +200,31 @@ export default class CodeEditor extends React.Component {
     })
 
     this.value = this.props.value
-	var config = {
-		rulers: buildCMRulers(rulers, enableRulers),
-		value: this.props.value,
-		lineNumbers: this.props.displayLineNumbers,
-		lineWrapping: true,
-		theme: this.props.theme,
-		indentUnit: this.props.indentSize,
-		tabSize: this.props.indentSize,
-		indentWithTabs: this.props.indentType !== 'space',
-		keyMap: this.props.keyMap,
-		scrollPastEnd: this.props.scrollPastEnd,
-		inputStyle: 'textarea',
-		dragDrop: false,
-		foldGutter: true,
-		gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-		extraKeys: this.defaultKeyMap
-	}
+    var config = {
+        rulers: buildCMRulers(rulers, enableRulers),
+        value: this.props.value,
+        lineNumbers: this.props.displayLineNumbers,
+        lineWrapping: true,
+        theme: this.props.theme,
+        indentUnit: this.props.indentSize,
+        tabSize: this.props.indentSize,
+        indentWithTabs: this.props.indentType !== 'space',
+        keyMap: this.props.keyMap,
+        scrollPastEnd: this.props.scrollPastEnd,
+        inputStyle: 'textarea',
+        dragDrop: false,
+        foldGutter: true,
+        gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+        extraKeys: this.defaultKeyMap
+    }
 
-	var autoCloseConfig = {
-		autoCloseBrackets: { pairs: '()[]{}\'\'""$$**``', triples: '```"""\'\'\'', explode: '[]{}``$$', override: true}
-	}
+    var autoCloseConfig = {
+        autoCloseBrackets: { pairs: '()[]{}\'\'""$$**``', triples: '```"""\'\'\'', explode: '[]{}``$$', override: true}
+    }
 
-	if (this.props.enableAutoClose) {
-		Object.assign(config, autoCloseConfig)
-	}
+    if (this.props.enableAutoClose) {
+        Object.assign(config, autoCloseConfig)
+    }
 
 
     this.editor = CodeMirror(this.refs.root, config)
@@ -441,12 +441,10 @@ export default class CodeEditor extends React.Component {
       this.editor.setOption('scrollPastEnd', this.props.scrollPastEnd)
     }
 
-	if (prevProps.enableAutoClose !== this.props.enableAutoClose) {
-		let newAutoCloseSetting = this.props.enableAutoClose ? { pairs: '()[]{}\'\'""$$**``', triples: '```"""\'\'\'', explode: '[]{}``$$', override: true} : null;
-		this.editor.setOption('autoCloseBrackets', newAutoCloseSetting)
-
-		//needRefresh = true
-	}
+    if (prevProps.enableAutoClose !== this.props.enableAutoClose) {
+        let newAutoCloseSetting = this.props.enableAutoClose ? { pairs: '()[]{}\'\'""$$**``', triples: '```"""\'\'\'', explode: '[]{}``$$', override: true} : null;
+        this.editor.setOption('autoCloseBrackets', newAutoCloseSetting)
+    }
 
     if (prevProps.enableTableEditor !== this.props.enableTableEditor) {
       if (this.props.enableTableEditor) {

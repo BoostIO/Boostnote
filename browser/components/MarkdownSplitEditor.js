@@ -165,7 +165,7 @@ class MarkdownSplitEditor extends React.Component {
           scrollPastEnd={config.editor.scrollPastEnd}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           enableTableEditor={config.editor.enableTableEditor}
-	      enableAutoClose={config.editor.enableAutoClose}
+          enableAutoClose={config.editor.enableAutoClose}
           storageKey={storageKey}
           noteKey={noteKey}
           onChange={this.handleOnChange.bind(this)}
