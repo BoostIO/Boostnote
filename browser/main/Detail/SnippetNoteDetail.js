@@ -706,6 +706,7 @@ class SnippetNoteDetail extends React.Component {
             scrollPastEnd={config.editor.scrollPastEnd}
             fetchUrlTitle={config.editor.fetchUrlTitle}
             enableTableEditor={config.editor.enableTableEditor}
+			enableAutoClose={config.editor.enableAutoClose}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
           />
