@@ -50,11 +50,70 @@ const smartQuotes = 'This is a "QUOTE".'
 
 const breaks = 'This is the first line.\nThis is the second line.'
 
+const abbrevations = `
+## abbr
+
+The HTML specification
+is maintained by the W3C.
+
+*[HTML]: Hyper Text Markup Language
+*[W3C]:  World Wide Web Consortium
+`
+
+const subTexts = `
+## sub
+
+H~2~0
+`
+
+const supTexts = `
+## sup
+
+29^th^
+`
+
+const deflists = `
+## definition list
+
+### list 1
+
+Term 1
+  ~ Definition 1
+
+Term 2
+  ~ Definition 2a
+  ~ Definition 2b
+
+Term 3
+~
+
+
+### list 2
+
+Term 1
+
+:   Definition 1
+
+Term 2 with *inline markup*
+
+:   Definition 2
+
+        { some code, part of Definition 2 }
+
+    Third paragraph of definition 2.
+`
+const shortcuts = '<kbd>Ctrl</kbd>\n\n[[Ctrl]]'
+
 export default {
   basic,
   codeblock,
   katex,
   checkboxes,
   smartQuotes,
-  breaks
+  breaks,
+  abbrevations,
+  subTexts,
+  supTexts,
+  deflists,
+  shortcuts
 }

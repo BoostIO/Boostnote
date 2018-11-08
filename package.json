@@ -15,7 +15,7 @@
     "dev": "node dev-scripts/dev.js"
   },
   "config": {
-    "electron-version": "2.0.7"
+    "electron-version": "3.0.3"
   },
   "repository": {
     "type": "git",
@@ -56,7 +56,7 @@
     "codemirror": "^5.40.2",
     "codemirror-mode-elixir": "^1.1.1",
     "electron-config": "^1.0.0",
-    "electron-gh-releases": "^2.0.2",
+    "electron-gh-releases": "^2.0.4",
     "escape-string-regexp": "^1.0.5",
     "file-uri-to-path": "^1.0.0",
     "file-url": "^2.0.2",
@@ -68,10 +68,12 @@
     "iconv-lite": "^0.4.19",
     "immutable": "^3.8.1",
     "js-sequence-diagrams": "^1000000.0.6",
+    "js-yaml": "^3.12.0",
     "katex": "^0.9.0",
     "lodash": "^4.11.1",
     "lodash-move": "^1.1.1",
     "markdown-it": "^6.0.1",
+    "markdown-it-abbr": "^1.0.4",
     "markdown-it-admonition": "^1.0.4",
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^3.0.0",
@@ -81,6 +83,8 @@
     "markdown-it-named-headers": "^0.0.4",
     "markdown-it-plantuml": "^1.1.0",
     "markdown-it-smartarrows": "^1.0.1",
+    "markdown-it-sub": "^1.0.0",
+    "markdown-it-sup": "^1.0.0",
     "markdown-toc": "^1.2.0",
     "mdurl": "^1.0.1",
     "mermaid": "^8.0.0-rc.8",
@@ -101,7 +105,9 @@
     "sanitize-html": "^1.18.2",
     "striptags": "^2.2.1",
     "unique-slug": "2.0.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "turndown":"^4.0.2",
+    "turndown-plugin-gfm":"^1.0.2"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -123,7 +129,7 @@
     "css-loader": "^0.19.0",
     "devtron": "^1.1.0",
     "dom-storage": "^2.0.2",
-    "electron": "2.0.7",
+    "electron": "3.0.3",
     "electron-packager": "^12.0.0",
     "eslint": "^3.13.1",
     "eslint-config-standard": "^6.2.1",

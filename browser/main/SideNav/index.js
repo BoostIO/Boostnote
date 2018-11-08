@@ -20,6 +20,10 @@ import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
 import { remote } from 'electron'
 
+function matchActiveTags (tags, activeTags) {
+  return _.every(activeTags, v => tags.indexOf(v) >= 0)
+}
+
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
 
@@ -202,12 +206,20 @@ class SideNav extends React.Component {
 
   tagListComponent () {
     const { data, location, config } = this.props
-    const relatedTags = this.getRelatedTags(this.getActiveTags(location.pathname), data.noteMap)
+    const activeTags = this.getActiveTags(location.pathname)
+    const relatedTags = this.getRelatedTags(activeTags, data.noteMap)
     let tagList = _.sortBy(data.tagNoteMap.map(
       (tag, name) => ({ name, size: tag.size, related: relatedTags.has(name) })
-    ), ['name']).filter(
+    ).filter(
       tag => tag.size > 0
-    )
+    ), ['name'])
+    if (config.ui.enableLiveNoteCounts && activeTags.length !== 0) {
+      const notesTags = data.noteMap.map(note => note.tags)
+      tagList = tagList.map(tag => {
+        tag.size = notesTags.filter(tags => tags.includes(tag.name) && matchActiveTags(tags, activeTags)).length
+        return tag
+      })
+    }
     if (config.sortTagsBy === 'COUNTER') {
       tagList = _.sortBy(tagList, item => (0 - item.size))
     }
@@ -306,7 +318,6 @@ class SideNav extends React.Component {
     .catch((err) => {
       console.error('Cannot Delete note: ' + err)
     })
-    console.log('Trash emptied')
   }
 
   handleFilterButtonContextMenu (event) {

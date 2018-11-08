@@ -100,6 +100,7 @@
 	"The Boostnote Team": "The Boostnote Team",
 	"Support via OpenCollective": "Support via OpenCollective",
 	"Language": "Language",
+	"Default New Note": "Default New Note",
 	"English": "English",
 	"German": "German",
 	"French": "French",
@@ -135,6 +136,7 @@
 	"Hotkeys": "Hotkeys",
 	"Show/Hide Boostnote": "Show/Hide Boostnote",
 	"Toggle Editor Mode": "Toggle Editor Mode",
+  "Delete Note": "Delete Note",
 	"Restore": "Restore",
 	"Permanent Delete": "Permanent Delete",
 	"Confirm note deletion": "Confirm note deletion",
@@ -155,6 +157,7 @@
 	"Password": "Password",
 	"Russian": "Russian",
 	"Hungarian": "Hungarian",
+	"Thai": "Thai (ภาษาไทย)",
 	"Command(⌘)": "Command(⌘)",
 	"Add Storage": "Add Storage",
 	"Name": "Name",
@@ -176,6 +179,9 @@
 	"Allow dangerous html tags": "Allow dangerous html tags",
 	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.",
 	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠",
+	"Save tags of a note in alphabetical order": "Save tags of a note in alphabetical order",
+	"Show tags of a note in alphabetical order": "Show tags of a note in alphabetical order",
+	"Enable live count of notes": "Enable live count of notes",
 	"Enable smart table editor": "Enable smart table editor",
 	"Snippet Default Language": "Snippet Default Language"
 }

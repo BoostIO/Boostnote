@@ -71,6 +71,9 @@ class UiTab extends React.Component {
         showCopyNotification: this.refs.showCopyNotification.checked,
         confirmDeletion: this.refs.confirmDeletion.checked,
         showOnlyRelatedTags: this.refs.showOnlyRelatedTags.checked,
+        showTagsAlphabetically: this.refs.showTagsAlphabetically.checked,
+        saveTagsAlphabetically: this.refs.saveTagsAlphabetically.checked,
+        enableLiveNoteCounts: this.refs.enableLiveNoteCounts.checked,
         disableDirectWrite: this.refs.uiD2w != null
           ? this.refs.uiD2w.checked
           : false
@@ -104,6 +107,7 @@ class UiTab extends React.Component {
         latexBlockClose: this.refs.previewLatexBlockClose.value,
         plantUMLServerAddress: this.refs.previewPlantUMLServerAddress.value,
         scrollPastEnd: this.refs.previewScrollPastEnd.checked,
+        scrollSync: this.refs.previewScrollSync.checked,
         smartQuotes: this.refs.previewSmartQuotes.checked,
         breaks: this.refs.previewBreaks.checked,
         smartArrows: this.refs.previewSmartArrows.checked,
@@ -248,16 +252,6 @@ class UiTab extends React.Component {
               {i18n.__('Show a confirmation dialog when deleting notes')}
             </label>
           </div>
-          <div styleName='group-checkBoxSection'>
-            <label>
-              <input onChange={(e) => this.handleUIChange(e)}
-                checked={this.state.config.ui.showOnlyRelatedTags}
-                ref='showOnlyRelatedTags'
-                type='checkbox'
-              />&nbsp;
-              {i18n.__('Show only related tags')}
-            </label>
-          </div>
           {
             global.process.platform === 'win32'
             ? <div styleName='group-checkBoxSection'>
@@ -273,6 +267,52 @@ class UiTab extends React.Component {
             </div>
             : null
           }
+          <div styleName='group-header2'>Tags</div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.saveTagsAlphabetically}
+                ref='saveTagsAlphabetically'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Save tags of a note in alphabetical order')}
+            </label>
+          </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.showTagsAlphabetically}
+                ref='showTagsAlphabetically'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Show tags of a note in alphabetical order')}
+            </label>
+          </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.showOnlyRelatedTags}
+                ref='showOnlyRelatedTags'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Show only related tags')}
+            </label>
+          </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.enableLiveNoteCounts}
+                ref='enableLiveNoteCounts'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable live count of notes')}
+            </label>
+          </div>
+
           <div styleName='group-header2'>Editor</div>
 
           <div styleName='group-section'>
@@ -559,6 +599,16 @@ class UiTab extends React.Component {
                 type='checkbox'
               />&nbsp;
               {i18n.__('Allow preview to scroll past the last line')}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.preview.scrollSync}
+                ref='previewScrollSync'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('When scrolling, synchronize preview with editor')}
             </label>
           </div>
           <div styleName='group-checkBoxSection'>

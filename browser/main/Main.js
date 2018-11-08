@@ -80,7 +80,6 @@ class Main extends React.Component {
         }
       })
       .then(data => {
-        console.log(data)
         store.dispatch({
           type: 'ADD_STORAGE',
           storage: data.storage,

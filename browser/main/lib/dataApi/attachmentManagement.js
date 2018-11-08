@@ -529,7 +529,6 @@ function handleAttachmentLinkPaste (storageKey, noteKey, linkText) {
       return modifiedLinkText
     })
   } else {
-    console.log('One if the parameters was null -> Do nothing..')
     return Promise.resolve(linkText)
   }
 }

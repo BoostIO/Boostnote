@@ -28,10 +28,20 @@ class HotkeyTab extends React.Component {
       }})
     }
     this.handleSettingError = (err) => {
-      this.setState({keymapAlert: {
-        type: 'error',
-        message: err.message != null ? err.message : i18n.__('An error occurred!')
-      }})
+      if (
+        this.state.config.hotkey.toggleMain === '' ||
+        this.state.config.hotkey.toggleMode === ''
+      ) {
+        this.setState({keymapAlert: {
+          type: 'success',
+          message: i18n.__('Successfully applied!')
+        }})
+      } else {
+        this.setState({keymapAlert: {
+          type: 'error',
+          message: err.message != null ? err.message : i18n.__('An error occurred!')
+        }})
+      }
     }
     this.oldHotkey = this.state.config.hotkey
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
@@ -68,7 +78,8 @@ class HotkeyTab extends React.Component {
     const { config } = this.state
     config.hotkey = {
       toggleMain: this.refs.toggleMain.value,
-      toggleMode: this.refs.toggleMode.value
+      toggleMode: this.refs.toggleMode.value,
+      deleteNote: this.refs.deleteNote.value
     }
     this.setState({
       config
@@ -123,6 +134,17 @@ class HotkeyTab extends React.Component {
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleMode'
                 value={config.hotkey.toggleMode}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Delete Note')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleHotkeyChange(e)}
+                ref='deleteNote'
+                value={config.hotkey.deleteNote}
                 type='text'
               />
             </div>

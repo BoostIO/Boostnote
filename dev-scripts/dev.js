@@ -49,7 +49,7 @@ function startServer () {
 }
 
 function startElectron () {
-  spawn(electron, ['--hot', './index.js'])
+  spawn(electron, ['--hot', './index.js'], { stdio: 'inherit' })
     .on('close', () => {
       server.close()
     })

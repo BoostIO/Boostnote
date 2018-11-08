@@ -14,7 +14,6 @@ function renameStorage (key, name) {
     cachedStorageList = JSON.parse(localStorage.getItem('storages'))
     if (!_.isArray(cachedStorageList)) throw new Error('invalid storages')
   } catch (err) {
-    console.log('error got')
     console.error(err)
     return Promise.reject(err)
   }

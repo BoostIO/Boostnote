@@ -25,7 +25,7 @@ const TagListItem = ({name, handleClickTagListItem, handleClickNarrowToTag, hand
     <button styleName={isActive ? 'tagList-item-active' : 'tagList-item'} onClick={() => handleClickTagListItem(name)}>
       <span styleName='tagList-item-name'>
         {`# ${name}`}
-        <span styleName='tagList-item-count'>{count}</span>
+        <span styleName='tagList-item-count'>{count !== 0 ? count : ''}</span>
       </span>
     </button>
   </div>

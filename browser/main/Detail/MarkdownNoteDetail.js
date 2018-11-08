@@ -61,6 +61,7 @@ class MarkdownNoteDetail extends React.Component {
       const reversedType = this.state.editorType === 'SPLIT' ? 'EDITOR_PREVIEW' : 'SPLIT'
       this.handleSwitchMode(reversedType)
     })
+    ee.on('hotkey:deletenote', this.handleDeleteNote.bind(this))
     ee.on('code:generate-toc', this.generateToc)
   }
 
@@ -349,6 +350,10 @@ class MarkdownNoteDetail extends React.Component {
     })
   }
 
+  handleDeleteNote () {
+    this.handleTrashButtonClick()
+  }
+
   handleClearTodo () {
     const { note } = this.state
     const splitted = note.content.split('\n')
@@ -397,7 +402,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   render () {
-    const { data, location } = this.props
+    const { data, location, config } = this.props
     const { note, editorType } = this.state
     const storageKey = note.storage
     const folderKey = note.folder
@@ -448,6 +453,8 @@ class MarkdownNoteDetail extends React.Component {
         <TagSelect
           ref='tags'
           value={this.state.note.tags}
+          saveTagsAlphabetically={config.ui.saveTagsAlphabetically}
+          showTagsAlphabetically={config.ui.showTagsAlphabetically}
           data={data}
           onChange={this.handleUpdateTag.bind(this)}
         />

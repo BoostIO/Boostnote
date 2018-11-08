@@ -179,10 +179,10 @@ class TagSelect extends React.Component {
   }
 
   render () {
-    const { value, className } = this.props
+    const { value, className, showTagsAlphabetically } = this.props
 
     const tagList = _.isArray(value)
-      ? value.map((tag) => {
+      ? (showTagsAlphabetically ? _.sortBy(value) : value).map((tag) => {
         return (
           <span styleName='tag'
             key={tag}

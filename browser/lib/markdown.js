@@ -28,32 +28,6 @@ class Markdown {
       html: true,
       xhtmlOut: true,
       breaks: config.preview.breaks,
-      highlight: function (str, lang) {
-        const delimiter = ':'
-        const langInfo = lang.split(delimiter)
-        const langType = langInfo[0]
-        const fileName = langInfo[1] || ''
-        const firstLineNumber = parseInt(langInfo[2], 10)
-
-        if (langType === 'flowchart') {
-          return `<pre class="flowchart">${str}</pre>`
-        }
-        if (langType === 'sequence') {
-          return `<pre class="sequence">${str}</pre>`
-        }
-        if (langType === 'chart') {
-          return `<pre class="chart">${str}</pre>`
-        }
-        if (langType === 'mermaid') {
-          return `<pre class="mermaid">${str}</pre>`
-        }
-        return '<pre class="code CodeMirror">' +
-          '<span class="filename">' + fileName + '</span>' +
-          createGutter(str, firstLineNumber) +
-          '<code class="' + langType + '">' +
-          str +
-          '</code></pre>'
-      },
       sanitize: 'STRICT'
     }
 
@@ -106,7 +80,11 @@ class Markdown {
           'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen'],
           'input': ['type', 'id', 'checked']
         },
-        allowedIframeHostnames: ['www.youtube.com']
+        allowedIframeHostnames: ['www.youtube.com'],
+        selfClosing: [ 'img', 'br', 'hr', 'input' ],
+        allowedSchemes: [ 'http', 'https', 'ftp', 'mailto' ],
+        allowedSchemesAppliedToAttributes: [ 'href', 'src', 'cite' ],
+        allowProtocolRelative: true
       })
     }
 
@@ -149,9 +127,49 @@ class Markdown {
       }
     })
     this.md.use(require('markdown-it-kbd'))
-
     this.md.use(require('markdown-it-admonition'), {types: ['note', 'hint', 'attention', 'caution', 'danger', 'error']})
+    this.md.use(require('markdown-it-abbr'))
+    this.md.use(require('markdown-it-sub'))
+    this.md.use(require('markdown-it-sup'))
+    this.md.use(require('./markdown-it-deflist'))
     this.md.use(require('./markdown-it-frontmatter'))
+
+    this.md.use(require('./markdown-it-fence'), {
+      chart: token => {
+        if (token.parameters.hasOwnProperty('yaml')) {
+          token.parameters.format = 'yaml'
+        }
+
+        return `<pre class="fence" data-line="${token.map[0]}">
+          <span class="filename">${token.fileName}</span>
+          <div class="chart" data-height="${token.parameters.height}" data-format="${token.parameters.format || 'json'}">${token.content}</div>
+        </pre>`
+      },
+      flowchart: token => {
+        return `<pre class="fence" data-line="${token.map[0]}">
+          <span class="filename">${token.fileName}</span>
+          <div class="flowchart" data-height="${token.parameters.height}">${token.content}</div>
+        </pre>`
+      },
+      mermaid: token => {
+        return `<pre class="fence" data-line="${token.map[0]}">
+          <span class="filename">${token.fileName}</span>
+          <div class="mermaid" data-height="${token.parameters.height}">${token.content}</div>
+        </pre>`
+      },
+      sequence: token => {
+        return `<pre class="fence" data-line="${token.map[0]}">
+          <span class="filename">${token.fileName}</span>
+          <div class="sequence" data-height="${token.parameters.height}">${token.content}</div>
+        </pre>`
+      }
+    }, token => {
+      return `<pre class="code CodeMirror" data-line="${token.map[0]}">
+        <span class="filename">${token.fileName}</span>
+        ${createGutter(token.content, token.firstLineNumber)}
+        <code class="${token.langType}">${token.content}</code>
+      </pre>`
+    })
 
     const deflate = require('markdown-it-plantuml/lib/deflate')
     this.md.use(require('markdown-it-plantuml'), '', {
@@ -253,9 +271,12 @@ class Markdown {
     this.md.renderer.render = (tokens, options, env) => {
       tokens.forEach((token) => {
         switch (token.type) {
-          case 'heading_open':
-          case 'paragraph_open':
           case 'blockquote_open':
+          case 'dd_open':
+          case 'dt_open':
+          case 'heading_open':
+          case 'list_item_open':
+          case 'paragraph_open':
           case 'table_open':
             token.attrPush(['data-line', token.map[0]])
         }
