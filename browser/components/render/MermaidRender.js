@@ -21,19 +21,22 @@ function getId () {
 
 function render (element, content, theme) {
   try {
+    const height = element.attributes.getNamedItem('data-height')
+    if (height && height.value !== 'undefined') {
+      element.style.height = height.value + 'vh'
+    }
     const isDarkTheme = theme === 'dark' || theme === 'solarized-dark' || theme === 'monokai' || theme === 'dracula'
     mermaidAPI.initialize({
       theme: isDarkTheme ? 'dark' : 'default',
-      themeCSS: isDarkTheme ? darkThemeStyling : ''
+      themeCSS: isDarkTheme ? darkThemeStyling : '',
+      useMaxWidth: false
     })
     mermaidAPI.render(getId(), content, (svgGraph) => {
       element.innerHTML = svgGraph
     })
   } catch (e) {
-    console.error(e)
     element.className = 'mermaid-error'
     element.innerHTML = 'mermaid diagram parse error: ' + e.message
   }
 }
-
 export default render
