@@ -6,7 +6,9 @@
 <h5 align="center">Apps available for Mac, Windows, Linux, Android, and iOS.</h5>
 <h5 align="center">Built with Electron, React + Redux, Webpack, and CSSModules.</h5>
 
-[![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
+<p align="center">
+  <img src="https://travis-ci.org/BoostIO/Boostnote.svg?branch=master" alt="Build Status" />
+ </p>
 
 ## Authors & Maintainers
 - [Rokt33r](https://github.com/rokt33r)
