@@ -304,7 +304,7 @@ export default class CodeEditor extends React.Component {
     })
 
     // Scroll to initial document line.
-    var topOffset = this.editor.charCoords({line: this.props.topLine.number - 1, ch: 0}, "local").top
+    var topOffset = this.editor.charCoords({line: this.props.topLine.number - 1, ch: 0}, 'local').top
     this.editor.scrollTo(null, topOffset)
   }
 
