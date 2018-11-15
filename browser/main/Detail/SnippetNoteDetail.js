@@ -434,6 +434,18 @@ class SnippetNoteDetail extends React.Component {
           this.focusEditor()
         }
         break
+      //I key
+      case 73:
+        {
+          const isSuper = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (isSuper){
+            e.preventDefault()
+            this.handleInfoButtonClick(e);
+          }
+        }
+        break;  
       // L key
       case 76:
         {
