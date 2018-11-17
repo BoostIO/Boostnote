@@ -61,6 +61,15 @@ class InfoTab extends React.Component {
     })
   }
 
+  toggleAutoUpdate () {
+    const newConfig = {
+      autoUpdateEnabled: !this.state.config.autoUpdateEnabled
+    }
+
+    this.setState({ config: newConfig })
+    ConfigManager.set(newConfig)
+  }
+
   infoMessage () {
     const { amaMessage } = this.state
     return amaMessage ? <p styleName='policy-confirm'>{amaMessage}</p> : null
@@ -139,6 +148,8 @@ class InfoTab extends React.Component {
             {i18n.__('License: GPL v3')}
           </li>
         </ul>
+
+        <div><label><input type='checkbox' onChange={this.toggleAutoUpdate.bind(this)} checked={this.state.config.autoUpdateEnabled} />{i18n.__('Enable Auto Update')}</label></div>
 
         <hr styleName='separate-line' />
 
