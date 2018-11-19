@@ -44,6 +44,11 @@ test('Markdown.render() should render line breaks correctly', t => {
   t.snapshot(renderedNonBreaks)
 })
 
+test('Markdown.render() should render audio correctly', t => {
+  const rendered = md.render(markdownFixtures.audio)
+  t.snapshot(rendered)
+})
+
 test('Markdown.render() should renders abbrevations correctly', t => {
   const rendered = md.render(markdownFixtures.abbrevations)
   t.snapshot(rendered)

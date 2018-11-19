@@ -133,6 +133,7 @@ class Markdown {
     this.md.use(require('markdown-it-sup'))
     this.md.use(require('./markdown-it-deflist'))
     this.md.use(require('./markdown-it-frontmatter'))
+    this.md.use(require('./markdown-it-audio'))
 
     this.md.use(require('./markdown-it-fence'), {
       chart: token => {

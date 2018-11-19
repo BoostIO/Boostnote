@@ -11,6 +11,11 @@ import i18n from 'browser/lib/i18n'
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
 const PATH_SEPARATORS = escapeStringRegexp(path.posix.sep) + escapeStringRegexp(path.win32.sep)
+// file type of attachments
+const FILE_TYPES = {
+  IMAGE: 'image',
+  AUDIO: 'audio'
+}
 /**
  * @description
  * Create a Image element to get the real size of image.
@@ -227,7 +232,7 @@ function migrateAttachments (markdownContent, storagePath, noteKey) {
  * @returns {String} postprocessed HTML in which all :storage references are mapped to the actual paths.
  */
 function fixLocalURLS (renderedHTML, storagePath) {
-  return renderedHTML.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?"', 'g'), function (match) {
+  return renderedHTML.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?["|\']', 'g'), function (match) {
     var encodedPathSeparators = new RegExp(mdurl.encode(path.win32.sep) + '|' + mdurl.encode(path.posix.sep), 'g')
     return match.replace(encodedPathSeparators, path.sep).replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER, 'g'), 'file:///' + path.join(storagePath, DESTINATION_FOLDER))
   })
@@ -237,11 +242,20 @@ function fixLocalURLS (renderedHTML, storagePath) {
  * @description Generates the markdown code for a given attachment
  * @param {String} fileName Name of the attachment
  * @param {String} path Path of the attachment
- * @param {Boolean} showPreview Indicator whether the generated markdown should show a preview of the image. Note that at the moment only previews for images are supported
+ * @param {Boolean} showPreview Indicator whether the generated markdown should show a preview of the attachment.
+ * @param {String} previewType Name of the type of attachment to preview
  * @returns {String} Generated markdown code
  */
-function generateAttachmentMarkdown (fileName, path, showPreview) {
-  return `${showPreview ? '!' : ''}[${fileName}](${path})`
+function generateAttachmentMarkdown (fileName, path, showPreview, previewType) {
+  if (!showPreview) {
+    return `[${fileName}](${path})`
+  }
+  switch (previewType) {
+    case FILE_TYPES.IMAGE:
+      return `![${fileName}](${path})`
+    case FILE_TYPES.AUDIO:
+      return `@[${fileName}](${path})`
+  }
 }
 
 /**
@@ -256,20 +270,38 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
   const file = dropEvent.dataTransfer.files[0]
   const filePath = file.path
   const originalFileName = path.basename(filePath)
-  const fileType = file['type']
-  const isImage = fileType.startsWith('image')
+  const fileType = getFileType(file['type'])
   let promise
-  if (isImage) {
+  if (fileType === FILE_TYPES.IMAGE) {
     promise = fixRotate(file).then(base64data => {
       return copyAttachment({type: 'base64', data: base64data, sourceFilePath: filePath}, storageKey, noteKey)
     })
   } else {
     promise = copyAttachment(filePath, storageKey, noteKey)
   }
+  // generate markdown syntax part
   promise.then((fileName) => {
-    const imageMd = generateAttachmentMarkdown(originalFileName, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName), isImage)
-    codeEditor.insertAttachmentMd(imageMd)
+    let shouldShowPreview = false
+    // whenever there's a new type of attachment can be preview, add it to this list
+    const canPreviewTypes = [FILE_TYPES.IMAGE, FILE_TYPES.AUDIO]
+    if (canPreviewTypes.indexOf(fileType) !== -1) {
+      shouldShowPreview = true
+    }
+    const md = generateAttachmentMarkdown(originalFileName, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName), shouldShowPreview, fileType)
+    codeEditor.insertAttachmentMd(md)
   })
+}
+
+function getFileType (type) {
+  const types = Object.keys(FILE_TYPES)
+  for (let i = 0; i < types.length; i++) {
+    const currentTypeName = types[i]
+    const currentTypeValue = FILE_TYPES[currentTypeName]
+    if (type.startsWith(currentTypeValue)) {
+      return currentTypeValue
+    }
+  }
+  return 'unknown'
 }
 
 /**

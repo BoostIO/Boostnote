@@ -206,11 +206,14 @@ it('should replace the ":storage" path with the actual storage path when they ha
   expect(actual).toEqual(expectedOutput)
 })
 
-it('should test that generateAttachmentMarkdown works correct both with previews and without', function () {
+it('should test that generateAttachmentMarkdown works correct both with different previews and without', function () {
   const fileName = 'fileName'
   const path = 'path'
   let expected = `![${fileName}](${path})`
-  let actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, true)
+  let actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, true, 'image')
+  expect(actual).toEqual(expected)
+  expected = `@[${fileName}](${path})`
+  actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, true, 'audio')
   expect(actual).toEqual(expected)
   expected = `[${fileName}](${path})`
   actual = systemUnderTest.generateAttachmentMarkdown(fileName, path, false)
