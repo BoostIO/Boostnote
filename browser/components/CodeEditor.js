@@ -569,14 +569,17 @@ export default class CodeEditor extends React.Component {
   }
 
   handlePaste (editor, e) {
+    const { storageKey, noteKey, fetchUrlTitle } = this.props
+
     const clipboardData = e.clipboardData
-    const { storageKey, noteKey } = this.props
     const dataTransferItem = clipboardData.items[0]
     const pastedTxt = clipboardData.getData('text')
+
     const isURL = str => {
       const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
       return matcher.test(str)
     }
+
     const isInLinkTag = editor => {
       const startCursor = editor.getCursor('start')
       const prevChar = editor.getRange(
@@ -591,30 +594,69 @@ export default class CodeEditor extends React.Component {
       return prevChar === '](' && nextChar === ')'
     }
 
-    const pastedHtml = clipboardData.getData('text/html')
-    if (pastedHtml !== '') {
-      this.handlePasteHtml(e, editor, pastedHtml)
-    } else if (dataTransferItem.type.match('image')) {
-      attachmentManagement.handlePastImageEvent(
-        this,
-        storageKey,
-        noteKey,
-        dataTransferItem
-      )
-    } else if (
-      this.props.fetchUrlTitle &&
-      isURL(pastedTxt) &&
-      !isInLinkTag(editor)
-    ) {
-      this.handlePasteUrl(e, editor, pastedTxt)
+    const isInFencedCodeBlock = editor => {
+      const cursor = editor.getCursor()
+
+      let token = editor.getTokenAt(cursor)
+      if (token.state.fencedState) {
+        return true
+      }
+
+      let line = line = cursor.line - 1
+      while (line >= 0) {
+        token = editor.getTokenAt({
+          ch: 3,
+          line
+        })
+
+        if (token.start === token.end) {
+          --line
+        } else if (token.type === 'comment') {
+          if (line > 0) {
+            token = editor.getTokenAt({
+              ch: 3,
+              line: line - 1
+            })
+
+            return token.type !== 'comment'
+          } else {
+            return true
+          }
+          return true
+        } else {
+          return false
+        }
+      }
+
+      return false
     }
+
+    if (isInFencedCodeBlock(editor)) {
+      this.handlePasteText(e, editor, pastedTxt)
+    } else {
+      const pastedHtml = clipboardData.getData('text/html')
+      if (pastedHtml !== '') {
+        this.handlePasteHtml(e, editor, pastedHtml)
+      } else if (dataTransferItem.type.match('image')) {
+        attachmentManagement.handlePastImageEvent(
+          this,
+          storageKey,
+          noteKey,
+          dataTransferItem
+        )
+      } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
+        this.handlePasteUrl(e, editor, pastedTxt)
+      }
+    }
+
     if (attachmentManagement.isAttachmentLink(pastedTxt)) {
+      e.preventDefault()
+
       attachmentManagement
         .handleAttachmentLinkPaste(storageKey, noteKey, pastedTxt)
         .then(modifiedText => {
           this.editor.replaceSelection(modifiedText)
         })
-      e.preventDefault()
     }
   }
 
@@ -668,6 +710,12 @@ export default class CodeEditor extends React.Component {
     e.preventDefault()
     const markdown = this.turndownService.turndown(pastedHtml)
     editor.replaceSelection(markdown)
+  }
+
+  handlePasteText (e, editor, pastedTxt) {
+    e.preventDefault()
+
+    editor.replaceSelection(pastedTxt)
   }
 
   mapNormalResponse (response, pastedTxt) {
