@@ -622,7 +622,6 @@ export default class CodeEditor extends React.Component {
           } else {
             return true
           }
-          return true
         } else {
           return false
         }
