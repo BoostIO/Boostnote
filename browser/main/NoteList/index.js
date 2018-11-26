@@ -295,16 +295,16 @@ class NoteList extends React.Component {
     }
 
     // UP or K key
-    if (e.keyCode === 38 || e.keyCode === 75) {
-      e.preventDefault()
-      this.selectPriorNote()
-    }
+    // if (e.keyCode === 38 || e.keyCode === 75) {
+    //   e.preventDefault()
+    //   this.selectPriorNote()
+    // }
 
     // DOWN or J key
-    if (e.keyCode === 40 || e.keyCode === 74) {
-      e.preventDefault()
-      this.selectNextNote()
-    }
+    // if (e.keyCode === 40 || e.keyCode === 74) {
+    //   e.preventDefault()
+    //   this.selectNextNote()
+    // }
 
     if (e.shiftKey) {
       this.setState({ shiftKeyDown: true })
