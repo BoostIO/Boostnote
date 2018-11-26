@@ -227,7 +227,7 @@ export default class CodeEditor extends React.Component {
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       autoCloseBrackets: {
-        pairs: '()[]{}\'\'""$$**``',
+        pairs: '()[]{}\'\'""``',
         triples: '```"""\'\'\'',
         explode: '[]{}``$$',
         override: true
