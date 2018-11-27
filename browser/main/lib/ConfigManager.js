@@ -25,7 +25,8 @@ export const DEFAULT_CONFIG = {
   hotkey: {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
-    deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace'
+    deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
+    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V'
   },
   ui: {
     language: 'en',
@@ -53,7 +54,8 @@ export const DEFAULT_CONFIG = {
     enableFrontMatterTitle: true,
     frontMatterTitleField: 'title',
     spellcheck: false,
-    autoCloseAsterisks: true
+    autoCloseAsterisks: true,
+    enableSmartPaste: false
   },
   preview: {
     fontSize: '14',

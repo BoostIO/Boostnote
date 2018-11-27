@@ -725,6 +725,8 @@ class SnippetNoteDetail extends React.Component {
             autoCloseAsterisks={config.editor.autoCloseAsterisks}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
+            enableSmartPaste={config.editor.enableSmartPaste}
+            hotkey={config.hotkey}
           />
         }
       </div>

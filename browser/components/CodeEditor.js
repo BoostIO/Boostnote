@@ -13,7 +13,7 @@ import crypto from 'crypto'
 import consts from 'browser/lib/consts'
 import styles from '../components/CodeEditor.styl'
 import fs from 'fs'
-const { ipcRenderer, remote } = require('electron')
+const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 const spellcheck = require('browser/lib/spellcheck')
 const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
@@ -32,6 +32,10 @@ const buildAutoCloseBrackets = (autoCloseAsterisks) =>
   explode: '[]{}``$$',
   override: true
 })
+
+function translateHotkey (hotkey) {
+  return hotkey.replace(/\s*\+\s*/g, '-').replace(/Command/g, 'Cmd').replace(/Control/g, 'Ctrl')
+}
 
 export default class CodeEditor extends React.Component {
   constructor (props) {
@@ -64,7 +68,11 @@ export default class CodeEditor extends React.Component {
         noteKey
       )
     }
-    this.pasteHandler = (editor, e) => this.handlePaste(editor, e)
+    this.pasteHandler = (editor, e) => {
+      e.preventDefault()
+
+      this.handlePaste(editor, false)
+    }
     this.loadStyleHandler = e => {
       this.editor.refresh()
     }
@@ -132,42 +140,8 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  updateTableEditorState () {
-    const active = this.tableEditor.cursorIsInTable(this.tableEditorOptions)
-    if (active) {
-      if (this.extraKeysMode !== 'editor') {
-        this.extraKeysMode = 'editor'
-        this.editor.setOption('extraKeys', this.editorKeyMap)
-      }
-    } else {
-      if (this.extraKeysMode !== 'default') {
-        this.extraKeysMode = 'default'
-        this.editor.setOption('extraKeys', this.defaultKeyMap)
-        this.tableEditor.resetSmartCursor()
-      }
-    }
-  }
-
-  componentDidMount () {
-    const { rulers, enableRulers, switchPreview } = this.props
-    const expandSnippet = this.expandSnippet.bind(this)
-    eventEmitter.on('line:jump', this.scrollToLineHandeler)
-
-    const defaultSnippet = [
-      {
-        id: crypto.randomBytes(16).toString('hex'),
-        name: 'Dummy text',
-        prefix: ['lorem', 'ipsum'],
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      }
-    ]
-    if (!fs.existsSync(consts.SNIPPET_FILE)) {
-      fs.writeFileSync(
-        consts.SNIPPET_FILE,
-        JSON.stringify(defaultSnippet, null, 4),
-        'utf8'
-      )
-    }
+  updateDefaultKeyMap () {
+    const { hotkey } = this.props
 
     this.defaultKeyMap = CodeMirror.normalizeKeyMap({
       Tab: function (cm) {
@@ -219,8 +193,51 @@ export default class CodeEditor extends React.Component {
           document.execCommand('copy')
         }
         return CodeMirror.Pass
+      },
+      [translateHotkey(hotkey.pasteSmartly)]: cm => {
+        this.handlePaste(cm, true)
       }
     })
+  }
+
+  updateTableEditorState () {
+    const active = this.tableEditor.cursorIsInTable(this.tableEditorOptions)
+    if (active) {
+      if (this.extraKeysMode !== 'editor') {
+        this.extraKeysMode = 'editor'
+        this.editor.setOption('extraKeys', this.editorKeyMap)
+      }
+    } else {
+      if (this.extraKeysMode !== 'default') {
+        this.extraKeysMode = 'default'
+        this.editor.setOption('extraKeys', this.defaultKeyMap)
+        this.tableEditor.resetSmartCursor()
+      }
+    }
+  }
+
+  componentDidMount () {
+    const { rulers, enableRulers } = this.props
+    const expandSnippet = this.expandSnippet.bind(this)
+    eventEmitter.on('line:jump', this.scrollToLineHandeler)
+
+    const defaultSnippet = [
+      {
+        id: crypto.randomBytes(16).toString('hex'),
+        name: 'Dummy text',
+        prefix: ['lorem', 'ipsum'],
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      }
+    ]
+    if (!fs.existsSync(consts.SNIPPET_FILE)) {
+      fs.writeFileSync(
+        consts.SNIPPET_FILE,
+        JSON.stringify(defaultSnippet, null, 4),
+        'utf8'
+      )
+    }
+
+    this.updateDefaultKeyMap()
 
     this.value = this.props.value
     this.editor = CodeMirror(this.refs.root, {
@@ -482,6 +499,14 @@ export default class CodeEditor extends React.Component {
       this.editor.setOption('extraKeys', this.defaultKeyMap)
     }
 
+    if (prevProps.hotkey !== this.props.hotkey) {
+      this.updateDefaultKeyMap()
+
+      if (this.extraKeysMode === 'default') {
+        this.editor.setOption('extraKeys', this.defaultKeyMap)
+      }
+    }
+
     if (this.state.clientWidth !== this.refs.root.clientWidth) {
       this.setState({
         clientWidth: this.refs.root.clientWidth
@@ -574,12 +599,8 @@ export default class CodeEditor extends React.Component {
     this.editor.replaceSelection(imageMd)
   }
 
-  handlePaste (editor, e) {
-    const { storageKey, noteKey, fetchUrlTitle } = this.props
-
-    const clipboardData = e.clipboardData
-    const dataTransferItem = clipboardData.items[0]
-    const pastedTxt = clipboardData.getData('text')
+  handlePaste (editor, forceSmartPaste) {
+    const { storageKey, noteKey, fetchUrlTitle, enableSmartPaste } = this.props
 
     const isURL = str => {
       const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
@@ -636,27 +657,34 @@ export default class CodeEditor extends React.Component {
       return false
     }
 
+    const pastedTxt = clipboard.readText()
+
     if (isInFencedCodeBlock(editor)) {
-      this.handlePasteText(e, editor, pastedTxt)
-    } else {
-      const pastedHtml = clipboardData.getData('text/html')
-      if (pastedHtml !== '') {
-        this.handlePasteHtml(e, editor, pastedHtml)
-      } else if (dataTransferItem.type.match('image')) {
-        attachmentManagement.handlePastImageEvent(
+      this.handlePasteText(editor, pastedTxt)
+    } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
+      this.handlePasteUrl(editor, pastedTxt)
+    } else if (enableSmartPaste || forceSmartPaste) {
+      const image = clipboard.readImage()
+      if (!image.isEmpty()) {
+        attachmentManagement.handlePastNativeImage(
           this,
           storageKey,
           noteKey,
-          dataTransferItem
+          image
         )
-      } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
-        this.handlePasteUrl(e, editor, pastedTxt)
+      } else {
+        const pastedHtml = clipboard.readHTML()
+        if (pastedHtml.length > 0) {
+          this.handlePasteHtml(editor, pastedHtml)
+        } else {
+          this.handlePasteText(editor, pastedTxt)
+        }
       }
+    } else {
+      this.handlePasteText(editor, pastedTxt)
     }
 
     if (attachmentManagement.isAttachmentLink(pastedTxt)) {
-      e.preventDefault()
-
       attachmentManagement
         .handleAttachmentLinkPaste(storageKey, noteKey, pastedTxt)
         .then(modifiedText => {
@@ -671,8 +699,7 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handlePasteUrl (e, editor, pastedTxt) {
-    e.preventDefault()
+  handlePasteUrl (editor, pastedTxt) {
     const taggedUrl = `<${pastedTxt}>`
     editor.replaceSelection(taggedUrl)
 
@@ -711,15 +738,12 @@ export default class CodeEditor extends React.Component {
       })
   }
 
-  handlePasteHtml (e, editor, pastedHtml) {
-    e.preventDefault()
+  handlePasteHtml (editor, pastedHtml) {
     const markdown = this.turndownService.turndown(pastedHtml)
     editor.replaceSelection(markdown)
   }
 
-  handlePasteText (e, editor, pastedTxt) {
-    e.preventDefault()
-
+  handlePasteText (editor, pastedTxt) {
     editor.replaceSelection(pastedTxt)
   }
 

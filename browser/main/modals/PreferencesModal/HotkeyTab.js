@@ -79,7 +79,8 @@ class HotkeyTab extends React.Component {
     config.hotkey = {
       toggleMain: this.refs.toggleMain.value,
       toggleMode: this.refs.toggleMode.value,
-      deleteNote: this.refs.deleteNote.value
+      deleteNote: this.refs.deleteNote.value,
+      pasteSmartly: this.refs.pasteSmartly.value
     }
     this.setState({
       config
@@ -145,6 +146,17 @@ class HotkeyTab extends React.Component {
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='deleteNote'
                 value={config.hotkey.deleteNote}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Paste Smartly')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleHotkeyChange(e)}
+                ref='pasteSmartly'
+                value={config.hotkey.pasteSmartly}
                 type='text'
               />
             </div>

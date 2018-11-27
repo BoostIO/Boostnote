@@ -317,6 +317,44 @@ function handlePastImageEvent (codeEditor, storageKey, noteKey, dataTransferItem
 }
 
 /**
+ * @description Creates a new file in the storage folder belonging to the current note and inserts the correct markdown code
+ * @param {CodeEditor} codeEditor Markdown editor. Its insertAttachmentMd() method will be called to include the markdown code
+ * @param {String} storageKey Key of the current storage
+ * @param {String} noteKey Key of the current note
+ * @param {NativeImage} image The native image
+ */
+function handlePastNativeImage (codeEditor, storageKey, noteKey, image) {
+  if (!codeEditor) {
+    throw new Error('codeEditor has to be given')
+  }
+  if (!storageKey) {
+    throw new Error('storageKey has to be given')
+  }
+
+  if (!noteKey) {
+    throw new Error('noteKey has to be given')
+  }
+  if (!image) {
+    throw new Error('image has to be given')
+  }
+
+  const targetStorage = findStorage.findStorage(storageKey)
+  const destinationDir = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+
+  createAttachmentDestinationFolder(targetStorage.path, noteKey)
+
+  const imageName = `${uniqueSlug()}.png`
+  const imagePath = path.join(destinationDir, imageName)
+
+  const binaryData = image.toPNG()
+  fs.writeFileSync(imagePath, binaryData, 'binary')
+
+  const imageReferencePath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, imageName)
+  const imageMd = generateAttachmentMarkdown(imageName, imageReferencePath, true)
+  codeEditor.insertAttachmentMd(imageMd)
+}
+
+/**
 * @description Returns all attachment paths of the given markdown
 * @param {String} markdownContent content in which the attachment paths should be found
 * @returns {String[]} Array of the relative paths (starting with :storage) of the attachments of the given markdown
@@ -539,6 +577,7 @@ module.exports = {
   generateAttachmentMarkdown,
   handleAttachmentDrop,
   handlePastImageEvent,
+  handlePastNativeImage,
   getAttachmentsInMarkdownContent,
   getAbsolutePathsOfAttachmentsInContent,
   removeStorageAndNoteReferences,
