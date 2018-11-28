@@ -658,7 +658,6 @@ export default class CodeEditor extends React.Component {
     }
 
     const pastedTxt = clipboard.readText()
-    console.log(pastedTxt)
 
     if (isInFencedCodeBlock(editor)) {
       this.handlePasteText(editor, pastedTxt)
