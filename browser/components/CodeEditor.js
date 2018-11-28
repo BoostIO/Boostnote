@@ -658,6 +658,7 @@ export default class CodeEditor extends React.Component {
     }
 
     const pastedTxt = clipboard.readText()
+    console.log(pastedTxt)
 
     if (isInFencedCodeBlock(editor)) {
       this.handlePasteText(editor, pastedTxt)
@@ -680,16 +681,14 @@ export default class CodeEditor extends React.Component {
           this.handlePasteText(editor, pastedTxt)
         }
       }
-    } else {
-      this.handlePasteText(editor, pastedTxt)
-    }
-
-    if (attachmentManagement.isAttachmentLink(pastedTxt)) {
+    } else if (attachmentManagement.isAttachmentLink(pastedTxt)) {
       attachmentManagement
         .handleAttachmentLinkPaste(storageKey, noteKey, pastedTxt)
         .then(modifiedText => {
           this.editor.replaceSelection(modifiedText)
         })
+    } else {
+      this.handlePasteText(editor, pastedTxt)
     }
   }
 
