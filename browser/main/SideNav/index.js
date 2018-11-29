@@ -27,13 +27,24 @@ function matchActiveTags (tags, activeTags) {
 
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
+  constructor (props) {
+    super(props)
+    this.activeIndex = 0
+    this.focusHandler = this.focusHandler.bind(this)
+  }
 
   componentDidMount () {
     EventEmitter.on('side:preferences', this.handleMenuButtonClick)
+    EventEmitter.on('side:focus', this.focusHandler)
   }
 
   componentWillUnmount () {
     EventEmitter.off('side:preferences', this.handleMenuButtonClick)
+    EventEmitter.off('side:focus', this.focusHandler)
+  }
+
+  focusHandler () {
+    this.sideNavRef.focus()
   }
 
   deleteTag (tag) {
@@ -89,11 +100,13 @@ class SideNav extends React.Component {
   handleHomeButtonClick (e) {
     const { router } = this.context
     router.push('/home')
+    this.activeIndex = 0
   }
 
   handleStarredButtonClick (e) {
     const { router } = this.context
     router.push('/starred')
+    this.activeIndex = 1
   }
 
   handleTagContextMenu (e, tag) {
@@ -120,6 +133,7 @@ class SideNav extends React.Component {
   handleTrashedButtonClick (e) {
     const { router } = this.context
     router.push('/trashed')
+    this.activeIndex = 2
   }
 
   handleSwitchFoldersButtonClick () {
@@ -132,6 +146,22 @@ class SideNav extends React.Component {
     router.push('/alltags')
   }
 
+  handleSideNavKeyDown (e) {
+    if (e.metaKey || e.ctrlKey) return true
+
+    // UP or K key
+    if (e.keyCode === 38 || e.keyCode === 75) {
+      e.preventDefault()
+      this.updateActiveIndex(this.activeIndex - 1)
+    }
+
+    // DOWN or J key
+    if (e.keyCode === 40 || e.keyCode === 74) {
+      e.preventDefault()
+      this.updateActiveIndex(this.activeIndex + 1)
+    }
+  }
+
   onSortEnd (storage) {
     return ({oldIndex, newIndex}) => {
       const { dispatch } = this.props
@@ -140,6 +170,25 @@ class SideNav extends React.Component {
         .then((data) => {
           dispatch({ type: 'REORDER_FOLDER', storage: data.storage })
         })
+    }
+  }
+
+  updateActiveIndex (index) {
+    if (index < 0 || index > 2) {
+      return
+    }
+    switch (index) {
+      case 0:
+        this.handleHomeButtonClick()
+        break
+      case 1:
+        this.handleStarredButtonClick()
+        break
+      case 2:
+        this.handleTrashedButtonClick()
+        break
+      default:
+        break
     }
   }
 
@@ -354,9 +403,11 @@ class SideNav extends React.Component {
     const isTagActive = location.pathname.match(/tag/)
     return (
       <div className='SideNav'
+        ref={(r) => { this.sideNavRef = r }}
         styleName={isFolded ? 'root--folded' : 'root'}
         tabIndex='1'
         style={style}
+        onKeyDown={(e) => this.handleSideNavKeyDown(e)}
       >
         <div styleName='top'>
           <div styleName='switch-buttons'>
