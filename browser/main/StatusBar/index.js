@@ -39,11 +39,11 @@ class StatusBar extends React.Component {
     }
   }
 
-  handleZoomIn(){
+  handleZoomIn () {
     this.handleZoomMenuItemClick(ZoomManager.getZoom() + 0.1)
   }
 
-  handleZoomOut(){
+  handleZoomOut () {
     this.handleZoomMenuItemClick(ZoomManager.getZoom() - 0.1)
   }
 
