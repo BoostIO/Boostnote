@@ -15,9 +15,7 @@ class TopBar extends React.Component {
       search: '',
       searchOptions: [],
       isSearching: false,
-      isAlphabet: false,
-      isIME: false,
-      isConfirmTranslation: false
+      onComposition: false
     }
 
     this.focusSearchHandler = () => {
@@ -57,12 +55,6 @@ class TopBar extends React.Component {
   }
 
   handleKeyDown (e) {
-    // reset states
-    this.setState({
-      isAlphabet: false,
-      isIME: false
-    })
-
     // Clear search on ESC
     if (e.keyCode === 27) {
       return this.handleSearchClearButton(e)
@@ -79,36 +71,17 @@ class TopBar extends React.Component {
       ee.emit('list:prior')
       e.preventDefault()
     }
-
-    // When the key is an alphabet, del, enter or ctr
-    if (e.keyCode <= 90 || e.keyCode >= 186 && e.keyCode <= 222) {
-      this.setState({
-        isAlphabet: true
-      })
-    // When the key is an IME input (Japanese, Chinese)
-    } else if (e.keyCode === 229) {
-      this.setState({
-        isIME: true
-      })
-    }
   }
 
   handleKeyUp (e) {
     const { router } = this.context
-    // reset states
-    this.setState({
-      isConfirmTranslation: false
-    })
-
-    // When the key is translation confirmation (Enter, Space)
-    if (this.state.isIME && (e.keyCode === 32 || e.keyCode === 13)) {
-      this.setState({
-        isConfirmTranslation: true
-      })
+    // When the IMEI is done input or Enter or Space is entered
+    if (!this.state.onComposition || (e.keyCode === 32 || e.keyCode === 13)) {
       const keyword = this.refs.searchInput.value
       router.push(`/searched/${encodeURIComponent(keyword)}`)
       this.setState({
-        search: keyword
+        search: keyword,
+        onComposition: false
       })
     }
   }
@@ -116,15 +89,16 @@ class TopBar extends React.Component {
   handleSearchChange (e) {
     const { router } = this.context
     const keyword = this.refs.searchInput.value
-    if (this.state.isAlphabet || this.state.isConfirmTranslation) {
-      router.push(`/searched/${encodeURIComponent(keyword)}`)
-    } else {
-      e.preventDefault()
-    }
     this.setState({
       search: keyword
     })
-    ee.emit('top:search', keyword)
+    if (!this.state.onComposition) {
+      router.push(`/searched/${encodeURIComponent(keyword)}`)
+
+      ee.emit('top:search', keyword)
+    } else {
+      e.preventDefault()
+    }
   }
 
   handleSearchFocus (e) {
@@ -164,6 +138,11 @@ class TopBar extends React.Component {
     ee.emit('top:search', this.refs.searchInput.value)
   }
 
+  handleComposition (event) {
+    const onComposition = !(event.type === 'compositionend')
+    this.setState({onComposition})
+  }
+
   render () {
     const { config, style, location } = this.props
     return (
@@ -185,6 +164,8 @@ class TopBar extends React.Component {
                 onChange={(e) => this.handleSearchChange(e)}
                 onKeyDown={(e) => this.handleKeyDown(e)}
                 onKeyUp={(e) => this.handleKeyUp(e)}
+                onCompositionStart={(e) => this.handleComposition(e)}
+                onCompositionEnd={(e) => this.handleComposition(e)}
                 placeholder={i18n.__('Search')}
                 type='text'
                 className='searchInput'
