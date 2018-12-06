@@ -211,6 +211,7 @@ export default class CodeEditor extends React.Component {
     })
 
     this.value = this.props.value
+    this.mirrorActive = this.props.value
     this.editor = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       value: this.props.value,
@@ -775,7 +776,8 @@ CodeEditor.propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   readOnly: PropTypes.bool,
-  spellCheck: PropTypes.bool
+  spellCheck: PropTypes.bool,
+  mirrorActive: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {
