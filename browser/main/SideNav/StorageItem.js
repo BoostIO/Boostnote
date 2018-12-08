@@ -247,6 +247,7 @@ class StorageItem extends React.Component {
   }
 
   handleDragEnter (e, key) {
+    e.preventDefault()
     if (this.state.draggedOver === key) { return }
     this.setState({
       draggedOver: key
@@ -254,6 +255,7 @@ class StorageItem extends React.Component {
   }
 
   handleDragLeave (e) {
+    e.preventDefault()
     if (this.state.draggedOver === null) { return }
     this.setState({
       draggedOver: null
@@ -282,6 +284,7 @@ class StorageItem extends React.Component {
   }
 
   handleDrop (e, storage, folder, dispatch, location) {
+    e.preventDefault()
     if (this.state.draggedOver !== null) {
       this.setState({
         draggedOver: null
@@ -321,15 +324,12 @@ class StorageItem extends React.Component {
           isFolded={isFolded}
           noteCount={noteCount}
           handleDrop={(e) => {
-            e.preventDefault()
             this.handleDrop(e, storage, folder, dispatch, location)
           }}
           handleDragEnter={(e) => {
-            e.preventDefault()
             this.handleDragEnter(e, folder.key)
           }}
           handleDragLeave={(e) => {
-            e.preventDefault()
             this.handleDragLeave(e, folder)
           }}
         />
