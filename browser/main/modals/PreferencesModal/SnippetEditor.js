@@ -8,12 +8,20 @@ import dataApi from 'browser/main/lib/dataApi'
 const defaultEditorFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
 const buildCMRulers = (rulers, enableRulers) =>
   enableRulers ? rulers.map(ruler => ({ column: ruler })) : []
+const buildAutoCloseBrackets = (autoCloseAsterisks) =>
+  ({
+      pairs: '()[]{}\'\'""``' + (autoCloseAsterisks ? '$$**' : ''),
+      triples: '```"""\'\'\'',
+      explode: '[]{}``$$',
+      override: true
+  })
 
 class SnippetEditor extends React.Component {
 
   componentDidMount () {
     this.props.onRef(this)
     const { rulers, enableRulers } = this.props
+    console.log(this.props);
     this.cm = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       lineNumbers: this.props.displayLineNumbers,
@@ -27,12 +35,7 @@ class SnippetEditor extends React.Component {
       dragDrop: false,
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-      autoCloseBrackets: {
-        pairs: '()[]{}\'\'""$$**``',
-        triples: '```"""\'\'\'',
-        explode: '[]{}``$$',
-        override: true
-      },
+      autoCloseBrackets: buildAutoCloseBrackets(this.props.autoCloseAsterisks),
       mode: 'null'
     })
     this.cm.setSize('100%', '100%')

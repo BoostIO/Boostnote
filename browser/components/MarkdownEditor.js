@@ -278,6 +278,7 @@ class MarkdownEditor extends React.Component {
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
           spellCheck={config.editor.spellcheck}
+          autoCloseAsterisks={config.editor.autoCloseAsterisks}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'

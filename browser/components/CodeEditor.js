@@ -25,6 +25,14 @@ CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 const buildCMRulers = (rulers, enableRulers) =>
   (enableRulers ? rulers.map(ruler => ({ column: ruler })) : [])
 
+const buildAutoCloseBrackets = (autoCloseAsterisks) =>
+  ({
+      pairs: '()[]{}\'\'""``' + (autoCloseAsterisks ? '$$**' : ''),
+      triples: '```"""\'\'\'',
+      explode: '[]{}``$$',
+      override: true
+  })
+
 export default class CodeEditor extends React.Component {
   constructor (props) {
     super(props)
@@ -226,12 +234,7 @@ export default class CodeEditor extends React.Component {
       dragDrop: false,
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-      autoCloseBrackets: {
-        pairs: '()[]{}\'\'""$$**``',
-        triples: '```"""\'\'\'',
-        explode: '[]{}``$$',
-        override: true
-      },
+      autoCloseBrackets: buildAutoCloseBrackets(this.props.autoCloseAsterisks),
       extraKeys: this.defaultKeyMap
     })
 
@@ -489,6 +492,10 @@ export default class CodeEditor extends React.Component {
       } else {
         this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
       }
+    }
+
+    if (prevProps.autoCloseAsterisks !== this.props.autoCloseAsterisks) {
+      this.editor.setOption('autoCloseBrackets', buildAutoCloseBrackets(this.props.autoCloseAsterisks))
     }
 
     if (needRefresh) {

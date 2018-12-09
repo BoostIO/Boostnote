@@ -52,7 +52,8 @@ export const DEFAULT_CONFIG = {
     enableTableEditor: false,
     enableFrontMatterTitle: true,
     frontMatterTitleField: 'title',
-    spellcheck: false
+    spellcheck: false,
+    autoCloseAsterisks: true
   },
   preview: {
     fontSize: '14',

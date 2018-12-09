@@ -96,7 +96,8 @@ class UiTab extends React.Component {
         enableTableEditor: this.refs.enableTableEditor.checked,
         enableFrontMatterTitle: this.refs.enableFrontMatterTitle.checked,
         frontMatterTitleField: this.refs.frontMatterTitleField.value,
-        spellcheck: this.refs.spellcheck.checked
+        spellcheck: this.refs.spellcheck.checked,
+        autoCloseAsterisks: this.refs.autoCloseAsterisks.checked
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -560,6 +561,16 @@ class UiTab extends React.Component {
                 type='checkbox'
               />&nbsp;
               {i18n.__('Enable spellcheck - Experimental feature!! :)')}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.autoCloseAsterisks}
+                ref='autoCloseAsterisks'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Auto close asterisks(*) and dollars($)')}
             </label>
           </div>
 

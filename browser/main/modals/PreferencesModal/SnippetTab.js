@@ -137,6 +137,7 @@ class SnippetTab extends React.Component {
               rulers={config.editor.rulers}
               displayLineNumbers={config.editor.displayLineNumbers}
               scrollPastEnd={config.editor.scrollPastEnd}
+              autoCloseAsterisks={config.editor.autoCloseAsterisks}
               onRef={ref => { this.snippetEditor = ref }} />
           </div>
         </div>
