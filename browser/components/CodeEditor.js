@@ -26,12 +26,12 @@ const buildCMRulers = (rulers, enableRulers) =>
   (enableRulers ? rulers.map(ruler => ({ column: ruler })) : [])
 
 const buildAutoCloseBrackets = (autoCloseAsterisks) =>
-  ({
-      pairs: '()[]{}\'\'""``' + (autoCloseAsterisks ? '$$**' : ''),
-      triples: '```"""\'\'\'',
-      explode: '[]{}``$$',
-      override: true
-  })
+({
+  pairs: '()[]{}\'\'""``' + (autoCloseAsterisks ? '$$**' : ''),
+  triples: '```"""\'\'\'',
+  explode: '[]{}``$$',
+  override: true
+})
 
 export default class CodeEditor extends React.Component {
   constructor (props) {

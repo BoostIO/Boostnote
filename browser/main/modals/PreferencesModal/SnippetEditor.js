@@ -10,10 +10,10 @@ const buildCMRulers = (rulers, enableRulers) =>
   enableRulers ? rulers.map(ruler => ({ column: ruler })) : []
 const buildAutoCloseBrackets = (autoCloseAsterisks) =>
   ({
-      pairs: '()[]{}\'\'""``' + (autoCloseAsterisks ? '$$**' : ''),
-      triples: '```"""\'\'\'',
-      explode: '[]{}``$$',
-      override: true
+    pairs: '()[]{}\'\'""``' + (autoCloseAsterisks ? '$$**' : ''),
+    triples: '```"""\'\'\'',
+    explode: '[]{}``$$',
+    override: true
   })
 
 class SnippetEditor extends React.Component {
@@ -21,7 +21,6 @@ class SnippetEditor extends React.Component {
   componentDidMount () {
     this.props.onRef(this)
     const { rulers, enableRulers } = this.props
-    console.log(this.props);
     this.cm = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       lineNumbers: this.props.displayLineNumbers,
