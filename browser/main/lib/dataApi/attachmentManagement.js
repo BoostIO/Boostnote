@@ -343,6 +343,45 @@ function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
 }
 
 /**
+ * @description Copies the attachments to the storage folder and returns the mardown content it should be replaced with
+ * @param {String} markDownContent content in which the attachment paths should be found
+ * @param {String} filepath The path of the file with attachments to import
+ * @param {String} storageKey Storage key of the destination storage
+ * @param {String} noteKey Key of the current note. Will be used as subfolder in :storage
+ */
+function importAttachments (markDownContent, filepath, storageKey, noteKey) {
+  return new Promise((resolve, reject) => {
+    let attach_names = markDownContent.match(/!\[.+?]\((?:.+?\..+?\))/g);
+
+    if (!attach_names)
+      resolve(markDownContent);
+
+    else {
+      let promise_array = [];
+      let end_path = []
+
+      for (let i = 0; i < attach_names.length; i++){
+        end_path[i] = attach_names[i].match(/(?<=]\()(?:.+?\..+?)(?=\))/)[0];
+        let begin_path = filepath.match(/\/.+\//)[0];
+        let final_path = path.join(begin_path, end_path[i]);
+
+        promise_array.push(this.copyAttachment(final_path, storageKey, noteKey));
+      }
+
+      Promise.all(promise_array).then((file_names) => {
+
+        for (let j = 0; j < file_names.length; j++) {
+          let new_path = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, file_names[j]);
+          markDownContent = markDownContent.replace(end_path[j], new_path);
+        }
+
+        resolve(markDownContent);
+      })
+    }
+  })
+}
+
+/**
  * @description Moves the attachments of the current note to the new location.
  * Returns a modified version of the given content so that the links to the attachments point to the new note key.
  * @param {String} oldPath Source of the note to be moved
@@ -541,6 +580,7 @@ module.exports = {
   handlePastImageEvent,
   getAttachmentsInMarkdownContent,
   getAbsolutePathsOfAttachmentsInContent,
+  importAttachments,
   removeStorageAndNoteReferences,
   deleteAttachmentFolder,
   deleteAttachmentsNotPresentInNote,

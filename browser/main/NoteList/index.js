@@ -876,43 +876,50 @@ class NoteList extends React.Component {
     if (!location.pathname.match(/\/trashed/)) this.addNotesFromFiles(filepaths)
   }
 
-  // Add notes to the current folder
-  addNotesFromFiles (filepaths) {
-    const { dispatch, location } = this.props
-    const { storage, folder } = this.resolveTargetFolder()
+ // Add notes to the current folder
+ addNotesFromFiles (filepaths) {
+  const { dispatch, location } = this.props
+  const { storage, folder } = this.resolveTargetFolder()
 
-    if (filepaths === undefined) return
-    filepaths.forEach((filepath) => {
-      fs.readFile(filepath, (err, data) => {
-        if (err) throw Error('File reading error: ', err)
+  if (filepaths === undefined) return
+  filepaths.forEach((filepath) => {
+    fs.readFile(filepath, (err, data) => {
+      if (err) throw Error('File reading error: ', err)
 
-        fs.stat(filepath, (err, {mtime, birthtime}) => {
-          if (err) throw Error('File stat reading error: ', err)
+      fs.stat(filepath, (err, {mtime, birthtime}) => {
+        if (err) throw Error('File stat reading error: ', err)
 
-          const content = data.toString()
-          const newNote = {
-            content: content,
-            folder: folder.key,
-            title: path.basename(filepath, path.extname(filepath)),
-            type: 'MARKDOWN_NOTE',
-            createdAt: birthtime,
-            updatedAt: mtime
-          }
-          dataApi.createNote(storage.key, newNote)
-          .then((note) => {
-            dispatch({
-              type: 'UPDATE_NOTE',
-              note: note
-            })
-            hashHistory.push({
-              pathname: location.pathname,
-              query: {key: getNoteKey(note)}
-            })
+        const content = data.toString()
+        const newNote = {
+          content: content,
+          folder: folder.key,
+          title: path.basename(filepath, path.extname(filepath)),
+          type: 'MARKDOWN_NOTE',
+          createdAt: birthtime,
+          updatedAt: mtime
+        }
+        dataApi.createNote(storage.key, newNote)
+        .then((note) => {
+
+          attachmentManagement.importAttachments(note.content, filepath, storage.key, note.key)
+          .then((newcontent) => {
+              note.content = newcontent;
+
+              dispatch({
+                type: 'UPDATE_NOTE',
+                note: note
+              })
+              hashHistory.push({
+                pathname: location.pathname,
+                query: {key: getNoteKey(note)}
+              })
+
           })
         })
       })
     })
-  }
+  })
+}
 
   getTargetIndex () {
     const { location } = this.props
