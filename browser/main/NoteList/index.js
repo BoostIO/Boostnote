@@ -877,33 +877,32 @@ class NoteList extends React.Component {
   }
 
  // Add notes to the current folder
- addNotesFromFiles (filepaths) {
-  const { dispatch, location } = this.props
-  const { storage, folder } = this.resolveTargetFolder()
+  addNotesFromFiles (filepaths) {
+    const { dispatch, location } = this.props
+    const { storage, folder } = this.resolveTargetFolder()
 
-  if (filepaths === undefined) return
-  filepaths.forEach((filepath) => {
-    fs.readFile(filepath, (err, data) => {
-      if (err) throw Error('File reading error: ', err)
+    if (filepaths === undefined) return
+    filepaths.forEach((filepath) => {
+      fs.readFile(filepath, (err, data) => {
+        if (err) throw Error('File reading error: ', err)
 
-      fs.stat(filepath, (err, {mtime, birthtime}) => {
-        if (err) throw Error('File stat reading error: ', err)
+        fs.stat(filepath, (err, {mtime, birthtime}) => {
+          if (err) throw Error('File stat reading error: ', err)
 
-        const content = data.toString()
-        const newNote = {
-          content: content,
-          folder: folder.key,
-          title: path.basename(filepath, path.extname(filepath)),
-          type: 'MARKDOWN_NOTE',
-          createdAt: birthtime,
-          updatedAt: mtime
-        }
-        dataApi.createNote(storage.key, newNote)
-        .then((note) => {
-
-          attachmentManagement.importAttachments(note.content, filepath, storage.key, note.key)
-          .then((newcontent) => {
-              note.content = newcontent;
+          const content = data.toString()
+          const newNote = {
+            content: content,
+            folder: folder.key,
+            title: path.basename(filepath, path.extname(filepath)),
+            type: 'MARKDOWN_NOTE',
+            createdAt: birthtime,
+            updatedAt: mtime
+          }
+          dataApi.createNote(storage.key, newNote)
+          .then((note) => {
+            attachmentManagement.importAttachments(note.content, filepath, storage.key, note.key)
+            .then((newcontent) => {
+              note.content = newcontent
 
               dispatch({
                 type: 'UPDATE_NOTE',
@@ -913,13 +912,12 @@ class NoteList extends React.Component {
                 pathname: location.pathname,
                 query: {key: getNoteKey(note)}
               })
-
+            })
           })
         })
       })
     })
-  })
-}
+  }
 
   getTargetIndex () {
     const { location } = this.props

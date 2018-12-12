@@ -351,33 +351,27 @@ function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
  */
 function importAttachments (markDownContent, filepath, storageKey, noteKey) {
   return new Promise((resolve, reject) => {
-    let attach_names = markDownContent.match(/!\[.+?]\((?:.+?\..+?\))/g);
+    const nameRegex = /(!\[.+?]\()(.+?\..+?)(\))/g
+    let attachName = nameRegex.exec(markDownContent)
+    const promiseArray = []
+    const beginPath = filepath.match(/\/.+\//)[0]
+    const endPath = []
+    const groupIndex = 2
 
-    if (!attach_names)
-      resolve(markDownContent);
-
-    else {
-      let promise_array = [];
-      let end_path = []
-
-      for (let i = 0; i < attach_names.length; i++){
-        end_path[i] = attach_names[i].match(/(?<=]\()(?:.+?\..+?)(?=\))/)[0];
-        let begin_path = filepath.match(/\/.+\//)[0];
-        let final_path = path.join(begin_path, end_path[i]);
-
-        promise_array.push(this.copyAttachment(final_path, storageKey, noteKey));
-      }
-
-      Promise.all(promise_array).then((file_names) => {
-
-        for (let j = 0; j < file_names.length; j++) {
-          let new_path = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, file_names[j]);
-          markDownContent = markDownContent.replace(end_path[j], new_path);
-        }
-
-        resolve(markDownContent);
-      })
+    while (attachName) {
+      endPath.push(attachName[groupIndex])
+      const finalPath = path.join(beginPath, attachName[groupIndex])
+      promiseArray.push(this.copyAttachment(finalPath, storageKey, noteKey))
+      attachName = nameRegex.exec(markDownContent)
     }
+
+    Promise.all(promiseArray).then((fileNames) => {
+      for (let j = 0; j < fileNames.length; j++) {
+        const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileNames[j])
+        markDownContent = markDownContent.replace(endPath[j], newPath)
+      }
+      resolve(markDownContent)
+    })
   })
 }
 
