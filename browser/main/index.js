@@ -8,7 +8,7 @@ import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-rou
 import { syncHistoryWithStore } from 'react-router-redux'
 require('./lib/ipcClient')
 require('../lib/customMeta')
-import i18n from 'browser/lib/i18n'
+import UpdatePopup from './UpdatePopup/UpdatePopup'
 
 const electron = require('electron')
 
@@ -82,20 +82,6 @@ const history = syncHistoryWithStore(hashHistory, store)
 function notify (...args) {
   return new window.Notification(...args)
 }
-
-function updateApp () {
-  const index = dialog.showMessageBox(remote.getCurrentWindow(), {
-    type: 'warning',
-    message: i18n.__('Update Boostnote'),
-    detail: i18n.__('New Boostnote is ready to be installed.'),
-    buttons: [i18n.__('Restart & Install'), i18n.__('Not Now')]
-  })
-
-  if (index === 0) {
-    ipcRenderer.send('update-app-confirm')
-  }
-}
-
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history}>
@@ -133,7 +119,7 @@ ReactDOM.render((
     notify('Update ready!', {
       body: 'New Boostnote is ready to be installed.'
     })
-    updateApp()
+    UpdatePopup.updateApp()
   })
 
   ipcRenderer.on('update-found', function () {

@@ -77,7 +77,8 @@ class UiTab extends React.Component {
         enableLiveNoteCounts: this.refs.enableLiveNoteCounts.checked,
         disableDirectWrite: this.refs.uiD2w != null
           ? this.refs.uiD2w.checked
-          : false
+          : false,
+        updateNotification: this.refs.updateNotification.checked
       },
       editor: {
         theme: this.refs.editorTheme.value,
@@ -269,6 +270,16 @@ class UiTab extends React.Component {
             </div>
             : null
           }
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.updateNotification}
+                ref='updateNotification'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Show update notification')}
+            </label>
+          </div>
 
           <div styleName='group-header2'>Tags</div>
 
