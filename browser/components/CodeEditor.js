@@ -211,7 +211,15 @@ export default class CodeEditor extends React.Component {
     })
 
     this.value = this.props.value
-    this.mirrorActive = this.props.value
+    console.log(this.props.enableCodeMirror)
+    var enable = true
+    if (this.props.enableCodeMirror === 'true') {
+      enable = true
+    } else {
+      enable = false
+    }
+    console.log('editor: ')
+    console.log(enable)
     this.editor = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       value: this.props.value,
@@ -231,11 +239,10 @@ export default class CodeEditor extends React.Component {
         pairs: '()[]{}\'\'""$$**``',
         triples: '```"""\'\'\'',
         explode: '[]{}``$$',
-        override: true
+        override: enable
       },
       extraKeys: this.defaultKeyMap
     })
-
     this.setMode(this.props.mode)
 
     this.editor.on('focus', this.focusHandler)
@@ -777,7 +784,7 @@ CodeEditor.propTypes = {
   onChange: PropTypes.func,
   readOnly: PropTypes.bool,
   spellCheck: PropTypes.bool,
-  mirrorActive: PropTypes.bool
+  enableCodeMirror: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {

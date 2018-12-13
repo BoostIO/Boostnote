@@ -55,6 +55,7 @@ class UiTab extends React.Component {
   handleUIChange (e) {
     const { codemirrorTheme } = this.state
     let checkHighLight = document.getElementById('checkHighLight')
+    console.log(this.refs.enableCodeMirror.value)
 
     if (checkHighLight === null) {
       checkHighLight = document.createElement('link')
@@ -96,7 +97,8 @@ class UiTab extends React.Component {
         enableTableEditor: this.refs.enableTableEditor.checked,
         enableFrontMatterTitle: this.refs.enableFrontMatterTitle.checked,
         frontMatterTitleField: this.refs.frontMatterTitleField.value,
-        spellcheck: this.refs.spellcheck.checked
+        spellcheck: this.refs.spellcheck.checked,
+        enableCodeMirror: this.refs.enableCodeMirror.value
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -434,7 +436,27 @@ class UiTab extends React.Component {
               />
             </div>
           </div>
-
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Double Characters [Needs Refresh] ')}
+            </div>
+            <div styleName='group-section-control'>
+              <div>
+                <select value={config.editor.enableCodeMirror}
+                  ref='enableCodeMirror'
+                  type='checkbox'
+                  onChange={(e) => this.handleUIChange(e)}
+                >
+                  <option value='true'>
+                    {i18n.__('Enable')}
+                  </option>
+                  <option value='false'>
+                    {i18n.__('Disable')}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div styleName='group-section'>
             <div styleName='group-section-label'>
               {i18n.__('Switch to Preview')}
