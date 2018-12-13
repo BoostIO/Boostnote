@@ -904,6 +904,8 @@ class NoteList extends React.Component {
             .then((newcontent) => {
               note.content = newcontent
 
+              dataApi.updateNote(storage.key, note.key, note)
+
               dispatch({
                 type: 'UPDATE_NOTE',
                 note: note

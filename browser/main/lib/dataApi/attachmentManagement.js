@@ -365,13 +365,28 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
       attachName = nameRegex.exec(markDownContent)
     }
 
-    Promise.all(promiseArray).then((fileNames) => {
-      for (let j = 0; j < fileNames.length; j++) {
-        const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileNames[j])
-        markDownContent = markDownContent.replace(endPath[j], newPath)
-      }
+    let numResolvedPromises = 0
+
+    if (promiseArray.length === 0) {
       resolve(markDownContent)
-    })
+    }
+
+    for (let j = 0; j < promiseArray.length; j++) {
+      promiseArray[j]
+      .then((fileName) => {
+        const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName)
+        markDownContent = markDownContent.replace(endPath[j], newPath)
+      })
+      .catch((e) => {
+        console.error('File does not exist in path: ' + endPath[j])
+      })
+      .finally(() => {
+        numResolvedPromises++
+        if (numResolvedPromises === promiseArray.length) {
+          resolve(markDownContent)
+        }
+      })
+    }
   })
 }
 
