@@ -74,6 +74,7 @@ class UiTab extends React.Component {
         showTagsAlphabetically: this.refs.showTagsAlphabetically.checked,
         saveTagsAlphabetically: this.refs.saveTagsAlphabetically.checked,
         enableLiveNoteCounts: this.refs.enableLiveNoteCounts.checked,
+        scrollBar: this.refs.scrollBar.checked,
         disableDirectWrite: this.refs.uiD2w != null
           ? this.refs.uiD2w.checked
           : false
@@ -267,6 +268,16 @@ class UiTab extends React.Component {
             </div>
             : null
           }
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.scrollBar}
+                ref='scrollBar'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Show the scroll bars in the editor and in the markdown preview (It will be applied after restarting)')}
+            </label>
+          </div>
           <div styleName='group-header2'>Tags</div>
 
           <div styleName='group-checkBoxSection'>

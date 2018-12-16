@@ -11,6 +11,7 @@ import mermaidRender from './render/MermaidRender'
 import SequenceDiagram from 'js-sequence-diagrams'
 import Chart from 'chart.js'
 import eventEmitter from 'browser/main/lib/eventEmitter'
+import config from 'browser/main/lib/ConfigManager'
 import htmlTextHelper from 'browser/lib/htmlTextHelper'
 import convertModeName from 'browser/lib/convertModeName'
 import copy from 'copy-to-clipboard'
@@ -156,19 +157,23 @@ ${allowCustomCSS ? customCSS : ''}
 
 const scrollBarStyle = `
 ::-webkit-scrollbar {
+  ${(config.get().ui.scrollBar) ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
+  ${(config.get().ui.scrollBar) ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.15);
 }
 `
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar {
+  ${(config.get().ui.scrollBar) ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
+  ${(config.get().ui.scrollBar) ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.3);
 }
 `
