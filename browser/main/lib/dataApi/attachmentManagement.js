@@ -351,7 +351,7 @@ function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
  */
 function importAttachments (markDownContent, filepath, storageKey, noteKey) {
   return new Promise((resolve, reject) => {
-    const nameRegex = /(!\[.+?]\()(.+?\..+?)(\))/g
+    const nameRegex = /(!\[.*?]\()(.+?\..+?)(\))/g
     let attachName = nameRegex.exec(markDownContent)
     const promiseArray = []
     const attachPath = []
