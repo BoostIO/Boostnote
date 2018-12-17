@@ -97,6 +97,10 @@ body {
 code {
   font-family: '${codeBlockFontFamily.join("','")}';
   background-color: rgba(0,0,0,0.04);
+  color: rgba(255,0,0,1);
+}
+code[class]{
+  color:unset;
 }
 .lineNumber {
   ${lineNumber && 'display: block !important;'}
