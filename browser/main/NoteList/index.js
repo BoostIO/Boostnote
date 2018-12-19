@@ -141,7 +141,7 @@ class NoteList extends React.Component {
     const CSON = require('@rokt33r/season')
 
     if (location.query.key !== prevKey) {
-      const focusNote = findNoteByKey(this.notes, location.query.key)
+      let focusNote = findNoteByKey(this.notes, location.query.key)
 
       if (focusNote.filepath !== undefined) {
         try {
@@ -152,7 +152,7 @@ class NoteList extends React.Component {
         this.fsWatcher = fs.watch(focusNote.filepath)
 
         this.fsWatcher.on('change', (event, filename) => {
-          const updatedNote = Object.assign({}, focusNote)
+          let updatedNote = Object.assign({}, focusNote)
 
           switch (event) {
             case 'change' :
