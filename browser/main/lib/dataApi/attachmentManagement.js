@@ -352,15 +352,21 @@ function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
 function importAttachments (markDownContent, filepath, storageKey, noteKey) {
   return new Promise((resolve, reject) => {
     const nameRegex = /(!\[.*?]\()(.+?\..+?)(\))/g
-    let attachName = nameRegex.exec(markDownContent)
+    let attachPath = nameRegex.exec(markDownContent)
     const promiseArray = []
-    const attachPath = []
+    const attachmentPaths = []
     const groupIndex = 2
 
-    while (attachName) {
-      attachPath.push(attachName[groupIndex])
-      promiseArray.push(this.copyAttachment(attachName[groupIndex], storageKey, noteKey))
-      attachName = nameRegex.exec(markDownContent)
+    while (attachPath) {
+      attachmentPaths.push(attachPath[groupIndex])
+
+      if (path.isAbsolute(attachPath[groupIndex])) {
+        promiseArray.push(this.copyAttachment(attachPath[groupIndex], storageKey, noteKey))
+      } else {
+        const fullPath = path.join(path.dirname(filepath), attachPath[groupIndex])
+        promiseArray.push(this.copyAttachment(fullPath, storageKey, noteKey))
+      }
+      attachPath = nameRegex.exec(markDownContent)
     }
 
     let numResolvedPromises = 0
@@ -373,10 +379,10 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
       promiseArray[j]
       .then((fileName) => {
         const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName)
-        markDownContent = markDownContent.replace(attachPath[j], newPath)
+        markDownContent = markDownContent.replace(attachmentPaths[j], newPath)
       })
       .catch((e) => {
-        console.error('File does not exist in path: ' + attachPath[j])
+        console.error('File does not exist in path: ' + attachmentPaths[j])
       })
       .finally(() => {
         numResolvedPromises++
