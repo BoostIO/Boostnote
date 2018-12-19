@@ -1,7 +1,7 @@
 {
   "name": "boost",
   "productName": "Boostnote",
-  "version": "0.11.11",
+  "version": "0.11.12",
   "main": "index.js",
   "description": "Boostnote",
   "license": "GPL-3.0",
@@ -62,7 +62,7 @@
     "escape-string-regexp": "^1.0.5",
     "file-uri-to-path": "^1.0.0",
     "file-url": "^2.0.2",
-    "filenamify": "^2.0.0",
+    "filenamify": "^2.1.0",
     "flowchart.js": "^1.6.5",
     "font-awesome": "^4.3.0",
     "fs-extra": "^5.0.0",

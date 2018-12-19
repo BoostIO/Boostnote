@@ -64,13 +64,14 @@ class NoteList extends React.Component {
     this.focusHandler = () => {
       this.refs.list.focus()
     }
-    this.alertIfSnippetHandler = () => {
-      this.alertIfSnippet()
+    this.alertIfSnippetHandler = (event, msg) => {
+      this.alertIfSnippet(msg)
     }
     this.importFromFileHandler = this.importFromFile.bind(this)
     this.jumpNoteByHash = this.jumpNoteByHashHandler.bind(this)
     this.handleNoteListKeyUp = this.handleNoteListKeyUp.bind(this)
     this.getNoteKeyFromTargetIndex = this.getNoteKeyFromTargetIndex.bind(this)
+    this.cloneNote = this.cloneNote.bind(this)
     this.deleteNote = this.deleteNote.bind(this)
     this.focusNote = this.focusNote.bind(this)
     this.pinToTop = this.pinToTop.bind(this)
@@ -96,6 +97,7 @@ class NoteList extends React.Component {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
+    ee.on('list:clone', this.cloneNote)
     ee.on('list:focus', this.focusHandler)
     ee.on('list:isMarkdownNote', this.alertIfSnippetHandler)
     ee.on('import:file', this.importFromFileHandler)
@@ -118,6 +120,7 @@ class NoteList extends React.Component {
 
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
+    ee.off('list:clone', this.cloneNote)
     ee.off('list:focus', this.focusHandler)
     ee.off('list:isMarkdownNote', this.alertIfSnippetHandler)
     ee.off('import:file', this.importFromFileHandler)
@@ -275,12 +278,6 @@ class NoteList extends React.Component {
     if (e.keyCode === 65 && !e.shiftKey) {
       e.preventDefault()
       ee.emit('top:new-note')
-    }
-
-    // D key
-    if (e.keyCode === 68) {
-      e.preventDefault()
-      this.deleteNote()
     }
 
     // E key
@@ -495,14 +492,21 @@ class NoteList extends React.Component {
     })
   }
 
-  alertIfSnippet () {
+  alertIfSnippet (msg) {
+    const warningMessage = (msg) => ({
+      'export-txt': 'Text export',
+      'export-md': 'Markdown export',
+      'export-html': 'HTML export',
+      'print': 'Print'
+    })[msg]
+
     const targetIndex = this.getTargetIndex()
     if (this.notes[targetIndex].type === 'SNIPPET_NOTE') {
       dialog.showMessageBox(remote.getCurrentWindow(), {
         type: 'warning',
         message: i18n.__('Sorry!'),
-        detail: i18n.__('md/text import is available only a markdown note.'),
-        buttons: [i18n.__('OK'), i18n.__('Cancel')]
+        detail: i18n.__(warningMessage(msg) + ' is available only in markdown notes.'),
+        buttons: [i18n.__('OK')]
       })
     }
   }

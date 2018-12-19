@@ -99,6 +99,7 @@ class UiTab extends React.Component {
         frontMatterTitleField: this.refs.frontMatterTitleField.value,
         spellcheck: this.refs.spellcheck.checked,
         enableCodeMirror: this.refs.enableCodeMirror.value
+        enableSmartPaste: this.refs.enableSmartPaste.checked
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -574,6 +575,18 @@ class UiTab extends React.Component {
               {i18n.__('Enable smart table editor')}
             </label>
           </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.enableSmartPaste}
+                ref='enableSmartPaste'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable smart paste')}
+            </label>
+          </div>
+
           <div styleName='group-checkBoxSection'>
             <label>
               <input onChange={(e) => this.handleUIChange(e)}

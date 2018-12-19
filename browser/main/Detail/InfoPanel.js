@@ -70,22 +70,22 @@ class InfoPanel extends React.Component {
         <hr />
 
         <div id='export-wrap'>
-          <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsMd(e, 'export-md')}>
             <i className='fa fa-file-code-o' />
             <p>{i18n.__('.md')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => exportAsTxt(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsTxt(e, 'export-txt')}>
             <i className='fa fa-file-text-o' />
             <p>{i18n.__('.txt')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => exportAsHtml(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsHtml(e, 'export-html')}>
             <i className='fa fa-html5' />
             <p>{i18n.__('.html')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => print(e)}>
+          <button styleName='export--enable' onClick={(e) => print(e, 'print')}>
             <i className='fa fa-print' />
             <p>{i18n.__('Print')}</p>
           </button>

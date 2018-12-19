@@ -645,11 +645,18 @@ class SnippetNoteDetail extends React.Component {
     if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
-  showWarning () {
+  showWarning (e, msg) {
+    const warningMessage = (msg) => ({
+      'export-txt': 'Text export',
+      'export-md': 'Markdown export',
+      'export-html': 'HTML export',
+      'print': 'Print'
+    })[msg]
+
     dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Sorry!'),
-      detail: i18n.__('md/text import is available only a markdown note.'),
+      detail: i18n.__(warningMessage(msg) + ' is available only in markdown notes.'),
       buttons: [i18n.__('OK')]
     })
   }
@@ -717,6 +724,8 @@ class SnippetNoteDetail extends React.Component {
             enableTableEditor={config.editor.enableTableEditor}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
+            enableSmartPaste={config.editor.enableSmartPaste}
+            hotkey={config.hotkey}
           />
         }
       </div>
@@ -800,7 +809,9 @@ class SnippetNoteDetail extends React.Component {
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.showWarning}
           exportAsTxt={this.showWarning}
+          exportAsHtml={this.showWarning}
           type={note.type}
+          print={this.showWarning}
         />
       </div>
     </div>
