@@ -70,7 +70,8 @@ class MarkdownNoteDetail extends React.Component {
   componentWillReceiveProps (nextProps) {
     const isNewNote = nextProps.note.key !== this.props.note.key
     const hasDeletedTags = nextProps.note.tags.length < this.props.note.tags.length
-    if (!this.state.isMovingNote && (isNewNote || hasDeletedTags)) {
+    const updateContent = nextProps.note.content !==  this.props.note.content
+    if (!this.state.isMovingNote && (isNewNote || hasDeletedTags || updateContent)) {
       if (this.saveQueue != null) this.saveNow()
       this.setState({
         note: Object.assign({linesHighlighted: []}, nextProps.note)
