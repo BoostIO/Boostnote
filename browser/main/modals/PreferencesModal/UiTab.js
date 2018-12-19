@@ -98,7 +98,7 @@ class UiTab extends React.Component {
         enableFrontMatterTitle: this.refs.enableFrontMatterTitle.checked,
         frontMatterTitleField: this.refs.frontMatterTitleField.value,
         spellcheck: this.refs.spellcheck.checked,
-        enableCodeMirror: this.refs.enableCodeMirror.value
+        enableCodeMirror: this.refs.enableCodeMirror.value,
         enableSmartPaste: this.refs.enableSmartPaste.checked
       },
       preview: {

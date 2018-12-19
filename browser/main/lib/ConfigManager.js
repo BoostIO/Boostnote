@@ -54,7 +54,7 @@ export const DEFAULT_CONFIG = {
     enableFrontMatterTitle: true,
     frontMatterTitleField: 'title',
     spellcheck: false,
-    enableCodeMirror: true
+    enableCodeMirror: true,
     enableSmartPaste: false
   },
   preview: {

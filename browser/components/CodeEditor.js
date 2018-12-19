@@ -232,15 +232,12 @@ export default class CodeEditor extends React.Component {
     this.updateDefaultKeyMap()
 
     this.value = this.props.value
-    console.log(this.props.enableCodeMirror)
     var enable = true
     if (this.props.enableCodeMirror === 'true') {
       enable = true
     } else {
       enable = false
     }
-    console.log('editor: ')
-    console.log(enable)
     this.editor = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       value: this.props.value,
