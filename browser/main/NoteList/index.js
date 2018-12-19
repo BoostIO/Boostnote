@@ -66,7 +66,7 @@ class NoteList extends React.Component {
     this.alertIfSnippetHandler = (event, msg) => {
       this.alertIfSnippet(msg)
     }
-    this.openFileHandler = this.openFile.bind(this);
+    this.openFileHandler = this.openFile.bind(this)
     this.importFromFileHandler = this.importFromFile.bind(this)
     this.jumpNoteByHash = this.jumpNoteByHashHandler.bind(this)
     this.handleNoteListKeyUp = this.handleNoteListKeyUp.bind(this)
@@ -92,7 +92,7 @@ class NoteList extends React.Component {
 
     this.contextNotes = []
 
-    this.fsWatcher = null;
+    this.fsWatcher = null
   }
 
   componentDidMount () {
@@ -140,36 +140,34 @@ class NoteList extends React.Component {
     const noteKey = visibleNoteKeys.includes(prevKey) ? prevKey : note && note.key
     const CSON = require('@rokt33r/season')
 
+    if (location.query.key !== prevKey) {
+      const focusNote = findNoteByKey(this.notes, location.query.key)
 
-    if(location.query.key != prevKey){
-      let focusNote = findNoteByKey(this.notes, location.query.key)
+      if (focusNote.filepath !== undefined) {
+        try {
+          this.fsWatcher.close()
+        } catch (e) {
+        }
 
-      if(focusNote.filepath != undefined){
-        try{
-        this.fsWatcher.close();
-        }
-        catch(e){
-        }
         this.fsWatcher = fs.watch(focusNote.filepath)
-        
+
         this.fsWatcher.on('change', (event, filename) => {
+          const updatedNote = Object.assign({}, focusNote)
 
-          let updatedNote = Object.assign({}, focusNote)
-
-          switch(event){
-            case 'change' : 
+          switch (event) {
+            case 'change' :
               updatedNote.content = fs.readFileSync(updatedNote.filepath, 'utf8')
               updatedNote.contentSynced = true
-              break;
-            
-            case 'rename': 
-              updatedNote.filepath = undefined;
-              this.fsWatcher.close();
+              break
+
+            case 'rename':
+              updatedNote.filepath = undefined
+              this.fsWatcher.close()
               const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
               CSON.writeFileSync(notePath, _.omit(updatedNote, ['key', 'storage']))
-              break;
-            
-            default: break;
+              break
+
+            default: break
           }
 
           dataApi
@@ -180,16 +178,14 @@ class NoteList extends React.Component {
                 note: note
               })
             })
-        });
+        })
       }
-  
     }
-
 
     if (note && location.query.key == null) {
       const { router } = this.context
       if (!location.pathname.match(/\/searched/)) this.contextNotes = this.getContextNotes()
-      
+
       // A visible note is an active note
       if (!selectedNoteKeys.includes(noteKey)) {
         if (selectedNoteKeys.length === 1) selectedNoteKeys.pop()
@@ -908,7 +904,7 @@ class NoteList extends React.Component {
     shell.openExternal(note.blog.blogLink)
   }
 
-  openFile(){
+  openFile () {
     const options = {
       filters: [
         { name: 'Documents', extensions: ['md', 'txt'] }
@@ -962,7 +958,7 @@ class NoteList extends React.Component {
             type: 'MARKDOWN_NOTE',
             createdAt: birthtime,
             updatedAt: mtime,
-            filepath: (linktype == 'LINK' ? filepath : undefined)
+            filepath: (linktype === 'LINK' ? filepath : undefined)
           }
           dataApi.createNote(storage.key, newNote)
           .then((note) => {
@@ -979,7 +975,7 @@ class NoteList extends React.Component {
       })
     })
   }
-  
+
   getTargetIndex () {
     const { location } = this.props
     const targetIndex = _.findIndex(this.notes, (note) => {

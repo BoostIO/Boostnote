@@ -2,7 +2,7 @@ const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
 const CSON = require('@rokt33r/season')
-const fs = require('fs-plus');
+const fs = require('fs-plus')
 const { findStorage } = require('browser/lib/findStorage')
 
 function validateInput (input) {
@@ -79,7 +79,7 @@ function updateNote (storageKey, noteKey, input) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
-    var contentSynced = input.contentSynced;
+    var contentSynced = input.contentSynced
     input = validateInput(input)
 
     targetStorage = findStorage(storageKey)
@@ -133,10 +133,10 @@ function updateNote (storageKey, noteKey, input) {
       })
 
       CSON.writeFileSync(path.join(storage.path, 'notes', noteKey + '.cson'), _.omit(noteData, ['key', 'storage']))
-      
-      if(noteData.filepath !== undefined){
-        if(!contentSynced && !noteData.isTrashed){
-          fs.writeFileSync(noteData.filepath, noteData.content);
+
+      if (noteData.filepath !== undefined) {
+        if (!contentSynced && !noteData.isTrashed) {
+          fs.writeFileSync(noteData.filepath, noteData.content)
         }
       }
       return noteData
