@@ -74,7 +74,6 @@ test.serial('Update a note', (t) => {
   }
   input4.title = input4.content.split('\n').shift()
 
-    
   const input5 = {
     type: 'MARKDOWN_NOTE',
     content: faker.lorem.lines(),
@@ -140,7 +139,6 @@ test.serial('Update a note', (t) => {
       t.is(input4.tags.length, jsonData2.tags.length)
       t.deepEqual(input4.linesHighlighted, data2.linesHighlighted)
       t.deepEqual(input4.linesHighlighted, jsonData2.linesHighlighted)
-
 
       const fileData3 = fs.readFileSync(path.join(storagePath, 'test', 'test' + '.txt'), 'utf8')
       const jsonData3 = CSON.readFileSync(path.join(storagePath, 'notes', data3.key + '.cson'))
