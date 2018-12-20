@@ -358,14 +358,10 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
     const groupIndex = 2
 
     while (attachPath) {
-      attachmentPaths.push(attachPath[groupIndex])
-
-      if (path.isAbsolute(attachPath[groupIndex])) {
-        promiseArray.push(this.copyAttachment(attachPath[groupIndex], storageKey, noteKey))
-      } else {
-        const fullPath = path.join(path.dirname(filepath), attachPath[groupIndex])
-        promiseArray.push(this.copyAttachment(fullPath, storageKey, noteKey))
-      }
+      let attachmentPath = attachPath[groupIndex]
+      attachmentPaths.push(attachmentPath)
+      attachmentPath = path.isAbsolute(attachmentPath) ? attachmentPath : path.join(path.dirname(filepath), attachmentPath)
+      promiseArray.push(this.copyAttachment(attachmentPath, storageKey, noteKey))
       attachPath = nameRegex.exec(markDownContent)
     }
 
