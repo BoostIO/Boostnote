@@ -13,6 +13,7 @@ const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
 const CSON = require('@rokt33r/season')
+const fs = require('fs')
 const faker = require('faker')
 
 const storagePath = path.join(os.tmpdir(), 'test/update-note')
@@ -73,25 +74,46 @@ test.serial('Update a note', (t) => {
   }
   input4.title = input4.content.split('\n').shift()
 
+    
+  const input5 = {
+    type: 'MARKDOWN_NOTE',
+    content: faker.lorem.lines(),
+    tags: faker.lorem.words().split(' '),
+    folder: folderKey,
+    filepath: path.join(storagePath, 'test', 'test' + '.txt')
+  }
+  input5.title = input5.content.split('\n').shift()
+
+  const input6 = {
+    type: 'MARKDOWN_NOTE',
+    content: faker.lorem.lines(),
+    tags: faker.lorem.words().split(' ')
+  }
+  input6.title = input6.content.split('\n').shift()
+
   return Promise.resolve()
     .then(function doTest () {
       return Promise
         .all([
           createNote(storageKey, input1),
-          createNote(storageKey, input2)
+          createNote(storageKey, input2),
+          createNote(storageKey, input5)
         ])
         .then(function updateNotes (data) {
           const data1 = data[0]
           const data2 = data[1]
+          const data3 = data[2]
           return Promise.all([
             updateNote(data1.storage, data1.key, input3),
-            updateNote(data1.storage, data2.key, input4)
+            updateNote(data1.storage, data2.key, input4),
+            updateNote(data1.storage, data3.key, input6)
           ])
         })
     })
     .then(function assert (data) {
       const data1 = data[0]
       const data2 = data[1]
+      const data3 = data[2]
 
       const jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.key + '.cson'))
       t.is(input3.title, data1.title)
@@ -118,6 +140,17 @@ test.serial('Update a note', (t) => {
       t.is(input4.tags.length, jsonData2.tags.length)
       t.deepEqual(input4.linesHighlighted, data2.linesHighlighted)
       t.deepEqual(input4.linesHighlighted, jsonData2.linesHighlighted)
+
+
+      const fileData3 = fs.readFileSync(path.join(storagePath, 'test', 'test' + '.txt'), 'utf8')
+      const jsonData3 = CSON.readFileSync(path.join(storagePath, 'notes', data3.key + '.cson'))
+      t.is(input6.title, data3.title)
+      t.is(input6.title, jsonData3.title)
+      t.is(input6.content, data3.content)
+      t.is(input6.content, jsonData3.content)
+      t.is(input6.tags.length, data3.tags.length)
+      t.is(input6.tags.length, data3.tags.length)
+      t.is(fileData3, data3.content)
     })
 })
 
