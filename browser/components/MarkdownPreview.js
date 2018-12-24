@@ -559,6 +559,12 @@ export default class MarkdownPreview extends React.Component {
           .concat(defaultCodeBlockFontFamily)
       : defaultCodeBlockFontFamily
 
+    const win = global.process.platform === 'win32'
+    if (win) {
+      codeBlockFontFamily = codeBlockFontFamily.filter(item => item !== 'Consolas')
+      codeBlockFontFamily.unshift('Consolas')
+    }
+
     return {
       fontFamily,
       fontSize,
