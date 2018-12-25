@@ -43,7 +43,7 @@ var config = {
     'markdown-it-admonition',
     'markdown-toc',
     'devtron',
-    '@rokt33r/season',
+    '@richardtks/season',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',

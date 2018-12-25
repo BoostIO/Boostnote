@@ -12,7 +12,7 @@ const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const _ = require('lodash')
 const os = require('os')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 
 const v1StoragePath = path.join(os.tmpdir(), 'test/addStorage-v1-storage')
 // const legacyStoragePath = path.join(os.tmpdir(), 'test/addStorage-legacy-storage')

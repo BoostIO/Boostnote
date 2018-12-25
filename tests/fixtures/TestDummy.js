@@ -2,7 +2,7 @@ const faker = require('faker')
 const keygen = require('browser/lib/keygen')
 const _ = require('lodash')
 const sander = require('sander')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 const path = require('path')
 
 function dummyFolder (override = {}) {

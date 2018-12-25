@@ -16,7 +16,7 @@ const _ = require('lodash')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 
 const storagePath = path.join(os.tmpdir(), 'test/delete-folder')
 

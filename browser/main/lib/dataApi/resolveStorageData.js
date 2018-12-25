@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 const migrateFromV6Storage = require('./migrateFromV6Storage')
 
 function resolveStorageData (storageCache) {

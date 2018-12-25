@@ -10,7 +10,7 @@ const localStorage = window.localStorage = global.localStorage = new Storage(nul
 const path = require('path')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 const _ = require('lodash')
 const os = require('os')
 

@@ -1,7 +1,7 @@
 const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 const { findStorage } = require('browser/lib/findStorage')
 
 function validateInput (input) {

@@ -2,7 +2,7 @@ const path = require('path')
 const sander = require('sander')
 const keygen = require('browser/lib/keygen')
 const _ = require('lodash')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 
 function migrateFromV5Storage (storagePath) {
   var boostnoteJSONPath = path.join(storagePath, 'boostnote.json')

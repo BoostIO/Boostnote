@@ -4,7 +4,7 @@ const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
 const consts = require('browser/lib/consts')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 /**
  * @param {Object}
  * name, path, type

@@ -1,6 +1,6 @@
 const sander = require('sander')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const CSON = require('@richardtks/season')
 
 function resolveStorageNotes (storage) {
   const notesDirPath = path.join(storage.path, 'notes')
