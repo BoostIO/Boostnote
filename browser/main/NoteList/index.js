@@ -25,6 +25,7 @@ import context from 'browser/lib/context'
 const { remote } = require('electron')
 const { dialog } = remote
 const WP_POST_PATH = '/wp/v2/posts'
+const CSON = require('@rokt33r/season')
 
 function sortByCreatedAt (a, b) {
   return new Date(b.createdAt) - new Date(a.createdAt)
@@ -138,7 +139,6 @@ class NoteList extends React.Component {
     const note = this.notes[0]
     const prevKey = prevProps.location.query.key
     const noteKey = visibleNoteKeys.includes(prevKey) ? prevKey : note && note.key
-    const CSON = require('@rokt33r/season')
 
     if (location.query.key !== prevKey) {
       let focusNote = findNoteByKey(this.notes, location.query.key)
@@ -146,7 +146,8 @@ class NoteList extends React.Component {
       if (focusNote.filepath !== undefined) {
         try {
           this.fsWatcher.close()
-        } catch (e) {
+        } catch (err) {
+          console.error('File watcher does not exist: ' + err)
         }
 
         this.fsWatcher = fs.watch(focusNote.filepath)
@@ -162,7 +163,11 @@ class NoteList extends React.Component {
 
             case 'rename':
               updatedNote.filepath = undefined
-              this.fsWatcher.close()
+              try {
+                this.fsWatcher.close()
+              } catch (err) {
+                console.error('File watcher does not exist: ' + err)
+              }
               const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
               CSON.writeFileSync(notePath, _.omit(updatedNote, ['key', 'storage']))
               break
