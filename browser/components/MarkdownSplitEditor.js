@@ -172,12 +172,12 @@ class MarkdownSplitEditor extends React.Component {
           enableTableEditor={config.editor.enableTableEditor}
           storageKey={storageKey}
           noteKey={noteKey}
+          hotkey={config.hotkey}
           linesHighlighted={linesHighlighted}
           onChange={(e) => this.handleOnChange(e)}
-          onScroll={this.handleScroll.bind(this)}
+          onScroll={(e) => this.handleScroll(e)}
           spellCheck={config.editor.spellcheck}
           enableSmartPaste={config.editor.enableSmartPaste}
-          hotkey={config.hotkey}
           switchPreview={config.editor.switchPreview}
        />
         <div styleName='slider' style={{left: this.state.codeEditorWidthInPercent + '%'}} onMouseDown={e => this.handleMouseDown(e)} >
@@ -202,7 +202,7 @@ class MarkdownSplitEditor extends React.Component {
           tabInde='0'
           value={value}
           onCheckboxClick={(e) => this.handleCheckboxClick(e)}
-          onScroll={this.handleScroll.bind(this)}
+          onScroll={(e) => this.handleScroll(e)}
           showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
           noteKey={noteKey}

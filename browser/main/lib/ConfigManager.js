@@ -26,7 +26,19 @@ export const DEFAULT_CONFIG = {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
     deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
-    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V'
+    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
+    foldAll: OSX ? 'Command + O' : 'Control + O',
+    unfoldAll: OSX ? 'Command + Shift + O' : 'Control + Shift + O',
+    foldLevel1: OSX ? 'Control + 1' : 'Alt + 1',
+    foldLevel2: OSX ? 'Control + 2' : 'Alt + 2',
+    foldLevel3: OSX ? 'Control + 3' : 'Alt + 3',
+    foldLevel4: OSX ? 'Control + 4' : 'Alt + 4',
+    foldLevel5: OSX ? 'Control + 5' : 'Alt + 5',
+    unfoldLevel1: OSX ? 'Control + Alt + 1' : 'Alt + Shift + 1',
+    unfoldLevel2: OSX ? 'Control + Alt + 2' : 'Alt + Shift + 2',
+    unfoldLevel3: OSX ? 'Control + Alt + 3' : 'Alt + Shift + 3',
+    unfoldLevel4: OSX ? 'Control + Alt + 4' : 'Alt + Shift + 4',
+    unfoldLevel5: OSX ? 'Control + Alt + 5' : 'Alt + Shift + 5'
   },
   ui: {
     language: 'en',

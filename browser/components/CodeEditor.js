@@ -284,6 +284,18 @@ export default class CodeEditor extends React.Component {
         }
         return CodeMirror.Pass
       },
+      [translateHotkey(hotkey.foldAll)]: 'foldAll',
+      [translateHotkey(hotkey.unfoldAll)]: 'unfoldAll',
+      [translateHotkey(hotkey.foldLevel1)]: 'foldLevel1',
+      [translateHotkey(hotkey.foldLevel2)]: 'foldLevel2',
+      [translateHotkey(hotkey.foldLevel3)]: 'foldLevel3',
+      [translateHotkey(hotkey.foldLevel4)]: 'foldLevel4',
+      [translateHotkey(hotkey.foldLevel5)]: 'foldLevel5',
+      [translateHotkey(hotkey.unfoldLevel1)]: 'unfoldLevel1',
+      [translateHotkey(hotkey.unfoldLevel2)]: 'unfoldLevel2',
+      [translateHotkey(hotkey.unfoldLevel3)]: 'unfoldLevel3',
+      [translateHotkey(hotkey.unfoldLevel4)]: 'unfoldLevel4',
+      [translateHotkey(hotkey.unfoldLevel5)]: 'unfoldLevel5',
       [translateHotkey(hotkey.pasteSmartly)]: cm => {
         this.handlePaste(cm, true)
       }

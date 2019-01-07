@@ -301,12 +301,12 @@ class MarkdownEditor extends React.Component {
           noteKey={noteKey}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           enableTableEditor={config.editor.enableTableEditor}
+          hotkey={config.hotkey}
           linesHighlighted={linesHighlighted}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
           spellCheck={config.editor.spellcheck}
           enableSmartPaste={config.editor.enableSmartPaste}
-          hotkey={config.hotkey}
           switchPreview={config.editor.switchPreview}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
