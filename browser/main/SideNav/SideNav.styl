@@ -18,7 +18,37 @@
   display flex
   text-align center
 
+.extra-buttons
+  position absolute
+  display flex
+  align-items center
+  justify-content flex-end
+  right 10px
+  top 24px
 
+.search
+  position relative
+  flex 1
+  display flex
+  max-height 0
+  overflow hidden
+  transition max-height .4s
+  margin -5px 10px 0
+  .search-input
+    flex 1
+    height 2em
+    vertical-align middle
+    font-size 14px
+    border solid 1px $border-color
+    border-radius 2px
+    padding 2px 6px
+    outline none
+  .search-clear
+    width 10px
+    position absolute
+    right 8px
+    top 9px
+    cursor pointer
 
 .top-menu-label
   margin-left 5px
@@ -98,6 +128,17 @@
   .top-menu-preference
     position absolute
     left 7px
+  .search
+    height 28px
+    .search-input
+      display none
+    .search-clear
+      display none
+    .search-folded
+      width 16px
+      padding-left 4px
+      margin-bottom 8px
+      cursor pointer
 
 body[data-theme="white"]
   .root, .root--folded

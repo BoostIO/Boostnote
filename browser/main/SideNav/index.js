@@ -13,6 +13,7 @@ import StorageList from 'browser/components/StorageList'
 import NavToggleButton from 'browser/components/NavToggleButton'
 import EventEmitter from 'browser/main/lib/eventEmitter'
 import PreferenceButton from './PreferenceButton'
+import SearchButton from './SearchButton'
 import ListButton from './ListButton'
 import TagButton from './TagButton'
 import {SortableContainer} from 'react-sortable-hoc'
@@ -36,21 +37,26 @@ class SideNav extends React.Component {
         show: false,
         color: null,
         tagName: null,
-        targetRect: null
+        targetRect: null,
+        showSearch: false,
+        searchText: ''
       }
     }
 
     this.dismissColorPicker = this.dismissColorPicker.bind(this)
     this.handleColorPickerConfirm = this.handleColorPickerConfirm.bind(this)
     this.handleColorPickerReset = this.handleColorPickerReset.bind(this)
+    this.handleSearchButtonClick = this.handleSearchButtonClick.bind(this)
+    this.handleSearchInputChange = this.handleSearchInputChange.bind(this)
+    this.handleSearchInputClear = this.handleSearchInputClear.bind(this)
   }
 
   componentDidMount () {
-    EventEmitter.on('side:preferences', this.handleMenuButtonClick)
+    EventEmitter.on('side:preferences', this.handlePreferenceButtonClick)
   }
 
   componentWillUnmount () {
-    EventEmitter.off('side:preferences', this.handleMenuButtonClick)
+    EventEmitter.off('side:preferences', this.handlePreferenceButtonClick)
   }
 
   deleteTag (tag) {
@@ -99,8 +105,28 @@ class SideNav extends React.Component {
     }
   }
 
-  handleMenuButtonClick (e) {
+  handlePreferenceButtonClick (e) {
     openModal(PreferencesModal)
+  }
+
+  handleSearchButtonClick (e) {
+    const { showSearch } = this.state
+    this.setState({
+      showSearch: !showSearch,
+      searchText: ''
+    })
+  }
+
+  handleSearchInputClear (e) {
+    this.setState({
+      searchText: ''
+    })
+  }
+
+  handleSearchInputChange (e) {
+    this.setState({
+      searchText: e.target.value
+    })
   }
 
   handleHomeButtonClick (e) {
@@ -181,12 +207,19 @@ class SideNav extends React.Component {
 
   handleToggleButtonClick (e) {
     const { dispatch, config } = this.props
+    const { showSearch, searchText } = this.state
 
     ConfigManager.set({isSideNavFolded: !config.isSideNavFolded})
     dispatch({
       type: 'SET_IS_SIDENAV_FOLDED',
       isFolded: !config.isSideNavFolded
     })
+
+    if (showSearch && searchText.length === 0) {
+      this.setState({
+        showSearch: false
+      })
+    }
   }
 
   handleTrashedButtonClick (e) {
@@ -215,8 +248,9 @@ class SideNav extends React.Component {
     }
   }
 
-  SideNavComponent (isFolded, storageList) {
-    const { location, data, config } = this.props
+  SideNavComponent (isFolded) {
+    const { location, data, config, dispatch } = this.props
+    const { showSearch, searchText } = this.state
 
     const isHomeActive = !!location.pathname.match(/^\/home$/)
     const isStarredActive = !!location.pathname.match(/^\/starred$/)
@@ -226,6 +260,28 @@ class SideNav extends React.Component {
 
     // TagsMode is not selected
     if (!location.pathname.match('/tags') && !location.pathname.match('/alltags')) {
+      let storageMap = data.storageMap
+      if (showSearch && searchText.length > 0) {
+        storageMap = storageMap.map((storage) => {
+          const folders = storage.folders.filter(folder => folder.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
+          return Object.assign({}, storage, { folders })
+        })
+      }
+
+      const storageList = storageMap.map((storage, key) => {
+        const SortableStorageItem = SortableContainer(StorageItem)
+        return <SortableStorageItem
+          key={storage.key}
+          storage={storage}
+          data={data}
+          location={location}
+          isFolded={isFolded}
+          dispatch={dispatch}
+          onSortEnd={this.onSortEnd.bind(this)(storage)}
+          useDragHandle
+        />
+      })
+
       component = (
         <div>
           <SideNavFilter
@@ -279,7 +335,7 @@ class SideNav extends React.Component {
 
   tagListComponent () {
     const { data, location, config } = this.props
-    const { colorPicker } = this.state
+    const { colorPicker, showSearch, searchText } = this.state
     const activeTags = this.getActiveTags(location.pathname)
     const relatedTags = this.getRelatedTags(activeTags, data.noteMap)
     let tagList = _.sortBy(data.tagNoteMap.map(
@@ -287,6 +343,9 @@ class SideNav extends React.Component {
     ).filter(
       tag => tag.size > 0
     ), ['name'])
+    if (showSearch && searchText.length > 0) {
+      tagList = tagList.filter(tag => tag.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1)
+    }
     if (config.ui.enableLiveNoteCounts && activeTags.length !== 0) {
       const notesTags = data.noteMap.map(note => note.tags)
       tagList = tagList.map(tag => {
@@ -406,24 +465,8 @@ class SideNav extends React.Component {
   }
 
   render () {
-    const { data, location, config, dispatch } = this.props
-    const { colorPicker: colorPickerState } = this.state
-
-    const isFolded = config.isSideNavFolded
-
-    const storageList = data.storageMap.map((storage, key) => {
-      const SortableStorageItem = SortableContainer(StorageItem)
-      return <SortableStorageItem
-        key={storage.key}
-        storage={storage}
-        data={data}
-        location={location}
-        isFolded={isFolded}
-        dispatch={dispatch}
-        onSortEnd={this.onSortEnd.bind(this)(storage)}
-        useDragHandle
-      />
-    })
+    const { location, config } = this.props
+    const { showSearch, searchText, colorPicker: colorPickerState } = this.state
 
     let colorPicker
     if (colorPickerState.show) {
@@ -438,9 +481,25 @@ class SideNav extends React.Component {
       )
     }
 
+    const isFolded = config.isSideNavFolded
     const style = {}
     if (!isFolded) style.width = this.props.width
     const isTagActive = location.pathname.match(/tag/)
+
+    const navSearch = (
+      <div styleName='search' style={{maxHeight: showSearch ? '3em' : '0'}}>
+        <input
+          styleName='search-input'
+          type='text'
+          ref={dom => { this.searchInput = dom }}
+          onChange={this.handleSearchInputChange}
+          value={searchText}
+        />
+        <img styleName='search-clear' src='../resources/icon/icon-x.svg' onClick={this.handleSearchInputClear} />
+        {isFolded && <img styleName='search-folded' src='../resources/icon/icon-search-active.svg' onClick={this.handleSearchButtonClick} />}
+      </div>
+    )
+
     return (
       <div className='SideNav'
         styleName={isFolded ? 'root--folded' : 'root'}
@@ -452,11 +511,16 @@ class SideNav extends React.Component {
             <ListButton onClick={this.handleSwitchFoldersButtonClick.bind(this)} isTagActive={isTagActive} />
             <TagButton onClick={this.handleSwitchTagsButtonClick.bind(this)} isTagActive={isTagActive} />
           </div>
-          <div>
-            <PreferenceButton onClick={this.handleMenuButtonClick} />
+          <div styleName='extra-buttons'>
+            <SearchButton
+              onClick={this.handleSearchButtonClick}
+              isActive={showSearch}
+            />
+            <PreferenceButton onClick={this.handlePreferenceButtonClick} />
           </div>
         </div>
-        {this.SideNavComponent(isFolded, storageList)}
+        {navSearch}
+        {this.SideNavComponent(isFolded)}
         {colorPicker}
       </div>
     )
