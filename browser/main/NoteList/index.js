@@ -145,45 +145,50 @@ class NoteList extends React.Component {
 
       if (focusNote.filepath !== undefined) {
         try {
-          this.fsWatcher.close()
+          if (this.fsWatcher != null) {
+            this.fsWatcher.close()
+            this.fsWatcher = null
+          }
         } catch (err) {
           console.error('File watcher does not exist: ' + err)
         }
 
-        this.fsWatcher = fs.watch(focusNote.filepath)
+        if (fs.existsSync(focusNote.filepath) && fs.lstatSync(focusNote.filepath).isFile()) {
+          this.fsWatcher = fs.watch(focusNote.filepath)
 
-        this.fsWatcher.on('change', (event, filename) => {
-          let updatedNote = Object.assign({}, focusNote)
+          this.fsWatcher.on('change', (event, filename) => {
+            let updatedNote = Object.assign({}, focusNote)
 
-          switch (event) {
-            case 'change' :
-              updatedNote.content = fs.readFileSync(updatedNote.filepath, 'utf8')
-              updatedNote.contentSynced = true
-              break
+            switch (event) {
+              case 'change' :
+                updatedNote.content = fs.readFileSync(updatedNote.filepath, 'utf8')
+                updatedNote.contentSynced = true
+                break
 
-            case 'rename':
-              updatedNote.filepath = undefined
-              try {
-                this.fsWatcher.close()
-              } catch (err) {
-                console.error('File watcher does not exist: ' + err)
-              }
-              const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
-              CSON.writeFileSync(notePath, _.omit(updatedNote, ['key', 'storage']))
-              break
+              case 'rename':
+                updatedNote.filepath = undefined
+                try {
+                  this.fsWatcher.close()
+                } catch (err) {
+                  console.error('File watcher does not exist: ' + err)
+                }
+                const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
+                CSON.writeFileSync(notePath, _.omit(updatedNote, ['key', 'storage']))
+                break
 
-            default: break
-          }
+              default: break
+            }
 
-          dataApi
-            .updateNote(storage.key, focusNote.key, updatedNote)
-            .then((note) => {
-              dispatch({
-                type: 'UPDATE_NOTE',
-                note: note
+            dataApi
+              .updateNote(storage.key, focusNote.key, updatedNote)
+              .then((note) => {
+                dispatch({
+                  type: 'UPDATE_NOTE',
+                  note: note
+                })
               })
-            })
-        })
+          })
+        }
       }
     }
 
@@ -975,6 +980,8 @@ class NoteList extends React.Component {
               pathname: location.pathname,
               query: {key: getNoteKey(note)}
             })
+            ee.emit('list:jump', getNoteKey(note))
+            ee.emit('detail:focus')
           })
         })
       })
