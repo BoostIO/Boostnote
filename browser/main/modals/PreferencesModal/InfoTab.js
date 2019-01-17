@@ -74,6 +74,11 @@ class InfoTab extends React.Component {
         <div styleName='top'>
           <ul styleName='list'>
             <li>
+              <a href='https://issuehunt.io/repos/53266139'
+                onClick={(e) => this.handleLinkClick(e)}
+              >{i18n.__('Bounty on IssueHunt')}</a>
+            </li>
+            <li>
               <a href='https://boostnote.io/#subscribe'
                 onClick={(e) => this.handleLinkClick(e)}
               >{i18n.__('Subscribe to Newsletter')}</a>
@@ -129,7 +134,7 @@ class InfoTab extends React.Component {
             >{i18n.__('Development')}</a>{i18n.__(' : Development configurations for Boostnote.')}
           </li>
           <li styleName='cc'>
-            {i18n.__('Copyright (C) 2017 - 2018 BoostIO')}
+            {i18n.__('Copyright (C) 2017 - 2019 BoostIO')}
           </li>
           <li styleName='cc'>
             {i18n.__('License: GPL v3')}

@@ -6,5 +6,8 @@ module.exports = {
   },
   'deleteNote': () => {
     ee.emit('hotkey:deletenote')
+  },
+  'toggleMenuBar': () => {
+    ee.emit('menubar:togglemenubar')
   }
 }

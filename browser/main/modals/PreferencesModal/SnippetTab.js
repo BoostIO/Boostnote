@@ -136,6 +136,9 @@ class SnippetTab extends React.Component {
               enableRulers={config.editor.enableRulers}
               rulers={config.editor.rulers}
               displayLineNumbers={config.editor.displayLineNumbers}
+              matchingPairs={config.editor.matchingPairs}
+              matchingTriples={config.editor.matchingTriples}
+              explodingPairs={config.editor.explodingPairs}
               scrollPastEnd={config.editor.scrollPastEnd}
               onRef={ref => { this.snippetEditor = ref }} />
           </div>

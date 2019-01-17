@@ -16,6 +16,7 @@ function validateInput (input) {
   switch (input.type) {
     case 'MARKDOWN_NOTE':
       if (!_.isString(input.content)) input.content = ''
+      if (!_.isArray(input.linesHighlighted)) input.linesHighlighted = []
       break
     case 'SNIPPET_NOTE':
       if (!_.isString(input.description)) input.description = ''
@@ -23,7 +24,8 @@ function validateInput (input) {
         input.snippets = [{
           name: '',
           mode: 'text',
-          content: ''
+          content: '',
+          linesHighlighted: []
         }]
       }
       break

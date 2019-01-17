@@ -31,7 +31,7 @@
 
 .tabList
   absolute left right
-  top 55px
+  top 70px
   height 30px
   display flex
   background-color $ui-noteDetail-backgroundColor
@@ -57,6 +57,9 @@
 .tabList .tabButton
   navWhiteButtonColor()
   width 30px
+  border-left 1px solid $ui-borderColor
+  border-top 1px solid $ui-borderColor
+  border-right 1px solid $ui-borderColor
 
 .tabView
   absolute left right bottom
@@ -98,16 +101,33 @@
   opacity 0
   transition 0.1s
 
-body[data-theme="white"]
+body[data-theme="white"], body[data-theme="default"]
   .root
     box-shadow $note-detail-box-shadow
     border none
+
+  .tabButton
+    &:hover
+      background-color alpha($ui-button--active-backgroundColor, 20%)
+      color $ui-text-color
+      transition 0.15s
 
 body[data-theme="dark"]
   .root
     border-left 1px solid $ui-dark-borderColor
     background-color $ui-dark-noteDetail-backgroundColor
     box-shadow none
+
+  .tabList .tabButton
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+
+  .tabButton
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-dark-text-color
+      transition 0.15s
 
   .body
     background-color $ui-dark-noteDetail-backgroundColor
@@ -118,7 +138,6 @@ body[data-theme="dark"]
     border 1px solid $ui-dark-borderColor
 
   .tabList
-    background-color $ui-button--active-backgroundColor
     background-color $ui-dark-noteDetail-backgroundColor
 
   .tabList .list
@@ -150,6 +169,15 @@ body[data-theme="solarized-dark"]
     color $ui-solarized-dark-text-color
     border 1px solid $ui-solarized-dark-borderColor
 
+  .tabList .tabButton
+    border-color $ui-solarized-dark-borderColor
+
+  .tabButton
+    &:hover
+      color $ui-solarized-dark-button--active-color
+      background-color $ui-solarized-dark-noteDetail-backgroundColor
+      transition 0.15s
+    
   .tabList
     background-color $ui-solarized-dark-noteDetail-backgroundColor
     color $ui-solarized-dark-text-color
@@ -167,6 +195,14 @@ body[data-theme="monokai"]
     color $ui-monokai-text-color
     border 1px solid $ui-monokai-borderColor
 
+  .tabList .tabButton
+    border-color $ui-monokai-borderColor
+
+  .tabButton
+    &:hover
+      color $ui-monokai-text-color
+      background-color $ui-monokai-noteDetail-backgroundColor
+
   .tabList
     background-color $ui-monokai-noteDetail-backgroundColor
     color $ui-monokai-text-color
@@ -183,6 +219,14 @@ body[data-theme="dracula"]
     background-color $ui-dracula-noteDetail-backgroundColor
     color $ui-dracula-text-color
     border 1px solid $ui-dracula-borderColor
+
+  .tabList .tabButton
+    border-color $ui-dracula-borderColor
+
+  .tabButton
+    &:hover
+      color $ui-dracula-text-color
+      background-color $ui-dracula-noteDetail-backgroundColor
 
   .tabList
     background-color $ui-dracula-noteDetail-backgroundColor

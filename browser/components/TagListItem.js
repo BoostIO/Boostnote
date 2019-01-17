@@ -10,11 +10,12 @@ import CSSModules from 'browser/lib/CSSModules'
 * @param {string} name
 * @param {Function} handleClickTagListItem
 * @param {Function} handleClickNarrowToTag
-* @param {bool} isActive
-* @param {bool} isRelated
+* @param {boolean} isActive
+* @param {boolean} isRelated
+* @param {string} bgColor tab backgroundColor
 */
 
-const TagListItem = ({name, handleClickTagListItem, handleClickNarrowToTag, handleContextMenu, isActive, isRelated, count}) => (
+const TagListItem = ({name, handleClickTagListItem, handleClickNarrowToTag, handleContextMenu, isActive, isRelated, count, color}) => (
   <div styleName='tagList-itemContainer' onContextMenu={e => handleContextMenu(e, name)}>
     {isRelated
       ? <button styleName={isActive ? 'tagList-itemNarrow-active' : 'tagList-itemNarrow'} onClick={() => handleClickNarrowToTag(name)}>
@@ -23,6 +24,7 @@ const TagListItem = ({name, handleClickTagListItem, handleClickNarrowToTag, hand
       : <div styleName={isActive ? 'tagList-itemNarrow-active' : 'tagList-itemNarrow'} />
     }
     <button styleName={isActive ? 'tagList-item-active' : 'tagList-item'} onClick={() => handleClickTagListItem(name)}>
+      <span styleName='tagList-item-color' style={{backgroundColor: color || 'transparent'}} />
       <span styleName='tagList-item-name'>
         {`# ${name}`}
         <span styleName='tagList-item-count'>{count !== 0 ? count : ''}</span>
@@ -33,7 +35,8 @@ const TagListItem = ({name, handleClickTagListItem, handleClickNarrowToTag, hand
 
 TagListItem.propTypes = {
   name: PropTypes.string.isRequired,
-  handleClickTagListItem: PropTypes.func.isRequired
+  handleClickTagListItem: PropTypes.func.isRequired,
+  color: PropTypes.string
 }
 
 export default CSSModules(TagListItem, styles)

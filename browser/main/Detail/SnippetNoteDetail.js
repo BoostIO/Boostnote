@@ -20,6 +20,7 @@ import _ from 'lodash'
 import {findNoteTitle} from 'browser/lib/findNoteTitle'
 import convertModeName from 'browser/lib/convertModeName'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+import FullscreenButton from './FullscreenButton'
 import TrashButton from './TrashButton'
 import RestoreButton from './RestoreButton'
 import PermanentDeleteButton from './PermanentDeleteButton'
@@ -48,7 +49,7 @@ class SnippetNoteDetail extends React.Component {
       note: Object.assign({
         description: ''
       }, props.note, {
-        snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
+        snippets: props.note.snippets.map((snippet) => Object.assign({linesHighlighted: []}, snippet))
       })
     }
 
@@ -76,8 +77,9 @@ class SnippetNoteDetail extends React.Component {
       const nextNote = Object.assign({
         description: ''
       }, nextProps.note, {
-        snippets: nextProps.note.snippets.map((snippet) => Object.assign({}, snippet))
+        snippets: nextProps.note.snippets.map((snippet) => Object.assign({linesHighlighted: []}, snippet))
       })
+
       this.setState({
         snippetIndex: 0,
         note: nextNote
@@ -410,6 +412,8 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       const snippets = this.state.note.snippets.slice()
       snippets[index].content = this.refs['code-' + index].value
+      snippets[index].linesHighlighted = e.options.linesHighlighted
+
       this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
       this.setState(state => ({
         note: state.note
@@ -596,13 +600,16 @@ class SnippetNoteDetail extends React.Component {
   }
 
   addSnippet () {
-    const { config } = this.props
+    const { config: { editor: { snippetDefaultLanguage } } } = this.props
     const { note } = this.state
+
+    const defaultLanguage = snippetDefaultLanguage === 'Auto Detect' ? null : snippetDefaultLanguage
 
     note.snippets = note.snippets.concat([{
       name: '',
-      mode: config.editor.snippetDefaultLanguage || 'text',
-      content: ''
+      mode: defaultLanguage,
+      content: '',
+      linesHighlighted: []
     }])
     const snippetIndex = note.snippets.length - 1
 
@@ -668,6 +675,8 @@ class SnippetNoteDetail extends React.Component {
     const storageKey = note.storage
     const folderKey = note.folder
 
+    const autoDetect = config.editor.snippetDefaultLanguage === 'Auto Detect'
+
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
@@ -692,10 +701,6 @@ class SnippetNoteDetail extends React.Component {
 
     const viewList = note.snippets.map((snippet, index) => {
       const isActive = this.state.snippetIndex === index
-
-      let syntax = CodeMirror.findModeByName(convertModeName(snippet.mode))
-      if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
-
       return <div styleName='tabView'
         key={index}
         style={{zIndex: isActive ? 5 : 4}}
@@ -704,26 +709,34 @@ class SnippetNoteDetail extends React.Component {
           ? <MarkdownEditor styleName='tabView-content'
             value={snippet.content}
             config={config}
+            linesHighlighted={snippet.linesHighlighted}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
             storageKey={storageKey}
           />
           : <CodeEditor styleName='tabView-content'
-            mode={snippet.mode}
+            mode={snippet.mode || (autoDetect ? null : config.editor.snippetDefaultLanguage)}
             value={snippet.content}
+            linesHighlighted={snippet.linesHighlighted}
             theme={config.editor.theme}
             fontFamily={config.editor.fontFamily}
             fontSize={editorFontSize}
             indentType={config.editor.indentType}
             indentSize={editorIndentSize}
             displayLineNumbers={config.editor.displayLineNumbers}
+            matchingPairs={config.editor.matchingPairs}
+            matchingTriples={config.editor.matchingTriples}
+            explodingPairs={config.editor.explodingPairs}
             keyMap={config.editor.keyMap}
             scrollPastEnd={config.editor.scrollPastEnd}
             fetchUrlTitle={config.editor.fetchUrlTitle}
             enableTableEditor={config.editor.enableTableEditor}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
+            enableSmartPaste={config.editor.enableSmartPaste}
+            hotkey={config.hotkey}
+            autoDetect={autoDetect}
           />
         }
       </div>
@@ -779,6 +792,7 @@ class SnippetNoteDetail extends React.Component {
           showTagsAlphabetically={config.ui.showTagsAlphabetically}
           data={data}
           onChange={(e) => this.handleChange(e)}
+          coloredTags={config.coloredTags}
         />
       </div>
       <div styleName='info-right'>
@@ -787,11 +801,7 @@ class SnippetNoteDetail extends React.Component {
           isActive={note.isStarred}
         />
 
-        <button styleName='control-fullScreenButton' title={i18n.__('Fullscreen')}
-          onMouseDown={(e) => this.handleFullScreenButton(e)}>
-          <img styleName='iconInfo' src='../resources/icon/icon-full.svg' />
-          <span styleName='tooltip'>{i18n.__('Fullscreen')}</span>
-        </button>
+        <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} />
 
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
 

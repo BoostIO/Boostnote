@@ -21,6 +21,8 @@ import yaml from 'js-yaml'
 import context from 'browser/lib/context'
 import i18n from 'browser/lib/i18n'
 import fs from 'fs'
+import { render } from 'react-dom'
+import Carousel from 'react-image-carousel'
 import ConfigManager from '../main/lib/ConfigManager'
 
 const { remote, shell } = require('electron')
@@ -40,7 +42,8 @@ const appPath = fileUrl(
 )
 const CSS_FILES = [
   `${appPath}/node_modules/katex/dist/katex.min.css`,
-  `${appPath}/node_modules/codemirror/lib/codemirror.css`
+  `${appPath}/node_modules/codemirror/lib/codemirror.css`,
+  `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
 
 function buildStyle (
@@ -207,7 +210,7 @@ export default class MarkdownPreview extends React.Component {
     this.saveAsHtmlHandler = () => this.handleSaveAsHtml()
     this.printHandler = () => this.handlePrint()
 
-    this.linkClickHandler = this.handlelinkClick.bind(this)
+    this.linkClickHandler = this.handleLinkClick.bind(this)
     this.initMarkdown = this.initMarkdown.bind(this)
     this.initMarkdown()
   }
@@ -395,6 +398,31 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
+  /**
+   * @description Convert special characters between three ```
+   * @param {string[]} splitWithCodeTag Array of HTML strings separated by three ```
+   * @returns {string} HTML in which special characters between three ``` have been converted
+   */
+  escapeHtmlCharactersInCodeTag (splitWithCodeTag) {
+    for (let index = 0; index < splitWithCodeTag.length; index++) {
+      const codeTagRequired = (splitWithCodeTag[index] !== '\`\`\`' && index < splitWithCodeTag.length - 1)
+      if (codeTagRequired) {
+        splitWithCodeTag.splice((index + 1), 0, '\`\`\`')
+      }
+    }
+    let inCodeTag = false
+    let result = ''
+    for (let content of splitWithCodeTag) {
+      if (content === '\`\`\`') {
+        inCodeTag = !inCodeTag
+      } else if (inCodeTag) {
+        content = escapeHtmlCharacters(content)
+      }
+      result += content
+    }
+    return result
+  }
+
   getScrollBarStyle () {
     const { theme } = this.props
 
@@ -410,6 +438,8 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentDidMount () {
+    const { onDrop } = this.props
+
     this.refs.root.setAttribute('sandbox', 'allow-scripts')
     this.refs.root.contentWindow.document.body.addEventListener(
       'contextmenu',
@@ -447,7 +477,7 @@ export default class MarkdownPreview extends React.Component {
     )
     this.refs.root.contentWindow.document.addEventListener(
       'drop',
-      this.preventImageDroppedHandler
+      onDrop || this.preventImageDroppedHandler
     )
     this.refs.root.contentWindow.document.addEventListener(
       'dragover',
@@ -464,6 +494,8 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentWillUnmount () {
+    const { onDrop } = this.props
+
     this.refs.root.contentWindow.document.body.removeEventListener(
       'contextmenu',
       this.contextMenuHandler
@@ -482,7 +514,7 @@ export default class MarkdownPreview extends React.Component {
     )
     this.refs.root.contentWindow.document.removeEventListener(
       'drop',
-      this.preventImageDroppedHandler
+      onDrop || this.preventImageDroppedHandler
     )
     this.refs.root.contentWindow.document.removeEventListener(
       'dragover',
@@ -625,11 +657,16 @@ export default class MarkdownPreview extends React.Component {
       indentSize,
       showCopyNotification,
       storagePath,
-      noteKey
+      noteKey,
+      sanitize
     } = this.props
     let { value, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
+    if (sanitize === 'NONE') {
+      const splitWithCodeTag = value.split('```')
+      value = this.escapeHtmlCharactersInCodeTag(splitWithCodeTag)
+    }
     const renderedHTML = this.markdown.render(value)
     attachmentManagement.migrateAttachments(value, storagePath, noteKey)
     this.refs.root.contentWindow.document.body.innerHTML = attachmentManagement.fixLocalURLS(
@@ -767,6 +804,34 @@ export default class MarkdownPreview extends React.Component {
         mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme)
       }
     )
+
+    _.forEach(
+      this.refs.root.contentWindow.document.querySelectorAll('.gallery'),
+      el => {
+        const images = el.innerHTML.split(/\n/g).filter(i => i.length > 0)
+        el.innerHTML = ''
+
+        const height = el.attributes.getNamedItem('data-height')
+        if (height && height.value !== 'undefined') {
+          el.style.height = height.value + 'vh'
+        }
+
+        let autoplay = el.attributes.getNamedItem('data-autoplay')
+        if (autoplay && autoplay.value !== 'undefined') {
+          autoplay = parseInt(autoplay.value, 10) || 0
+        } else {
+          autoplay = 0
+        }
+
+        render(
+          <Carousel
+            images={images}
+            autoplay={autoplay}
+          />,
+          el
+        )
+      }
+    )
   }
 
   focus () {
@@ -809,7 +874,7 @@ export default class MarkdownPreview extends React.Component {
     return new window.Notification(title, options)
   }
 
-  handlelinkClick (e) {
+  handleLinkClick (e) {
     e.preventDefault()
     e.stopPropagation()
 

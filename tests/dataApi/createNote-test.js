@@ -25,13 +25,16 @@ test.serial('Create a note', (t) => {
   const storageKey = t.context.storage.cache.key
   const folderKey = t.context.storage.json.folders[0].key
 
+  const randLinesHighlightedArray = new Array(10).fill().map(() => Math.round(Math.random() * 10))
+
   const input1 = {
     type: 'SNIPPET_NOTE',
     description: faker.lorem.lines(),
     snippets: [{
       name: faker.system.fileName(),
       mode: 'text',
-      content: faker.lorem.lines()
+      content: faker.lorem.lines(),
+      linesHighlighted: randLinesHighlightedArray
     }],
     tags: faker.lorem.words().split(' '),
     folder: folderKey
@@ -42,7 +45,8 @@ test.serial('Create a note', (t) => {
     type: 'MARKDOWN_NOTE',
     content: faker.lorem.lines(),
     tags: faker.lorem.words().split(' '),
-    folder: folderKey
+    folder: folderKey,
+    linesHighlighted: randLinesHighlightedArray
   }
   input2.title = input2.content.split('\n').shift()
 
@@ -59,6 +63,7 @@ test.serial('Create a note', (t) => {
 
       t.is(storageKey, data1.storage)
       const jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.key + '.cson'))
+
       t.is(input1.title, data1.title)
       t.is(input1.title, jsonData1.title)
       t.is(input1.description, data1.description)
@@ -71,6 +76,8 @@ test.serial('Create a note', (t) => {
       t.is(input1.snippets[0].content, jsonData1.snippets[0].content)
       t.is(input1.snippets[0].name, data1.snippets[0].name)
       t.is(input1.snippets[0].name, jsonData1.snippets[0].name)
+      t.deepEqual(input1.snippets[0].linesHighlighted, data1.snippets[0].linesHighlighted)
+      t.deepEqual(input1.snippets[0].linesHighlighted, jsonData1.snippets[0].linesHighlighted)
 
       t.is(storageKey, data2.storage)
       const jsonData2 = CSON.readFileSync(path.join(storagePath, 'notes', data2.key + '.cson'))
@@ -80,6 +87,8 @@ test.serial('Create a note', (t) => {
       t.is(input2.content, jsonData2.content)
       t.is(input2.tags.length, data2.tags.length)
       t.is(input2.tags.length, jsonData2.tags.length)
+      t.deepEqual(input2.linesHighlighted, data2.linesHighlighted)
+      t.deepEqual(input2.linesHighlighted, jsonData2.linesHighlighted)
     })
 })
 

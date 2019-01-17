@@ -17,7 +17,7 @@
         "${workspaceFolder}/index.js"
       ],
       "windows": {
-        "runtimeExecutable": "${workspaceFolder}/node_modeules/.bin/electron.cmd"
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       }
     },
     {

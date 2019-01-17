@@ -18,7 +18,8 @@ export function createMarkdownNote (storage, folder, dispatch, location, params,
       folder: folder,
       title: '',
       tags,
-      content: ''
+      content: '',
+      linesHighlighted: []
     })
     .then(note => {
       const noteHash = note.key
@@ -45,6 +46,8 @@ export function createSnippetNote (storage, folder, dispatch, location, params, 
     tags = params.tagname.split(' ')
   }
 
+  const defaultLanguage = config.editor.snippetDefaultLanguage === 'Auto Detect' ? null : config.editor.snippetDefaultLanguage
+
   return dataApi
     .createNote(storage, {
       type: 'SNIPPET_NOTE',
@@ -55,8 +58,9 @@ export function createSnippetNote (storage, folder, dispatch, location, params, 
       snippets: [
         {
           name: '',
-          mode: config.editor.snippetDefaultLanguage || 'text',
-          content: ''
+          mode: defaultLanguage,
+          content: '',
+          linesHighlighted: []
         }
       ]
     })

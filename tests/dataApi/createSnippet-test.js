@@ -26,6 +26,7 @@ test.serial('Create a snippet', (t) => {
       t.is(snippet.name, data.name)
       t.deepEqual(snippet.prefix, data.prefix)
       t.is(snippet.content, data.content)
+      t.deepEqual(snippet.linesHighlighted, data.linesHighlighted)
     })
 })
 
