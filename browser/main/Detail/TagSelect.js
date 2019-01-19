@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import invertColor from 'invert-color'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TagSelect.styl'
 import _ from 'lodash'
@@ -45,8 +46,14 @@ class TagSelect extends React.Component {
     value = _.isArray(value)
       ? value.slice()
       : []
-    value.push(newTag)
-    value = _.uniq(value)
+
+    if (!_.includes(value, newTag)) {
+      value.push(newTag)
+    }
+
+    if (this.props.saveTagsAlphabetically) {
+      value = _.sortBy(value)
+    }
 
     this.setState({
       newTag: ''
@@ -179,19 +186,34 @@ class TagSelect extends React.Component {
   }
 
   render () {
-    const { value, className, showTagsAlphabetically } = this.props
+    const { value, className, showTagsAlphabetically, coloredTags } = this.props
 
     const tagList = _.isArray(value)
       ? (showTagsAlphabetically ? _.sortBy(value) : value).map((tag) => {
+        const wrapperStyle = {}
+        const textStyle = {}
+        const BLACK = '#333333'
+        const WHITE = '#f1f1f1'
+        const color = coloredTags[tag]
+        const invertedColor = color && invertColor(color, { black: BLACK, white: WHITE })
+        let iconRemove = '../resources/icon/icon-x.svg'
+        if (color) {
+          wrapperStyle.backgroundColor = color
+          textStyle.color = invertedColor
+        }
+        if (invertedColor === WHITE) {
+          iconRemove = '../resources/icon/icon-x-light.svg'
+        }
         return (
           <span styleName='tag'
             key={tag}
+            style={wrapperStyle}
           >
-            <span styleName='tag-label' onClick={(e) => this.handleTagLabelClick(tag)}>#{tag}</span>
+            <span styleName='tag-label' style={textStyle} onClick={(e) => this.handleTagLabelClick(tag)}>#{tag}</span>
             <button styleName='tag-removeButton'
               onClick={(e) => this.handleTagRemoveButtonClick(tag)}
             >
-              <img className='tag-removeButton-icon' src='../resources/icon/icon-x.svg' width='8px' />
+              <img className='tag-removeButton-icon' src={iconRemove} width='8px' />
             </button>
           </span>
         )
@@ -240,7 +262,8 @@ TagSelect.contextTypes = {
 TagSelect.propTypes = {
   className: PropTypes.string,
   value: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  coloredTags: PropTypes.object
 }
 
 export default CSSModules(TagSelect, styles)

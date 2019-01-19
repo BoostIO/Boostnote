@@ -35,19 +35,20 @@ class NewNoteButton extends React.Component {
   }
 
   handleNewNoteButtonClick (e) {
-    const { location, dispatch, config } = this.props
+    const { location, params, dispatch, config } = this.props
     const { storage, folder } = this.resolveTargetFolder()
 
     if (config.ui.defaultNote === 'MARKDOWN_NOTE') {
-      createMarkdownNote(storage.key, folder.key, dispatch, location)
+      createMarkdownNote(storage.key, folder.key, dispatch, location, params, config)
     } else if (config.ui.defaultNote === 'SNIPPET_NOTE') {
-      createSnippetNote(storage.key, folder.key, dispatch, location, config)
+      createSnippetNote(storage.key, folder.key, dispatch, location, params, config)
     } else {
       modal.open(NewNoteModal, {
         storage: storage.key,
         folder: folder.key,
         dispatch,
         location,
+        params,
         config
       })
     }

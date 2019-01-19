@@ -151,5 +151,6 @@
 	"Allow styles": "Permitir Estilos",
 	"Allow dangerous html tags": "Permitir tags html perigosas",
 	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Converter setas de texto em simbolos. ⚠  Isto irá interferir no use de comentários em HTML em Markdown.",
-	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ Você colou um link referente a um anexo que não pôde ser encontrado no local de armazenamento desta nota. A vinculação de anexos de referência de links só é suportada se o local de origem e de destino for o mesmo de armazenamento. Por favor, arraste e solte o anexo na nota! ⚠"
+	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ Você colou um link referente a um anexo que não pôde ser encontrado no local de armazenamento desta nota. A vinculação de anexos de referência de links só é suportada se o local de origem e de destino for o mesmo de armazenamento. Por favor, arraste e solte o anexo na nota! ⚠",
+  "Disabled": "Disabled"
 }

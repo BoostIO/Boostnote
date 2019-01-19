@@ -21,8 +21,8 @@ class NewNoteModal extends React.Component {
   }
 
   handleMarkdownNoteButtonClick (e) {
-    const { storage, folder, dispatch, location } = this.props
-    createMarkdownNote(storage, folder, dispatch, location).then(() => {
+    const { storage, folder, dispatch, location, params, config } = this.props
+    createMarkdownNote(storage, folder, dispatch, location, params, config).then(() => {
       setTimeout(this.props.close, 200)
     })
   }
@@ -35,8 +35,8 @@ class NewNoteModal extends React.Component {
   }
 
   handleSnippetNoteButtonClick (e) {
-    const { storage, folder, dispatch, location, config } = this.props
-    createSnippetNote(storage, folder, dispatch, location, config).then(() => {
+    const { storage, folder, dispatch, location, params, config } = this.props
+    createSnippetNote(storage, folder, dispatch, location, params, config).then(() => {
       setTimeout(this.props.close, 200)
     })
   }

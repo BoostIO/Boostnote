@@ -25,14 +25,17 @@ export const DEFAULT_CONFIG = {
   hotkey: {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
-    deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace'
+    deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
+    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
+    toggleMenuBar: 'Alt'
   },
   ui: {
     language: 'en',
     theme: 'default',
     showCopyNotification: true,
     disableDirectWrite: false,
-    defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
+    defaultNote: 'ALWAYS_ASK', // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
+    showMenuBar: false
   },
   editor: {
     theme: 'base16-light',
@@ -44,6 +47,9 @@ export const DEFAULT_CONFIG = {
     enableRulers: false,
     rulers: [80, 120],
     displayLineNumbers: true,
+    matchingPairs: '()[]{}\'\'""$$**``',
+    matchingTriples: '```"""\'\'\'',
+    explodingPairs: '[]{}``$$',
     switchPreview: 'BLUR', // 'BLUR', 'DBL_CLICK', 'RIGHTCLICK'
     delfaultStatus: 'PREVIEW', // 'PREVIEW', 'CODE'
     scrollPastEnd: false,
@@ -51,7 +57,9 @@ export const DEFAULT_CONFIG = {
     fetchUrlTitle: true,
     enableTableEditor: false,
     enableFrontMatterTitle: true,
-    frontMatterTitleField: 'title'
+    frontMatterTitleField: 'title',
+    spellcheck: false,
+    enableSmartPaste: false
   },
   preview: {
     fontSize: '14',
@@ -80,7 +88,8 @@ export const DEFAULT_CONFIG = {
     token: '',
     username: '',
     password: ''
-  }
+  },
+  coloredTags: {}
 }
 
 function validate (config) {

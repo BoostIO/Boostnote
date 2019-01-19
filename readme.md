@@ -5,8 +5,11 @@
 <h4 align="center">Note-taking app for programmers. </h4>
 <h5 align="center">Apps available for Mac, Windows, Linux, Android, and iOS.</h5>
 <h5 align="center">Built with Electron, React + Redux, Webpack, and CSSModules.</h5>
-
-[![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
+<p align="center">
+  <a href="https://travis-ci.org/BoostIO/Boostnote">
+    <img src="https://travis-ci.org/BoostIO/Boostnote.svg?branch=master" alt="Build Status" />
+  </a>
+ </p>
 
 ## Authors & Maintainers
 - [Rokt33r](https://github.com/rokt33r)
@@ -24,7 +27,7 @@ Boostnote is an open source project. It's an independent project with its ongoin
 
 Issues on Boostnote can be funded by anyone and the money will be distributed to contributors and maintainers. If you use Boostnote please consider becoming a backer:
 
-[![issuehunt-image](https://github.com/BoostIO/issuehunt-materials/blob/master/issuehunt-badge@1x.png?raw=true)](https://issuehunt.io/repos/53266139)
+[![Let's fund issues in this repository](https://issuehunt.io/static/embed/issuehunt-button-v1.svg)](https://issuehunt.io/repos/53266139)
 
 ## Community
 - [Facebook Group](https://www.facebook.com/groups/boostnote/)
@@ -38,7 +41,7 @@ Issues on Boostnote can be funded by anyone and the money will be distributed to
 * Website: https://boostnote.io
 * Newsletters: https://boostnote.io/#subscribe
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md): Development configurations for Boostnote.
-* Copyright (C) 2016 - 2018 BoostIO, Inc.
+* Copyright (C) 2016 - 2019 BoostIO, Inc.
 
 
 #### License

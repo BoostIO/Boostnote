@@ -54,7 +54,7 @@ class StarButton extends React.Component {
             : '../resources/icon/icon-star.svg'
           }
         />
-        <span styleName='tooltip'>{i18n.__('Star')}</span>
+        <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Star')}</span>
       </button>
     )
   }

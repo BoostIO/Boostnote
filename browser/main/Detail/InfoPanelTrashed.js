@@ -31,17 +31,17 @@ const InfoPanelTrashed = ({
     </div>
 
     <div id='export-wrap'>
-      <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>
+      <button styleName='export--enable' onClick={(e) => exportAsMd(e, 'export-md')}>
         <i className='fa fa-file-code-o' />
         <p>.md</p>
       </button>
 
-      <button styleName='export--enable' onClick={(e) => exportAsTxt(e)}>
+      <button styleName='export--enable' onClick={(e) => exportAsTxt(e, 'export-txt')}>
         <i className='fa fa-file-text-o' />
         <p>.txt</p>
       </button>
 
-      <button styleName='export--enable' onClick={(e) => exportAsHtml(e)}>
+      <button styleName='export--enable' onClick={(e) => exportAsHtml(e, 'export-html')}>
         <i className='fa fa-html5' />
         <p>.html</p>
       </button>

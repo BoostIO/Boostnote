@@ -55,11 +55,12 @@ body
   line-height 1.6
   overflow-x hidden
   background-color $ui-noteDetail-backgroundColor
+  // do not allow display line breaks
+  .katex-display > .katex
+    white-space nowrap
+  // allow inline line breaks
   .katex
-    font 400 1.2em 'KaTeX_Main'
-    line-height 1.2em
     white-space initial
-    text-indent 0
   .katex .mfrac>.vlist>span:nth-child(2)
     top 0 !important
   .katex-error
@@ -183,6 +184,10 @@ ul
     display list-item
     &.taskListItem
       list-style none
+      &>input
+        margin-left -1.6em
+      &>p
+        margin-left -1.8em
     p
       margin 0
   &>li>ul, &>li>ol
@@ -416,6 +421,26 @@ pre.fence
     canvas, svg
       max-width 100% !important
 
+  .gallery
+    width 100%
+    height 50vh
+
+    .carousel
+      .carousel-main img
+        min-width auto
+        max-width 100%
+        min-height auto
+        max-height 100%
+
+      .carousel-footer::-webkit-scrollbar-corner
+        background-color transparent
+
+      .carousel-main, .carousel-footer
+        background-color $ui-noteDetail-backgroundColor
+      .prev, .next
+        color $ui-text-color
+        background-color $ui-tag-backgroundColor
+
 themeDarkBackground = darken(#21252B, 10%)
 themeDarkText = #f9f9f9
 themeDarkBorder = lighten(themeDarkBackground, 20%)
@@ -475,6 +500,14 @@ body[data-theme="dark"]
     border-color themeDarkBorder
     background-color themeDarkPreview
 
+  pre.fence
+    .gallery
+      .carousel-main, .carousel-footer
+        background-color $ui-dark-noteDetail-backgroundColor
+      .prev, .next
+        color $ui-dark-text-color
+        background-color $ui-dark-tag-backgroundColor
+
 themeSolarizedDarkTableOdd = $ui-solarized-dark-noteDetail-backgroundColor
 themeSolarizedDarkTableEven = darken($ui-solarized-dark-noteDetail-backgroundColor, 10%)
 themeSolarizedDarkTableHead = themeSolarizedDarkTableEven
@@ -510,6 +543,14 @@ body[data-theme="solarized-dark"]
     border-color themeDarkBorder
     background-color $ui-solarized-dark-noteDetail-backgroundColor
 
+  pre.fence
+    .gallery
+      .carousel-main, .carousel-footer
+        background-color $ui-solarized-dark-noteDetail-backgroundColor
+      .prev, .next
+        color $ui-solarized-dark-button--active-color
+        background-color $ui-solarized-dark-button-backgroundColor
+
 themeMonokaiTableOdd = $ui-monokai-noteDetail-backgroundColor
 themeMonokaiTableEven = darken($ui-monokai-noteDetail-backgroundColor, 10%)
 themeMonokaiTableHead = themeMonokaiTableEven
@@ -538,6 +579,7 @@ body[data-theme="monokai"]
           border-right solid 1px themeMonokaiTableBorder
   kbd
     background-color themeDarkBackground
+
   dl
     border-color themeDarkBorder
     background-color themeMonokaiTableHead
@@ -546,6 +588,14 @@ body[data-theme="monokai"]
   dd
     border-color themeDarkBorder
     background-color $ui-monokai-noteDetail-backgroundColor
+
+  pre.fence
+    .gallery
+      .carousel-main, .carousel-footer
+        background-color $ui-monokai-noteDetail-backgroundColor
+      .prev, .next
+        color $ui-monokai-button--active-color
+        background-color $ui-monokai-button-backgroundColor
 
 themeDraculaTableOdd = $ui-dracula-noteDetail-backgroundColor
 themeDraculaTableEven = darken($ui-dracula-noteDetail-backgroundColor, 10%)
@@ -575,6 +625,7 @@ body[data-theme="dracula"]
           border-right solid 1px themeDraculaTableBorder
   kbd
     background-color themeDarkBackground
+
   dl
     border-color themeDarkBorder
     background-color themeDraculaTableHead
@@ -583,3 +634,11 @@ body[data-theme="dracula"]
   dd
     border-color themeDarkBorder
     background-color $ui-dracula-noteDetail-backgroundColor
+
+  pre.fence
+    .gallery
+      .carousel-main, .carousel-footer
+        background-color $ui-dracula-noteDetail-backgroundColor
+      .prev, .next
+        color $ui-dracula-button--active-color
+        background-color $ui-dracula-button-backgroundColor

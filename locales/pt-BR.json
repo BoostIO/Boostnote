@@ -33,7 +33,7 @@
 	"White": "Branco",
 	"Solarized Dark": "Escuro Solarizado",
 	"Dark": "Escuro",
-	"Show a confirmation dialog when deleting notes": "Mostrar um diálogo de confirmação ao escluir notas",
+	"Show a confirmation dialog when deleting notes": "Mostrar um diálogo de confirmação ao excluir notas",
 	"Editor Theme": "Tema do Editor",
 	"Editor Font Size": "Tamanho da Fonte do Editor",
 	"Editor Font Family": "Família da Fonte do Editor",
@@ -152,5 +152,6 @@
 	"Allow styles": "Permitir estilos",
 	"Allow dangerous html tags": "Permitir tags html perigosas",
 	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.",
-	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠"
+	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠",
+	"Disabled": "Disabled"
 }

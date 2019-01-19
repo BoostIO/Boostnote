@@ -161,5 +161,6 @@
 	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ Wkleiłes link odnoszący się do załącznika, ktory nie może zostać znaleziony. Wklejanie linków do załączników jest możliwe tylko gdy notatka i załącznik są w tym samym folderze. Używaj opcji 'Przeciągaj i upuść' załącznik! ⚠",
   "Star": "Oznacz",
   "Fullscreen": "Pełen ekran",
-  "Add tag...": "Dodaj tag..."
+  "Add tag...": "Dodaj tag...",
+  "Disabled": "Disabled"
 }

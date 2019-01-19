@@ -151,5 +151,6 @@
 	"Sanitization": "Temizleme",
 	"Only allow secure html tags (recommended)": "Sadece güvenli html etiketlerine izin ver (tavsiye edilen)",
 	"Allow styles": "Stillere izin ver",
-	"Allow dangerous html tags": "Tehlikeli html etiketlerine izin ver"
+	"Allow dangerous html tags": "Tehlikeli html etiketlerine izin ver",
+	"Disabled": "Disabled"
 }

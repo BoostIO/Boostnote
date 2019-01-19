@@ -3,15 +3,23 @@ import dataApi from 'browser/main/lib/dataApi'
 import ee from 'browser/main/lib/eventEmitter'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 
-export function createMarkdownNote (storage, folder, dispatch, location) {
+export function createMarkdownNote (storage, folder, dispatch, location, params, config) {
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_MARKDOWN')
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
+
+  let tags = []
+  if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
+    tags = params.tagname.split(' ')
+  }
+
   return dataApi
     .createNote(storage, {
       type: 'MARKDOWN_NOTE',
       folder: folder,
       title: '',
-      content: ''
+      tags,
+      content: '',
+      linesHighlighted: []
     })
     .then(note => {
       const noteHash = note.key
@@ -29,20 +37,30 @@ export function createMarkdownNote (storage, folder, dispatch, location) {
     })
 }
 
-export function createSnippetNote (storage, folder, dispatch, location, config) {
+export function createSnippetNote (storage, folder, dispatch, location, params, config) {
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_SNIPPET')
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
+
+  let tags = []
+  if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
+    tags = params.tagname.split(' ')
+  }
+
+  const defaultLanguage = config.editor.snippetDefaultLanguage === 'Auto Detect' ? null : config.editor.snippetDefaultLanguage
+
   return dataApi
     .createNote(storage, {
       type: 'SNIPPET_NOTE',
       folder: folder,
       title: '',
+      tags,
       description: '',
       snippets: [
         {
           name: '',
-          mode: config.editor.snippetDefaultLanguage || 'text',
-          content: ''
+          mode: defaultLanguage,
+          content: '',
+          linesHighlighted: []
         }
       ]
     })

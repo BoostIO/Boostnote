@@ -5,6 +5,7 @@ import styles from './StatusBar.styl'
 import ZoomManager from 'browser/main/lib/ZoomManager'
 import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
+import EventEmitter from 'browser/main/lib/eventEmitter'
 
 const electron = require('electron')
 const { remote, ipcRenderer } = electron
@@ -13,6 +14,26 @@ const { dialog } = remote
 const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
 
 class StatusBar extends React.Component {
+
+  constructor (props) {
+    super(props)
+    this.handleZoomInMenuItem = this.handleZoomInMenuItem.bind(this)
+    this.handleZoomOutMenuItem = this.handleZoomOutMenuItem.bind(this)
+    this.handleZoomResetMenuItem = this.handleZoomResetMenuItem.bind(this)
+  }
+
+  componentDidMount () {
+    EventEmitter.on('status:zoomin', this.handleZoomInMenuItem)
+    EventEmitter.on('status:zoomout', this.handleZoomOutMenuItem)
+    EventEmitter.on('status:zoomreset', this.handleZoomResetMenuItem)
+  }
+
+  componentWillUnmount () {
+    EventEmitter.off('status:zoomin', this.handleZoomInMenuItem)
+    EventEmitter.off('status:zoomout', this.handleZoomOutMenuItem)
+    EventEmitter.off('status:zoomreset', this.handleZoomResetMenuItem)
+  }
+
   updateApp () {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
@@ -46,6 +67,20 @@ class StatusBar extends React.Component {
       type: 'SET_ZOOM',
       zoom: zoomFactor
     })
+  }
+
+  handleZoomInMenuItem () {
+    const zoomFactor = ZoomManager.getZoom() + 0.1
+    this.handleZoomMenuItemClick(zoomFactor)
+  }
+
+  handleZoomOutMenuItem () {
+    const zoomFactor = ZoomManager.getZoom() - 0.1
+    this.handleZoomMenuItemClick(zoomFactor)
+  }
+
+  handleZoomResetMenuItem () {
+    this.handleZoomMenuItemClick(1.0)
   }
 
   render () {

@@ -7,7 +7,6 @@ import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import katex from 'katex'
 import { lastFindInArray } from './utils'
-import ee from 'browser/main/lib/eventEmitter'
 
 function createGutter (str, firstLineNumber) {
   if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
@@ -118,13 +117,8 @@ class Markdown {
     this.md.use(require('markdown-it-imsize'))
     this.md.use(require('markdown-it-footnote'))
     this.md.use(require('markdown-it-multimd-table'))
-    this.md.use(require('markdown-it-named-headers'), {
-      slugify: (header) => {
-        return encodeURI(header.trim()
-          .replace(/[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '')
-          .replace(/\s+/g, '-'))
-          .replace(/\-+$/, '')
-      }
+    this.md.use(require('@enyaxu/markdown-it-anchor'), {
+      slugify: require('./slugify')
     })
     this.md.use(require('markdown-it-kbd'))
     this.md.use(require('markdown-it-admonition'), {types: ['note', 'hint', 'attention', 'caution', 'danger', 'error']})
@@ -149,6 +143,21 @@ class Markdown {
         return `<pre class="fence" data-line="${token.map[0]}">
           <span class="filename">${token.fileName}</span>
           <div class="flowchart" data-height="${token.parameters.height}">${token.content}</div>
+        </pre>`
+      },
+      gallery: token => {
+        const content = token.content.split('\n').slice(0, -1).map(line => {
+          const match = /!\[[^\]]*]\(([^\)]*)\)/.exec(line)
+          if (match) {
+            return match[1]
+          } else {
+            return line
+          }
+        }).join('\n')
+
+        return `<pre class="fence" data-line="${token.map[0]}">
+          <span class="filename">${token.fileName}</span>
+          <div class="gallery" data-autoplay="${token.parameters.autoplay}" data-height="${token.parameters.height}">${content}</div>
         </pre>`
       },
       mermaid: token => {

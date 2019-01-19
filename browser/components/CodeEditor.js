@@ -2,25 +2,120 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
+import hljs from 'highlight.js'
 import 'codemirror-mode-elixir'
 import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import convertModeName from 'browser/lib/convertModeName'
-import { options, TableEditor, Alignment } from '@susisu/mte-kernel'
+import {
+  options,
+  TableEditor,
+  Alignment
+} from '@susisu/mte-kernel'
 import TextEditorInterface from 'browser/lib/TextEditorInterface'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
 import crypto from 'crypto'
 import consts from 'browser/lib/consts'
+import styles from '../components/CodeEditor.styl'
 import fs from 'fs'
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
+const spellcheck = require('browser/lib/spellcheck')
+const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
 import TurndownService from 'turndown'
-import { gfm } from 'turndown-plugin-gfm'
+import {
+  gfm
+} from 'turndown-plugin-gfm'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
 const buildCMRulers = (rulers, enableRulers) =>
-  (enableRulers ? rulers.map(ruler => ({ column: ruler })) : [])
+  (enableRulers ? rulers.map(ruler => ({
+    column: ruler
+  })) : [])
+
+function translateHotkey (hotkey) {
+  return hotkey.replace(/\s*\+\s*/g, '-').replace(/Command/g, 'Cmd').replace(/Control/g, 'Ctrl')
+}
+
+const languageMaps = {
+  brainfuck: 'Brainfuck',
+  cpp: 'C++',
+  cs: 'C#',
+  clojure: 'Clojure',
+  'clojure-repl': 'ClojureScript',
+  cmake: 'CMake',
+  coffeescript: 'CoffeeScript',
+  crystal: 'Crystal',
+  css: 'CSS',
+  d: 'D',
+  dart: 'Dart',
+  delphi: 'Pascal',
+  diff: 'Diff',
+  django: 'Django',
+  dockerfile: 'Dockerfile',
+  ebnf: 'EBNF',
+  elm: 'Elm',
+  erlang: 'Erlang',
+  'erlang-repl': 'Erlang',
+  fortran: 'Fortran',
+  fsharp: 'F#',
+  gherkin: 'Gherkin',
+  go: 'Go',
+  groovy: 'Groovy',
+  haml: 'HAML',
+  haskell: 'Haskell',
+  haxe: 'Haxe',
+  http: 'HTTP',
+  ini: 'toml',
+  java: 'Java',
+  javascript: 'JavaScript',
+  json: 'JSON',
+  julia: 'Julia',
+  kotlin: 'Kotlin',
+  less: 'LESS',
+  livescript: 'LiveScript',
+  lua: 'Lua',
+  markdown: 'Markdown',
+  mathematica: 'Mathematica',
+  nginx: 'Nginx',
+  nsis: 'NSIS',
+  objectivec: 'Objective-C',
+  ocaml: 'Ocaml',
+  perl: 'Perl',
+  php: 'PHP',
+  powershell: 'PowerShell',
+  properties: 'Properties files',
+  protobuf: 'ProtoBuf',
+  python: 'Python',
+  puppet: 'Puppet',
+  q: 'Q',
+  r: 'R',
+  ruby: 'Ruby',
+  rust: 'Rust',
+  sas: 'SAS',
+  scala: 'Scala',
+  scheme: 'Scheme',
+  scss: 'SCSS',
+  shell: 'Shell',
+  smalltalk: 'Smalltalk',
+  sml: 'SML',
+  sql: 'SQL',
+  stylus: 'Stylus',
+  swift: 'Swift',
+  tcl: 'Tcl',
+  tex: 'LaTex',
+  typescript: 'TypeScript',
+  twig: 'Twig',
+  vbnet: 'VB.NET',
+  vbscript: 'VBScript',
+  verilog: 'Verilog',
+  vhdl: 'VHDL',
+  xml: 'HTML',
+  xquery: 'XQuery',
+  yaml: 'YAML',
+  elixir: 'Elixir'
+}
 
 export default class CodeEditor extends React.Component {
   constructor (props) {
@@ -30,7 +125,8 @@ export default class CodeEditor extends React.Component {
       leading: false,
       trailing: true
     })
-    this.changeHandler = e => this.handleChange(e)
+    this.changeHandler = (editor, changeObject) => this.handleChange(editor, changeObject)
+    this.highlightHandler = (editor, changeObject) => this.handleHighlight(editor, changeObject)
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
     }
@@ -46,14 +142,21 @@ export default class CodeEditor extends React.Component {
       }
       this.props.onBlur != null && this.props.onBlur(e)
 
-      const { storageKey, noteKey } = this.props
+      const {
+        storageKey,
+        noteKey
+      } = this.props
       attachmentManagement.deleteAttachmentsNotPresentInNote(
         this.editor.getValue(),
         storageKey,
         noteKey
       )
     }
-    this.pasteHandler = (editor, e) => this.handlePaste(editor, e)
+    this.pasteHandler = (editor, e) => {
+      e.preventDefault()
+
+      this.handlePaste(editor, false)
+    }
     this.loadStyleHandler = e => {
       this.editor.refresh()
     }
@@ -62,6 +165,16 @@ export default class CodeEditor extends React.Component {
     this.scrollToLineHandeler = this.scrollToLine.bind(this)
 
     this.formatTable = () => this.handleFormatTable()
+
+    if (props.switchPreview !== 'RIGHTCLICK') {
+      this.contextMenuHandler = function (editor, event) {
+        const menu = buildEditorContextMenu(editor, event)
+        if (menu != null) {
+          setTimeout(() => menu.popup(remote.getCurrentWindow()), 30)
+        }
+      }
+    }
+
     this.editorActivityHandler = () => this.handleEditorActivity()
 
     this.turndownService = new TurndownService()
@@ -102,7 +215,9 @@ export default class CodeEditor extends React.Component {
   }
 
   handleFormatTable () {
-    this.tableEditor.formatAll(options({textWidthOptions: {}}))
+    this.tableEditor.formatAll(options({
+      textWidthOptions: {}
+    }))
   }
 
   handleEditorActivity () {
@@ -111,42 +226,9 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  updateTableEditorState () {
-    const active = this.tableEditor.cursorIsInTable(this.tableEditorOptions)
-    if (active) {
-      if (this.extraKeysMode !== 'editor') {
-        this.extraKeysMode = 'editor'
-        this.editor.setOption('extraKeys', this.editorKeyMap)
-      }
-    } else {
-      if (this.extraKeysMode !== 'default') {
-        this.extraKeysMode = 'default'
-        this.editor.setOption('extraKeys', this.defaultKeyMap)
-        this.tableEditor.resetSmartCursor()
-      }
-    }
-  }
-
-  componentDidMount () {
-    const { rulers, enableRulers } = this.props
+  updateDefaultKeyMap () {
+    const { hotkey } = this.props
     const expandSnippet = this.expandSnippet.bind(this)
-    eventEmitter.on('line:jump', this.scrollToLineHandeler)
-
-    const defaultSnippet = [
-      {
-        id: crypto.randomBytes(16).toString('hex'),
-        name: 'Dummy text',
-        prefix: ['lorem', 'ipsum'],
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      }
-    ]
-    if (!fs.existsSync(consts.SNIPPET_FILE)) {
-      fs.writeFileSync(
-        consts.SNIPPET_FILE,
-        JSON.stringify(defaultSnippet, null, 4),
-        'utf8'
-      )
-    }
 
     this.defaultKeyMap = CodeMirror.normalizeKeyMap({
       Tab: function (cm) {
@@ -189,6 +271,9 @@ export default class CodeEditor extends React.Component {
           }
         }
       },
+      'Cmd-Left': function (cm) {
+        cm.execCommand('goLineLeft')
+      },
       'Cmd-T': function (cm) {
         // Do nothing
       },
@@ -198,13 +283,56 @@ export default class CodeEditor extends React.Component {
           document.execCommand('copy')
         }
         return CodeMirror.Pass
+      },
+      [translateHotkey(hotkey.pasteSmartly)]: cm => {
+        this.handlePaste(cm, true)
       }
     })
+  }
+
+  updateTableEditorState () {
+    const active = this.tableEditor.cursorIsInTable(this.tableEditorOptions)
+    if (active) {
+      if (this.extraKeysMode !== 'editor') {
+        this.extraKeysMode = 'editor'
+        this.editor.setOption('extraKeys', this.editorKeyMap)
+      }
+    } else {
+      if (this.extraKeysMode !== 'default') {
+        this.extraKeysMode = 'default'
+        this.editor.setOption('extraKeys', this.defaultKeyMap)
+        this.tableEditor.resetSmartCursor()
+      }
+    }
+  }
+
+  componentDidMount () {
+    const { rulers, enableRulers } = this.props
+    eventEmitter.on('line:jump', this.scrollToLineHandeler)
+
+    const defaultSnippet = [
+      {
+        id: crypto.randomBytes(16).toString('hex'),
+        name: 'Dummy text',
+        prefix: ['lorem', 'ipsum'],
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      }
+    ]
+    if (!fs.existsSync(consts.SNIPPET_FILE)) {
+      fs.writeFileSync(
+        consts.SNIPPET_FILE,
+        JSON.stringify(defaultSnippet, null, 4),
+        'utf8'
+      )
+    }
+
+    this.updateDefaultKeyMap()
 
     this.value = this.props.value
     this.editor = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       value: this.props.value,
+      linesHighlighted: this.props.linesHighlighted,
       lineNumbers: this.props.displayLineNumbers,
       lineWrapping: true,
       theme: this.props.theme,
@@ -218,20 +346,28 @@ export default class CodeEditor extends React.Component {
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       autoCloseBrackets: {
-        pairs: '()[]{}\'\'""$$**``',
-        triples: '```"""\'\'\'',
-        explode: '[]{}``$$',
+        pairs: this.props.matchingPairs,
+        triples: this.props.matchingTriples,
+        explode: this.props.explodingPairs,
         override: true
       },
       extraKeys: this.defaultKeyMap
     })
 
-    this.setMode(this.props.mode)
+    if (!this.props.mode && this.props.value && this.props.autoDetect) {
+      this.autoDetectLanguage(this.props.value)
+    } else {
+      this.setMode(this.props.mode)
+    }
 
     this.editor.on('focus', this.focusHandler)
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
+    this.editor.on('gutterClick', this.highlightHandler)
     this.editor.on('paste', this.pasteHandler)
+    if (this.props.switchPreview !== 'RIGHTCLICK') {
+      this.editor.on('contextmenu', this.contextMenuHandler)
+    }
     eventEmitter.on('top:search', this.searchHandler)
 
     eventEmitter.emit('code:init')
@@ -248,6 +384,10 @@ export default class CodeEditor extends React.Component {
 
     this.textEditorInterface = new TextEditorInterface(this.editor)
     this.tableEditor = new TableEditor(this.textEditorInterface)
+    if (this.props.spellCheck) {
+      this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+    }
+
     eventEmitter.on('code:format-table', this.formatTable)
 
     this.tableEditorOptions = options({
@@ -255,43 +395,117 @@ export default class CodeEditor extends React.Component {
     })
 
     this.editorKeyMap = CodeMirror.normalizeKeyMap({
-      'Tab': () => { this.tableEditor.nextCell(this.tableEditorOptions) },
-      'Shift-Tab': () => { this.tableEditor.previousCell(this.tableEditorOptions) },
-      'Enter': () => { this.tableEditor.nextRow(this.tableEditorOptions) },
-      'Ctrl-Enter': () => { this.tableEditor.escape(this.tableEditorOptions) },
-      'Cmd-Enter': () => { this.tableEditor.escape(this.tableEditorOptions) },
-      'Shift-Ctrl-Left': () => { this.tableEditor.alignColumn(Alignment.LEFT, this.tableEditorOptions) },
-      'Shift-Cmd-Left': () => { this.tableEditor.alignColumn(Alignment.LEFT, this.tableEditorOptions) },
-      'Shift-Ctrl-Right': () => { this.tableEditor.alignColumn(Alignment.RIGHT, this.tableEditorOptions) },
-      'Shift-Cmd-Right': () => { this.tableEditor.alignColumn(Alignment.RIGHT, this.tableEditorOptions) },
-      'Shift-Ctrl-Up': () => { this.tableEditor.alignColumn(Alignment.CENTER, this.tableEditorOptions) },
-      'Shift-Cmd-Up': () => { this.tableEditor.alignColumn(Alignment.CENTER, this.tableEditorOptions) },
-      'Shift-Ctrl-Down': () => { this.tableEditor.alignColumn(Alignment.NONE, this.tableEditorOptions) },
-      'Shift-Cmd-Down': () => { this.tableEditor.alignColumn(Alignment.NONE, this.tableEditorOptions) },
-      'Ctrl-Left': () => { this.tableEditor.moveFocus(0, -1, this.tableEditorOptions) },
-      'Cmd-Left': () => { this.tableEditor.moveFocus(0, -1, this.tableEditorOptions) },
-      'Ctrl-Right': () => { this.tableEditor.moveFocus(0, 1, this.tableEditorOptions) },
-      'Cmd-Right': () => { this.tableEditor.moveFocus(0, 1, this.tableEditorOptions) },
-      'Ctrl-Up': () => { this.tableEditor.moveFocus(-1, 0, this.tableEditorOptions) },
-      'Cmd-Up': () => { this.tableEditor.moveFocus(-1, 0, this.tableEditorOptions) },
-      'Ctrl-Down': () => { this.tableEditor.moveFocus(1, 0, this.tableEditorOptions) },
-      'Cmd-Down': () => { this.tableEditor.moveFocus(1, 0, this.tableEditorOptions) },
-      'Ctrl-K Ctrl-I': () => { this.tableEditor.insertRow(this.tableEditorOptions) },
-      'Cmd-K Cmd-I': () => { this.tableEditor.insertRow(this.tableEditorOptions) },
-      'Ctrl-L Ctrl-I': () => { this.tableEditor.deleteRow(this.tableEditorOptions) },
-      'Cmd-L Cmd-I': () => { this.tableEditor.deleteRow(this.tableEditorOptions) },
-      'Ctrl-K Ctrl-J': () => { this.tableEditor.insertColumn(this.tableEditorOptions) },
-      'Cmd-K Cmd-J': () => { this.tableEditor.insertColumn(this.tableEditorOptions) },
-      'Ctrl-L Ctrl-J': () => { this.tableEditor.deleteColumn(this.tableEditorOptions) },
-      'Cmd-L Cmd-J': () => { this.tableEditor.deleteColumn(this.tableEditorOptions) },
-      'Alt-Shift-Ctrl-Left': () => { this.tableEditor.moveColumn(-1, this.tableEditorOptions) },
-      'Alt-Shift-Cmd-Left': () => { this.tableEditor.moveColumn(-1, this.tableEditorOptions) },
-      'Alt-Shift-Ctrl-Right': () => { this.tableEditor.moveColumn(1, this.tableEditorOptions) },
-      'Alt-Shift-Cmd-Right': () => { this.tableEditor.moveColumn(1, this.tableEditorOptions) },
-      'Alt-Shift-Ctrl-Up': () => { this.tableEditor.moveRow(-1, this.tableEditorOptions) },
-      'Alt-Shift-Cmd-Up': () => { this.tableEditor.moveRow(-1, this.tableEditorOptions) },
-      'Alt-Shift-Ctrl-Down': () => { this.tableEditor.moveRow(1, this.tableEditorOptions) },
-      'Alt-Shift-Cmd-Down': () => { this.tableEditor.moveRow(1, this.tableEditorOptions) }
+      'Tab': () => {
+        this.tableEditor.nextCell(this.tableEditorOptions)
+      },
+      'Shift-Tab': () => {
+        this.tableEditor.previousCell(this.tableEditorOptions)
+      },
+      'Enter': () => {
+        this.tableEditor.nextRow(this.tableEditorOptions)
+      },
+      'Ctrl-Enter': () => {
+        this.tableEditor.escape(this.tableEditorOptions)
+      },
+      'Cmd-Enter': () => {
+        this.tableEditor.escape(this.tableEditorOptions)
+      },
+      'Shift-Ctrl-Left': () => {
+        this.tableEditor.alignColumn(Alignment.LEFT, this.tableEditorOptions)
+      },
+      'Shift-Cmd-Left': () => {
+        this.tableEditor.alignColumn(Alignment.LEFT, this.tableEditorOptions)
+      },
+      'Shift-Ctrl-Right': () => {
+        this.tableEditor.alignColumn(Alignment.RIGHT, this.tableEditorOptions)
+      },
+      'Shift-Cmd-Right': () => {
+        this.tableEditor.alignColumn(Alignment.RIGHT, this.tableEditorOptions)
+      },
+      'Shift-Ctrl-Up': () => {
+        this.tableEditor.alignColumn(Alignment.CENTER, this.tableEditorOptions)
+      },
+      'Shift-Cmd-Up': () => {
+        this.tableEditor.alignColumn(Alignment.CENTER, this.tableEditorOptions)
+      },
+      'Shift-Ctrl-Down': () => {
+        this.tableEditor.alignColumn(Alignment.NONE, this.tableEditorOptions)
+      },
+      'Shift-Cmd-Down': () => {
+        this.tableEditor.alignColumn(Alignment.NONE, this.tableEditorOptions)
+      },
+      'Ctrl-Left': () => {
+        this.tableEditor.moveFocus(0, -1, this.tableEditorOptions)
+      },
+      'Cmd-Left': () => {
+        this.tableEditor.moveFocus(0, -1, this.tableEditorOptions)
+      },
+      'Ctrl-Right': () => {
+        this.tableEditor.moveFocus(0, 1, this.tableEditorOptions)
+      },
+      'Cmd-Right': () => {
+        this.tableEditor.moveFocus(0, 1, this.tableEditorOptions)
+      },
+      'Ctrl-Up': () => {
+        this.tableEditor.moveFocus(-1, 0, this.tableEditorOptions)
+      },
+      'Cmd-Up': () => {
+        this.tableEditor.moveFocus(-1, 0, this.tableEditorOptions)
+      },
+      'Ctrl-Down': () => {
+        this.tableEditor.moveFocus(1, 0, this.tableEditorOptions)
+      },
+      'Cmd-Down': () => {
+        this.tableEditor.moveFocus(1, 0, this.tableEditorOptions)
+      },
+      'Ctrl-K Ctrl-I': () => {
+        this.tableEditor.insertRow(this.tableEditorOptions)
+      },
+      'Cmd-K Cmd-I': () => {
+        this.tableEditor.insertRow(this.tableEditorOptions)
+      },
+      'Ctrl-L Ctrl-I': () => {
+        this.tableEditor.deleteRow(this.tableEditorOptions)
+      },
+      'Cmd-L Cmd-I': () => {
+        this.tableEditor.deleteRow(this.tableEditorOptions)
+      },
+      'Ctrl-K Ctrl-J': () => {
+        this.tableEditor.insertColumn(this.tableEditorOptions)
+      },
+      'Cmd-K Cmd-J': () => {
+        this.tableEditor.insertColumn(this.tableEditorOptions)
+      },
+      'Ctrl-L Ctrl-J': () => {
+        this.tableEditor.deleteColumn(this.tableEditorOptions)
+      },
+      'Cmd-L Cmd-J': () => {
+        this.tableEditor.deleteColumn(this.tableEditorOptions)
+      },
+      'Alt-Shift-Ctrl-Left': () => {
+        this.tableEditor.moveColumn(-1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Cmd-Left': () => {
+        this.tableEditor.moveColumn(-1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Ctrl-Right': () => {
+        this.tableEditor.moveColumn(1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Cmd-Right': () => {
+        this.tableEditor.moveColumn(1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Ctrl-Up': () => {
+        this.tableEditor.moveRow(-1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Cmd-Up': () => {
+        this.tableEditor.moveRow(-1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Ctrl-Down': () => {
+        this.tableEditor.moveRow(1, this.tableEditorOptions)
+      },
+      'Alt-Shift-Cmd-Down': () => {
+        this.tableEditor.moveRow(1, this.tableEditorOptions)
+      }
     })
 
     if (this.props.enableTableEditor) {
@@ -306,6 +520,8 @@ export default class CodeEditor extends React.Component {
     // Scroll to initial document line.
     var topOffset = this.editor.charCoords({line: this.props.topLine.number - 1, ch: 0}, 'local').top
     this.editor.scrollTo(null, topOffset)
+    
+    this.initialHighlighting()
   }
 
   expandSnippet (line, cursor, cm, snippets) {
@@ -382,8 +598,14 @@ export default class CodeEditor extends React.Component {
     return {
       text: wordBeforeCursor,
       range: {
-        from: { line: lineNumber, ch: originCursorPosition },
-        to: { line: lineNumber, ch: cursorPosition }
+        from: {
+          line: lineNumber,
+          ch: originCursorPosition
+        },
+        to: {
+          line: lineNumber,
+          ch: cursorPosition
+        }
       }
     }
   }
@@ -399,9 +621,11 @@ export default class CodeEditor extends React.Component {
     this.editor.off('paste', this.pasteHandler)
     eventEmitter.off('top:search', this.searchHandler)
     this.editor.off('scroll', this.scrollHandler)
+    this.editor.off('contextmenu', this.contextMenuHandler)
     const editorTheme = document.getElementById('editorTheme')
     editorTheme.removeEventListener('load', this.loadStyleHandler)
 
+    spellcheck.setLanguage(null, spellcheck.SPELLCHECK_DISABLED)
     eventEmitter.off('code:format-table', this.formatTable)
 
     // "Remember" top line number (property of grand-parent component).
@@ -411,7 +635,10 @@ export default class CodeEditor extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
     let needRefresh = false
-    const { rulers, enableRulers } = this.props
+    const {
+      rulers,
+      enableRulers
+    } = this.props
     if (prevProps.mode !== this.props.mode) {
       this.setMode(this.props.mode)
     }
@@ -452,6 +679,18 @@ export default class CodeEditor extends React.Component {
       this.editor.setOption('scrollPastEnd', this.props.scrollPastEnd)
     }
 
+    if (prevProps.matchingPairs !== this.props.matchingPairs ||
+      prevProps.matchingTriples !== this.props.matchingTriples ||
+      prevProps.explodingPairs !== this.props.explodingPairs) {
+      const bracketObject = {
+        pairs: this.props.matchingPairs,
+        triples: this.props.matchingTriples,
+        explode: this.props.explodingPairs,
+        override: true
+      }
+      this.editor.setOption('autoCloseBrackets', bracketObject)
+    }
+
     if (prevProps.enableTableEditor !== this.props.enableTableEditor) {
       if (this.props.enableTableEditor) {
         this.editor.on('cursorActivity', this.editorActivityHandler)
@@ -465,6 +704,14 @@ export default class CodeEditor extends React.Component {
       this.editor.setOption('extraKeys', this.defaultKeyMap)
     }
 
+    if (prevProps.hotkey !== this.props.hotkey) {
+      this.updateDefaultKeyMap()
+
+      if (this.extraKeysMode === 'default') {
+        this.editor.setOption('extraKeys', this.defaultKeyMap)
+      }
+    }
+
     if (this.state.clientWidth !== this.refs.root.clientWidth) {
       this.setState({
         clientWidth: this.refs.root.clientWidth
@@ -473,24 +720,119 @@ export default class CodeEditor extends React.Component {
       needRefresh = true
     }
 
+    if (prevProps.spellCheck !== this.props.spellCheck) {
+      if (this.props.spellCheck === false) {
+        spellcheck.setLanguage(this.editor, spellcheck.SPELLCHECK_DISABLED)
+        const elem = document.getElementById('editor-bottom-panel')
+        elem.parentNode.removeChild(elem)
+      } else {
+        this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+      }
+    }
+
     if (needRefresh) {
       this.editor.refresh()
     }
   }
 
   setMode (mode) {
-    let syntax = CodeMirror.findModeByName(convertModeName(mode))
+    let syntax = CodeMirror.findModeByName(convertModeName(mode || 'text'))
     if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
 
     this.editor.setOption('mode', syntax.mime)
     CodeMirror.autoLoadMode(this.editor, syntax.mode)
   }
 
-  handleChange (e) {
-    this.value = this.editor.getValue()
+  handleChange (editor, changeObject) {
+    spellcheck.handleChange(editor, changeObject)
+
+    this.updateHighlight(editor, changeObject)
+
+    this.value = editor.getValue()
     if (this.props.onChange) {
-      this.props.onChange(e)
+      this.props.onChange(editor)
     }
+  }
+
+  incrementLines (start, linesAdded, linesRemoved, editor) {
+    let highlightedLines = editor.options.linesHighlighted
+
+    const totalHighlightedLines = highlightedLines.length
+
+    let offset = linesAdded - linesRemoved
+
+    // Store new items to be added as we're changing the lines
+    let newLines = []
+
+    let i = totalHighlightedLines
+
+    while (i--) {
+      const lineNumber = highlightedLines[i]
+
+      // Interval that will need to be updated
+      // Between start and (start + offset) remove highlight
+      if (lineNumber >= start) {
+        highlightedLines.splice(highlightedLines.indexOf(lineNumber), 1)
+
+        // Lines that need to be relocated
+        if (lineNumber >= (start + linesRemoved)) {
+          newLines.push(lineNumber + offset)
+        }
+      }
+    }
+
+    // Adding relocated lines
+    highlightedLines.push(...newLines)
+
+    if (this.props.onChange) {
+      this.props.onChange(editor)
+    }
+  }
+
+  handleHighlight (editor, changeObject) {
+    const lines = editor.options.linesHighlighted
+
+    if (!lines.includes(changeObject)) {
+      lines.push(changeObject)
+      editor.addLineClass(changeObject, 'text', 'CodeMirror-activeline-background')
+    } else {
+      lines.splice(lines.indexOf(changeObject), 1)
+      editor.removeLineClass(changeObject, 'text', 'CodeMirror-activeline-background')
+    }
+    if (this.props.onChange) {
+      this.props.onChange(editor)
+    }
+  }
+
+  updateHighlight (editor, changeObject) {
+    const linesAdded = changeObject.text.length - 1
+    const linesRemoved = changeObject.removed.length - 1
+
+    // If no lines added or removed return
+    if (linesAdded === 0 && linesRemoved === 0) {
+      return
+    }
+
+    let start = changeObject.from.line
+
+    switch (changeObject.origin) {
+      case '+insert", "undo':
+        start += 1
+        break
+
+      case 'paste':
+      case '+delete':
+      case '+input':
+        if (changeObject.to.ch !== 0 || changeObject.from.ch !== 0) {
+          start += 1
+        }
+        break
+
+      default:
+        return
+    }
+
+    this.incrementLines(start, linesAdded, linesRemoved, editor)
   }
 
   moveCursorTo (row, col) {}
@@ -517,6 +859,7 @@ export default class CodeEditor extends React.Component {
     this.value = this.props.value
     this.editor.setValue(this.props.value)
     this.editor.clearHistory()
+    this.restartHighlighting()
     this.editor.on('change', this.changeHandler)
     this.editor.refresh()
   }
@@ -529,7 +872,10 @@ export default class CodeEditor extends React.Component {
 
   handleDropImage (dropEvent) {
     dropEvent.preventDefault()
-    const { storageKey, noteKey } = this.props
+    const {
+      storageKey,
+      noteKey
+    } = this.props
     attachmentManagement.handleAttachmentDrop(
       this,
       storageKey,
@@ -542,53 +888,110 @@ export default class CodeEditor extends React.Component {
     this.editor.replaceSelection(imageMd)
   }
 
-  handlePaste (editor, e) {
-    const clipboardData = e.clipboardData
-    const { storageKey, noteKey } = this.props
-    const dataTransferItem = clipboardData.items[0]
-    const pastedTxt = clipboardData.getData('text')
+  autoDetectLanguage (content) {
+    const res = hljs.highlightAuto(content, Object.keys(languageMaps))
+    this.setMode(languageMaps[res.language])
+  }
+
+  handlePaste (editor, forceSmartPaste) {
+    const { storageKey, noteKey, fetchUrlTitle, enableSmartPaste } = this.props
+
     const isURL = str => {
       const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
       return matcher.test(str)
     }
+
     const isInLinkTag = editor => {
       const startCursor = editor.getCursor('start')
-      const prevChar = editor.getRange(
-        { line: startCursor.line, ch: startCursor.ch - 2 },
-        { line: startCursor.line, ch: startCursor.ch }
-      )
+      const prevChar = editor.getRange({
+        line: startCursor.line,
+        ch: startCursor.ch - 2
+      }, {
+        line: startCursor.line,
+        ch: startCursor.ch
+      })
       const endCursor = editor.getCursor('end')
-      const nextChar = editor.getRange(
-        { line: endCursor.line, ch: endCursor.ch },
-        { line: endCursor.line, ch: endCursor.ch + 1 }
-      )
+      const nextChar = editor.getRange({
+        line: endCursor.line,
+        ch: endCursor.ch
+      }, {
+        line: endCursor.line,
+        ch: endCursor.ch + 1
+      })
       return prevChar === '](' && nextChar === ')'
     }
 
-    const pastedHtml = clipboardData.getData('text/html')
-    if (pastedHtml !== '') {
-      this.handlePasteHtml(e, editor, pastedHtml)
-    } else if (dataTransferItem.type.match('image')) {
-      attachmentManagement.handlePastImageEvent(
-        this,
-        storageKey,
-        noteKey,
-        dataTransferItem
-      )
-    } else if (
-      this.props.fetchUrlTitle &&
-      isURL(pastedTxt) &&
-      !isInLinkTag(editor)
-    ) {
-      this.handlePasteUrl(e, editor, pastedTxt)
+    const isInFencedCodeBlock = editor => {
+      const cursor = editor.getCursor()
+
+      let token = editor.getTokenAt(cursor)
+      if (token.state.fencedState) {
+        return true
+      }
+
+      let line = line = cursor.line - 1
+      while (line >= 0) {
+        token = editor.getTokenAt({
+          ch: 3,
+          line
+        })
+
+        if (token.start === token.end) {
+          --line
+        } else if (token.type === 'comment') {
+          if (line > 0) {
+            token = editor.getTokenAt({
+              ch: 3,
+              line: line - 1
+            })
+
+            return token.type !== 'comment'
+          } else {
+            return true
+          }
+        } else {
+          return false
+        }
+      }
+
+      return false
     }
-    if (attachmentManagement.isAttachmentLink(pastedTxt)) {
+
+    const pastedTxt = clipboard.readText()
+
+    if (isInFencedCodeBlock(editor)) {
+      this.handlePasteText(editor, pastedTxt)
+    } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
+      this.handlePasteUrl(editor, pastedTxt)
+    } else if (attachmentManagement.isAttachmentLink(pastedTxt)) {
       attachmentManagement
         .handleAttachmentLinkPaste(storageKey, noteKey, pastedTxt)
         .then(modifiedText => {
           this.editor.replaceSelection(modifiedText)
         })
-      e.preventDefault()
+    } else {
+      const image = clipboard.readImage()
+      if (!image.isEmpty()) {
+        attachmentManagement.handlePastNativeImage(
+          this,
+          storageKey,
+          noteKey,
+          image
+        )
+      } else if (enableSmartPaste || forceSmartPaste) {
+        const pastedHtml = clipboard.readHTML()
+        if (pastedHtml.length > 0) {
+          this.handlePasteHtml(editor, pastedHtml)
+        } else {
+          this.handlePasteText(editor, pastedTxt)
+        }
+      } else {
+        this.handlePasteText(editor, pastedTxt)
+      }
+    }
+
+    if (!this.props.mode && this.props.autoDetect) {
+      this.autoDetectLanguage(editor.doc.getValue())
     }
   }
 
@@ -598,8 +1001,7 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handlePasteUrl (e, editor, pastedTxt) {
-    e.preventDefault()
+  handlePasteUrl (editor, pastedTxt) {
     const taggedUrl = `<${pastedTxt}>`
     editor.replaceSelection(taggedUrl)
 
@@ -638,10 +1040,13 @@ export default class CodeEditor extends React.Component {
       })
   }
 
-  handlePasteHtml (e, editor, pastedHtml) {
-    e.preventDefault()
+  handlePasteHtml (editor, pastedHtml) {
     const markdown = this.turndownService.turndown(pastedHtml)
     editor.replaceSelection(markdown)
+  }
+
+  handlePasteText (editor, pastedTxt) {
+    editor.replaceSelection(pastedTxt)
   }
 
   mapNormalResponse (response, pastedTxt) {
@@ -662,6 +1067,29 @@ export default class CodeEditor extends React.Component {
         }
       })
     })
+  }
+
+  initialHighlighting () {
+    if (this.editor.options.linesHighlighted == null) {
+      return
+    }
+
+    const totalHighlightedLines = this.editor.options.linesHighlighted.length
+    const totalAvailableLines = this.editor.lineCount()
+
+    for (let i = 0; i < totalHighlightedLines; i++) {
+      const lineNumber = this.editor.options.linesHighlighted[i]
+      if (lineNumber > totalAvailableLines) {
+        // make sure that we skip the invalid lines althrough this case should not be happened.
+        continue
+      }
+      this.editor.addLineClass(lineNumber, 'text', 'CodeMirror-activeline-background')
+    }
+  }
+
+  restartHighlighting () {
+    this.editor.options.linesHighlighted = this.props.linesHighlighted
+    this.initialHighlighting()
   }
 
   mapImageResponse (response, pastedTxt) {
@@ -709,22 +1137,49 @@ export default class CodeEditor extends React.Component {
   }
 
   render () {
-    const {className, fontSize} = this.props
+    const {
+      className,
+      fontSize
+    } = this.props
     const fontFamily = normalizeEditorFontFamily(this.props.fontFamily)
     const width = this.props.width
-    return (
-      <div
-        className={className == null ? 'CodeEditor' : `CodeEditor ${className}`}
-        ref='root'
-        tabIndex='-1'
-        style={{
-          fontFamily,
-          fontSize: fontSize,
-          width: width
-        }}
-        onDrop={e => this.handleDropImage(e)}
+    return (<
+      div className={
+        className == null ? 'CodeEditor' : `CodeEditor ${className}`
+      }
+      ref='root'
+      tabIndex='-1'
+      style={
+      {
+        fontFamily,
+        fontSize: fontSize,
+        width: width
+      }
+      }
+      onDrop={
+        e => this.handleDropImage(e)
+      }
       />
     )
+  }
+
+  createSpellCheckPanel () {
+    const panel = document.createElement('div')
+    panel.className = 'panel bottom'
+    panel.id = 'editor-bottom-panel'
+    const dropdown = document.createElement('select')
+    dropdown.title = 'Spellcheck'
+    dropdown.className = styles['spellcheck-select']
+    dropdown.addEventListener('change', (e) => spellcheck.setLanguage(this.editor, dropdown.value))
+    const options = spellcheck.getAvailableDictionaries()
+    for (const op of options) {
+      const option = document.createElement('option')
+      option.value = op.value
+      option.innerHTML = op.label
+      dropdown.appendChild(option)
+    }
+    panel.appendChild(dropdown)
+    return panel
   }
 }
 
@@ -736,7 +1191,9 @@ CodeEditor.propTypes = {
   className: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  autoDetect: PropTypes.bool,
+  spellCheck: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {
@@ -746,5 +1203,7 @@ CodeEditor.defaultProps = {
   fontSize: 14,
   fontFamily: 'Monaco, Consolas',
   indentSize: 4,
-  indentType: 'space'
+  indentType: 'space',
+  autoDetect: false,
+  spellCheck: false
 }

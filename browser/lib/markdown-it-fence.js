@@ -3,7 +3,7 @@
 module.exports = function (md, renderers, defaultRenderer) {
   const paramsRE = /^[ \t]*([\w+#-]+)?(?:\(((?:\s*\w[-\w]*(?:=(?:'(?:.*?[^\\])?'|"(?:.*?[^\\])?"|(?:[^'"][^\s]*)))?)*)\))?(?::([^:]*)(?::(\d+))?)?\s*$/
 
-  function fence (state, startLine, endLine) {
+  function fence (state, startLine, endLine, silent) {
     let pos = state.bMarks[startLine] + state.tShift[startLine]
     let max = state.eMarks[startLine]
 
@@ -12,7 +12,7 @@ module.exports = function (md, renderers, defaultRenderer) {
     }
 
     const marker = state.src.charCodeAt(pos)
-    if (!(marker === 96 || marker === 126)) {
+    if (marker !== 0x7E/* ~ */ && marker !== 0x60 /* ` */) {
       return false
     }
 
@@ -26,6 +26,10 @@ module.exports = function (md, renderers, defaultRenderer) {
 
     const markup = state.src.slice(mem, pos)
     const params = state.src.slice(pos, max)
+
+    if (silent) {
+      return true
+    }
 
     let nextLine = startLine
     let haveEndMarker = false
