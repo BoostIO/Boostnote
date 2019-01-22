@@ -6,7 +6,7 @@ const electron = require('electron')
 const { remote, ipcRenderer } = electron
 const { dialog } = remote
 
-function updateApp () {
+export function updateApp () {
   const config = ConfigManager.get()
 
   if (config.ui.updateNotification) {
@@ -31,8 +31,4 @@ function updateApp () {
       })
     }
   }
-}
-
-export default {
-  updateApp
 }

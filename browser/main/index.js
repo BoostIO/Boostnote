@@ -8,7 +8,7 @@ import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-rou
 import { syncHistoryWithStore } from 'react-router-redux'
 require('./lib/ipcClient')
 require('../lib/customMeta')
-import UpdatePopup from './UpdatePopup/UpdatePopup'
+import { updateApp } from './lib/updateApp'
 
 const electron = require('electron')
 
@@ -119,7 +119,7 @@ ReactDOM.render((
     notify('Update ready!', {
       body: 'New Boostnote is ready to be installed.'
     })
-    UpdatePopup.updateApp()
+    updateApp()
   })
 
   ipcRenderer.on('update-found', function () {
