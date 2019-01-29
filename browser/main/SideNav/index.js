@@ -491,7 +491,6 @@ class SideNav extends React.Component {
         <input
           styleName='search-input'
           type='text'
-          ref={dom => { this.searchInput = dom }}
           onChange={this.handleSearchInputChange}
           value={searchText}
         />
