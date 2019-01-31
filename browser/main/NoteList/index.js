@@ -527,6 +527,7 @@ class NoteList extends React.Component {
   }
 
   handleNoteContextMenu (e, uniqueKey) {
+    this.setState({ ctrlKeyDown: false })
     const { location } = this.props
     const { selectedNoteKeys } = this.state
     const note = findNoteByKey(this.notes, uniqueKey)
