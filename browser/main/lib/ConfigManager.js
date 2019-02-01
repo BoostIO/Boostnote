@@ -87,7 +87,10 @@ export const DEFAULT_CONFIG = {
     authMethod: 'JWT', // Available value: JWT, USER
     token: '',
     username: '',
-    password: ''
+    password: '',
+    mdFilePath: 'C:/hexo/source/_posts',
+    imgFilePath: 'C:/hexo/source/images',
+    imgRelaPath: '/images'
   },
   coloredTags: {}
 }

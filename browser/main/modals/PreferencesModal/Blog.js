@@ -57,8 +57,11 @@ class Blog extends React.Component {
       password: !_.isNil(this.refs.passwordInput) ? this.refs.passwordInput.value : config.blog.password,
       username: !_.isNil(this.refs.usernameInput) ? this.refs.usernameInput.value : config.blog.username,
       token: !_.isNil(this.refs.tokenInput) ? this.refs.tokenInput.value : config.blog.token,
-      authMethod: this.refs.authMethodDropdown.value,
-      address: this.refs.addressInput.value,
+      authMethod: !_.isNil(this.refs.authMethodDropdown) ? this.refs.authMethodDropdown.value : config.blog.authMethod,
+      address: !_.isNil(this.refs.addressInput) ? this.refs.addressInput.value : config.blog.address,
+      mdFilePath: !_.isNil(this.refs.mdFilePathInput) ? this.refs.mdFilePathInput.value : config.blog.mdFilePath,
+      imgFilePath: !_.isNil(this.refs.imgFilePathInput) ? this.refs.imgFilePathInput.value : config.blog.imgFilePath,
+      imgRelaPath: !_.isNil(this.refs.imgRelaPathInput) ? this.refs.imgRelaPathInput.value : config.blog.imgRelaPath,
       type: this.refs.typeDropdown.value
     }
     this.setState({
@@ -97,6 +100,100 @@ class Blog extends React.Component {
         {BlogAlert.message}
       </p>
       : null
+    if (config.blog.type === 'wordpress') {
+      return (
+        <div styleName='root'>
+          <div styleName='group'>
+            <div styleName='group-header'>{i18n.__('Blog')}</div>
+            <div styleName='group-section'>
+              <div styleName='group-section-label'>
+                {i18n.__('Blog Type')}
+              </div>
+              <div styleName='group-section-control'>
+                <select
+                  value={config.blog.type}
+                  ref='typeDropdown'
+                  onChange={(e) => this.handleBlogChange(e)}
+                >
+                  <option value='wordpress' key='wordpress'>{i18n.__('wordpress')}</option>
+                  <option value='hexo' key='hexo'>{i18n.__('hexo')}</option>
+                </select>
+              </div>
+            </div>
+            <div styleName='group-section'>
+              <div styleName='group-section-label'>{i18n.__('Blog Address')}</div>
+              <div styleName='group-section-control'>
+                <input styleName='group-section-control-input'
+                  onChange={(e) => this.handleBlogChange(e)}
+                  ref='addressInput'
+                  value={config.blog.address}
+                  type='text'
+                />
+              </div>
+            </div>
+            <div styleName='group-control'>
+              <button styleName='group-control-rightButton'
+                onClick={(e) => this.handleSaveButtonClick(e)}>{i18n.__('Save')}
+              </button>
+              {blogAlertElement}
+            </div>
+          </div>
+          <div styleName='group-header2'>{i18n.__('Auth')}</div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Authentication Method')}
+            </div>
+            <div styleName='group-section-control'>
+              <select
+                value={config.blog.authMethod}
+                ref='authMethodDropdown'
+                onChange={(e) => this.handleBlogChange(e)}
+              >
+                <option value='JWT' key='JWT'>{i18n.__('JWT')}</option>
+                <option value='USER' key='USER'>{i18n.__('USER')}</option>
+              </select>
+            </div>
+          </div>
+          { config.blog.authMethod === 'JWT' &&
+            <div styleName='group-section'>
+              <div styleName='group-section-label'>{i18n.__('Token')}</div>
+              <div styleName='group-section-control'>
+                <input styleName='group-section-control-input'
+                  onChange={(e) => this.handleBlogChange(e)}
+                  ref='tokenInput'
+                  value={config.blog.token}
+                  type='text' />
+              </div>
+            </div>
+          }
+          { config.blog.authMethod === 'USER' &&
+            <div>
+              <div styleName='group-section'>
+                <div styleName='group-section-label'>{i18n.__('UserName')}</div>
+                <div styleName='group-section-control'>
+                  <input styleName='group-section-control-input'
+                    onChange={(e) => this.handleBlogChange(e)}
+                    ref='usernameInput'
+                    value={config.blog.username}
+                    type='text' />
+                </div>
+              </div>
+              <div styleName='group-section'>
+                <div styleName='group-section-label'>{i18n.__('Password')}</div>
+                <div styleName='group-section-control'>
+                  <input styleName='group-section-control-input'
+                    onChange={(e) => this.handleBlogChange(e)}
+                    ref='passwordInput'
+                    value={config.blog.password}
+                    type='password' />
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      )
+    }
     return (
       <div styleName='root'>
         <div styleName='group'>
@@ -112,20 +209,44 @@ class Blog extends React.Component {
                 onChange={(e) => this.handleBlogChange(e)}
               >
                 <option value='wordpress' key='wordpress'>{i18n.__('wordpress')}</option>
+                <option value='hexo' key='hexo'>{i18n.__('hexo')}</option>
               </select>
             </div>
           </div>
           <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Blog Address')}</div>
+            <div styleName='group-section-label'>{i18n.__('Markdown file path')}</div>
             <div styleName='group-section-control'>
               <input styleName='group-section-control-input'
                 onChange={(e) => this.handleBlogChange(e)}
-                ref='addressInput'
-                value={config.blog.address}
+                ref='mdFilePathInput'
+                value={config.blog.mdFilePath}
                 type='text'
               />
             </div>
           </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Image file path')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleBlogChange(e)}
+                ref='imgFilePathInput'
+                value={config.blog.imgFilePath}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Image relative path')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleBlogChange(e)}
+                ref='imgRelaPathInput'
+                value={config.blog.imgRelaPath}
+                type='text'
+              />
+            </div>
+          </div>
+
           <div styleName='group-control'>
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveButtonClick(e)}>{i18n.__('Save')}
@@ -133,59 +254,6 @@ class Blog extends React.Component {
             {blogAlertElement}
           </div>
         </div>
-        <div styleName='group-header2'>{i18n.__('Auth')}</div>
-
-        <div styleName='group-section'>
-          <div styleName='group-section-label'>
-            {i18n.__('Authentication Method')}
-          </div>
-          <div styleName='group-section-control'>
-            <select
-              value={config.blog.authMethod}
-              ref='authMethodDropdown'
-              onChange={(e) => this.handleBlogChange(e)}
-            >
-              <option value='JWT' key='JWT'>{i18n.__('JWT')}</option>
-              <option value='USER' key='USER'>{i18n.__('USER')}</option>
-            </select>
-          </div>
-        </div>
-        { config.blog.authMethod === 'JWT' &&
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Token')}</div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleBlogChange(e)}
-                ref='tokenInput'
-                value={config.blog.token}
-                type='text' />
-            </div>
-          </div>
-        }
-        { config.blog.authMethod === 'USER' &&
-          <div>
-            <div styleName='group-section'>
-              <div styleName='group-section-label'>{i18n.__('UserName')}</div>
-              <div styleName='group-section-control'>
-                <input styleName='group-section-control-input'
-                  onChange={(e) => this.handleBlogChange(e)}
-                  ref='usernameInput'
-                  value={config.blog.username}
-                  type='text' />
-              </div>
-            </div>
-            <div styleName='group-section'>
-              <div styleName='group-section-label'>{i18n.__('Password')}</div>
-              <div styleName='group-section-control'>
-                <input styleName='group-section-control-input'
-                  onChange={(e) => this.handleBlogChange(e)}
-                  ref='passwordInput'
-                  value={config.blog.password}
-                  type='password' />
-              </div>
-            </div>
-          </div>
-        }
       </div>
     )
   }

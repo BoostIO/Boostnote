@@ -21,10 +21,16 @@ import Markdown from '../../lib/markdown'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import context from 'browser/lib/context'
+import exportNote from 'browser/main/lib/dataApi/exportNote'
+import { findStorage } from 'browser/lib/findStorage'
+import escapeStringRegexp from 'escape-string-regexp'
+import mdurl from 'mdurl'
+import filenamify from 'filenamify'
 
 const { remote } = require('electron')
 const { dialog } = remote
 const WP_POST_PATH = '/wp/v2/posts'
+const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 
 function sortByCreatedAt (a, b) {
   return new Date(b.createdAt) - new Date(a.createdAt)
@@ -544,6 +550,7 @@ class NoteList extends React.Component {
     const publishLabel = i18n.__('Publish Blog')
     const updateLabel = i18n.__('Update Blog')
     const openBlogLabel = i18n.__('Open Blog')
+    const exportHexoLabel = i18n.__('Export Hexo File')
 
     const templates = []
 
@@ -573,18 +580,27 @@ class NoteList extends React.Component {
         click: this.copyNoteLink.bind(this, note)
       })
       if (note.type === 'MARKDOWN_NOTE') {
-        if (note.blog && note.blog.blogLink && note.blog.blogId) {
+        const config = ConfigManager.get()
+        const blogType = config.blog.type
+        if (blogType === 'wordpress') {
+          if (note.blog && note.blog.blogLink && note.blog.blogId) {
+            templates.push({
+              label: updateLabel,
+              click: this.publishMarkdown.bind(this)
+            }, {
+              label: openBlogLabel,
+              click: () => this.openBlog.bind(this)(note)
+            })
+          } else {
+            templates.push({
+              label: publishLabel,
+              click: this.publishMarkdown.bind(this)
+            })
+          }
+        } else if (blogType === 'hexo') {
           templates.push({
-            label: updateLabel,
-            click: this.publishMarkdown.bind(this)
-          }, {
-            label: openBlogLabel,
-            click: () => this.openBlog.bind(this)(note)
-          })
-        } else {
-          templates.push({
-            label: publishLabel,
-            click: this.publishMarkdown.bind(this)
+            label: exportHexoLabel,
+            click: this.exportHexoFile.bind(this)
           })
         }
       }
@@ -763,6 +779,65 @@ class NoteList extends React.Component {
           type: 'UPDATE_NOTE',
           note: note
         })
+      })
+  }
+
+  exportHexoFile () {
+    const config = ConfigManager.get()
+    const {mdFilePath, imgFilePath, imgRelaPath} = config.blog
+
+    const { selectedNoteKeys } = this.state
+    const notes = this.notes.map((note) => Object.assign({}, note))
+    const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
+    const firstNote = selectedNotes[0]
+    const storage = findStorage(firstNote.storage)
+
+    const nodeKey = firstNote.key
+    const storageKey = storage.key
+    const noteContent = firstNote.content
+    const noteName = filenamify(firstNote.title, {replacement: '_'}) + '.md'
+    const targetPath = path.join(mdFilePath, noteName)
+
+    const outputFormatter = function (exportedData, exportTasks) {
+      exportTasks.forEach(task => {
+        task.dst = imgFilePath
+      })
+      exportedData = noteContent.replace(new RegExp('/?' +
+        STORAGE_FOLDER_PLACEHOLDER + '.*?\\)', 'g'), function (match) {
+        const temp = match
+          .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), '/')
+          .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), '/')
+          .replace(new RegExp(escapeStringRegexp(path.win32.sep), 'g'), '/')
+          .replace(new RegExp(escapeStringRegexp(path.posix.sep), 'g'), '/')
+        return temp.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER +
+          '(' + '/' + nodeKey + ')?', 'g'), imgRelaPath)
+      })
+      return exportedData
+    }
+
+    const hasMdFilePath = fs.existsSync(mdFilePath)
+    const hasImgFilePath = fs.existsSync(imgFilePath)
+    if (!hasMdFilePath) {
+      fs.mkdirSync(mdFilePath)
+    }
+    if (!hasImgFilePath) {
+      fs.mkdirSync(imgFilePath)
+    }
+
+    exportNote(nodeKey, storageKey, noteContent, targetPath,
+        outputFormatter)
+      .then(res => {
+        dialog.showMessageBox(remote.getCurrentWindow(), {
+          type: 'info',
+          message: `Exported to ${targetPath}`
+        })
+      })
+      .catch(err => {
+        dialog.showErrorBox(
+          'Export error',
+          err ? err.message || err : 'Unexpected error during export'
+        )
+        throw err
       })
   }
 
