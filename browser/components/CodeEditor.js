@@ -22,6 +22,7 @@ const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
 import TurndownService from 'turndown'
 import {languageMaps} from '../lib/CMLanguageList'
 import snippetManager from '../lib/SnippetManager'
+import {generateInEditor, tocExistsInEditor} from 'browser/lib/markdown-toc-generator'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -614,12 +615,46 @@ export default class CodeEditor extends React.Component {
   handleChange (editor, changeObject) {
     spellcheck.handleChange(editor, changeObject)
 
+    // The current note contains an toc. We'll check for changes on headlines.
+    // origin is undefined when markdownTocGenerator replace the old tod
+    if (tocExistsInEditor(editor) && changeObject.origin !== undefined) {
+      let requireTocUpdate
+
+      // Check if one of the changed lines contains a headline
+      for (let line = 0; line < changeObject.text.length; line++) {
+        if (this.linePossibleContainsHeadline(editor.getLine(changeObject.from.line + line))) {
+          requireTocUpdate = true
+          break
+        }
+      }
+
+      if (!requireTocUpdate) {
+        // Check if one of the removed lines contains a headline
+        for (let line = 0; line < changeObject.removed.length; line++) {
+          if (this.linePossibleContainsHeadline(changeObject.removed[line])) {
+            requireTocUpdate = true
+            break
+          }
+        }
+      }
+
+      if (requireTocUpdate) {
+        generateInEditor(editor)
+      }
+    }
+
     this.updateHighlight(editor, changeObject)
 
     this.value = editor.getValue()
     if (this.props.onChange) {
       this.props.onChange(editor)
     }
+  }
+
+  linePossibleContainsHeadline (currentLine) {
+    // We can't check if the line start with # because when some write text before
+    // the # we also need to update the toc
+    return currentLine.includes('# ')
   }
 
   incrementLines (start, linesAdded, linesRemoved, editor) {

@@ -28,6 +28,8 @@ function linkify (token) {
 const TOC_MARKER_START = '<!-- toc -->'
 const TOC_MARKER_END = '<!-- tocstop -->'
 
+const tocRegex = new RegExp(`${TOC_MARKER_START}[\\s\\S]*?${TOC_MARKER_END}`)
+
 /**
  * Takes care of proper updating given editor with TOC.
  * If TOC doesn't exit in the editor, it's inserted at current caret position.
@@ -35,12 +37,6 @@ const TOC_MARKER_END = '<!-- tocstop -->'
  * @param editor CodeMirror editor to be updated with TOC
  */
 export function generateInEditor (editor) {
-  const tocRegex = new RegExp(`${TOC_MARKER_START}[\\s\\S]*?${TOC_MARKER_END}`)
-
-  function tocExistsInEditor () {
-    return tocRegex.test(editor.getValue())
-  }
-
   function updateExistingToc () {
     const toc = generate(editor.getValue())
     const search = editor.getSearchCursor(tocRegex)
@@ -54,11 +50,15 @@ export function generateInEditor (editor) {
     editor.replaceRange(wrapTocWithEol(toc, editor), editor.getCursor())
   }
 
-  if (tocExistsInEditor()) {
+  if (tocExistsInEditor(editor)) {
     updateExistingToc()
   } else {
     addTocAtCursorPosition()
   }
+}
+
+export function tocExistsInEditor (editor) {
+  return tocRegex.test(editor.getValue())
 }
 
 /**
@@ -94,5 +94,6 @@ function wrapTocWithEol (toc, editor) {
 
 export default {
   generate,
-  generateInEditor
+  generateInEditor,
+  tocExistsInEditor
 }
