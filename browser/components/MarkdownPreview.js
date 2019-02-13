@@ -835,77 +835,93 @@ export default class MarkdownPreview extends React.Component {
 
     const markdownPreviewIframe = document.querySelector('.MarkdownPreview')
     const rect = markdownPreviewIframe.getBoundingClientRect()
+    const config = { attributes: true, subtree: true }
+    const imgObserver = new MutationObserver((mutationList) => {
+      for (const mu of mutationList) {
+        if (mu.target.className === 'carouselContent-enter-done') {
+          this.setImgOnClickEventHelper(mu.target, rect)
+          break
+        }
+      }
+    })
+
     const imgList = markdownPreviewIframe.contentWindow.document.body.querySelectorAll('img')
     for (const img of imgList) {
-      img.onclick = () => {
-        const widthMagnification = document.body.clientWidth / img.width
-        const heightMagnification = document.body.clientHeight / img.height
-        const baseOnWidth = widthMagnification < heightMagnification
-        const magnification = baseOnWidth ? widthMagnification : heightMagnification
+      const parentEl = img.parentElement
+      this.setImgOnClickEventHelper(img, rect)
+      imgObserver.observe(parentEl, config)
+    }
+  }
 
-        const zoomImgWidth = img.width * magnification
-        const zoomImgHeight = img.height * magnification
-        const zoomImgTop = (document.body.clientHeight - zoomImgHeight) / 2
-        const zoomImgLeft = (document.body.clientWidth - zoomImgWidth) / 2
-        const originalImgTop = img.y + rect.top
-        const originalImgLeft = img.x + rect.left
-        const originalImgRect = {
-          top: `${originalImgTop}px`,
-          left: `${originalImgLeft}px`,
-          width: `${img.width}px`,
-          height: `${img.height}px`
-        }
-        const zoomInImgRect = {
-          top: `${baseOnWidth ? zoomImgTop : 0}px`,
-          left: `${baseOnWidth ? 0 : zoomImgLeft}px`,
-          width: `${zoomImgWidth}px`,
-          height: `${zoomImgHeight}px`
-        }
-        const animationSpeed = 300
+  setImgOnClickEventHelper (img, rect) {
+    img.onclick = () => {
+      const widthMagnification = document.body.clientWidth / img.width
+      const heightMagnification = document.body.clientHeight / img.height
+      const baseOnWidth = widthMagnification < heightMagnification
+      const magnification = baseOnWidth ? widthMagnification : heightMagnification
 
-        const zoomImg = document.createElement('img')
-        zoomImg.src = img.src
+      const zoomImgWidth = img.width * magnification
+      const zoomImgHeight = img.height * magnification
+      const zoomImgTop = (document.body.clientHeight - zoomImgHeight) / 2
+      const zoomImgLeft = (document.body.clientWidth - zoomImgWidth) / 2
+      const originalImgTop = img.y + rect.top
+      const originalImgLeft = img.x + rect.left
+      const originalImgRect = {
+        top: `${originalImgTop}px`,
+        left: `${originalImgLeft}px`,
+        width: `${img.width}px`,
+        height: `${img.height}px`
+      }
+      const zoomInImgRect = {
+        top: `${baseOnWidth ? zoomImgTop : 0}px`,
+        left: `${baseOnWidth ? 0 : zoomImgLeft}px`,
+        width: `${zoomImgWidth}px`,
+        height: `${zoomImgHeight}px`
+      }
+      const animationSpeed = 300
+
+      const zoomImg = document.createElement('img')
+      zoomImg.src = img.src
+      zoomImg.style = `
+        position: absolute;
+        top: ${baseOnWidth ? zoomImgTop : 0}px;
+        left: ${baseOnWidth ? 0 : zoomImgLeft}px;
+        width: ${zoomImgWidth};
+        height: ${zoomImgHeight}px;
+        `
+      zoomImg.animate([
+        originalImgRect,
+        zoomInImgRect
+      ], animationSpeed)
+
+      const overlay = document.createElement('div')
+      overlay.style = `
+        background-color: rgba(0,0,0,0.5);
+        cursor: zoom-out;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: ${document.body.clientHeight}px;
+        z-index: 100;
+      `
+      overlay.onclick = () => {
         zoomImg.style = `
           position: absolute;
-          top: ${baseOnWidth ? zoomImgTop : 0}px;
-          left: ${baseOnWidth ? 0 : zoomImgLeft}px;
-          width: ${zoomImgWidth};
-          height: ${zoomImgHeight}px;
+          top: ${originalImgTop}px;
+          left: ${originalImgLeft}px;
+          width: ${img.width}px;
+          height: ${img.height}px;
           `
-        zoomImg.animate([
-          originalImgRect,
-          zoomInImgRect
+        const zoomOutImgAnimation = zoomImg.animate([
+          zoomInImgRect,
+          originalImgRect
         ], animationSpeed)
-
-        const overlay = document.createElement('div')
-        overlay.style = `
-          background-color: rgba(0,0,0,0.5);
-          cursor: zoom-out;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: ${document.body.clientHeight}px;
-          z-index: 100;
-        `
-        overlay.onclick = () => {
-          zoomImg.style = `
-            position: absolute;
-            top: ${originalImgTop}px;
-            left: ${originalImgLeft}px;
-            width: ${img.width}px;
-            height: ${img.height}px;
-            `
-          const zoomOutImgAnimation = zoomImg.animate([
-            zoomInImgRect,
-            originalImgRect
-          ], animationSpeed)
-          zoomOutImgAnimation.onfinish = () => overlay.remove()
-        }
-
-        overlay.appendChild(zoomImg)
-        document.body.appendChild(overlay)
+        zoomOutImgAnimation.onfinish = () => overlay.remove()
       }
+
+      overlay.appendChild(zoomImg)
+      document.body.appendChild(overlay)
     }
   }
 
