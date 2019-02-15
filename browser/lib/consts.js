@@ -3,14 +3,40 @@ const fs = require('sander')
 const { remote } = require('electron')
 const { app } = remote
 
-const themePath = process.env.NODE_ENV === 'production'
-  ? path.join(app.getAppPath(), './node_modules/codemirror/theme')
-  : require('path').resolve('./node_modules/codemirror/theme')
-const themes = fs.readdirSync(themePath)
-  .map((themePath) => {
-    return themePath.substring(0, themePath.lastIndexOf('.'))
-  })
-themes.splice(themes.indexOf('solarized'), 1, 'solarized dark', 'solarized light')
+const isProduction = process.env.NODE_ENV === 'production'
+const paths = [
+  isProduction ? path.join(app.getAppPath(), './node_modules/codemirror/theme') : path.resolve('./node_modules/codemirror/theme'),
+  isProduction ? path.join(app.getAppPath(), './extra_scripts/codemirror/theme') : path.resolve('./extra_scripts/codemirror/theme')
+]
+
+const themes = paths
+  .map(directory => fs.readdirSync(directory).map(file => {
+    const name = file.substring(0, file.lastIndexOf('.'))
+
+    return {
+      name,
+      path: path.join(directory.split(/\//g).slice(-3).join('/'), file),
+      className: `cm-s-${name}`
+    }
+  }))
+  .reduce((accumulator, value) => accumulator.concat(value), [])
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+themes.splice(themes.findIndex(({ name }) => name === 'solarized'), 1, {
+  name: 'solarized dark',
+  path: 'node_modules/codemirror/theme/solarized.css',
+  className: `cm-s-solarized cm-s-dark`
+}, {
+  name: 'solarized light',
+  path: 'node_modules/codemirror/theme/solarized.css',
+  className: `cm-s-solarized cm-s-light`
+})
+
+themes.splice(0, 0, {
+  name: 'default',
+  path: '/node_modules/codemirror/theme/elegant.css',
+  className: `cm-s-default`
+})
 
 const snippetFile = process.env.NODE_ENV !== 'test'
   ? path.join(app.getPath('userData'), 'snippets.json')
@@ -35,7 +61,7 @@ const consts = {
     'Dodger Blue',
     'Violet Eggplant'
   ],
-  THEMES: ['default'].concat(themes),
+  THEMES: themes,
   SNIPPET_FILE: snippetFile,
   DEFAULT_EDITOR_FONT_FAMILY: [
     'Monaco',

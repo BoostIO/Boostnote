@@ -128,8 +128,13 @@ class UiTab extends React.Component {
     const newCodemirrorTheme = this.refs.editorTheme.value
 
     if (newCodemirrorTheme !== codemirrorTheme) {
-      checkHighLight.setAttribute('href', `../node_modules/codemirror/theme/${newCodemirrorTheme.split(' ')[0]}.css`)
+      const theme = consts.THEMES.find(theme => theme.name === newCodemirrorTheme)
+
+      if (theme) {
+        checkHighLight.setAttribute('href', `../${theme.path}`)
+      }
     }
+
     this.setState({ config: newConfig, codemirrorTheme: newCodemirrorTheme }, () => {
       const {ui, editor, preview} = this.props.config
       this.currentConfig = {ui, editor, preview}
@@ -355,7 +360,7 @@ class UiTab extends React.Component {
               >
                 {
                   themes.map((theme) => {
-                    return (<option value={theme} key={theme}>{theme}</option>)
+                    return (<option value={theme.name} key={theme.name}>{theme.name}</option>)
                   })
                 }
               </select>
@@ -670,7 +675,7 @@ class UiTab extends React.Component {
               >
                 {
                   themes.map((theme) => {
-                    return (<option value={theme} key={theme}>{theme}</option>)
+                    return (<option value={theme.name} key={theme.name}>{theme.name}</option>)
                   })
                 }
               </select>
