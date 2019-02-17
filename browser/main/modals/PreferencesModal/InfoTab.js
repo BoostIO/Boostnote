@@ -69,8 +69,7 @@ class InfoTab extends React.Component {
   render () {
     return (
       <div styleName='root'>
-
-        <div styleName='header--sub'>{i18n.__('Community')}</div>
+        <div styleName='group-header'>{i18n.__('Community')}</div>
         <div styleName='top'>
           <ul styleName='list'>
             <li>
@@ -108,7 +107,7 @@ class InfoTab extends React.Component {
 
         <hr />
 
-        <div styleName='header--sub'>{i18n.__('About')}</div>
+        <div styleName='group-header--sub'>{i18n.__('About')}</div>
 
         <div styleName='top'>
           <div styleName='icon-space'>
@@ -143,7 +142,7 @@ class InfoTab extends React.Component {
 
         <hr styleName='separate-line' />
 
-        <div styleName='policy'>{i18n.__('Analytics')}</div>
+        <div styleName='group-header2--sub'>{i18n.__('Analytics')}</div>
         <div>{i18n.__('Boostnote collects anonymous data for the sole purpose of improving the application, and strictly does not collect any personal information such the contents of your notes.')}</div>
         <div>{i18n.__('You can see how it works on ')}<a href='https://github.com/BoostIO/Boostnote' onClick={(e) => this.handleLinkClick(e)}>GitHub</a>.</div>
         <br />

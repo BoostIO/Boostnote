@@ -91,7 +91,7 @@ class SnippetTab extends React.Component {
     if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
     return (
       <div styleName='root'>
-        <div styleName='header'>{i18n.__('Snippets')}</div>
+        <div styleName='group-header'>{i18n.__('Snippets')}</div>
         <SnippetList
           onSnippetSelect={this.handleSnippetSelect.bind(this)}
           onSnippetDeleted={this.handleDeleteSnippet.bind(this)}
