@@ -907,6 +907,8 @@ export default class MarkdownPreview extends React.Component {
         document.body.appendChild(overlay)
       }
     }
+
+    this.getWindow().scrollTo(0, 0)
   }
 
   focus () {
