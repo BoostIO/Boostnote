@@ -44,7 +44,9 @@ function data (state = defaultDataMap(), action) {
         const folderNoteSet = getOrInitItem(state.folderNoteMap, folderKey)
         folderNoteSet.add(uniqueKey)
 
-        assignToTags(note.tags, state, uniqueKey)
+        if (!note.isTrashed) {
+          assignToTags(note.tags, state, uniqueKey)
+        }
       })
       return state
     case 'UPDATE_NOTE':
