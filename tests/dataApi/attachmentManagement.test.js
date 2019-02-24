@@ -48,7 +48,7 @@ it('should test that copyAttachment works correctly assuming correct working of 
   const dummyExtension = '.ext'
   const sourcePath = 'path' + dummyExtension
   const storageKey = 'storageKey'
-  const noteKey = 'noteKey'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   const dummyUniquePath = 'dummyPath'
   const dummyStorage = {path: 'dummyStoragePath'}
   const dummyReadStream = {}
@@ -77,7 +77,7 @@ it('should test that copyAttachment works correctly assuming correct working of 
 
 it('should test that copyAttachment creates a new folder if the attachment folder doesn\'t exist', function () {
   const dummyStorage = {path: 'dummyStoragePath'}
-  const noteKey = 'noteKey'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   const attachmentFolderPath = path.join(dummyStorage.path, systemUnderTest.DESTINATION_FOLDER)
   const attachmentFolderNoteKyPath = path.join(dummyStorage.path, systemUnderTest.DESTINATION_FOLDER, noteKey)
   const dummyReadStream = {}
@@ -95,7 +95,7 @@ it('should test that copyAttachment creates a new folder if the attachment folde
   findStorage.findStorage.mockReturnValue(dummyStorage)
   uniqueSlug.mockReturnValue('dummyPath')
 
-  return systemUnderTest.copyAttachment('path', 'storageKey', 'noteKey').then(
+  return systemUnderTest.copyAttachment('path', 'storageKey', noteKey).then(
     function () {
       expect(fs.existsSync).toHaveBeenCalledWith(attachmentFolderPath)
       expect(fs.mkdirSync).toHaveBeenCalledWith(attachmentFolderPath)
@@ -372,7 +372,7 @@ it('should test that migrateAttachments work when they have different path separ
   const dummyStoragePath = 'dummyStoragePath'
   const imagesPath = path.join(dummyStoragePath, 'images')
   const attachmentsPath = path.join(dummyStoragePath, 'attachments')
-  const noteKey = 'noteKey'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   const testInput = '"# Test\n' +
   '\n' +
   '![Screenshot1](:storage' + path.win32.sep + '0.3b88d0dc.png)\n' +
@@ -417,7 +417,7 @@ it('should test that getAbsolutePathsOfAttachmentsInContent returns all absolute
 
 it('should remove the all ":storage" and noteKey references', function () {
   const storageFolder = systemUnderTest.DESTINATION_FOLDER
-  const noteKey = 'noteKey'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   const testInput =
     '<html>\n' +
     '    <head>\n' +
@@ -459,31 +459,16 @@ it('should remove the all ":storage" and noteKey references', function () {
 })
 
 it('should make sure that "removeStorageAndNoteReferences" works with markdown content as well', function () {
-  const noteKey = 'noteKey'
-  const testInput =
-    'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + noteKey + path.win32.sep + 'image.jpg](imageName) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + noteKey + path.posix.sep + 'pdf.pdf](pdf)'
-
-  const expectedOutput =
-    'Test input' +
-    '![' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'image.jpg](imageName) \n' +
-    '[' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'pdf.pdf](pdf)'
-  const actual = systemUnderTest.removeStorageAndNoteReferences(testInput, noteKey)
-  expect(actual).toEqual(expectedOutput)
-})
-
-it('should make sure that "removeStorageAndNoteReferences" works with markdown content as well (correct attachment syntax now -.-)', function () {
-  const noteKey = '595ec5aa-5234-402e-8899-68d8a8733179'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   const testInput =
     'Test input' +
     '![imageName](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + noteKey + path.win32.sep + 'image.jpg) \n' +
-    '[pdf.pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + noteKey + path.posix.sep + 'pdf.pdf)'
+    '[pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + noteKey + path.posix.sep + 'pdf.pdf)'
 
   const expectedOutput =
     'Test input' +
     '![imageName](' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'image.jpg) \n' +
-    '[pdf.pdf](' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'pdf.pdf)'
+    '[pdf](' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'pdf.pdf)'
   const actual = systemUnderTest.removeStorageAndNoteReferences(testInput, noteKey)
   expect(actual).toEqual(expectedOutput)
 })
@@ -491,7 +476,7 @@ it('should make sure that "removeStorageAndNoteReferences" works with markdown c
 it('should delete the correct attachment folder if a note is deleted', function () {
   const dummyStorage = {path: 'dummyStoragePath'}
   const storageKey = 'storageKey'
-  const noteKey = 'noteKey'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   findStorage.findStorage = jest.fn(() => dummyStorage)
   sander.rimrafSync = jest.fn()
 
@@ -503,7 +488,7 @@ it('should delete the correct attachment folder if a note is deleted', function 
 
 it('should test that deleteAttachmentsNotPresentInNote deletes all unreferenced attachments ', function () {
   const dummyStorage = {path: 'dummyStoragePath'}
-  const noteKey = 'noteKey'
+  const noteKey = 'abc234-8266-49b9-b438-084003c2e723'
   const storageKey = 'storageKey'
   const markdownContent = ''
   const dummyFilesInFolder = ['file1.txt', 'file2.pdf', 'file3.jpg']
@@ -630,12 +615,12 @@ it('should test that moveAttachments returns a correct modified content version'
   const newNoteKey = 'newNoteKey'
   const testInput =
     'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNoteKey + path.win32.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNoteKey + path.posix.sep + 'pdf.pdf](pdf})'
+    '![image](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNoteKey + path.win32.sep + 'image.jpg) \n' +
+    '[pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNoteKey + path.posix.sep + 'pdf.pdf)'
   const expectedOutput =
     'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'pdf.pdf](pdf})'
+    '![image](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'image.jpg) \n' +
+    '[pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNoteKey + path.sep + 'pdf.pdf)'
 
   const actualContent = systemUnderTest.moveAttachments(oldPath, newPath, oldNoteKey, newNoteKey, testInput)
   expect(actualContent).toBe(expectedOutput)
@@ -646,16 +631,16 @@ it('should test that cloneAttachments modifies the content of the new note corre
   const newNote = {key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKey', type: 'MARKDOWN_NOTE'}
   const testInput =
     'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNote.key + path.win32.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNote.key + path.posix.sep + 'pdf.pdf](pdf})'
+    '![image](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNote.key + path.win32.sep + 'image.jpg) \n' +
+    '[pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNote.key + path.posix.sep + 'pdf.pdf)'
   newNote.content = testInput
   findStorage.findStorage = jest.fn()
   findStorage.findStorage.mockReturnValue({path: 'dummyStoragePath'})
 
   const expectedOutput =
     'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNote.key + path.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNote.key + path.sep + 'pdf.pdf](pdf})'
+    '![image](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNote.key + path.sep + 'image.jpg) \n' +
+    '[pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.sep + newNote.key + path.sep + 'pdf.pdf)'
   systemUnderTest.cloneAttachments(oldNote, newNote)
 
   expect(newNote.content).toBe(expectedOutput)
@@ -670,8 +655,8 @@ it('should test that cloneAttachments finds all attachments and copies them to t
   const newNote = {key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKeyNewNote', type: 'MARKDOWN_NOTE'}
   const testInput =
     'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNote.key + path.win32.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNote.key + path.posix.sep + 'pdf.pdf](pdf})'
+    '![image](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNote.key + path.win32.sep + 'image.jpg) \n' +
+    '[pdf' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNote.key + path.posix.sep + 'pdf.pdf)'
   oldNote.content = testInput
   newNote.content = testInput
 
