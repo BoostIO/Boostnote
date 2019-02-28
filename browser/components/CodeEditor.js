@@ -808,7 +808,7 @@ export default class CodeEditor extends React.Component {
     }
 
     const pastedTxt = clipboard.readText()
-    console.log(pastedTxt);
+
     if (isInFencedCodeBlock(editor)) {
       this.handlePasteText(editor, pastedTxt)
     } else if (fetchUrlTitle && isMarkdownTitleURL(pastedTxt) && !isInLinkTag(editor)) {
@@ -853,15 +853,15 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handlePasteUrl(editor, pastedTxt) {
+  handlePasteUrl (editor, pastedTxt) {
     let taggedUrl = `<${pastedTxt}>`
-    let urlToFetch = pastedTxt;
-    let titleMark = '';
+    let urlToFetch = pastedTxt
+    let titleMark = ''
 
     if (isMarkdownTitleURL(pastedTxt)) {
       const pastedTxtSplitted = pastedTxt.split(' ')
-      titleMark = `${pastedTxtSplitted[0]} `;
-      urlToFetch = pastedTxtSplitted[1];
+      titleMark = `${pastedTxtSplitted[0]} `
+      urlToFetch = pastedTxtSplitted[1]
       taggedUrl = `<${urlToFetch}>`
     }
 
@@ -876,7 +876,7 @@ export default class CodeEditor extends React.Component {
     const replaceTaggedUrl = replacement => {
       const value = editor.getValue()
       const cursor = editor.getCursor()
-      const newValue =  value.replace(taggedUrl, titleMark + replacement)
+      const newValue = value.replace(taggedUrl, titleMark + replacement)
       const newCursor = Object.assign({}, cursor, {
         ch: cursor.ch + newValue.length - (value.length - titleMark.length)
       })
