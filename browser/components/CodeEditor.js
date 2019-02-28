@@ -14,6 +14,8 @@ import {
 import TextEditorInterface from 'browser/lib/TextEditorInterface'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
+
+import { isMarkdownTitleURL } from 'browser/lib/utils'
 import styles from '../components/CodeEditor.styl'
 const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
@@ -806,9 +808,11 @@ export default class CodeEditor extends React.Component {
     }
 
     const pastedTxt = clipboard.readText()
-
+    console.log(pastedTxt);
     if (isInFencedCodeBlock(editor)) {
       this.handlePasteText(editor, pastedTxt)
+    } else if (fetchUrlTitle && isMarkdownTitleURL(pastedTxt) && !isInLinkTag(editor)) {
+      this.handlePasteUrl(editor, pastedTxt)
     } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
       this.handlePasteUrl(editor, pastedTxt)
     } else if (attachmentManagement.isAttachmentLink(pastedTxt)) {
@@ -849,8 +853,18 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handlePasteUrl (editor, pastedTxt) {
-    const taggedUrl = `<${pastedTxt}>`
+  handlePasteUrl(editor, pastedTxt) {
+    let taggedUrl = `<${pastedTxt}>`
+    let urlToFetch = pastedTxt;
+    let titleMark = '';
+
+    if (isMarkdownTitleURL(pastedTxt)) {
+      const pastedTxtSplitted = pastedTxt.split(' ')
+      titleMark = `${pastedTxtSplitted[0]} `;
+      urlToFetch = pastedTxtSplitted[1];
+      taggedUrl = `<${urlToFetch}>`
+    }
+
     editor.replaceSelection(taggedUrl)
 
     const isImageReponse = response => {
@@ -862,22 +876,23 @@ export default class CodeEditor extends React.Component {
     const replaceTaggedUrl = replacement => {
       const value = editor.getValue()
       const cursor = editor.getCursor()
-      const newValue = value.replace(taggedUrl, replacement)
+      const newValue = titleMark + value.replace(taggedUrl, replacement)
       const newCursor = Object.assign({}, cursor, {
-        ch: cursor.ch + newValue.length - value.length
+        ch: cursor.ch + newValue.length - (value.length - titleMark.length)
       })
+
       editor.setValue(newValue)
       editor.setCursor(newCursor)
     }
 
-    fetch(pastedTxt, {
+    fetch(urlToFetch, {
       method: 'get'
     })
       .then(response => {
         if (isImageReponse(response)) {
-          return this.mapImageResponse(response, pastedTxt)
+          return this.mapImageResponse(response, urlToFetch)
         } else {
-          return this.mapNormalResponse(response, pastedTxt)
+          return this.mapNormalResponse(response, urlToFetch)
         }
       })
       .then(replacement => {

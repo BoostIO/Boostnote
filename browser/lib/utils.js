@@ -132,8 +132,13 @@ export function isObjectEqual (a, b) {
   return true
 }
 
+export function isMarkdownTitleURL (str) {
+  return /(^#{1,6}\s)(?:\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str)
+}
+
 export default {
   lastFindInArray,
   escapeHtmlCharacters,
-  isObjectEqual
+  isObjectEqual,
+  isMarkdownTitleURL
 }
