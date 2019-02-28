@@ -876,7 +876,7 @@ export default class CodeEditor extends React.Component {
     const replaceTaggedUrl = replacement => {
       const value = editor.getValue()
       const cursor = editor.getCursor()
-      const newValue = titleMark + value.replace(taggedUrl, replacement)
+      const newValue =  value.replace(taggedUrl, titleMark + replacement)
       const newCursor = Object.assign({}, cursor, {
         ch: cursor.ch + newValue.length - (value.length - titleMark.length)
       })
