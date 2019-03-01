@@ -40,13 +40,17 @@
   margin-top 10px
   font-size 12px
 
+
 body[data-theme="dark"]
   .root
     color alpha($tab--dark-text-color, 80%)
-
+  .appId
+    color $ui-dark-text-color
 
 body[data-theme="solarized-dark"]
   .root
+    color $ui-solarized-dark-text-color
+  .appId
     color $ui-solarized-dark-text-color
 .list
   a
@@ -55,12 +59,16 @@ body[data-theme="solarized-dark"]
 body[data-theme="monokai"]
   .root
     color $ui-monokai-text-color
+  .appId
+    color $ui-monokai-text-color
 .list
   a
     color $ui-monokai-active-color
 
 body[data-theme="dracula"]
   .root
+    color $ui-dracula-text-color
+  .appId
     color $ui-dracula-text-color
 .list
   a
