@@ -26,15 +26,15 @@ const { remote } = require('electron')
 const { dialog } = remote
 const WP_POST_PATH = '/wp/v2/posts'
 
-const matchStartingTitleNumber = new RegExp('^([0-9]*\.?[0-9]+).*$')
+const regexMatchStartingTitleNumber = new RegExp('^([0-9]*\.?[0-9]+).*$')
 
 function sortByCreatedAt (a, b) {
   return new Date(b.createdAt) - new Date(a.createdAt)
 }
 
 function sortByAlphabetical (a, b) {
-  const matchA = matchStartingTitleNumber.exec(a.title)
-  const matchB = matchStartingTitleNumber.exec(b.title)
+  const matchA = regexMatchStartingTitleNumber.exec(a.title)
+  const matchB = regexMatchStartingTitleNumber.exec(b.title)
 
   if (matchA && matchA.length === 2 && matchB && matchB.length === 2) {
     // Both note titles are starting with a float. We will compare it now.
