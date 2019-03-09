@@ -115,11 +115,15 @@ class TopBar extends React.Component {
   }
 
   handleSearchChange (e) {
+    const keyword = this.refs.searchInput.value
     if (this.state.isAlphabet || this.state.isConfirmTranslation) {
-      const keyword = this.refs.searchInput.value
       this.updateKeyword(keyword)
     } else {
       e.preventDefault()
+      this.setState({
+        search: keyword
+      })
+      ee.emit('top:search', keyword)
     }
   }
 
