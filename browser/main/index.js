@@ -107,6 +107,7 @@ ReactDOM.render((
           <Route path=':searchword' />
         </Route>
         <Route path='trashed' />
+        <Route path='gisted' />
         <Route path='alltags' />
         <Route path='tags'>
           <IndexRedirect to='/alltags' />

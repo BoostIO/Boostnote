@@ -18,11 +18,11 @@ import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
 import {findNoteTitle} from 'browser/lib/findNoteTitle'
-import convertModeName from 'browser/lib/convertModeName'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import FullscreenButton from './FullscreenButton'
 import TrashButton from './TrashButton'
 import RestoreButton from './RestoreButton'
+import GistButton from './GistButton'
 import PermanentDeleteButton from './PermanentDeleteButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
@@ -31,6 +31,7 @@ import { formatDate } from 'browser/lib/date-formatter'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
+import { getGithubApi, CREATE_SINGLE_GIST, EDIT_SINGLE_GIST, mapToGist } from 'browser/main/lib/dataApi/github-api.js'
 
 const electron = require('electron')
 const { remote } = electron
@@ -74,6 +75,7 @@ class SnippetNoteDetail extends React.Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key && !this.state.isMovingNote) {
       if (this.saveQueue != null) this.saveNow()
+      if (this.saveGithubQueue != null) this.saveGithub()
       const nextNote = Object.assign({
         description: ''
       }, nextProps.note, {
@@ -96,6 +98,7 @@ class SnippetNoteDetail extends React.Component {
 
   componentWillUnmount () {
     if (this.saveQueue != null) this.saveNow()
+    if (this.saveGithubQueue != null) this.saveGithub()
     ee.off('code:generate-toc', this.generateToc)
   }
 
@@ -128,6 +131,11 @@ class SnippetNoteDetail extends React.Component {
     this.saveQueue = setTimeout(() => {
       this.saveNow()
     }, 1000)
+    clearTimeout(this.saveGithubQueue)
+    this.saveGithubQueue = setTimeout(() => {
+      this.saveGithub()
+    }, 5 * 60 * 1000
+    )
   }
 
   saveNow () {
@@ -144,6 +152,13 @@ class SnippetNoteDetail extends React.Component {
         })
         AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
       })
+  }
+
+  saveGithub () {
+    const { note } = this.props
+    clearTimeout(this.saveGithubQueue)
+    this.saveGithubQueue = null
+    getGithubApi(EDIT_SINGLE_GIST)(mapToGist(note))
   }
 
   handleFolderChange (e) {
@@ -198,11 +213,10 @@ class SnippetNoteDetail extends React.Component {
 
   handleTrashButtonClick (e) {
     const { note } = this.state
-    const { isTrashed } = note
+    const { isTrashed, gistId } = note
     const { confirmDeletion } = this.props.config.ui
-
-    if (isTrashed) {
-      if (confirmDeleteNote(confirmDeletion, true)) {
+    if (isTrashed || gistId) {
+      if (confirmDeleteNote(confirmDeletion, true, gistId)) {
         const {note, dispatch} = this.props
         dataApi
           .deleteNote(note.storage, note.key)
@@ -231,6 +245,26 @@ class SnippetNoteDetail extends React.Component {
         ee.emit('list:next')
       }
     }
+  }
+
+  handleGistedClick (e) {
+    const { note } = this.state
+    note.isGisted = !note.isGisted
+    this.setState({
+      note
+    }, () => {
+      this.save()
+    })
+    !note.gistId ? getGithubApi(CREATE_SINGLE_GIST)(mapToGist(note)).then(x => {
+      note.gistId = x.id
+      this.setState({
+        note
+      }, () => {
+        this.save()
+      })
+    }).catch(x => {
+      throw Error(x)
+    }) : null
   }
 
   handleUndoButtonClick (e) {
@@ -759,9 +793,12 @@ class SnippetNoteDetail extends React.Component {
       </div>
       <div styleName='info-right'>
         <PermanentDeleteButton onClick={(e) => this.handleTrashButtonClick(e)} />
+
+        <GistButton onClick={(e) => this.handleGistedClick(e)} gistId={note.gistId} isGisted={note.isGisted} />
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
         />
+
         <InfoPanelTrashed
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
@@ -804,6 +841,8 @@ class SnippetNoteDetail extends React.Component {
         <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} />
 
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
+
+        <GistButton onClick={(e) => this.handleGistedClick(e)} gistId={note.gistId} isGisted={note.isGisted} />
 
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}

@@ -53,7 +53,6 @@ function getNoteKey (note) {
 class NoteList extends React.Component {
   constructor (props) {
     super(props)
-
     this.selectNextNoteHandler = () => {
       this.selectNextNote()
     }
@@ -322,7 +321,6 @@ class NoteList extends React.Component {
 
   getNotes () {
     const { data, params, location } = this.props
-
     if (location.pathname.match(/\/home/) || location.pathname.match(/alltags/)) {
       const allNotes = data.noteMap.map((note) => note)
       this.contextNotes = allNotes
@@ -358,6 +356,14 @@ class NoteList extends React.Component {
       }).filter(note => listOfTags.every(tag => note.tags.includes(tag)))
     }
 
+    if (location.pathname.match(/\/gisted/)) {
+      const gisted = data.noteMap.map(note => {
+        return note
+      }).filter(({gistId}) => gistId)
+      // .sort((a,b)=>{return a.isGisted>b.isGisted}) //render sorts the items
+      this.contextNotes = gisted
+      return gisted
+    }
     return this.getContextNotes()
   }
 
@@ -645,9 +651,9 @@ class NoteList extends React.Component {
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
     const firstNote = selectedNotes[0]
     const { confirmDeletion } = this.props.config.ui
-
-    if (firstNote.isTrashed) {
-      if (!confirmDeleteNote(confirmDeletion, true)) return
+    const { gistId } = firstNote
+    if (firstNote.isTrashed || gistId) {
+      if (!confirmDeleteNote(confirmDeletion, true, gistId)) return
 
       Promise.all(
         selectedNotes.map((note) => {
@@ -977,7 +983,7 @@ class NoteList extends React.Component {
 
   render () {
     const { location, config, params: { folderKey } } = this.props
-    let { notes } = this.props
+    let notes
     const { selectedNoteKeys } = this.state
     const sortBy = _.get(config, [folderKey, 'sortBy'], config.sortBy.default)
     const sortFunc = sortBy === 'CREATED_AT'
@@ -989,8 +995,11 @@ class NoteList extends React.Component {
         ? this.getNotes().sort(sortFunc)
         : this.sortByPin(this.getNotes().sort(sortFunc))
     this.notes = notes = sortedNotes.filter((note) => {
-      // this is for the trash box
-      if (note.isTrashed !== true || location.pathname === '/trashed') return true
+      // this is for the trash box, gists go straight to oblivion rather than trash (gists page is trash for gists)
+      const { isTrashed, isGisted, gistId } = note
+      const trash = !isTrashed && !gistId || location.pathname === '/trashed'
+      const gist = !gistId || isGisted || location.pathname === '/gisted'
+      return gist || trash
     })
 
     moment.updateLocale('en', {

@@ -68,6 +68,10 @@ function validateInput (input) {
             return true
           })
       }
+      if (input.gistId != null) {
+        validatedInput.gistId = input.gistId
+        validatedInput.isGisted = !!input.isGisted
+      }
       return validatedInput
     default:
       throw new Error('Invalid type: only MARKDOWN_NOTE and SNIPPET_NOTE are available.')
@@ -123,7 +127,6 @@ function updateNote (storageKey, noteKey, input) {
       if (noteData.type === 'SNIPPET_NOTE') {
         noteData.title
       }
-
       Object.assign(noteData, input, {
         key: noteKey,
         updatedAt: new Date(),

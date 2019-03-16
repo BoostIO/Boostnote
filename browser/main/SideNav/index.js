@@ -204,6 +204,11 @@ class SideNav extends React.Component {
     router.push('/alltags')
   }
 
+  handleGistedButtonClick () {
+    const {router} = this.context
+    router.push('/gisted')
+  }
+
   onSortEnd (storage) {
     return ({oldIndex, newIndex}) => {
       const { dispatch } = this.props
@@ -221,11 +226,16 @@ class SideNav extends React.Component {
     const isHomeActive = !!location.pathname.match(/^\/home$/)
     const isStarredActive = !!location.pathname.match(/^\/starred$/)
     const isTrashedActive = !!location.pathname.match(/^\/trashed$/)
+    const isGistedActive = !!location.pathname.match(/^\/gisted$/)
 
     let component
 
     // TagsMode is not selected
     if (!location.pathname.match('/tags') && !location.pathname.match('/alltags')) {
+      var count = data.noteMap._map.size - data.trashedSet._set.size
+      data.noteMap.forEach(x => {
+        count -= (!x.isGisted && !!x.gistId)
+      })
       component = (
         <div>
           <SideNavFilter
@@ -234,11 +244,14 @@ class SideNav extends React.Component {
             handleAllNotesButtonClick={(e) => this.handleHomeButtonClick(e)}
             isStarredActive={isStarredActive}
             isTrashedActive={isTrashedActive}
+            isGistedActive={isGistedActive}
             handleStarredButtonClick={(e) => this.handleStarredButtonClick(e)}
             handleTrashedButtonClick={(e) => this.handleTrashedButtonClick(e)}
-            counterTotalNote={data.noteMap._map.size - data.trashedSet._set.size}
+            handleGistedButtonClick={(e) => this.handleGistedButtonClick(e)}
+            counterTotalNote={count}
             counterStarredNote={data.starredSet._set.size}
             counterDelNote={data.trashedSet._set.size}
+            counterGistsNote={data.gistsSet._set.size}
             handleFilterButtonContextMenu={this.handleFilterButtonContextMenu.bind(this)}
           />
 

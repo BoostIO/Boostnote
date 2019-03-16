@@ -1,0 +1,242 @@
+@import('./Tab')
+
+.root
+  padding 15px
+  color $ui-text-color
+  margin-bottom 30px
+
+.group
+  margin-bottom 45px
+
+.group-header
+  @extend .header
+  color $ui-text-color
+
+.group-header2
+  font-size 20px
+  color $ui-text-color
+  margin-bottom 15px
+  margin-top 30px
+
+.group-section
+  margin-bottom 20px
+  display flex
+  line-height 30px
+
+.group-section-label
+  width 200px
+  text-align left
+  margin-right 10px
+  font-size 14px
+
+.group-section-control
+  flex 1
+  margin-left 5px
+
+.group-section-control select
+  outline none
+  border 1px solid $ui-borderColor
+  font-size 16px
+  height 30px
+  width 250px
+  margin-bottom 5px
+  background-color transparent
+
+.group-section-control-input
+  height 30px
+  vertical-align middle
+  width 400px
+  font-size $tab--button-font-size
+  border solid 1px $border-color
+  border-radius 2px
+  padding 0 5px
+  outline none
+  &:disabled
+    background-color $ui-input--disabled-backgroundColor
+
+.group-checkBoxSection
+  margin-bottom 15px
+  display flex
+  line-height 30px
+  padding-left 15px
+
+.group-control
+  padding-top 10px
+  box-sizing border-box
+  height 40px
+  text-align right
+  :global
+    .alert
+      display inline-block
+      position fixed
+      top 130px
+      right 100px
+      font-size 14px
+    .success
+      color #1EC38B
+    .error
+      color red
+    .warning
+      color #FFA500
+
+.group-control-leftButton
+  colorDefaultButton()
+  border none
+  border-radius 2px
+  font-size $tab--button-font-size
+  height $tab--button-height
+  padding 0 15px
+  margin-right 10px
+
+.group-control-rightButton
+  position fixed
+  top 80px
+  right 100px
+  colorPrimaryButton()
+  border none
+  border-radius 2px
+  font-size $tab--button-font-size
+  height 40px
+  width 120px
+  padding 0 15px
+
+.group-hint
+  border $ui-border
+  padding 10px 15px
+  margin 15px 0
+  border-radius 2px
+  background-color $ui-backgroundColor
+  color $ui-inactive-text-color
+  ul
+    list-style inherit
+    padding-left 1em
+    line-height 1.2
+  p
+    line-height 1.2
+
+.note-for-keymap
+  font-size: 12px
+
+.code-mirror
+  width 400px
+  height 120px
+  margin 5px 0
+  font-size 12px
+
+colorDarkControl()
+  border-color $ui-dark-borderColor
+  background-color $ui-dark-backgroundColor
+  color $ui-dark-text-color
+
+colorSolarizedDarkControl()
+  border none
+  background-color $ui-solarized-dark-button-backgroundColor
+  color $ui-solarized-dark-text-color
+
+colorMonokaiControl()
+  border none
+  background-color $ui-monokai-button-backgroundColor
+  color $ui-monokai-text-color
+
+
+body[data-theme="dark"]
+  .root
+    color $ui-dark-text-color
+
+  .group-header
+    color $ui-dark-text-color
+    border-color $ui-dark-borderColor
+
+  .group-header2
+    color $ui-dark-text-color
+
+  .group-section-control-input
+    border-color $ui-dark-borderColor
+
+  .group-control
+    border-color $ui-dark-borderColor
+  .group-control-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+  .group-control-rightButton
+    colorDarkPrimaryButton()
+  .group-hint
+    colorDarkControl()
+  .group-section-control
+    select, .group-section-control-input
+      colorDarkControl()
+
+
+body[data-theme="solarized-dark"]
+  .root
+    color $ui-solarized-dark-text-color
+
+  .group-header
+    color $ui-solarized-dark-text-color
+    border-color $ui-solarized-dark-borderColor
+
+  .group-header2
+    color $ui-solarized-dark-text-color
+
+  .group-section-control-input
+    border-color $ui-solarized-dark-borderColor
+
+  .group-control
+    border-color $ui-solarized-dark-borderColor
+  .group-control-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-solarized-dark-borderColor
+  .group-control-rightButton
+    colorSolarizedDarkPrimaryButton()
+  .group-hint
+    colorSolarizedDarkControl()
+  .group-section-control
+    select, .group-section-control-input
+      colorSolarizedDarkControl()
+
+body[data-theme="monokai"]
+  .root
+    color $ui-monokai-text-color
+
+  .group-header
+    color $ui-monokai-text-color
+    border-color $ui-monokai-borderColor
+
+  .group-header2
+    color $ui-monokai-text-color
+
+  .group-section-control-input
+    border-color $ui-monokai-borderColor
+
+  .group-control
+    border-color $ui-monokai-borderColor
+  .group-control-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-monokai-borderColor
+  .group-control-rightButton
+    colorMonokaiPrimaryButton()
+  .group-hint
+    colorMonokaiControl()
+  .group-section-control
+    select, .group-section-control-input
+      colorMonokaiControl()
+
+.cf-link
+  height 35px
+  border-radius 2px
+  border none
+  background-color alpha(#1EC38B, 90%)
+  padding-left 20px
+  padding-right 20px
+  text-decoration none
+  color white
+  font-weight 600
+  font-size 16px
+  &:hover
+    background-color #1EC38B
+    transition 0.2s
+
+.github-user-avatar-img
+  width 150px
+  height 150px
+

@@ -34,7 +34,7 @@ function validateInput (input) {
   }
 }
 
-function createNote (storageKey, input) {
+function createNote (storageKey, input, id) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
@@ -54,8 +54,9 @@ function createNote (storageKey, input) {
       return storage
     })
     .then(function saveNote (storage) {
-      let key = keygen(true)
-      let isUnique = false
+      let isUnique = !!id
+      let key = id || keygen(true)
+
       while (!isUnique) {
         try {
           sander.statSync(path.join(storage.path, 'notes', key + '.cson'))

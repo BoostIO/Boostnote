@@ -38,7 +38,7 @@ function translateHotkey (hotkey) {
   return hotkey.replace(/\s*\+\s*/g, '-').replace(/Command/g, 'Cmd').replace(/Control/g, 'Ctrl')
 }
 
-const languageMaps = {
+export const languageMaps = {
   brainfuck: 'Brainfuck',
   cpp: 'C++',
   cs: 'C#',
@@ -747,14 +747,14 @@ export default class CodeEditor extends React.Component {
   }
 
   incrementLines (start, linesAdded, linesRemoved, editor) {
-    let highlightedLines = editor.options.linesHighlighted
+    const highlightedLines = editor.options.linesHighlighted
 
     const totalHighlightedLines = highlightedLines.length
 
-    let offset = linesAdded - linesRemoved
+    const offset = linesAdded - linesRemoved
 
     // Store new items to be added as we're changing the lines
-    let newLines = []
+    const newLines = []
 
     let i = totalHighlightedLines
 

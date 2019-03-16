@@ -3,6 +3,7 @@ import { routerReducer } from 'react-router-redux'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import { Map, Set } from 'browser/lib/Mutable'
 import _ from 'lodash'
+import { getGithubApi, DELETE_SINGLE_GIST } from 'browser/main/lib/dataApi/github-api.js'
 
 function defaultDataMap () {
   return {
@@ -12,7 +13,8 @@ function defaultDataMap () {
     storageNoteMap: new Map(),
     folderNoteMap: new Map(),
     tagNoteMap: new Map(),
-    trashedSet: new Set()
+    trashedSet: new Set(),
+    gistsSet: new Set()
   }
 }
 
@@ -38,6 +40,9 @@ function data (state = defaultDataMap(), action) {
         if (note.isTrashed) {
           state.trashedSet.add(uniqueKey)
         }
+        if (note.gistId) {
+          state.gistsSet.add(uniqueKey)
+        }
         const storageNoteList = getOrInitItem(state.storageNoteMap, note.storage)
         storageNoteList.add(uniqueKey)
 
@@ -59,6 +64,9 @@ function data (state = defaultDataMap(), action) {
         state.noteMap.set(uniqueKey, note)
 
         updateStarredChange(oldNote, note, state, uniqueKey)
+        if (note.gistId) {
+          state.gistsSet.add(uniqueKey)
+        }
 
         if (oldNote == null || oldNote.isTrashed !== note.isTrashed) {
           state.trashedSet = new Set(state.trashedSet)
@@ -73,6 +81,9 @@ function data (state = defaultDataMap(), action) {
 
             if (note.isStarred) {
               state.starredSet.add(uniqueKey)
+            }
+            if (note.gistId) {
+              state.gistsSet.add(uniqueKey)
             }
           }
         }
@@ -94,7 +105,6 @@ function data (state = defaultDataMap(), action) {
         } else {
           assignToTags(note.tags, state, uniqueKey)
         }
-
         return state
       }
     case 'MOVE_NOTE':
@@ -178,7 +188,7 @@ function data (state = defaultDataMap(), action) {
       {
         const uniqueKey = action.noteKey
         const targetNote = state.noteMap.get(uniqueKey)
-
+        const {gistId} = targetNote
         state = Object.assign({}, state)
 
         // From storageNoteMap
@@ -200,6 +210,11 @@ function data (state = defaultDataMap(), action) {
             state.trashedSet.delete(uniqueKey)
           }
 
+          if (targetNote.gistId) {
+            state.gistsSet = new Set(state.gistsSet)
+            state.gistsSet.delete(uniqueKey)
+          }
+
           // From folderNoteMap
           const folderKey = targetNote.storage + '-' + targetNote.folder
           state.folderNoteMap = new Map(state.folderNoteMap)
@@ -212,6 +227,8 @@ function data (state = defaultDataMap(), action) {
         }
         state.noteMap = new Map(state.noteMap)
         state.noteMap.delete(uniqueKey)
+        gistId ? getGithubApi(DELETE_SINGLE_GIST)(gistId).then(console.log) : null
+
         return state
       }
     case 'UPDATE_FOLDER':
@@ -261,6 +278,11 @@ function data (state = defaultDataMap(), action) {
               if (note.isTrashed) {
                 state.trashedSet = new Set(state.trashedSet)
                 state.trashedSet.delete(noteKey)
+              }
+
+              if (note.gistId) {
+                state.gistsSet = new Set(state.gistsSet)
+                state.gistsSet.delete(noteKey)
               }
 
               // Delete key from tag map

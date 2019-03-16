@@ -40,7 +40,6 @@ export function createMarkdownNote (storage, folder, dispatch, location, params,
 export function createSnippetNote (storage, folder, dispatch, location, params, config) {
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_SNIPPET')
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
-
   let tags = []
   if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
     tags = params.tagname.split(' ')

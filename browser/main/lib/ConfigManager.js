@@ -89,6 +89,11 @@ export const DEFAULT_CONFIG = {
     username: '',
     password: ''
   },
+  githubGists: {
+    clientID: '',
+    clientSecret: '',
+    loggedInUserToken: ''
+  },
   coloredTags: {}
 }
 
@@ -102,7 +107,6 @@ function validate (config) {
 }
 
 function _save (config) {
-  console.log(config)
   window.localStorage.setItem('config', JSON.stringify(config))
 }
 

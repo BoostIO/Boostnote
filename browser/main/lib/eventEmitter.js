@@ -14,6 +14,7 @@ function once (name, listener) {
 }
 
 function emit (name, ...args) {
+  console.trace(name)
   remote.getCurrentWindow().webContents.send(name, ...args)
 }
 

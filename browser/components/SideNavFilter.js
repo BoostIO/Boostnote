@@ -17,8 +17,9 @@ import i18n from 'browser/lib/i18n'
  */
 const SideNavFilter = ({
   isFolded, isHomeActive, handleAllNotesButtonClick,
-  isStarredActive, handleStarredButtonClick, isTrashedActive, handleTrashedButtonClick, counterDelNote,
-  counterTotalNote, counterStarredNote, handleFilterButtonContextMenu
+  isStarredActive, handleStarredButtonClick, isTrashedActive, isGistedActive, handleTrashedButtonClick, counterDelNote,
+  counterTotalNote, counterStarredNote, counterGistsNote, handleFilterButtonContextMenu,
+  handleGistedButtonClick
 }) => (
   <div styleName={isFolded ? 'menu--folded' : 'menu'}>
 
@@ -50,7 +51,8 @@ const SideNavFilter = ({
       <span styleName='counters'>{counterStarredNote}</span>
     </button>
 
-    <button styleName={isTrashedActive ? 'menu-button-trash--active' : 'menu-button'}
+    <button
+      styleName={isTrashedActive ? 'menu-button-trash--active' : 'menu-button'}
       onClick={handleTrashedButtonClick} onContextMenu={handleFilterButtonContextMenu}
     >
       <div styleName='iconWrap'>
@@ -64,6 +66,17 @@ const SideNavFilter = ({
       <span styleName='counters'>{counterDelNote}</span>
     </button>
 
+    <button
+      onClick={handleGistedButtonClick}
+      styleName={isGistedActive ? 'menu-button-trash--active' : 'menu-button'}
+        >
+      <div styleName='iconWrap'>
+        <img src='../resources/icon/icon-gist.svg' />
+      </div>
+      <span styleName='menu-button-label'>{i18n.__('Gists')}</span>
+      <span styleName='counters'>{counterGistsNote}</span>
+    </button>
+
   </div>
 )
 
@@ -71,10 +84,13 @@ SideNavFilter.propTypes = {
   isFolded: PropTypes.bool,
   isHomeActive: PropTypes.bool.isRequired,
   handleAllNotesButtonClick: PropTypes.func.isRequired,
+  counterGistsNote: PropTypes.bool.isRequired,
   isStarredActive: PropTypes.bool.isRequired,
   isTrashedActive: PropTypes.bool.isRequired,
+  isGistedActive: PropTypes.bool.isRequired,
   handleStarredButtonClick: PropTypes.func.isRequired,
-  handleTrashdButtonClick: PropTypes.func.isRequired
+  handleTrashdButtonClick: PropTypes.func.isRequired,
+  handleGistedButtonClick: PropTypes.func.isRequired
 }
 
 export default CSSModules(SideNavFilter, styles)

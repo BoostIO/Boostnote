@@ -17,6 +17,11 @@ import store from 'browser/main/store'
 import i18n from 'browser/lib/i18n'
 import { getLocales } from 'browser/lib/Languages'
 import applyShortcuts from 'browser/main/lib/shortcutManager'
+import {
+  getGithubApi,
+  GET_ALL_GISTS,
+  mapToNote
+} from 'browser/main/lib/dataApi/github-api'
 const path = require('path')
 const electron = require('electron')
 const { remote } = electron
@@ -141,7 +146,7 @@ class Main extends React.Component {
 
   componentDidMount () {
     const { dispatch, config } = this.props
-
+    console.log(1)
     const supportedThemes = ['dark', 'white', 'solarized-dark', 'monokai', 'dracula']
 
     if (supportedThemes.indexOf(config.ui.theme) !== -1) {
@@ -156,6 +161,7 @@ class Main extends React.Component {
       i18n.setLocale('en')
     }
     applyShortcuts()
+
     // Reload all data
     dataApi.init().then(data => {
       dispatch({
@@ -167,6 +173,36 @@ class Main extends React.Component {
       if (data.storages.length < 1) {
         this.init()
       }
+      return data
+    }).then(data => {
+      function makeUpdate (note) {
+        store.dispatch({
+          type: 'UPDATE_NOTE',
+          note: note
+        })
+      }
+      function add (note, older) {
+        if (older) {
+          dataApi.updateNote(note.storage, note.key, note)
+          .then(makeUpdate)
+        } else {
+          dataApi
+        .createNote(data.storages[0].key, note)
+        .then(makeUpdate)
+        }
+      }
+      getGithubApi(GET_ALL_GISTS)().then((items) => {
+        var loadedGists = new Map(data.notes.filter(x => x.gistId).map(x => [x.gistId, x]))
+        items.forEach(x => {
+          const gistId = x.id
+          const older = loadedGists.get(gistId)
+          const note = Object.assign({ }, mapToNote(x), older, { gistId }, { folder: data.storages[0].folders[0].key })
+          add(note, older)
+        })
+      }).catch(x => {
+        throw Error(x)
+      })
+      return data
     })
 
     delete CodeMirror.keyMap.emacs['Ctrl-V']
