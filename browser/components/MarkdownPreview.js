@@ -322,7 +322,7 @@ export default class MarkdownPreview extends React.Component {
         customCSS
       )
       let body = this.markdown.render(noteContent)
-      body = body.replace(/:storage(\/|%)[a-zA-Z0-9-]*/g,"attachments")
+      body = body.replace(/:storage(\/|%)[a-zA-Z0-9-]*/g, 'attachments')
       const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
       files.forEach(file => {
         if (global.process.platform === 'win32') {
