@@ -32,6 +32,7 @@ class MarkdownEditor extends React.Component {
   componentDidMount () {
     this.value = this.refs.code.value
     eventEmitter.on('editor:lock', this.lockEditorCode)
+    eventEmitter.on('editor:focus', this.focusEditor.bind(this))
   }
 
   componentDidUpdate () {
@@ -47,6 +48,15 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount () {
     this.cancelQueue()
     eventEmitter.off('editor:lock', this.lockEditorCode)
+    eventEmitter.off('editor:focus', this.focusEditor.bind(this))
+  }
+
+  focusEditor () {
+    this.setState({
+      status: 'CODE'
+    }, () => {
+      this.refs.code.focus()
+    })
   }
 
   queueRendering (value) {

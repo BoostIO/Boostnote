@@ -19,6 +19,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
   "Print": "Drukuj",
   "Help": "Pomoc",
 	"Your preferences for Boostnote": "Twoje ustawienia dla Boostnote",

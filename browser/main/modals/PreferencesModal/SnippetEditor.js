@@ -4,6 +4,7 @@ import _ from 'lodash'
 import styles from './SnippetTab.styl'
 import CSSModules from 'browser/lib/CSSModules'
 import dataApi from 'browser/main/lib/dataApi'
+import snippetManager from '../../../lib/SnippetManager'
 
 const defaultEditorFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
 const buildCMRulers = (rulers, enableRulers) =>
@@ -64,7 +65,9 @@ class SnippetEditor extends React.Component {
   }
 
   saveSnippet () {
-    dataApi.updateSnippet(this.snippet).catch((err) => { throw err })
+    dataApi.updateSnippet(this.snippet)
+      .then(snippets => snippetManager.assignSnippets(snippets))
+      .catch((err) => { throw err })
   }
 
   render () {

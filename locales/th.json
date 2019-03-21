@@ -19,6 +19,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
 	"Print": "พิมพ์",
 	"Your preferences for Boostnote": "การตั้งค่าของคุณสำหรับ Boostnote",
 	"Help": "ช่วยเหลือ",

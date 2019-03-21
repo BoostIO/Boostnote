@@ -22,6 +22,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
 	"Print": "印刷",
 	"Your preferences for Boostnote": "Boostnoteの個人設定",
 	"Help": "ヘルプ",

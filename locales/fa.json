@@ -18,6 +18,7 @@
     ".md": ".md",
     ".txt": ".txt",
     ".html": ".html",
+	".pdf": ".pdf",
     "Print": "پرینت",
     "Your preferences for Boostnote": "تنظیمات شما برای boostnote",
     "Storage Locations": "ذخیره سازی",

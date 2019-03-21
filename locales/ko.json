@@ -18,6 +18,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
 	"Print": "인쇄",
 	"Your preferences for Boostnote": "Boostnote 설정",
 	"Storage Locations": "저장소",

@@ -18,6 +18,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
 	"Print": "Yazdır",
 	"Your preferences for Boostnote": "Boostnote tercihleriniz",
 	"Storage Locations": "Saklama Alanları",

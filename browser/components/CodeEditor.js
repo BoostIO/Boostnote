@@ -14,18 +14,14 @@ import {
 import TextEditorInterface from 'browser/lib/TextEditorInterface'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
-import crypto from 'crypto'
-import consts from 'browser/lib/consts'
 import styles from '../components/CodeEditor.styl'
-import fs from 'fs'
 const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 const spellcheck = require('browser/lib/spellcheck')
 const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
 import TurndownService from 'turndown'
-import {
-  gfm
-} from 'turndown-plugin-gfm'
+import {languageMaps} from '../lib/CMLanguageList'
+import snippetManager from '../lib/SnippetManager'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -36,85 +32,6 @@ const buildCMRulers = (rulers, enableRulers) =>
 
 function translateHotkey (hotkey) {
   return hotkey.replace(/\s*\+\s*/g, '-').replace(/Command/g, 'Cmd').replace(/Control/g, 'Ctrl')
-}
-
-const languageMaps = {
-  brainfuck: 'Brainfuck',
-  cpp: 'C++',
-  cs: 'C#',
-  clojure: 'Clojure',
-  'clojure-repl': 'ClojureScript',
-  cmake: 'CMake',
-  coffeescript: 'CoffeeScript',
-  crystal: 'Crystal',
-  css: 'CSS',
-  d: 'D',
-  dart: 'Dart',
-  delphi: 'Pascal',
-  diff: 'Diff',
-  django: 'Django',
-  dockerfile: 'Dockerfile',
-  ebnf: 'EBNF',
-  elm: 'Elm',
-  erlang: 'Erlang',
-  'erlang-repl': 'Erlang',
-  fortran: 'Fortran',
-  fsharp: 'F#',
-  gherkin: 'Gherkin',
-  go: 'Go',
-  groovy: 'Groovy',
-  haml: 'HAML',
-  haskell: 'Haskell',
-  haxe: 'Haxe',
-  http: 'HTTP',
-  ini: 'toml',
-  java: 'Java',
-  javascript: 'JavaScript',
-  json: 'JSON',
-  julia: 'Julia',
-  kotlin: 'Kotlin',
-  less: 'LESS',
-  livescript: 'LiveScript',
-  lua: 'Lua',
-  markdown: 'Markdown',
-  mathematica: 'Mathematica',
-  nginx: 'Nginx',
-  nsis: 'NSIS',
-  objectivec: 'Objective-C',
-  ocaml: 'Ocaml',
-  perl: 'Perl',
-  php: 'PHP',
-  powershell: 'PowerShell',
-  properties: 'Properties files',
-  protobuf: 'ProtoBuf',
-  python: 'Python',
-  puppet: 'Puppet',
-  q: 'Q',
-  r: 'R',
-  ruby: 'Ruby',
-  rust: 'Rust',
-  sas: 'SAS',
-  scala: 'Scala',
-  scheme: 'Scheme',
-  scss: 'SCSS',
-  shell: 'Shell',
-  smalltalk: 'Smalltalk',
-  sml: 'SML',
-  sql: 'SQL',
-  stylus: 'Stylus',
-  swift: 'Swift',
-  tcl: 'Tcl',
-  tex: 'LaTex',
-  typescript: 'TypeScript',
-  twig: 'Twig',
-  vbnet: 'VB.NET',
-  vbscript: 'VBScript',
-  verilog: 'Verilog',
-  vhdl: 'VHDL',
-  xml: 'HTML',
-  xquery: 'XQuery',
-  yaml: 'YAML',
-  elixir: 'Elixir'
 }
 
 export default class CodeEditor extends React.Component {
@@ -228,7 +145,8 @@ export default class CodeEditor extends React.Component {
 
   updateDefaultKeyMap () {
     const { hotkey } = this.props
-    const expandSnippet = this.expandSnippet.bind(this)
+    const self = this
+    const expandSnippet = snippetManager.expandSnippet
 
     this.defaultKeyMap = CodeMirror.normalizeKeyMap({
       Tab: function (cm) {
@@ -252,10 +170,12 @@ export default class CodeEditor extends React.Component {
             cursor.ch > 1
           ) {
             // text expansion on tab key if the char before is alphabet
-            const snippets = JSON.parse(
-              fs.readFileSync(consts.SNIPPET_FILE, 'utf8')
+            const wordBeforeCursor = self.getWordBeforeCursor(
+              line,
+              cursor.line,
+              cursor.ch
             )
-            if (expandSnippet(line, cursor, cm, snippets) === false) {
+            if (expandSnippet(wordBeforeCursor, cursor, cm) === false) {
               if (tabs) {
                 cm.execCommand('insertTab')
               } else {
@@ -310,22 +230,7 @@ export default class CodeEditor extends React.Component {
     const { rulers, enableRulers } = this.props
     eventEmitter.on('line:jump', this.scrollToLineHandeler)
 
-    const defaultSnippet = [
-      {
-        id: crypto.randomBytes(16).toString('hex'),
-        name: 'Dummy text',
-        prefix: ['lorem', 'ipsum'],
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-      }
-    ]
-    if (!fs.existsSync(consts.SNIPPET_FILE)) {
-      fs.writeFileSync(
-        consts.SNIPPET_FILE,
-        JSON.stringify(defaultSnippet, null, 4),
-        'utf8'
-      )
-    }
-
+    snippetManager.init()
     this.updateDefaultKeyMap()
 
     this.value = this.props.value
@@ -520,61 +425,12 @@ export default class CodeEditor extends React.Component {
     this.initialHighlighting()
   }
 
-  expandSnippet (line, cursor, cm, snippets) {
-    const wordBeforeCursor = this.getWordBeforeCursor(
-      line,
-      cursor.line,
-      cursor.ch
-    )
-    const templateCursorString = ':{}'
-    for (let i = 0; i < snippets.length; i++) {
-      if (snippets[i].prefix.indexOf(wordBeforeCursor.text) !== -1) {
-        if (snippets[i].content.indexOf(templateCursorString) !== -1) {
-          const snippetLines = snippets[i].content.split('\n')
-          let cursorLineNumber = 0
-          let cursorLinePosition = 0
-
-          let cursorIndex
-          for (let j = 0; j < snippetLines.length; j++) {
-            cursorIndex = snippetLines[j].indexOf(templateCursorString)
-
-            if (cursorIndex !== -1) {
-              cursorLineNumber = j
-              cursorLinePosition = cursorIndex
-
-              break
-            }
-          }
-
-          cm.replaceRange(
-            snippets[i].content.replace(templateCursorString, ''),
-            wordBeforeCursor.range.from,
-            wordBeforeCursor.range.to
-          )
-          cm.setCursor({
-            line: cursor.line + cursorLineNumber,
-            ch: cursorLinePosition + cursor.ch - wordBeforeCursor.text.length
-          })
-        } else {
-          cm.replaceRange(
-            snippets[i].content,
-            wordBeforeCursor.range.from,
-            wordBeforeCursor.range.to
-          )
-        }
-        return true
-      }
-    }
-
-    return false
-  }
-
   getWordBeforeCursor (line, lineNumber, cursorPosition) {
     let wordBeforeCursor = ''
     const originCursorPosition = cursorPosition
     const emptyChars = /\t|\s|\r|\n/
 
-    // to prevent the word to expand is long that will crash the whole app
+    // to prevent the word is long that will crash the whole app
     // the safeStop is there to stop user to expand words that longer than 20 chars
     const safeStop = 20
 
@@ -584,7 +440,7 @@ export default class CodeEditor extends React.Component {
       if (!emptyChars.test(currentChar)) {
         wordBeforeCursor = currentChar + wordBeforeCursor
       } else if (wordBeforeCursor.length >= safeStop) {
-        throw new Error('Your snippet trigger is too long !')
+        throw new Error('Stopped after 20 loops for safety reason !')
       } else {
         break
       }
@@ -747,14 +603,14 @@ export default class CodeEditor extends React.Component {
   }
 
   incrementLines (start, linesAdded, linesRemoved, editor) {
-    let highlightedLines = editor.options.linesHighlighted
+    const highlightedLines = editor.options.linesHighlighted
 
     const totalHighlightedLines = highlightedLines.length
 
-    let offset = linesAdded - linesRemoved
+    const offset = linesAdded - linesRemoved
 
     // Store new items to be added as we're changing the lines
-    let newLines = []
+    const newLines = []
 
     let i = totalHighlightedLines
 
@@ -835,6 +691,9 @@ export default class CodeEditor extends React.Component {
       ch: 1
     }
     this.editor.setCursor(cursor)
+    const top = this.editor.charCoords({line: num, ch: 0}, 'local').top
+    const middleHeight = this.editor.getScrollerElement().offsetHeight / 2
+    this.editor.scrollTo(null, top - middleHeight - 5)
   }
 
   focus () {

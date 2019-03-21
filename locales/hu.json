@@ -19,6 +19,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
 	"Print": "Nyomtatás",
 	"Your preferences for Boostnote": "Boostnote beállításaid",
 	"Help": "Súgó",
