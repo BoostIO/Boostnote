@@ -259,13 +259,23 @@ class NoteList extends React.Component {
   }
 
   jumpNoteByHashHandler (event, noteHash) {
+    const { data } = this.props
+
     // first argument event isn't used.
     if (this.notes === null || this.notes.length === 0) {
       return
     }
 
     const selectedNoteKeys = [noteHash]
-    this.focusNote(selectedNoteKeys, noteHash, '/home')
+
+    let locationToSelect = '/home'
+    const notesByHash = data.noteMap.map((note) => note).filter((note) => note.key === noteHash)
+    if (notesByHash.length > 0) {
+      const note = notesByHash[0]
+      locationToSelect = '/storages/' + note.storage + '/folders/' + note.folder
+    }
+
+    this.focusNote(selectedNoteKeys, noteHash, locationToSelect)
 
     ee.emit('list:moved')
   }
