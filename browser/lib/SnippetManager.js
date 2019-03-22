@@ -15,7 +15,7 @@ class SnippetManager {
     this.snippets = []
     this.expandSnippet = this.expandSnippet.bind(this)
     this.init = this.init.bind(this)
-    this.assignSnippet = this.assignSnippet.bind(this)
+    this.assignSnippets = this.assignSnippets.bind(this)
   }
 
   init () {
