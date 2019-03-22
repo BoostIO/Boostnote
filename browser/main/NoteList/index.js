@@ -269,10 +269,9 @@ class NoteList extends React.Component {
     const selectedNoteKeys = [noteHash]
 
     let locationToSelect = '/home'
-    const notesByHash = data.noteMap.map((note) => note).filter((note) => note.key === noteHash)
-    if (notesByHash.length > 0) {
-      const note = notesByHash[0]
-      locationToSelect = '/storages/' + note.storage + '/folders/' + note.folder
+    const noteByHash = data.noteMap.map((note) => note).find(note => { return note.key === noteHash })
+    if (noteByHash !== undefined) {
+      locationToSelect = '/storages/' + noteByHash.storage + '/folders/' + noteByHash.folder
     }
 
     this.focusNote(selectedNoteKeys, noteHash, locationToSelect)
