@@ -302,7 +302,6 @@ class Markdown {
     this.escapedHtmlEntities.forEach(function (entity) {
       content = content.replace(entity, `\\${entity}`)
     })
-    
     if (!_.isString(content)) content = ''
     return this.md.render(content)
   }
