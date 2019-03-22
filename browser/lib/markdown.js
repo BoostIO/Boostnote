@@ -20,6 +20,7 @@ function createGutter (str, firstLineNumber) {
 
 class Markdown {
   constructor (options = {}) {
+    this.escapedHtmlEntities = ['&lt;', '&gt;']
     const config = ConfigManager.get()
     const defaultOptions = {
       typographer: config.preview.smartQuotes,
@@ -298,6 +299,10 @@ class Markdown {
   }
 
   render (content) {
+    this.escapedHtmlEntities.forEach(function (entity) {
+      content = content.replace(entity, `\\${entity}`)
+    })
+    
     if (!_.isString(content)) content = ''
     return this.md.render(content)
   }
