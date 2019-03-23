@@ -269,7 +269,7 @@ class NoteList extends React.Component {
     const selectedNoteKeys = [noteHash]
 
     let locationToSelect = '/home'
-    const noteByHash = data.noteMap.map((note) => note).find(note => { return note.key === noteHash })
+    const noteByHash = data.noteMap.map((note) => note).find(note => note.key === noteHash)
     if (noteByHash !== undefined) {
       locationToSelect = '/storages/' + noteByHash.storage + '/folders/' + noteByHash.folder
     }
