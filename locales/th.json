@@ -179,5 +179,8 @@
 	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "แปลงลูกศรจากรูปแบบข้อความให้เป็นสัญลักษณ์. ⚠ สิ่งนี้จะเป็นการแทรกโดยใช้ HTML comment ลงไปใน Markdown ที่คุณเขียน.",
 	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ ไม่พบไฟล์แนบในโน๊ตนี้ จากลิงค์ที่คุณได้วาง. คุณสามารถวางลิงค์ที่อ้างอิงไปยังไฟล์แนบ เฉพาะกรณีที่ต้นทาง และปลายทางที่อ้างถึงนั้นอยู่ใน 'แหล่งจัดเก็บ เดียวกัน. กรุณาใช้การลากและวางเพื่อใส่ไฟล์แนบแทน! ⚠",
 	"Enable smart table editor": "เปิดการใช้ Smart table editor",
-	"Snippet Default Language": "ทำการ Snippet ภาษาที่เป็นค่าเริ่มต้น"
+	"Snippet Default Language": "ทำการ Snippet ภาษาที่เป็นค่าเริ่มต้น",
+	"Spellcheck disabled": "Spellcheck disabled",
+	"Show menu bar": "Show menu bar",
+	"Auto Detect": "Auto Detect"
 }
