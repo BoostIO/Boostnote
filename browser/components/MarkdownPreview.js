@@ -280,35 +280,33 @@ export default class MarkdownPreview extends React.Component {
     if (this.props.onDoubleClick != null) this.props.onDoubleClick(e)
   }
 
-  handleMouseDown (e) {
+  handleMouseDown(e) {
     const config = ConfigManager.get()
+    const clickElement = e.target
+    const targetTag = clickElement.tagName // The direct parent HTML of where was clicked ie "BODY" or "DIV"
+    const lineNumber = getSourceLineNumberByElement(clickElement) // Line location of element clicked.
+
+    if (clickElement === null && targetTag !== "INPUT") {
+      return null
+    }
+
     if (config.editor.switchPreview === 'RIGHTCLICK' && e.buttons === 2 && config.editor.type === 'SPLIT') {
       eventEmitter.emit('topbar:togglemodebutton', 'CODE')
     }
     if (e.ctrlKey) {
       if (config.editor.type === 'SPLIT') {
-        const clickElement = e.target
-        const lineNumber = getSourceLineNumberByElement(clickElement)
         if (lineNumber !== -1) {
           eventEmitter.emit('line:jump', lineNumber)
         }
       } else {
-        const clickElement = e.target
-        const lineNumber = getSourceLineNumberByElement(clickElement)
         if (lineNumber !== -1) {
           eventEmitter.emit('editor:focus')
           eventEmitter.emit('line:jump', lineNumber)
         }
       }
     }
-    if (e.target != null) {
-      switch (e.target.tagName) {
-        case 'A':
-        case 'INPUT':
-          return null
-      }
-    }
-    if (this.props.onMouseDown != null) this.props.onMouseDown(e)
+
+    if (this.props.onMouseDown != null && targetTag === 'BODY') this.props.onMouseDown(e)
   }
 
   handleMouseUp (e) {
