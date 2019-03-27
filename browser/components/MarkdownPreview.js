@@ -286,10 +286,6 @@ export default class MarkdownPreview extends React.Component {
     const targetTag = clickElement.tagName // The direct parent HTML of where was clicked ie "BODY" or "DIV"
     const lineNumber = getSourceLineNumberByElement(clickElement) // Line location of element clicked.
 
-    if (clickElement === null && targetTag !== "INPUT") {
-      return null
-    }
-
     if (config.editor.switchPreview === 'RIGHTCLICK' && e.buttons === 2 && config.editor.type === 'SPLIT') {
       eventEmitter.emit('topbar:togglemodebutton', 'CODE')
     }
