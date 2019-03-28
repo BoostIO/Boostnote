@@ -280,7 +280,7 @@ export default class MarkdownPreview extends React.Component {
     if (this.props.onDoubleClick != null) this.props.onDoubleClick(e)
   }
 
-  handleMouseDown(e) {
+  handleMouseDown (e) {
     const config = ConfigManager.get()
     const clickElement = e.target
     const targetTag = clickElement.tagName // The direct parent HTML of where was clicked ie "BODY" or "DIV"
