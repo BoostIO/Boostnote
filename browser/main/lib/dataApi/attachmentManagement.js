@@ -274,11 +274,13 @@ function generateAttachmentMarkdown (fileName, path, showPreview) {
  * @param {String} noteKey Key of the current note
  * @param {Event} dropEvent DropEvent
  */
-function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
+function handleAttachmentDrop(codeEditor, storageKey, noteKey, dropEvent) {
   let promise
   if (dropEvent.dataTransfer.files.length > 0) {
     promise = Promise.all(Array.from(dropEvent.dataTransfer.files).map(file => {
+      var filePath = file.path
       if (file.type.startsWith('image')) {
+        var a = getOrientation(file)
         if (file.type === 'image/gif' || file.type === 'image/svg+xml') {
           return copyAttachment(file.path, storageKey, noteKey).then(fileName => ({
             fileName,
@@ -286,13 +288,24 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
             isImage: true
           }))
         } else {
-          return fixRotate(file)
-            .then(data => copyAttachment({type: 'base64', data: data, sourceFilePath: file.path}, storageKey, noteKey)
-              .then(fileName => ({
+          return getOrientation(file)
+            .then((orientation) => {
+              if (orientation === -1) {
+                return copyAttachment(file.path, storageKey, noteKey)
+              } else {
+                return fixRotate(file).then(data => copyAttachment({
+                  type: 'base64',
+                  data: data,
+                  sourceFilePath: filePath
+                }, storageKey, noteKey))
+              }
+            })
+            .then(fileName =>
+              ({
                 fileName,
-                title: path.basename(file.path),
+                title: path.basename(filePath),
                 isImage: true
-              }))
+              })
             )
         }
       } else {
@@ -325,13 +338,18 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
         canvas.height = image.height
         context.drawImage(image, 0, 0)
 
-        return copyAttachment({type: 'base64', data: canvas.toDataURL(), sourceFilePath: imageURL}, storageKey, noteKey)
+        return copyAttachment({
+          type: 'base64',
+          data: canvas.toDataURL(),
+          sourceFilePath: imageURL
+        }, storageKey, noteKey)
       })
       .then(fileName => ({
         fileName,
         title: imageURL,
         isImage: true
-      }))])
+      }))
+    ])
   }
 
   promise.then(files => {
