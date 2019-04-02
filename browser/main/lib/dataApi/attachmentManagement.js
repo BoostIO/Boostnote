@@ -274,13 +274,12 @@ function generateAttachmentMarkdown (fileName, path, showPreview) {
  * @param {String} noteKey Key of the current note
  * @param {Event} dropEvent DropEvent
  */
-function handleAttachmentDrop(codeEditor, storageKey, noteKey, dropEvent) {
+function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
   let promise
   if (dropEvent.dataTransfer.files.length > 0) {
     promise = Promise.all(Array.from(dropEvent.dataTransfer.files).map(file => {
       var filePath = file.path
       if (file.type.startsWith('image')) {
-        var a = getOrientation(file)
         if (file.type === 'image/gif' || file.type === 'image/svg+xml') {
           return copyAttachment(file.path, storageKey, noteKey).then(fileName => ({
             fileName,
@@ -290,7 +289,7 @@ function handleAttachmentDrop(codeEditor, storageKey, noteKey, dropEvent) {
         } else {
           return getOrientation(file)
             .then((orientation) => {
-              if (orientation === -1) {
+              if (orientation === -1) { // The image rotation is correct and does not need adjustment
                 return copyAttachment(file.path, storageKey, noteKey)
               } else {
                 return fixRotate(file).then(data => copyAttachment({
