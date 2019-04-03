@@ -197,6 +197,26 @@ export default class CodeEditor extends React.Component {
       'Cmd-T': function (cm) {
         // Do nothing
       },
+      'Ctrl-/': function (cm) {
+        if (global.process.platform === 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleDateString())
+      },
+      'Cmd-/': function (cm) {
+        if (global.process.platform !== 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleDateString())
+      },
+      'Shift-Ctrl-/': function (cm) {
+        if (global.process.platform === 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleString())
+      },
+      'Shift-Cmd-/': function (cm) {
+        if (global.process.platform !== 'darwin') { return }
+        const dateNow = new Date()
+        cm.replaceSelection(dateNow.toLocaleString())
+      },
       Enter: 'boostNewLineAndIndentContinueMarkdownList',
       'Ctrl-C': cm => {
         if (cm.getOption('keyMap').substr(0, 3) === 'vim') {
