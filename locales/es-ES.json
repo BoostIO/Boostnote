@@ -134,7 +134,7 @@
 	"Successfully applied!": "¡Aplicado con éxito!",
 	"Albanian": "Albanés",
 	"Chinese (zh-CN)": "Chino - China",
-	"Chinese (zh-TW)": "Chino - Taiwan",
+	"Chinese (zh-TW)": "Chino - Taiwán",
 	"Danish": "Danés",
 	"Japanese": "Japonés",
 	"Korean": "Coreano",
@@ -155,8 +155,8 @@
 	"Allow dangerous html tags": "Permitir etiquetas html peligrosas",
 	"⚠ You have pasted a link referring an attachment that could not be found in the location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ Ha pegado un enlace a un archivo adjunto que no se puede encontrar en el almacenamiento de esta nota. Pegar enlaces a archivos adjuntos solo está soportado si el origen y el destino son el mismo almacenamiento. ¡Por favor, mejor arrastre el archivo! ⚠",
 	"Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.": "Convertir flechas textuales a símbolos bonitos. ⚠ Esto interferirá cuando use comentarios HTML en Markdown.",
-	"Spellcheck disabled": "Spellcheck disabled",
-	"Show menu bar": "Show menu bar",
-	"Auto Detect": "Auto Detect",
+	"Spellcheck disabled": "Deshabilitar corrector ortográfico",
+	"Show menu bar": "Mostrar barra del menú",
+	"Auto Detect": "Detección automática",
 	"Snippet Default Language": "Lenguaje por defecto de los fragmentos de código"
 }
