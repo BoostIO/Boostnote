@@ -278,19 +278,20 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
   let promise
   if (dropEvent.dataTransfer.files.length > 0) {
     promise = Promise.all(Array.from(dropEvent.dataTransfer.files).map(file => {
-      var filePath = file.path
-      if (file.type.startsWith('image')) {
-        if (file.type === 'image/gif' || file.type === 'image/svg+xml') {
-          return copyAttachment(file.path, storageKey, noteKey).then(fileName => ({
+      const filePath = file.path
+      const fileType = file.type // EX) 'image/gif' or 'text/html'
+      if (fileType.startsWith('image')) {
+        if (fileType === 'image/gif' || fileType === 'image/svg+xml') {
+          return copyAttachment(filePath, storageKey, noteKey).then(fileName => ({
             fileName,
-            title: path.basename(file.path),
+            title: path.basename(filePath),
             isImage: true
           }))
         } else {
           return getOrientation(file)
             .then((orientation) => {
               if (orientation === -1) { // The image rotation is correct and does not need adjustment
-                return copyAttachment(file.path, storageKey, noteKey)
+                return copyAttachment(filePath, storageKey, noteKey)
               } else {
                 return fixRotate(file).then(data => copyAttachment({
                   type: 'base64',
@@ -308,9 +309,9 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
             )
         }
       } else {
-        return copyAttachment(file.path, storageKey, noteKey).then(fileName => ({
+        return copyAttachment(filePath, storageKey, noteKey).then(fileName => ({
           fileName,
-          title: path.basename(file.path),
+          title: path.basename(filePath),
           isImage: false
         }))
       }
