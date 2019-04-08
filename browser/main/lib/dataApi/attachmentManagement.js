@@ -85,7 +85,7 @@ function getOrientation (file) {
             return view.getUint16(offset + (i * 12) + 8, little)
           }
         }
-      } else if ((marker & 0xFF00) !== 0xFF00) { // If not start with 0xFF, not a Marker
+      } else if ((marker & 0xFF00) !== 0xFF00) { // If not start with 0xFF, not a Marker.
         break
       } else {
         offset += view.getUint16(offset, false)
