@@ -492,7 +492,7 @@ class UiTab extends React.Component {
                 ref='editorSnippetDefaultLanguage'
                 onChange={(e) => this.handleUIChange(e)}
               >
-                <option key='Auto Detect' value='Auto Detect'>Auto Detect</option>
+                <option key='Auto Detect' value='Auto Detect'>{i18n.__('Auto Detect')}</option>
                 {
                   _.sortBy(CodeMirror.modeInfo.map(mode => mode.name)).map(name => (<option key={name} value={name}>{name}</option>))
                 }

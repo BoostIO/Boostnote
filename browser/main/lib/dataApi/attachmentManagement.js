@@ -450,6 +450,54 @@ function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
 }
 
 /**
+ * @description Copies the attachments to the storage folder and returns the mardown content it should be replaced with
+ * @param {String} markDownContent content in which the attachment paths should be found
+ * @param {String} filepath The path of the file with attachments to import
+ * @param {String} storageKey Storage key of the destination storage
+ * @param {String} noteKey Key of the current note. Will be used as subfolder in :storage
+ */
+function importAttachments (markDownContent, filepath, storageKey, noteKey) {
+  return new Promise((resolve, reject) => {
+    const nameRegex = /(!\[.*?]\()(.+?\..+?)(\))/g
+    let attachPath = nameRegex.exec(markDownContent)
+    const promiseArray = []
+    const attachmentPaths = []
+    const groupIndex = 2
+
+    while (attachPath) {
+      let attachmentPath = attachPath[groupIndex]
+      attachmentPaths.push(attachmentPath)
+      attachmentPath = path.isAbsolute(attachmentPath) ? attachmentPath : path.join(path.dirname(filepath), attachmentPath)
+      promiseArray.push(this.copyAttachment(attachmentPath, storageKey, noteKey))
+      attachPath = nameRegex.exec(markDownContent)
+    }
+
+    let numResolvedPromises = 0
+
+    if (promiseArray.length === 0) {
+      resolve(markDownContent)
+    }
+
+    for (let j = 0; j < promiseArray.length; j++) {
+      promiseArray[j]
+      .then((fileName) => {
+        const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName)
+        markDownContent = markDownContent.replace(attachmentPaths[j], newPath)
+      })
+      .catch((e) => {
+        console.error('File does not exist in path: ' + attachmentPaths[j])
+      })
+      .finally(() => {
+        numResolvedPromises++
+        if (numResolvedPromises === promiseArray.length) {
+          resolve(markDownContent)
+        }
+      })
+    }
+  })
+}
+
+/**
  * @description Moves the attachments of the current note to the new location.
  * Returns a modified version of the given content so that the links to the attachments point to the new note key.
  * @param {String} oldPath Source of the note to be moved
@@ -656,6 +704,7 @@ module.exports = {
   handlePasteNativeImage,
   getAttachmentsInMarkdownContent,
   getAbsolutePathsOfAttachmentsInContent,
+  importAttachments,
   removeStorageAndNoteReferences,
   deleteAttachmentFolder,
   deleteAttachmentsNotPresentInNote,

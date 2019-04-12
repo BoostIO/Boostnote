@@ -43,19 +43,18 @@ function exportFolder (storageKey, folderKey, fileType, exportDir) {
     .then(function exportNotes (data) {
       const { storage, notes } = data
 
-      notes
+      return Promise.all(notes
         .filter(note => note.folder === folderKey && note.isTrashed === false && note.type === 'MARKDOWN_NOTE')
-        .forEach(note => {
+        .map(note => {
           const notePath = path.join(exportDir, `${filenamify(note.title, {replacement: '_'})}.${fileType}`)
-          exportNote(note.key, storage.path, note.content, notePath, null)
+          return exportNote(note.key, storage.path, note.content, notePath, null)
         })
-
-      return {
+      ).then(() => ({
         storage,
         folderKey,
         fileType,
         exportDir
-      }
+      }))
     })
 }
 

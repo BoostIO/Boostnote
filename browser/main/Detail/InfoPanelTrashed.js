@@ -5,7 +5,7 @@ import styles from './InfoPanel.styl'
 import i18n from 'browser/lib/i18n'
 
 const InfoPanelTrashed = ({
-  storageName, folderName, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml
+  storageName, folderName, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, exportAsPdf
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel-trash' style={{display: 'none'}}>
     <div>
@@ -46,7 +46,7 @@ const InfoPanelTrashed = ({
         <p>.html</p>
       </button>
 
-      <button styleName='export--unable'>
+      <button styleName='export--enable' onClick={(e) => exportAsPdf(e, 'export-pdf')}>
         <i className='fa fa-file-pdf-o' />
         <p>.pdf</p>
       </button>
@@ -61,7 +61,8 @@ InfoPanelTrashed.propTypes = {
   createdAt: PropTypes.string.isRequired,
   exportAsMd: PropTypes.func.isRequired,
   exportAsTxt: PropTypes.func.isRequired,
-  exportAsHtml: PropTypes.func.isRequired
+  exportAsHtml: PropTypes.func.isRequired,
+  exportAsPdf: PropTypes.func.isRequired
 }
 
 export default CSSModules(InfoPanelTrashed, styles)

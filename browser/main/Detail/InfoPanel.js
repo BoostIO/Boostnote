@@ -14,7 +14,7 @@ class InfoPanel extends React.Component {
 
   render () {
     const {
-      storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, wordCount, letterCount, type, print
+      storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, exportAsPdf, wordCount, letterCount, type, print
     } = this.props
     return (
       <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
@@ -85,6 +85,11 @@ class InfoPanel extends React.Component {
             <p>{i18n.__('.html')}</p>
           </button>
 
+          <button styleName='export--enable' onClick={(e) => exportAsPdf(e, 'export-pdf')}>
+            <i className='fa fa-file-pdf-o' />
+            <p>{i18n.__('.pdf')}</p>
+          </button>
+
           <button styleName='export--enable' onClick={(e) => print(e, 'print')}>
             <i className='fa fa-print' />
             <p>{i18n.__('Print')}</p>
@@ -104,6 +109,7 @@ InfoPanel.propTypes = {
   exportAsMd: PropTypes.func.isRequired,
   exportAsTxt: PropTypes.func.isRequired,
   exportAsHtml: PropTypes.func.isRequired,
+  exportAsPdf: PropTypes.func.isRequired,
   wordCount: PropTypes.number,
   letterCount: PropTypes.number,
   type: PropTypes.string.isRequired,

@@ -18,6 +18,7 @@
 	".md": ".md",
 	".txt": ".txt",
 	".html": ".html",
+	".pdf": ".pdf",
 	"Print": "Yazdır",
 	"Your preferences for Boostnote": "Boostnote tercihleriniz",
 	"Storage Locations": "Saklama Alanları",
@@ -152,5 +153,7 @@
 	"Only allow secure html tags (recommended)": "Sadece güvenli html etiketlerine izin ver (tavsiye edilen)",
 	"Allow styles": "Stillere izin ver",
 	"Allow dangerous html tags": "Tehlikeli html etiketlerine izin ver",
-	"Disabled": "Disabled"
+	"Spellcheck disabled": "Spellcheck disabled",
+	"Show menu bar": "Show menu bar",
+	"Auto Detect": "Auto Detect"
 }
