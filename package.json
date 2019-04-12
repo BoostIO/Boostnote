@@ -50,6 +50,7 @@
   "homepage": "https://boostnote.io",
   "dependencies": {
     "@enyaxu/markdown-it-anchor": "^5.0.2",
+    "@rokt33r/js-sequence-diagrams": "^2.0.6-2",
     "@rokt33r/markdown-it-math": "^4.0.1",
     "@rokt33r/season": "^5.3.0",
     "@susisu/mte-kernel": "^2.0.0",
@@ -72,7 +73,6 @@
     "iconv-lite": "^0.4.19",
     "immutable": "^3.8.1",
     "invert-color": "^2.0.0",
-    "js-sequence-diagrams": "^1000000.0.6",
     "js-yaml": "^3.12.0",
     "katex": "^0.9.0",
     "lodash": "^4.11.1",

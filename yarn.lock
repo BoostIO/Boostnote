@@ -71,6 +71,14 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
+"@rokt33r/js-sequence-diagrams@^2.0.6-2":
+  version "2.0.6-2"
+  resolved "https://registry.yarnpkg.com/@rokt33r/js-sequence-diagrams/-/js-sequence-diagrams-2.0.6-2.tgz#fe9c4ad8f70c356873739485d1eff5cf75008821"
+  integrity sha512-33oibMKJEqCyA83TBeRkc9ifBvoIi2pn/davZuW0PZNbgK7zBkZUdFz1yMPPksA0Rbrxapc9BOwU7xXIACmxhg==
+  dependencies:
+    raphael "~2.1.x"
+    underscore "~1.4.x"
+
 "@rokt33r/markdown-it-math@^4.0.1":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@rokt33r/markdown-it-math/-/markdown-it-math-4.0.2.tgz#87c7172f459833b05e406cfc846e0c0b7ebc24ef"
@@ -5381,13 +5389,6 @@ js-queue@>=2.0.0:
   dependencies:
     easy-stack "^1.0.0"
 
-js-sequence-diagrams@^1000000.0.6:
-  version "1000000.0.6"
-  resolved "https://registry.yarnpkg.com/js-sequence-diagrams/-/js-sequence-diagrams-1000000.0.6.tgz#e95db01420479c5ccbc12046af1da42fde649e5c"
-  dependencies:
-    raphael "~2.1.x"
-    underscore "~1.4.x"
-
 js-string-escape@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/js-string-escape/-/js-string-escape-1.0.1.tgz#e2625badbc0d67c7533e9edc1068c587ae4137ef"
@@ -7459,6 +7460,7 @@ raphael@2.2.7, raphael@^2.2.7:
 raphael@~2.1.x:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/raphael/-/raphael-2.1.4.tgz#b09ca664ad048b814bb2ff5d4d1e75838cab9c97"
+  integrity sha1-sJymZK0Ei4FLsv9dTR51g4yrnJc=
   dependencies:
     eve "git://github.com/adobe-webplatform/eve.git#eef80ed"
 
@@ -9114,6 +9116,7 @@ underscore.string@~2.4.0:
 underscore@~1.4.x:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.4.4.tgz#61a6a32010622afa07963bf325203cf12239d604"
+  integrity sha1-YaajIBBiKvoHljvzJSA88SI51gQ=
 
 underscore@~1.6.0:
   version "1.6.0"
