@@ -128,6 +128,12 @@ class Markdown {
     this.md.use(require('./markdown-it-deflist'))
     this.md.use(require('./markdown-it-frontmatter'))
 
+    if (config.preview.automaticCollapsibleBlocks === 'ONLY_HEADINGS' || config.preview.automaticCollapsibleBlocks === 'HEADINGS_CODE_BLOCKS') {
+      const levels = config.preview.automaticCollapsibleTitleLevels.split(',').map(l => parseInt(l, 10)).filter(l => l >= 1 && l <= 5)
+
+      this.md.use(require('./markdown-it-automatic-collapsible-heading')(levels.length === 0 ? [1, 2] : levels))
+    }
+
     this.md.use(require('./markdown-it-fence'), {
       chart: token => {
         if (token.parameters.hasOwnProperty('yaml')) {

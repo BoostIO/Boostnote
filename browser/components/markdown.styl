@@ -50,7 +50,7 @@ popupZIndex= 500
 
 body
   font-size 16px
-  padding 15px
+  padding 1rem 1rem 1rem 1.2rem
   font-family helvetica, arial, sans-serif
   line-height 1.6
   overflow-x hidden
@@ -224,6 +224,39 @@ pre
   margin 0 0 1rem
   display flex
   line-height 1.4em
+  &.flowchart, &.sequence, &.chart
+    display flex
+    justify-content center
+    background-color white
+  &.CodeMirror
+    height initial
+    flex-wrap wrap
+    &>code
+      flex 1
+      overflow-x auto
+
+    &.code-collapsed
+      &>code
+        overflow-x initial
+
+      i.btn-collapse:after
+        content "\f0da"
+
+    i[class^="btn-"]:after
+      font-family FontAwesome
+      font-style normal
+      font-size 1.2rem
+      text-rendering auto
+      -webkit-font-smoothing antialiased
+      cursor pointer
+
+    i.btn-collapse
+      position fixed
+      margin-left -1.5rem
+
+      &:after
+        content "\f0d7"
+
   code
     background-color inherit
     margin 0
@@ -245,6 +278,8 @@ pre
     color white
     &:empty
       display none
+    &:not(:empty) ~ i.btn-clipboard
+      margin-top -1.5rem
   &>span.lineNumber
     display none
     font-size 1em
@@ -292,6 +327,28 @@ table
       border-color borderColor
       &:last-child
         border-right solid 1px borderColor
+
+.clipboardButton
+  color: rgba(147,147,149,0.8)
+  fill: rgba(147,147,149,1)
+  border-radius: 50%
+  margin: 0px 10px
+  border: none;
+  background-color: transparent
+  outline: none
+  height: 15px
+  width: 15px
+  cursor: pointer
+
+  &:hover
+    transition: 0.2s
+    color: #939395
+    fill: #939395
+    background-color: rgba(0,0,0,0.1)
+
+  @media print
+      display none
+
 kbd
   background-color #fafbfc
   border solid 1px borderColor
@@ -380,6 +437,26 @@ for name, val in admonition_types
         @extend $admonition-icon
         color: val[color]
         content: val[icon]
+
+details
+  margin-bottom 0.5rem
+
+  > summary
+    display flex
+    align-items center
+    margin-bottom 0.5rem
+    cursor pointer
+
+    &:focus
+      outline none
+
+    &::-webkit-details-marker
+      margin-left: -1rem
+
+    h1, h2, h3, h4, h5
+      display inline-block
+      margin-bottom 0
+      padding-bottom 0
 
 dl
   margin 2rem 0

@@ -120,6 +120,9 @@ class UiTab extends React.Component {
         smartArrows: this.refs.previewSmartArrows.checked,
         sanitize: this.refs.previewSanitize.value,
         allowCustomCSS: this.refs.previewAllowCustomCSS.checked,
+        automaticCollapsibleBlocks: this.refs.automaticCollapsibleBlocks.value,
+        automaticCollapsibleCodeBlockMaxLines: this.refs.automaticCollapsibleCodeBlockMaxLines.value,
+        automaticCollapsibleTitleLevels: this.refs.automaticCollapsibleTitleLevels.value,
         lineThroughCheckbox: this.refs.lineThroughCheckbox.checked,
         customCSS: this.customCSSCM.getCodeMirror().getValue()
       }
@@ -745,6 +748,50 @@ class UiTab extends React.Component {
               />&nbsp;
               {i18n.__('Convert textual arrows to beautiful signs. ⚠ This will interfere with using HTML comments in your Markdown.')}
             </label>
+          </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Automatic Collapsible Blocks')}
+            </div>
+            <div styleName='group-section-control'>
+              <select
+                value={config.preview.automaticCollapsibleBlocks}
+                ref='automaticCollapsibleBlocks'
+                onChange={(e) => this.handleUIChange(e)}
+              >
+                <option value='NONE'>{i18n.__('None')}</option>
+                <option value='ONLY_CODE_BLOCK'>{i18n.__('Only Code Blocks')}</option>
+                <option value='ONLY_HEADINGS'>{i18n.__('Only Headings')}</option>
+                <option value='HEADINGS_CODE_BLOCKS'>{i18n.__('Headings & Code Blocks')}</option>
+              </select>
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Collapsed Code Blocks')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                ref='automaticCollapsibleCodeBlockMaxLines'
+                value={config.preview.automaticCollapsibleCodeBlockMaxLines}
+                onChange={(e) => this.handleUIChange(e)}
+                type='number'
+              /> lines
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Collapsed Titles')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                ref='automaticCollapsibleTitleLevels'
+                value={config.preview.automaticCollapsibleTitleLevels}
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+            </div>
           </div>
 
           <div styleName='group-section'>

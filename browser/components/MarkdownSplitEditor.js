@@ -208,6 +208,9 @@ class MarkdownSplitEditor extends React.Component {
           noteKey={noteKey}
           customCSS={config.preview.customCSS}
           allowCustomCSS={config.preview.allowCustomCSS}
+          automaticCollapsibleBlocks={config.preview.automaticCollapsibleBlocks}
+          automaticCollapsibleCodeBlockMaxLines={config.preview.automaticCollapsibleCodeBlockMaxLines}
+          automaticCollapsibleTitleLevels={config.preview.automaticCollapsibleTitleLevels}
           lineThroughCheckbox={config.preview.lineThroughCheckbox}
        />
       </div>
