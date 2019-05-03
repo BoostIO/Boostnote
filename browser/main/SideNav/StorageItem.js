@@ -2,7 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
-import { hashHistory } from 'react-router'
+// import { hashHistory } from 'react-router'
+import { history } from 'browser/main/store'
 import modal from 'browser/main/lib/modal'
 import CreateFolderModal from 'browser/main/modals/CreateFolderModal'
 import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
@@ -135,13 +136,13 @@ class StorageItem extends React.Component {
 
   handleHeaderInfoClick (e) {
     const { storage } = this.props
-    hashHistory.push('/storages/' + storage.key)
+    history.push('/storages/' + storage.key)
   }
 
   handleFolderButtonClick (folderKey) {
     return (e) => {
       const { storage } = this.props
-      hashHistory.push('/storages/' + storage.key + '/folders/' + folderKey)
+      history.push('/storages/' + storage.key + '/folders/' + folderKey)
     }
   }
 

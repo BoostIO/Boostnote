@@ -14,13 +14,15 @@ import NoteItemSimple from 'browser/components/NoteItemSimple'
 import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import path from 'path'
-import { hashHistory } from 'react-router'
+import { history } from 'browser/main/store'
+import { push, replace } from 'connected-react-router'
 import copy from 'copy-to-clipboard'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import Markdown from '../../lib/markdown'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import context from 'browser/lib/context'
+import queryString from 'query-string'
 
 const { remote } = require('electron')
 const { dialog } = remote
@@ -127,15 +129,14 @@ class NoteList extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { location } = this.props
+    const { dispatch, location } = this.props
     const { selectedNoteKeys } = this.state
-    const visibleNoteKeys = this.notes.map(note => note.key)
-    const note = this.notes[0]
-    const prevKey = prevProps.location.query.key
+    const visibleNoteKeys = this.notes && this.notes.map(note => note.key)
+    const note = this.notes && this.notes[0]
+    const prevKey = prevProps.location.search && queryString.parse(prevProps.location.search).key
     const noteKey = visibleNoteKeys.includes(prevKey) ? prevKey : note && note.key
 
-    if (note && location.query.key == null) {
-      const { router } = this.context
+    if (note && location.search === '') {
       if (!location.pathname.match(/\/searched/)) this.contextNotes = this.getContextNotes()
 
       // A visible note is an active note
@@ -145,49 +146,49 @@ class NoteList extends React.Component {
         ee.emit('list:moved')
       }
 
-      router.replace({
+      dispatch(replace({ // was passed with context - we can use connected router here
         pathname: location.pathname,
-        query: {
+        search: queryString.stringify({
           key: noteKey
-        }
-      })
+        })
+      }))
       return
     }
 
-    // Auto scroll
-    if (_.isString(location.query.key) && prevProps.location.query.key === location.query.key) {
-      const targetIndex = this.getTargetIndex()
-      if (targetIndex > -1) {
-        const list = this.refs.list
-        const item = list.childNodes[targetIndex]
+    // Auto scroll //<<<<<<<<<<<<<< fix me later
+    // if (_.isString(location.query.key) && prevProps.location.query.key === location.query.key) {
+    //   const targetIndex = this.getTargetIndex()
+    //   if (targetIndex > -1) {
+    //     const list = this.refs.list
+    //     const item = list.childNodes[targetIndex]
 
-        if (item == null) return false
+    //     if (item == null) return false
 
-        const overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0
-        if (overflowBelow) {
-          list.scrollTop = item.offsetTop + item.clientHeight - list.clientHeight
-        }
-        const overflowAbove = list.scrollTop > item.offsetTop
-        if (overflowAbove) {
-          list.scrollTop = item.offsetTop
-        }
-      }
-    }
+    //     const overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0
+    //     if (overflowBelow) {
+    //       list.scrollTop = item.offsetTop + item.clientHeight - list.clientHeight
+    //     }
+    //     const overflowAbove = list.scrollTop > item.offsetTop
+    //     if (overflowAbove) {
+    //       list.scrollTop = item.offsetTop
+    //     }
+    //   }
+    // }
   }
 
   focusNote (selectedNoteKeys, noteKey, pathname) {
-    const { router } = this.context
+    const { dispatch } = this.props
 
     this.setState({
       selectedNoteKeys
     })
 
-    router.push({
+    dispatch(push({
       pathname,
-      query: {
+      search: queryString.stringify({
         key: noteKey
-      }
-    })
+      })
+    }))
   }
 
   getNoteKeyFromTargetIndex (targetIndex) {
@@ -330,8 +331,7 @@ class NoteList extends React.Component {
   }
 
   getNotes () {
-    const { data, params, location } = this.props
-
+    const { data, match: { params }, location } = this.props
     if (location.pathname.match(/\/home/) || location.pathname.match(/alltags/)) {
       const allNotes = data.noteMap.map((note) => note)
       this.contextNotes = allNotes
@@ -372,7 +372,7 @@ class NoteList extends React.Component {
 
   // get notes in the current folder
   getContextNotes () {
-    const { data, params } = this.props
+    const { data, match: { params } } = this.props
     const storageKey = params.storageKey
     const folderKey = params.folderKey
     const storage = data.storageMap.get(storageKey)
@@ -412,8 +412,7 @@ class NoteList extends React.Component {
   }
 
   handleNoteClick (e, uniqueKey) {
-    const { router } = this.context
-    const { location } = this.props
+    const { dispatch, location } = this.props
     let { selectedNoteKeys, prevShiftNoteIndex } = this.state
     const { ctrlKeyDown, shiftKeyDown } = this.state
     const hasSelectedNoteKey = selectedNoteKeys.length > 0
@@ -464,16 +463,16 @@ class NoteList extends React.Component {
       prevShiftNoteIndex
     })
 
-    router.push({
+    dispatch(push({
       pathname: location.pathname,
-      query: {
+      search: queryString.stringify({
         key: uniqueKey
-      }
-    })
+      })
+    }))
   }
 
   handleSortByChange (e) {
-    const { dispatch, params: { folderKey } } = this.props
+    const { dispatch, match: { params: { folderKey } } } = this.props
 
     const config = {
       [folderKey]: { sortBy: e.target.value }
@@ -746,9 +745,9 @@ class NoteList extends React.Component {
           selectedNoteKeys: [note.key]
         })
 
-        hashHistory.push({
+        history.push({
           pathname: location.pathname,
-          query: {key: note.key}
+          search: queryString.stringify({key: note.key})
         })
       })
   }
@@ -758,14 +757,16 @@ class NoteList extends React.Component {
     return copy(noteLink)
   }
 
+  // Navigate seems unused
   navigate (sender, pathname) {
-    const { router } = this.context
-    router.push({
+    // const { router } = this.context
+    const { dispatch } = this.props
+    dispatch(push({
       pathname,
-      query: {
+      search: queryString.stringify({
         // key: noteKey
-      }
-    })
+      })
+    }))
   }
 
   save (note) {
@@ -929,9 +930,9 @@ class NoteList extends React.Component {
                 type: 'UPDATE_NOTE',
                 note: note
               })
-              hashHistory.push({
+              history.push({
                 pathname: location.pathname,
-                query: {key: getNoteKey(note)}
+                search: queryString.stringify({key: getNoteKey(note)})
               })
             })
           })
@@ -942,14 +943,15 @@ class NoteList extends React.Component {
 
   getTargetIndex () {
     const { location } = this.props
+    const key = queryString.parse(location.search).key
     const targetIndex = _.findIndex(this.notes, (note) => {
-      return getNoteKey(note) === location.query.key
+      return getNoteKey(note) === key
     })
     return targetIndex
   }
 
   resolveTargetFolder () {
-    const { data, params } = this.props
+    const { data, match: { params } } = this.props
     let storage = data.storageMap.get(params.storageKey)
 
     // Find first storage
@@ -997,7 +999,7 @@ class NoteList extends React.Component {
   }
 
   render () {
-    const { location, config, params: { folderKey } } = this.props
+    const { location, config, match: { params: { folderKey } } } = this.props
     let { notes } = this.props
     const { selectedNoteKeys } = this.state
     const sortBy = _.get(config, [folderKey, 'sortBy'], config.sortBy.default)

@@ -1,8 +1,10 @@
-import { combineReducers, createStore } from 'redux'
-import { routerReducer } from 'react-router-redux'
+import { combineReducers, createStore, compose, applyMiddleware } from 'redux'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
+import { createHashHistory as createHistory } from 'history'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import { Map, Set } from 'browser/lib/Mutable'
 import _ from 'lodash'
+import DevTools from './DevTools'
 
 function defaultDataMap () {
   return {
@@ -465,13 +467,21 @@ function getOrInitItem (target, key) {
   return results
 }
 
+const history = createHistory()
+
+// Query not available in HashHistory with ReactRouter >= v4
+// Relevant Issue https://github.com/ReactTraining/react-router/issues/4410#issuecomment-293772446
+// --> moved from query to search - so we only need query-string parsing/stringify for noteKey.
+//     (No need to add query to history with a listener)
+
 const reducer = combineReducers({
   data,
   config,
   status,
-  routing: routerReducer
+  router: connectRouter(history) // I think we could also go with-out connected-router as we're using history with imports directly
 })
 
-const store = createStore(reducer)
+const store = createStore(reducer, undefined, compose(
+  applyMiddleware(routerMiddleware(history)), DevTools.instrument()))
 
-export default store
+export { store, history }

@@ -21,6 +21,9 @@ class NewNoteButton extends React.Component {
     this.state = {
     }
 
+    this.handleNewNoteButtonClick = this.handleNewNoteButtonClick.bind(this)
+
+    // why is there a newNoteHandler?!
     this.newNoteHandler = () => {
       this.handleNewNoteButtonClick()
     }
@@ -35,9 +38,8 @@ class NewNoteButton extends React.Component {
   }
 
   handleNewNoteButtonClick (e) {
-    const { location, params, dispatch, config } = this.props
+    const { location, dispatch, match: { params }, config } = this.props
     const { storage, folder } = this.resolveTargetFolder()
-
     if (config.ui.defaultNote === 'MARKDOWN_NOTE') {
       createMarkdownNote(storage.key, folder.key, dispatch, location, params, config)
     } else if (config.ui.defaultNote === 'SNIPPET_NOTE') {
@@ -55,9 +57,8 @@ class NewNoteButton extends React.Component {
   }
 
   resolveTargetFolder () {
-    const { data, params } = this.props
+    const { data, match: { params } } = this.props
     let storage = data.storageMap.get(params.storageKey)
-
     // Find first storage
     if (storage == null) {
       for (const kv of data.storageMap) {
@@ -93,7 +94,7 @@ class NewNoteButton extends React.Component {
       >
         <div styleName='control'>
           <button styleName='control-newNoteButton'
-            onClick={(e) => this.handleNewNoteButtonClick(e)}>
+            onClick={this.handleNewNoteButtonClick}>
             <img styleName='iconTag' src='../resources/icon/icon-newnote.svg' />
             <span styleName='control-newNoteButton-tooltip'>
               {i18n.__('Make a note')} {OSX ? '⌘' : i18n.__('Ctrl')} + N

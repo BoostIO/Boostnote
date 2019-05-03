@@ -1,7 +1,9 @@
-import { hashHistory } from 'react-router'
+// import { hashHistory } from 'react-router'
+import { history } from 'browser/main/store'
 import dataApi from 'browser/main/lib/dataApi'
 import ee from 'browser/main/lib/eventEmitter'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+import queryString from 'query-string'
 
 export function createMarkdownNote (storage, folder, dispatch, location, params, config) {
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_MARKDOWN')
@@ -28,9 +30,9 @@ export function createMarkdownNote (storage, folder, dispatch, location, params,
         note: note
       })
 
-      hashHistory.push({
+      history.push({
         pathname: location.pathname,
-        query: { key: noteHash }
+        search: queryString.stringify({ key: noteHash })
       })
       ee.emit('list:jump', noteHash)
       ee.emit('detail:focus')
@@ -70,9 +72,9 @@ export function createSnippetNote (storage, folder, dispatch, location, params, 
         type: 'UPDATE_NOTE',
         note: note
       })
-      hashHistory.push({
+      history.push({
         pathname: location.pathname,
-        query: { key: noteHash }
+        search: queryString.stringify({ key: noteHash })
       })
       ee.emit('list:jump', noteHash)
       ee.emit('detail:focus')
