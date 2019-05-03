@@ -133,6 +133,7 @@ class NoteList extends React.Component {
     const { selectedNoteKeys } = this.state
     const visibleNoteKeys = this.notes && this.notes.map(note => note.key)
     const note = this.notes && this.notes[0]
+    const key = location.search && queryString.parse(location.search).key
     const prevKey = prevProps.location.search && queryString.parse(prevProps.location.search).key
     const noteKey = visibleNoteKeys.includes(prevKey) ? prevKey : note && note.key
 
@@ -155,25 +156,25 @@ class NoteList extends React.Component {
       return
     }
 
-    // Auto scroll //<<<<<<<<<<<<<< fix me later
-    // if (_.isString(location.query.key) && prevProps.location.query.key === location.query.key) {
-    //   const targetIndex = this.getTargetIndex()
-    //   if (targetIndex > -1) {
-    //     const list = this.refs.list
-    //     const item = list.childNodes[targetIndex]
+    // Auto scroll
+    if (_.isString(key) && prevKey === key) {
+      const targetIndex = this.getTargetIndex()
+      if (targetIndex > -1) {
+        const list = this.refs.list
+        const item = list.childNodes[targetIndex]
 
-    //     if (item == null) return false
+        if (item == null) return false
 
-    //     const overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0
-    //     if (overflowBelow) {
-    //       list.scrollTop = item.offsetTop + item.clientHeight - list.clientHeight
-    //     }
-    //     const overflowAbove = list.scrollTop > item.offsetTop
-    //     if (overflowAbove) {
-    //       list.scrollTop = item.offsetTop
-    //     }
-    //   }
-    // }
+        const overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0
+        if (overflowBelow) {
+          list.scrollTop = item.offsetTop + item.clientHeight - list.clientHeight
+        }
+        const overflowAbove = list.scrollTop > item.offsetTop
+        if (overflowAbove) {
+          list.scrollTop = item.offsetTop
+        }
+      }
+    }
   }
 
   focusNote (selectedNoteKeys, noteKey, pathname) {
