@@ -18,14 +18,6 @@ class ColorPicker extends React.Component {
     this.handleConfirm = this.handleConfirm.bind(this)
   }
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    if (nextProps.color !== prevState.color) {
-      return {
-        color: nextProps.color
-      }
-    }
-  }
-
   componentWillReceiveProps (nextProps) {
     this.onColorChange(nextProps.color)
   }

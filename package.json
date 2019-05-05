@@ -208,7 +208,7 @@
   "lint-staged": {
     "linters": {
       "*.{js,jsx,mjs}": [
-        "lint:fix",
+        "npm run lint:fix",
         "git add"
       ]
     }
@@ -220,6 +220,7 @@
   },
   "standard": {
     "globals": [
+      "fetch",
       "FileReader",
       "Image"
     ],
