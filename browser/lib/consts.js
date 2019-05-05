@@ -3,10 +3,13 @@ const fs = require('sander')
 const { remote } = require('electron')
 const { app } = remote
 
+const CODEMIRROR_THEME_PATH = 'node_modules/codemirror/theme'
+const CODEMIRROR_EXTRA_THEME_PATH = 'extra_scripts/codemirror/theme'
+
 const isProduction = process.env.NODE_ENV === 'production'
 const paths = [
-  isProduction ? path.join(app.getAppPath(), './node_modules/codemirror/theme') : path.resolve('./node_modules/codemirror/theme'),
-  isProduction ? path.join(app.getAppPath(), './extra_scripts/codemirror/theme') : path.resolve('./extra_scripts/codemirror/theme')
+  isProduction ? path.join(app.getAppPath(), CODEMIRROR_THEME_PATH) : path.resolve(CODEMIRROR_THEME_PATH),
+  isProduction ? path.join(app.getAppPath(), CODEMIRROR_EXTRA_THEME_PATH) : path.resolve(CODEMIRROR_EXTRA_THEME_PATH)
 ]
 
 const themes = paths
@@ -24,17 +27,17 @@ const themes = paths
 
 themes.splice(themes.findIndex(({ name }) => name === 'solarized'), 1, {
   name: 'solarized dark',
-  path: 'node_modules/codemirror/theme/solarized.css',
+  path: `${CODEMIRROR_THEME_PATH}/solarized.css`,
   className: `cm-s-solarized cm-s-dark`
 }, {
   name: 'solarized light',
-  path: 'node_modules/codemirror/theme/solarized.css',
+  path: `${CODEMIRROR_THEME_PATH}/solarized.css`,
   className: `cm-s-solarized cm-s-light`
 })
 
 themes.splice(0, 0, {
   name: 'default',
-  path: '/node_modules/codemirror/theme/elegant.css',
+  path: `${CODEMIRROR_THEME_PATH}/elegant.css`,
   className: `cm-s-default`
 })
 

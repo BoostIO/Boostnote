@@ -2,7 +2,7 @@
 
 .cm-s-nord.CodeMirror { color: #d8dee9; }
 .cm-s-nord.CodeMirror { background: #2e3440; }
-.cm-s-nord .CodeMirror-cursor { color: #d8dee9; }
+.cm-s-nord .CodeMirror-cursor { color: #d8dee9; border-color: #d8dee9; }
 .cm-s-nord .CodeMirror-activeline-background { background: #434c5e52 !important; }
 .cm-s-nord .CodeMirror-selected { background: undefined; }
 .cm-s-nord .cm-comment { color: #4c566a; }
