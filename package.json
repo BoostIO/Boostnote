@@ -164,7 +164,6 @@
     "merge-stream": "^1.0.0",
     "mock-require": "^3.0.1",
     "nib": "^1.1.0",
-    "prettier-standard": "^9.1.1",
     "react-css-modules": "^3.7.6",
     "react-input-autosize": "^1.1.0",
     "react-router": "^2.4.0",
@@ -209,14 +208,14 @@
   "lint-staged": {
     "linters": {
       "*.{js,jsx,mjs}": [
-        "npm run prettier",
+        "lint:fix",
         "git add"
       ]
     }
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
   "standard": {
