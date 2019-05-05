@@ -840,7 +840,7 @@ export default class MarkdownPreview extends React.Component {
             canvas.height = height.value + 'vh'
           }
 
-          Chart(canvas, chartConfig)
+          const chart = Chart(canvas, chartConfig) // eslint-disable-line
         } catch (e) {
           el.className = 'chart-error'
           el.innerHTML = 'chartjs diagram parse error: ' + e.message

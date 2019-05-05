@@ -121,6 +121,6 @@
   }
 
   CodeMirror.defineOption('hyperlink', true, (cm) => {
-    HyperLink(cm)
+    const addon = new HyperLink(cm) // eslint-disable-line
   })
 })

@@ -1,3 +1,4 @@
+/* globals _ */
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
@@ -21,7 +22,6 @@ import context from 'browser/lib/context'
 import { remote } from 'electron'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import ColorPicker from 'browser/components/ColorPicker'
-import _ from 'loadash'
 
 function matchActiveTags (tags, activeTags) {
   return _.every(activeTags, v => tags.indexOf(v) >= 0)
