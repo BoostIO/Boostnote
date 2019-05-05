@@ -40,15 +40,11 @@ class RenameTagModal extends React.Component {
   handleInputKeyDown (e) {
     switch (e.keyCode) {
       case 13:
-        this.confirm()
+        this.handleConfirmButtonClick()
     }
   }
 
   handleConfirmButtonClick (e) {
-    this.confirm()
-  }
-
-  confirm () {
     if (this.state.name.trim().length > 0) {
       const { name, oldName } = this.state
       this.renameTag(oldName, name)
