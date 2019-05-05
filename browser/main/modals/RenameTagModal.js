@@ -40,11 +40,11 @@ class RenameTagModal extends React.Component {
   handleInputKeyDown (e) {
     switch (e.keyCode) {
       case 13:
-        this.handleConfirmButtonClick()
+        this.handleConfirm()
     }
   }
 
-  handleConfirmButtonClick (e) {
+  handleConfirm () {
     if (this.state.name.trim().length > 0) {
       const { name, oldName } = this.state
       this.renameTag(oldName, name)
@@ -101,7 +101,7 @@ class RenameTagModal extends React.Component {
             onKeyDown={(e) => this.handleInputKeyDown(e)}
           />
           <button styleName='control-confirmButton'
-            onClick={(e) => this.handleConfirmButtonClick(e)}
+            onClick={() => this.handleConfirm()}
           >
             {i18n.__('Confirm')}
           </button>
