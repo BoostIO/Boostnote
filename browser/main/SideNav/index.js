@@ -15,12 +15,13 @@ import EventEmitter from 'browser/main/lib/eventEmitter'
 import PreferenceButton from './PreferenceButton'
 import ListButton from './ListButton'
 import TagButton from './TagButton'
-import {SortableContainer} from 'react-sortable-hoc'
+import { SortableContainer } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
 import { remote } from 'electron'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import ColorPicker from 'browser/components/ColorPicker'
+import _ from 'loadash'
 
 function matchActiveTags (tags, activeTags) {
   return _.every(activeTags, v => tags.indexOf(v) >= 0)
@@ -150,9 +151,9 @@ class SideNav extends React.Component {
   }
 
   handleColorPickerConfirm (color) {
-    const { dispatch, config: {coloredTags} } = this.props
+    const { dispatch, config: { coloredTags } } = this.props
     const { colorPicker: { tagName } } = this.state
-    const newColoredTags = Object.assign({}, coloredTags, {[tagName]: color.hex})
+    const newColoredTags = Object.assign({}, coloredTags, { [tagName]: color.hex })
 
     const config = { coloredTags: newColoredTags }
     ConfigManager.set(config)
@@ -164,7 +165,7 @@ class SideNav extends React.Component {
   }
 
   handleColorPickerReset () {
-    const { dispatch, config: {coloredTags} } = this.props
+    const { dispatch, config: { coloredTags } } = this.props
     const { colorPicker: { tagName } } = this.state
     const newColoredTags = Object.assign({}, coloredTags)
 
@@ -182,7 +183,7 @@ class SideNav extends React.Component {
   handleToggleButtonClick (e) {
     const { dispatch, config } = this.props
 
-    ConfigManager.set({isSideNavFolded: !config.isSideNavFolded})
+    ConfigManager.set({ isSideNavFolded: !config.isSideNavFolded })
     dispatch({
       type: 'SET_IS_SIDENAV_FOLDED',
       isFolded: !config.isSideNavFolded
@@ -205,7 +206,7 @@ class SideNav extends React.Component {
   }
 
   onSortEnd (storage) {
-    return ({oldIndex, newIndex}) => {
+    return ({ oldIndex, newIndex }) => {
       const { dispatch } = this.props
       dataApi
         .reorderFolder(storage.key, oldIndex, newIndex)
@@ -326,7 +327,7 @@ class SideNav extends React.Component {
       return new Set()
     }
     const relatedNotes = noteMap.map(
-      note => ({key: note.key, tags: note.tags})
+      note => ({ key: note.key, tags: note.tags })
     ).filter(
       note => activeTags.every(tag => note.tags.includes(tag))
     )
@@ -387,14 +388,14 @@ class SideNav extends React.Component {
     const { confirmDeletion } = this.props.config.ui
     if (!confirmDeleteNote(confirmDeletion, true)) return
     Promise.all(deletionPromises)
-    .then((arrayOfStorageAndNoteKeys) => {
-      arrayOfStorageAndNoteKeys.forEach(({ storageKey, noteKey }) => {
-        dispatch({ type: 'DELETE_NOTE', storageKey, noteKey })
+      .then((arrayOfStorageAndNoteKeys) => {
+        arrayOfStorageAndNoteKeys.forEach(({ storageKey, noteKey }) => {
+          dispatch({ type: 'DELETE_NOTE', storageKey, noteKey })
+        })
       })
-    })
-    .catch((err) => {
-      console.error('Cannot Delete note: ' + err)
-    })
+      .catch((err) => {
+        console.error('Cannot Delete note: ' + err)
+      })
   }
 
   handleFilterButtonContextMenu (event) {

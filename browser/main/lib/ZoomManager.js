@@ -10,7 +10,7 @@ function _init () {
 }
 
 function _saveZoom (zoomFactor) {
-  ConfigManager.set({zoom: zoomFactor})
+  ConfigManager.set({ zoom: zoomFactor })
 }
 
 function setZoom (zoomFactor, noSave = false) {

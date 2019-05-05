@@ -46,7 +46,7 @@ class SnippetTab extends React.Component {
         dataApi.fetchSnippet(snippet.id).then(changedSnippet => {
           // notify the snippet editor to load the content of the new snippet
           this.snippetEditor.onSnippetChanged(changedSnippet)
-          this.setState({currentSnippet: changedSnippet})
+          this.setState({ currentSnippet: changedSnippet })
         })
       }
     }
@@ -66,7 +66,7 @@ class SnippetTab extends React.Component {
   handleDeleteSnippet (snippet) {
     // prevent old snippet still display when deleted
     if (snippet.id === this.state.currentSnippet.id) {
-      this.setState({currentSnippet: null})
+      this.setState({ currentSnippet: null })
     }
   }
 
@@ -96,7 +96,7 @@ class SnippetTab extends React.Component {
           onSnippetSelect={this.handleSnippetSelect.bind(this)}
           onSnippetDeleted={this.handleDeleteSnippet.bind(this)}
           currentSnippet={currentSnippet} />
-        <div styleName='snippet-detail' style={{visibility: currentSnippet ? 'visible' : 'hidden'}}>
+        <div styleName='snippet-detail' style={{ visibility: currentSnippet ? 'visible' : 'hidden' }}>
           <div styleName='group-section'>
             <div styleName='group-section-control'>
               <button styleName='group-control-rightButton'
@@ -148,7 +148,7 @@ class SnippetTab extends React.Component {
   }
 }
 
-SnippetTab.PropTypes = {
-}
+// SnippetTab.PropTypes = {
+// }
 
 export default CSSModules(SnippetTab, styles)

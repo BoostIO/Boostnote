@@ -13,13 +13,13 @@ const TodoProcess = ({
     completed: completedTodo
   }
 }) => (
-  <div styleName='todo-process' style={{display: totalTodo > 0 ? '' : 'none'}}>
+  <div styleName='todo-process' style={{ display: totalTodo > 0 ? '' : 'none' }}>
     <div styleName='todo-process-text'>
       <i className='fa fa-fw fa-check-square-o' />
       {completedTodo} of {totalTodo}
     </div>
     <div styleName='todo-process-bar'>
-      <div styleName='todo-process-bar--inner' style={{width: parseInt(completedTodo / totalTodo * 100) + '%'}} />
+      <div styleName='todo-process-bar--inner' style={{ width: parseInt(completedTodo / totalTodo * 100) + '%' }} />
     </div>
   </div>
 )

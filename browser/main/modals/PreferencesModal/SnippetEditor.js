@@ -11,7 +11,6 @@ const buildCMRulers = (rulers, enableRulers) =>
   enableRulers ? rulers.map(ruler => ({ column: ruler })) : []
 
 class SnippetEditor extends React.Component {
-
   componentDidMount () {
     this.props.onRef(this)
     const { rulers, enableRulers } = this.props

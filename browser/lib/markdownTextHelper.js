@@ -10,16 +10,16 @@ export function strip (input) {
   let output = input
   try {
     output = output
-      .replace(/^([\s\t]*)([\*\-\+]|\d+\.)\s+/gm, '$1')
+      .replace(/^([\s\t]*)([\*\-\+]|\d+\.)\s+/gm, '$1') // eslint-disable-line
       .replace(/\n={2,}/g, '\n')
       .replace(/~~/g, '')
       .replace(/`{3}.*\n/g, '')
       .replace(/<(.*?)>/g, '$1')
-      .replace(/^[=\-]{2,}\s*$/g, '')
+      .replace(/^[=\-]{2,}\s*$/g, '')  // eslint-disable-line
       .replace(/\[\^.+?\](: .*?$)?/g, '')
       .replace(/\s{0,2}\[.*?\]: .*?$/g, '')
-      .replace(/!\[.*?\][\[\(].*?[\]\)]/g, '')
-      .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, '$1')
+      .replace(/!\[.*?\][\[\(].*?[\]\)]/g, '')  // eslint-disable-line
+      .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, '$1')  // eslint-disable-line
       .replace(/>/g, '')
       .replace(/^\s{1,2}\[(.*?)\]: (\S+)( ".*?")?\s*$/g, '')
       .replace(/^#{1,6}\s*/gm, '')

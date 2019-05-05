@@ -21,8 +21,8 @@ const emptyDirPath = path.join(os.tmpdir(), 'test/init-empty-storage')
 test.beforeEach((t) => {
   localStorage.clear()
   // Prepare 3 types of dir
-  t.context.v1StorageData = TestDummy.dummyStorage(v1StoragePath, {cache: {name: 'v1'}})
-  t.context.legacyStorageData = TestDummy.dummyLegacyStorage(legacyStoragePath, {cache: {name: 'legacy'}})
+  t.context.v1StorageData = TestDummy.dummyStorage(v1StoragePath, { cache: { name: 'v1' } })
+  t.context.legacyStorageData = TestDummy.dummyLegacyStorage(legacyStoragePath, { cache: { name: 'legacy' } })
   t.context.emptyStorageData = {
     cache: {
       type: 'FILESYSTEM',

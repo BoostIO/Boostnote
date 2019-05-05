@@ -28,7 +28,7 @@ test.serial('Toggle a storage location', (t) => {
     })
     .then(function assert (data) {
       const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-      t.true(_.find(cachedStorageList, {key: storageKey}).isOpen === true)
+      t.true(_.find(cachedStorageList, { key: storageKey }).isOpen === true)
     })
 })
 

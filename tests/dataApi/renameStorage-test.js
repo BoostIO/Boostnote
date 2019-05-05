@@ -28,7 +28,7 @@ test.serial('Rename a storage', (t) => {
     })
     .then(function assert (data) {
       const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-      t.true(_.find(cachedStorageList, {key: storageKey}).name === 'changed')
+      t.true(_.find(cachedStorageList, { key: storageKey }).name === 'changed')
     })
 })
 

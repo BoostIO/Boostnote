@@ -53,7 +53,7 @@ test.serial('Add Storage', (t) => {
       })
 
       // Check localStorage
-      const cacheData = _.find(JSON.parse(localStorage.getItem('storages')), {key: data.storage.key})
+      const cacheData = _.find(JSON.parse(localStorage.getItem('storages')), { key: data.storage.key })
       t.is(cacheData.name, input.name)
       t.is(cacheData.type, input.type)
       t.is(cacheData.path, input.path)

@@ -223,7 +223,8 @@ class TagSelect extends React.Component {
     const { newTag, suggestions } = this.state
 
     return (
-      <div className={_.isString(className)
+      <div
+        className={_.isString(className)
           ? 'TagSelect ' + className
           : 'TagSelect'
         }

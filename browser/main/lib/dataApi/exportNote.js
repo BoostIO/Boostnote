@@ -51,13 +51,13 @@ function exportNote (nodeKey, storageKey, noteContent, targetPath, outputFormatt
   const tasks = prepareTasks(exportTasks, storagePath, path.dirname(targetPath))
 
   return Promise.all(tasks.map((task) => copyFile(task.src, task.dst)))
-  .then(() => exportedData)
-  .then(data => {
-    return saveToFile(data, targetPath)
-  }).catch((err) => {
-    rollbackExport(tasks)
-    throw err
-  })
+    .then(() => exportedData)
+    .then(data => {
+      return saveToFile(data, targetPath)
+    }).catch((err) => {
+      rollbackExport(tasks)
+      throw err
+    })
 }
 
 function prepareTasks (tasks, storagePath, targetPath) {

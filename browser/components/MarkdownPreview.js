@@ -1,3 +1,4 @@
+/* global MutationObserver */
 import PropTypes from 'prop-types'
 import React from 'react'
 import Markdown from 'browser/lib/markdown'
@@ -36,7 +37,7 @@ const dialog = remote.dialog
 
 const uri2path = require('file-uri-to-path')
 
-const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
+const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1] // eslint-disable-line
 const appPath = fileUrl(
   process.env.NODE_ENV === 'production' ? app.getAppPath() : path.resolve()
 )
@@ -344,7 +345,7 @@ export default class MarkdownPreview extends React.Component {
       allowCustomCSS,
       customCSS
     )
-    let body = this.markdown.render(noteContent)
+    const body = this.markdown.render(noteContent)
     const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     files.forEach(file => {
       if (global.process.platform === 'win32') {
@@ -381,7 +382,7 @@ export default class MarkdownPreview extends React.Component {
 
   handleSaveAsPdf () {
     this.exportAsDocument('pdf', (noteContent, exportTasks, targetDir) => {
-      const printout = new remote.BrowserWindow({show: false, webPreferences: {webSecurity: false}})
+      const printout = new remote.BrowserWindow({ show: false, webPreferences: { webSecurity: false } })
       printout.loadURL('data:text/html;charset=UTF-8,' + this.htmlContentFormatter(noteContent, exportTasks, targetDir))
       return new Promise((resolve, reject) => {
         printout.webContents.on('did-finish-load', () => {
@@ -448,15 +449,16 @@ export default class MarkdownPreview extends React.Component {
    */
   escapeHtmlCharactersInCodeTag (splitWithCodeTag) {
     for (let index = 0; index < splitWithCodeTag.length; index++) {
+      // eslint-disable-next-line
       const codeTagRequired = (splitWithCodeTag[index] !== '\`\`\`' && index < splitWithCodeTag.length - 1)
       if (codeTagRequired) {
-        splitWithCodeTag.splice((index + 1), 0, '\`\`\`')
+        splitWithCodeTag.splice((index + 1), 0, '\`\`\`') // eslint-disable-line
       }
     }
     let inCodeTag = false
     let result = ''
     for (let content of splitWithCodeTag) {
-      if (content === '\`\`\`') {
+      if (content === '\`\`\`') { // eslint-disable-line
         inCodeTag = !inCodeTag
       } else if (inCodeTag) {
         content = escapeHtmlCharacters(content)
@@ -617,16 +619,16 @@ export default class MarkdownPreview extends React.Component {
     let { fontFamily, codeBlockFontFamily } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
       ? fontFamily
-          .split(',')
-          .map(fontName => fontName.trim())
-          .concat(defaultFontFamily)
+        .split(',')
+        .map(fontName => fontName.trim())
+        .concat(defaultFontFamily)
       : defaultFontFamily
     codeBlockFontFamily = _.isString(codeBlockFontFamily) &&
       codeBlockFontFamily.trim().length > 0
       ? codeBlockFontFamily
-          .split(',')
-          .map(fontName => fontName.trim())
-          .concat(defaultCodeBlockFontFamily)
+        .split(',')
+        .map(fontName => fontName.trim())
+        .concat(defaultCodeBlockFontFamily)
       : defaultCodeBlockFontFamily
 
     return {
@@ -838,7 +840,7 @@ export default class MarkdownPreview extends React.Component {
             canvas.height = height.value + 'vh'
           }
 
-          const chart = new Chart(canvas, chartConfig)
+          Chart(canvas, chartConfig)
         } catch (e) {
           el.className = 'chart-error'
           el.innerHTML = 'chartjs diagram parse error: ' + e.message
@@ -1072,6 +1074,7 @@ export default class MarkdownPreview extends React.Component {
     const { className, style, tabIndex } = this.props
     return (
       <iframe
+        title='Markdown Preview'
         className={
           className != null ? 'MarkdownPreview ' + className : 'MarkdownPreview'
         }

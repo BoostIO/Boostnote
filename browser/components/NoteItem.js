@@ -3,7 +3,7 @@
  */
 import PropTypes from 'prop-types'
 import React from 'react'
-import { isArray } from 'lodash'
+import _, { isArray } from 'lodash'
 import invertColor from 'invert-color'
 import CSSModules from 'browser/lib/CSSModules'
 import { getTodoStatus } from 'browser/lib/getTodoStatus'
@@ -113,7 +113,7 @@ const NoteItem = ({
             : <span
               style={{ fontStyle: 'italic', opacity: 0.5 }}
               styleName='item-bottom-tagList-empty'
-              >
+            >
               {i18n.__('No tags')}
             </span>}
         </div>
@@ -122,7 +122,7 @@ const NoteItem = ({
             ? <img
               styleName='item-star'
               src='../resources/icon/icon-starred.svg'
-              />
+            />
             : ''}
           {note.isPinned && !pathname.match(/\/starred|\/trash/)
             ? <i styleName='item-pin' className='fa fa-thumb-tack' />
@@ -144,7 +144,7 @@ NoteItem.propTypes = {
     storage: PropTypes.string.isRequired,
     key: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    title: PropTypes.string.isrequired,
+    title: PropTypes.string.isRequired,
     tags: PropTypes.array,
     isStarred: PropTypes.bool.isRequired,
     isTrashed: PropTypes.bool.isRequired,

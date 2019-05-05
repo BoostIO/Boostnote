@@ -16,6 +16,8 @@ function resolveStorageNotes (storage) {
     }
     notePathList = []
   }
+  // Note: Map is not returning a value on error
+  /* eslint-disable */
   const notes = notePathList
     .filter(function filterOnlyCSONFile (notePath) {
       return /\.cson$/.test(notePath)
@@ -33,6 +35,7 @@ function resolveStorageNotes (storage) {
     .filter(function filterOnlyNoteObject (noteObj) {
       return typeof noteObj === 'object'
     })
+  /* eslint-enable */
 
   return Promise.resolve(notes)
 }

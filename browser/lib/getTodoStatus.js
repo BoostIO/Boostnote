@@ -5,10 +5,10 @@ export function getTodoStatus (content) {
 
   splitted.forEach((line) => {
     const trimmedLine = line.trim()
-    if (trimmedLine.match(/^[\+\-\*] \[(\s|x)\] ./i)) {
+    if (trimmedLine.match(/^[\+\-\*] \[(\s|x)\] ./i)) {  // eslint-disable-line
       numberOfTodo++
     }
-    if (trimmedLine.match(/^[\+\-\*] \[x\] ./i)) {
+    if (trimmedLine.match(/^[\+\-\*] \[x\] ./i)) { // eslint-disable-line
       numberOfCompletedTodo++
     }
   })

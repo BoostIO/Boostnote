@@ -48,7 +48,7 @@ function createNote (storageKey, input) {
 
   return resolveStorageData(targetStorage)
     .then(function checkFolderExists (storage) {
-      if (_.find(storage.folders, {key: input.folder}) == null) {
+      if (_.find(storage.folders, { key: input.folder }) == null) {
         throw new Error('Target folder doesn\'t exist.')
       }
       return storage

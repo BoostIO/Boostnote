@@ -127,7 +127,7 @@ class StorageItem extends React.Component {
             >
               <i className='fa fa-plus' />
               <span styleName='header-control-button-tooltip'
-                style={{left: -20}}
+                style={{ left: -20 }}
               >{i18n.__('Add Folder')}</span>
             </button>
             <button styleName='header-control-button'
@@ -135,7 +135,7 @@ class StorageItem extends React.Component {
             >
               <i className='fa fa-external-link' />
               <span styleName='header-control-button-tooltip'
-                style={{left: -50}}
+                style={{ left: -50 }}
               >{i18n.__('Open Storage folder')}</span>
             </button>
             <button styleName='header-control-button'
@@ -143,7 +143,7 @@ class StorageItem extends React.Component {
             >
               <i className='fa fa-unlink' />
               <span styleName='header-control-button-tooltip'
-                style={{left: -10}}
+                style={{ left: -10 }}
               >{i18n.__('Unlink')}</span>
             </button>
           </div>

@@ -7,7 +7,7 @@ import i18n from 'browser/lib/i18n'
 const InfoPanelTrashed = ({
   storageName, folderName, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, exportAsPdf
 }) => (
-  <div className='infoPanel' styleName='control-infoButton-panel-trash' style={{display: 'none'}}>
+  <div className='infoPanel' styleName='control-infoButton-panel-trash' style={{ display: 'none' }}>
     <div>
       <p styleName='modification-date'>{updatedAt}</p>
       <p styleName='modification-date-desc'>{i18n.__('MODIFICATION DATE')}</p>

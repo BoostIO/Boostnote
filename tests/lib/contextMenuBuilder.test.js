@@ -1,6 +1,6 @@
 let menuBuilderParameter
 jest.mock('electron', () => {
-  return {remote: {require: jest.fn(() => { return {Menu: {buildFromTemplate: jest.fn((param) => { menuBuilderParameter = param })}} })}}
+  return { remote: { require: jest.fn(() => { return { Menu: { buildFromTemplate: jest.fn((param) => { menuBuilderParameter = param }) } } }) } }
 })
 
 const spellcheck = require('browser/lib/spellcheck')
@@ -23,7 +23,7 @@ it('should make sure that word suggestions are only requested if the word contai
   spellcheck.getSpellingSuggestion = jest.fn()
   const editor = jest.fn()
   editor.coordsChar = jest.fn()
-  editor.findWordAt = jest.fn(() => { return {anchor: {}, head: {}} })
+  editor.findWordAt = jest.fn(() => { return { anchor: {}, head: {} } })
   editor.getRange = jest.fn()
   editor.findMarks = jest.fn(() => [])
   const event = {
@@ -44,10 +44,10 @@ it('should make sure that word suggestions are only requested if the word contai
   spellcheck.getCSSClassName = jest.fn(() => 'dummyErrorClassName')
   const editor = jest.fn()
   editor.coordsChar = jest.fn()
-  editor.findWordAt = jest.fn(() => { return {anchor: {}, head: {}} })
+  editor.findWordAt = jest.fn(() => { return { anchor: {}, head: {} } })
   editor.getRange = jest.fn()
   const dummyMarks = [
-    {className: 'someStupidClassName'}
+    { className: 'someStupidClassName' }
   ]
   editor.findMarks = jest.fn(() => dummyMarks)
   const event = {
@@ -66,14 +66,14 @@ it('should make sure that word suggestions are only requested if the word contai
 it('should make sure that word suggestions calls the right editor functions', function () {
   spellcheck.getSpellingSuggestion = jest.fn()
   spellcheck.getCSSClassName = jest.fn(() => 'dummyErrorClassName')
-  const dummyCursor = {dummy: 'dummy'}
-  const dummyRange = {anchor: {test: 'test'}, head: {test2: 'test2'}}
+  const dummyCursor = { dummy: 'dummy' }
+  const dummyRange = { anchor: { test: 'test' }, head: { test2: 'test2' } }
   const editor = jest.fn()
   editor.coordsChar = jest.fn(() => dummyCursor)
   editor.findWordAt = jest.fn(() => dummyRange)
   editor.getRange = jest.fn()
   const dummyMarks = [
-    {className: 'someStupidClassName'}
+    { className: 'someStupidClassName' }
   ]
   editor.findMarks = jest.fn(() => dummyMarks)
   const event = {
@@ -81,7 +81,7 @@ it('should make sure that word suggestions calls the right editor functions', fu
     pageY: 21
   }
 
-  const expectedCoordsCharCall = {left: event.pageX, top: event.pageY}
+  const expectedCoordsCharCall = { left: event.pageX, top: event.pageY }
 
   buildEditorContextMenu(editor, event)
 
@@ -95,13 +95,13 @@ it('should make sure that word suggestions creates a correct menu if there was a
   const errorClassName = 'errorCSS'
   const wordToCorrect = 'pustekuchen'
   const dummyMarks = [
-    {className: errorClassName}
+    { className: errorClassName }
   ]
   spellcheck.getSpellingSuggestion = jest.fn(() => suggestions)
   spellcheck.getCSSClassName = jest.fn(() => errorClassName)
   const editor = jest.fn()
   editor.coordsChar = jest.fn()
-  editor.findWordAt = jest.fn(() => { return {anchor: {}, head: {}} })
+  editor.findWordAt = jest.fn(() => { return { anchor: {}, head: {} } })
   editor.getRange = jest.fn(() => wordToCorrect)
   editor.findMarks = jest.fn(() => [])
 

@@ -82,4 +82,3 @@ module.exports = {
     return languages
   }
 }
-

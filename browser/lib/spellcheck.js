@@ -14,10 +14,10 @@ let self
 
 function getAvailableDictionaries () {
   return [
-    {label: i18n.__('Spellcheck disabled'), value: SPELLCHECK_DISABLED},
-    {label: i18n.__('English'), value: 'en_GB'},
-    {label: i18n.__('German'), value: 'de_DE'},
-    {label: i18n.__('French'), value: 'fr_FR'}
+    { label: i18n.__('Spellcheck disabled'), value: SPELLCHECK_DISABLED },
+    { label: i18n.__('English'), value: 'en_GB' },
+    { label: i18n.__('German'), value: 'de_DE' },
+    { label: i18n.__('French'), value: 'fr_FR' }
   ]
 }
 
@@ -64,8 +64,8 @@ function checkWholeDocument (editor) {
   const lastLine = editor.lineCount() - 1
   const textOfLastLine = editor.getLine(lastLine) || ''
   const lastChar = textOfLastLine.length
-  const from = {line: 0, ch: 0}
-  const to = {line: lastLine, ch: lastChar}
+  const from = { line: 0, ch: 0 }
+  const to = { line: lastLine, ch: lastChar }
   checkMultiLineRange(editor, from, to)
 }
 
@@ -78,12 +78,12 @@ function checkWholeDocument (editor) {
 function checkMultiLineRange (editor, from, to) {
   function sortRange (pos1, pos2) {
     if (pos1.line > pos2.line || (pos1.line === pos2.line && pos1.ch > pos2.ch)) {
-      return {from: pos2, to: pos1}
+      return { from: pos2, to: pos1 }
     }
-    return {from: pos1, to: pos2}
+    return { from: pos1, to: pos2 }
   }
 
-  const {from: smallerPos, to: higherPos} = sortRange(from, to)
+  const { from: smallerPos, to: higherPos } = sortRange(from, to)
   for (let l = smallerPos.line; l <= higherPos.line; l++) {
     const line = editor.getLine(l) || ''
     let w = 0
@@ -95,7 +95,7 @@ function checkMultiLineRange (editor, from, to) {
       wEnd = higherPos.ch
     }
     while (w <= wEnd) {
-      const wordRange = editor.findWordAt({line: l, ch: w})
+      const wordRange = editor.findWordAt({ line: l, ch: w })
       self.checkWord(editor, wordRange)
       w += (wordRange.head.ch - wordRange.anchor.ch) + 1
     }
@@ -116,7 +116,7 @@ function checkWord (editor, wordRange) {
     return
   }
   if (!dictionary.check(word)) {
-    editor.markText(wordRange.anchor, wordRange.head, {className: styles[CSS_ERROR_CLASS]})
+    editor.markText(wordRange.anchor, wordRange.head, { className: styles[CSS_ERROR_CLASS] })
   }
 }
 
@@ -145,13 +145,13 @@ function checkChangeRange (editor, fromChangeObject, toChangeObject) {
         biggest = currentPos
       }
     }
-    return {start: smallest, end: biggest}
+    return { start: smallest, end: biggest }
   }
 
   if (dictionary === null || editor == null) { return }
 
   try {
-    const {start, end} = getStartAndEnd(fromChangeObject, toChangeObject)
+    const { start, end } = getStartAndEnd(fromChangeObject, toChangeObject)
 
     // Expand the range to include words after/before whitespaces
     start.ch = Math.max(start.ch - 1, 0)

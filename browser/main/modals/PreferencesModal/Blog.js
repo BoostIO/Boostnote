@@ -35,16 +35,16 @@ class Blog extends React.Component {
 
   componentDidMount () {
     this.handleSettingDone = () => {
-      this.setState({BlogAlert: {
+      this.setState({ BlogAlert: {
         type: 'success',
         message: i18n.__('Successfully applied!')
-      }})
+      } })
     }
     this.handleSettingError = (err) => {
-      this.setState({BlogAlert: {
+      this.setState({ BlogAlert: {
         type: 'error',
         message: err.message != null ? err.message : i18n.__('An error occurred!')
-      }})
+      } })
     }
     this.oldBlog = this.state.config.blog
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
@@ -91,7 +91,7 @@ class Blog extends React.Component {
   }
 
   render () {
-    const {config, BlogAlert} = this.state
+    const { config, BlogAlert } = this.state
     const blogAlertElement = BlogAlert != null
       ? <p className={`alert ${BlogAlert.type}`}>
         {BlogAlert.message}

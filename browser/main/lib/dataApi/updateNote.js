@@ -120,9 +120,10 @@ function updateNote (storageKey, noteKey, input) {
         noteData.isPinned = false
       }
 
-      if (noteData.type === 'SNIPPET_NOTE') {
-        noteData.title
-      }
+      // Commented as it's doing nothing - Should it be removed?
+      // if (noteData.type === 'SNIPPET_NOTE') {
+      //   noteData.title
+      // }
 
       Object.assign(noteData, input, {
         key: noteKey,

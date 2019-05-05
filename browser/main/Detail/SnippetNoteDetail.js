@@ -8,7 +8,7 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
-import {hashHistory} from 'react-router'
+import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
@@ -17,8 +17,7 @@ import StatusBar from '../StatusBar'
 import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
-import {findNoteTitle} from 'browser/lib/findNoteTitle'
-import convertModeName from 'browser/lib/convertModeName'
+import { findNoteTitle } from 'browser/lib/findNoteTitle'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import FullscreenButton from './FullscreenButton'
 import TrashButton from './TrashButton'
@@ -49,7 +48,7 @@ class SnippetNoteDetail extends React.Component {
       note: Object.assign({
         description: ''
       }, props.note, {
-        snippets: props.note.snippets.map((snippet) => Object.assign({linesHighlighted: []}, snippet))
+        snippets: props.note.snippets.map((snippet) => Object.assign({ linesHighlighted: [] }, snippet))
       })
     }
 
@@ -77,7 +76,7 @@ class SnippetNoteDetail extends React.Component {
       const nextNote = Object.assign({
         description: ''
       }, nextProps.note, {
-        snippets: nextProps.note.snippets.map((snippet) => Object.assign({linesHighlighted: []}, snippet))
+        snippets: nextProps.note.snippets.map((snippet) => Object.assign({ linesHighlighted: [] }, snippet))
       })
 
       this.setState({
@@ -203,7 +202,7 @@ class SnippetNoteDetail extends React.Component {
 
     if (isTrashed) {
       if (confirmDeleteNote(confirmDeletion, true)) {
-        const {note, dispatch} = this.props
+        const { note, dispatch } = this.props
         dataApi
           .deleteNote(note.storage, note.key)
           .then((data) => {
@@ -263,8 +262,8 @@ class SnippetNoteDetail extends React.Component {
         const visiblePart = lastVisibleTab.offsetWidth + lastVisibleTab.offsetLeft - left
         const isFullyVisible = visiblePart > lastVisibleTab.offsetWidth * this.scrollToNextTabThreshold
         const scrollToTab = (isFullyVisible && lastVisibleTab.previousSibling)
-            ? lastVisibleTab.previousSibling
-            : lastVisibleTab
+          ? lastVisibleTab.previousSibling
+          : lastVisibleTab
 
         // FIXME use `scrollIntoView()` instead of custom method after update to Electron2.0 (with Chrome 61 its possible animate the scroll)
         this.moveToTab(scrollToTab)
@@ -286,8 +285,8 @@ class SnippetNoteDetail extends React.Component {
       const visiblePart = width + left - lastVisibleTab.offsetLeft
       const isFullyVisible = visiblePart > lastVisibleTab.offsetWidth * this.scrollToNextTabThreshold
       const scrollToTab = (isFullyVisible && lastVisibleTab.nextSibling)
-          ? lastVisibleTab.nextSibling
-          : lastVisibleTab
+        ? lastVisibleTab.nextSibling
+        : lastVisibleTab
 
       // FIXME use `scrollIntoView()` instead of custom method after update to Electron2.0 (with Chrome 61 its possible animate the scroll)
       this.moveToTab(scrollToTab)
@@ -318,7 +317,7 @@ class SnippetNoteDetail extends React.Component {
     snippets[index] = draggedSnippet
     const snippetIndex = index
 
-    const note = Object.assign({}, this.state.note, {snippets})
+    const note = Object.assign({}, this.state.note, { snippets })
     this.setState({ note, snippetIndex }, () => {
       this.save()
       this.refs['code-' + index].reload()
@@ -347,7 +346,7 @@ class SnippetNoteDetail extends React.Component {
   deleteSnippetByIndex (index) {
     const snippets = this.state.note.snippets.slice()
     snippets.splice(index, 1)
-    const note = Object.assign({}, this.state.note, {snippets})
+    const note = Object.assign({}, this.state.note, { snippets })
     const snippetIndex = this.state.snippetIndex >= snippets.length
       ? snippets.length - 1
       : this.state.snippetIndex
@@ -381,7 +380,7 @@ class SnippetNoteDetail extends React.Component {
         name: mode
       })
     }
-    this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
+    this.setState(state => ({ note: Object.assign(state.note, { snippets: snippets }) }))
 
     this.setState(state => ({
       note: state.note
@@ -394,7 +393,7 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       const snippets = this.state.note.snippets.slice()
       snippets[index].mode = name
-      this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
+      this.setState(state => ({ note: Object.assign(state.note, { snippets: snippets }) }))
 
       this.setState(state => ({
         note: state.note
@@ -414,7 +413,7 @@ class SnippetNoteDetail extends React.Component {
       snippets[index].content = this.refs['code-' + index].value
       snippets[index].linesHighlighted = e.options.linesHighlighted
 
-      this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
+      this.setState(state => ({ note: Object.assign(state.note, { snippets: snippets }) }))
       this.setState(state => ({
         note: state.note
       }), () => {
@@ -596,7 +595,7 @@ class SnippetNoteDetail extends React.Component {
     const enableRightArrow = visibleTabs.scrollLeft !== allTabs.scrollWidth - visibleTabs.offsetWidth
     const enableLeftArrow = visibleTabs.scrollLeft !== 0
 
-    return {showArrows, enableRightArrow, enableLeftArrow}
+    return { showArrows, enableRightArrow, enableLeftArrow }
   }
 
   addSnippet () {
@@ -704,7 +703,7 @@ class SnippetNoteDetail extends React.Component {
       const isActive = this.state.snippetIndex === index
       return <div styleName='tabView'
         key={index}
-        style={{zIndex: isActive ? 5 : 4}}
+        style={{ zIndex: isActive ? 5 : 4 }}
       >
         {snippet.mode === 'Markdown' || snippet.mode === 'GitHub Flavored Markdown'
           ? <MarkdownEditor styleName='tabView-content'

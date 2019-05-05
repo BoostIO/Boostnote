@@ -1,4 +1,3 @@
-'use strict'
 const _ = require('lodash')
 const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
@@ -40,7 +39,7 @@ function init () {
 
   const fetchNotes = function (storages) {
     const findNotesFromEachStorage = storages
-    .filter(storage => fs.existsSync(storage.path))
+      .filter(storage => fs.existsSync(storage.path))
       .map((storage) => {
         return resolveStorageNotes(storage)
           .then((notes) => {

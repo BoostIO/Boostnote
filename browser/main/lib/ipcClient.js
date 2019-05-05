@@ -17,10 +17,10 @@ nodeIpc.connectTo(
       console.error(err)
     })
     nodeIpc.of.node.on('connect', function () {
-      ipcRenderer.send('config-renew', {config: ConfigManager.get()})
+      ipcRenderer.send('config-renew', { config: ConfigManager.get() })
     })
     nodeIpc.of.node.on('disconnect', function () {
-      return
+      return // eslint-disable-line
     })
   }
 )

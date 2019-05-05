@@ -39,4 +39,3 @@ var config = Object.assign({}, skeleton, {
 })
 
 module.exports = config
-

@@ -279,7 +279,7 @@ test(t => {
   const testCases = [
     [
       `***************************** Empty note, cursor at the top`,
-      {line: 0, ch: 0},
+      { line: 0, ch: 0 },
       ``,
       `
 <!-- toc -->
@@ -291,7 +291,7 @@ test(t => {
     ],
     [
       `***************************** Two level note,TOC at the beginning `,
-      {line: 0, ch: 0},
+      { line: 0, ch: 0 },
       `
 # one
 this is a level one text
@@ -329,7 +329,7 @@ this is a level one text
     ],
     [
       `***************************** Two level note, cursor just after 'header text' `,
-      {line: 1, ch: 12},
+      { line: 1, ch: 12 },
       `
 # header 
  header text
@@ -373,7 +373,7 @@ this is a level one text
     ],
     [
       `***************************** Two level note, cursor at empty line under 'header text' `,
-      {line: 2, ch: 0},
+      { line: 2, ch: 0 },
       `
 # header 
  header text
@@ -416,7 +416,7 @@ this is a level one text
     ],
     [
       `***************************** Two level note, cursor just before 'text' word`,
-      {line: 1, ch: 8},
+      { line: 1, ch: 8 },
       `
 # header 
  header text
@@ -461,7 +461,7 @@ this is a level one text
     ],
     [
       `***************************** Already generated TOC without header file, regenerate TOC in place, no changes`,
-      {line: 13, ch: 0},
+      { line: 13, ch: 0 },
       `
 # header 
  header text
@@ -511,7 +511,7 @@ this is a level one text
     ],
     [
       `***************************** Already generated TOC, needs updating in place`,
-      {line: 0, ch: 0},
+      { line: 0, ch: 0 },
       `
 # header 
  header text
@@ -561,7 +561,7 @@ this is a level one text
     ],
     [
       `***************************** Document with cursor at the last line, expecting empty TOC `,
-      {line: 13, ch: 30},
+      { line: 13, ch: 30 },
       `
 # header 
  header text
@@ -602,7 +602,7 @@ this is a level one text
     ],
     [
       `***************************** Empty, not actual TOC , should be supplemented with two new points beneath`,
-      {line: 0, ch: 0},
+      { line: 0, ch: 0 },
       `
 # header 
  header text

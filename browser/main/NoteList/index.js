@@ -378,7 +378,7 @@ class NoteList extends React.Component {
     const storage = data.storageMap.get(storageKey)
     if (storage === undefined) return []
 
-    const folder = _.find(storage.folders, {key: folderKey})
+    const folder = _.find(storage.folders, { key: folderKey })
     if (folder === undefined) {
       const storageNoteSet = data.storageNoteMap.get(storage.key) || []
       return storageNoteSet.map((uniqueKey) => data.noteMap.get(uniqueKey))
@@ -614,20 +614,20 @@ class NoteList extends React.Component {
     }
 
     Promise.all(
-        selectedNotes.map((note) => {
-          note = updateFunc(note)
-          return dataApi
-              .updateNote(note.storage, note.key, note)
-        })
+      selectedNotes.map((note) => {
+        note = updateFunc(note)
+        return dataApi
+          .updateNote(note.storage, note.key, note)
+      })
     )
-        .then((updatedNotes) => {
-          updatedNotes.forEach((note) => {
-            dispatch({
-              type: 'UPDATE_NOTE',
-              note
-            })
+      .then((updatedNotes) => {
+        updatedNotes.forEach((note) => {
+          dispatch({
+            type: 'UPDATE_NOTE',
+            note
           })
         })
+      })
 
     if (cleanSelection) {
       this.selectNextNote()
@@ -665,22 +665,22 @@ class NoteList extends React.Component {
             .deleteNote(note.storage, note.key)
         })
       )
-      .then((data) => {
-        const dispatchHandler = () => {
-          data.forEach((item) => {
-            dispatch({
-              type: 'DELETE_NOTE',
-              storageKey: item.storageKey,
-              noteKey: item.noteKey
+        .then((data) => {
+          const dispatchHandler = () => {
+            data.forEach((item) => {
+              dispatch({
+                type: 'DELETE_NOTE',
+                storageKey: item.storageKey,
+                noteKey: item.noteKey
+              })
             })
-          })
-        }
-        ee.once('list:next', dispatchHandler)
-      })
-      .then(() => ee.emit('list:next'))
-      .catch((err) => {
-        console.error('Cannot Delete note: ' + err)
-      })
+          }
+          ee.once('list:next', dispatchHandler)
+        })
+        .then(() => ee.emit('list:next'))
+        .catch((err) => {
+          console.error('Cannot Delete note: ' + err)
+        })
     } else {
       if (!confirmDeleteNote(confirmDeletion, false)) return
 
@@ -689,22 +689,22 @@ class NoteList extends React.Component {
           note.isTrashed = true
 
           return dataApi
-          .updateNote(note.storage, note.key, note)
+            .updateNote(note.storage, note.key, note)
         })
       )
-      .then((newNotes) => {
-        newNotes.forEach((newNote) => {
-          dispatch({
-            type: 'UPDATE_NOTE',
-            note: newNote
+        .then((newNotes) => {
+          newNotes.forEach((newNote) => {
+            dispatch({
+              type: 'UPDATE_NOTE',
+              note: newNote
+            })
           })
+          AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
         })
-        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
-      })
-      .then(() => ee.emit('list:next'))
-      .catch((err) => {
-        console.error('Notes could not go to trash: ' + err)
-      })
+        .then(() => ee.emit('list:next'))
+        .catch((err) => {
+          console.error('Notes could not go to trash: ' + err)
+        })
     }
     this.setState({ selectedNoteKeys: [] })
   }
@@ -748,7 +748,7 @@ class NoteList extends React.Component {
 
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: note.key}
+          query: { key: note.key }
         })
       })
   }
@@ -790,12 +790,12 @@ class NoteList extends React.Component {
   }
 
   publishMarkdownNow () {
-    const {selectedNoteKeys} = this.state
+    const { selectedNoteKeys } = this.state
     const notes = this.notes.map((note) => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
     const firstNote = selectedNotes[0]
     const config = ConfigManager.get()
-    const {address, token, authMethod, username, password} = config.blog
+    const { address, token, authMethod, username, password } = config.blog
     let authToken = ''
     if (authMethod === 'USER') {
       authToken = `Basic ${window.btoa(`${username}:${password}`)}`
@@ -830,7 +830,8 @@ class NoteList extends React.Component {
     }).then(res => res.json())
       .then(response => {
         if (_.isNil(response.link) || _.isNil(response.id)) {
-          return Promise.reject()
+          // Note: Reject should be called with new Error()
+          return Promise.reject() // eslint-disable-line
         }
         firstNote.blog = {
           blogLink: response.link,
@@ -895,7 +896,7 @@ class NoteList extends React.Component {
     if (!location.pathname.match(/\/trashed/)) this.addNotesFromFiles(filepaths)
   }
 
- // Add notes to the current folder
+  // Add notes to the current folder
   addNotesFromFiles (filepaths) {
     const { dispatch, location } = this.props
     const { storage, folder } = this.resolveTargetFolder()
@@ -905,7 +906,7 @@ class NoteList extends React.Component {
       fs.readFile(filepath, (err, data) => {
         if (err) throw Error('File reading error: ', err)
 
-        fs.stat(filepath, (err, {mtime, birthtime}) => {
+        fs.stat(filepath, (err, { mtime, birthtime }) => {
           if (err) throw Error('File stat reading error: ', err)
 
           const content = data.toString()
@@ -918,23 +919,23 @@ class NoteList extends React.Component {
             updatedAt: mtime
           }
           dataApi.createNote(storage.key, newNote)
-          .then((note) => {
-            attachmentManagement.importAttachments(note.content, filepath, storage.key, note.key)
-            .then((newcontent) => {
-              note.content = newcontent
+            .then((note) => {
+              attachmentManagement.importAttachments(note.content, filepath, storage.key, note.key)
+                .then((newcontent) => {
+                  note.content = newcontent
 
-              dataApi.updateNote(storage.key, note.key, note)
+                  dataApi.updateNote(storage.key, note.key, note)
 
-              dispatch({
-                type: 'UPDATE_NOTE',
-                note: note
-              })
-              hashHistory.push({
-                pathname: location.pathname,
-                query: {key: getNoteKey(note)}
-              })
+                  dispatch({
+                    type: 'UPDATE_NOTE',
+                    note: note
+                  })
+                  hashHistory.push({
+                    pathname: location.pathname,
+                    query: { key: getNoteKey(note) }
+                  })
+                })
             })
-          })
         })
       })
     })
@@ -961,7 +962,7 @@ class NoteList extends React.Component {
     }
 
     if (storage == null) this.showMessageBox('No storage for importing note(s)')
-    const folder = _.find(storage.folders, {key: params.folderKey}) || storage.folders[0]
+    const folder = _.find(storage.folders, { key: params.folderKey }) || storage.folders[0]
     if (folder == null) this.showMessageBox('No folder for importing note(s)')
 
     return {
@@ -1004,11 +1005,13 @@ class NoteList extends React.Component {
     const sortFunc = sortBy === 'CREATED_AT'
       ? sortByCreatedAt
       : sortBy === 'ALPHABETICAL'
-      ? sortByAlphabetical
-      : sortByUpdatedAt
+        ? sortByAlphabetical
+        : sortByUpdatedAt
     const sortedNotes = location.pathname.match(/\/starred|\/trash/)
-        ? this.getNotes().sort(sortFunc)
-        : this.sortByPin(this.getNotes().sort(sortFunc))
+      ? this.getNotes().sort(sortFunc)
+      : this.sortByPin(this.getNotes().sort(sortFunc))
+    // Note: Filter is not returning a value in every case
+    // eslint-disable-next-line
     this.notes = notes = sortedNotes.filter((note) => {
       // this is for the trash box
       if (note.isTrashed !== true || location.pathname === '/trashed') return true
@@ -1114,7 +1117,9 @@ class NoteList extends React.Component {
             </select>
           </div>
           <div styleName='control-button-area'>
-            <button title={i18n.__('Default View')} styleName={config.listStyle === 'DEFAULT'
+            <button
+              title={i18n.__('Default View')}
+              styleName={config.listStyle === 'DEFAULT'
                 ? 'control-button--active'
                 : 'control-button'
               }
@@ -1122,7 +1127,9 @@ class NoteList extends React.Component {
             >
               <img styleName='iconTag' src='../resources/icon/icon-column.svg' />
             </button>
-            <button title={i18n.__('Compressed View')} styleName={config.listStyle === 'SMALL'
+            <button
+              title={i18n.__('Compressed View')}
+              styleName={config.listStyle === 'SMALL'
                 ? 'control-button--active'
                 : 'control-button'
               }

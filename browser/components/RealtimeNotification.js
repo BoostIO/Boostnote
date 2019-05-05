@@ -25,7 +25,7 @@ class RealtimeNotification extends React.Component {
         return response.json()
       })
       .then(json => {
-        this.setState({notifications: json.notifications})
+        this.setState({ notifications: json.notifications })
       })
   }
 
@@ -42,7 +42,7 @@ class RealtimeNotification extends React.Component {
       >
         Info: {notifications[0].text}
       </a>
-    : ''
+      : ''
 
     return (
       <div styleName='notification-area' style={this.props.style}>{link}</div>

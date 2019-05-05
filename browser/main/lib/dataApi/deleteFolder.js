@@ -3,7 +3,6 @@ const path = require('path')
 const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
 const CSON = require('@rokt33r/season')
-const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
 const deleteSingleNote = require('./deleteNote')
 

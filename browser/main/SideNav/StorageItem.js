@@ -193,35 +193,35 @@ class StorageItem extends React.Component {
       multiSelections: false
     }
     dialog.showOpenDialog(remote.getCurrentWindow(), options,
-    (paths) => {
-      if (paths && paths.length === 1) {
-        const { storage, dispatch } = this.props
-        dataApi
-          .exportFolder(storage.key, folder.key, fileType, paths[0])
-          .then((data) => {
-            dispatch({
-              type: 'EXPORT_FOLDER',
-              storage: data.storage,
-              folderKey: data.folderKey,
-              fileType: data.fileType
+      (paths) => {
+        if (paths && paths.length === 1) {
+          const { storage, dispatch } = this.props
+          dataApi
+            .exportFolder(storage.key, folder.key, fileType, paths[0])
+            .then((data) => {
+              dispatch({
+                type: 'EXPORT_FOLDER',
+                storage: data.storage,
+                folderKey: data.folderKey,
+                fileType: data.fileType
+              })
+              return data
             })
-            return data
-          })
-          .then(data => {
-            dialog.showMessageBox(remote.getCurrentWindow(), {
-              type: 'info',
-              message: 'Exported to "' + data.exportDir + '"'
+            .then(data => {
+              dialog.showMessageBox(remote.getCurrentWindow(), {
+                type: 'info',
+                message: 'Exported to "' + data.exportDir + '"'
+              })
             })
-          })
-          .catch(err => {
-            dialog.showErrorBox(
-              'Export error',
-              err ? err.message || err : 'Unexpected error during export'
-            )
-            throw err
-          })
-      }
-    })
+            .catch(err => {
+              dialog.showErrorBox(
+                'Export error',
+                err ? err.message || err : 'Unexpected error during export'
+              )
+              throw err
+            })
+        }
+      })
   }
 
   handleFolderDeleteClick (e, folder) {
@@ -269,18 +269,18 @@ class StorageItem extends React.Component {
     Promise.all(
       noteData.map((note) => dataApi.moveNote(note.storage, note.key, storage.key, folder.key))
     )
-    .then((createdNoteData) => {
-      createdNoteData.forEach((newNote) => {
-        dispatch({
-          type: 'MOVE_NOTE',
-          originNote: noteData.find((note) => note.content === newNote.oldContent),
-          note: newNote
+      .then((createdNoteData) => {
+        createdNoteData.forEach((newNote) => {
+          dispatch({
+            type: 'MOVE_NOTE',
+            originNote: noteData.find((note) => note.content === newNote.oldContent),
+            note: newNote
+          })
         })
       })
-    })
-    .catch((err) => {
-      console.error(`error on delete notes: ${err}`)
-    })
+      .catch((err) => {
+        console.error(`error on delete notes: ${err}`)
+      })
   }
 
   handleDrop (e, storage, folder, dispatch, location) {
@@ -342,10 +342,11 @@ class StorageItem extends React.Component {
       <div styleName={isFolded ? 'root--folded' : 'root'}
         key={storage.key}
       >
-        <div styleName={isActive
-          ? 'header--active'
-          : 'header'
-        }
+        <div
+          styleName={isActive
+            ? 'header--active'
+            : 'header'
+          }
           onContextMenu={(e) => this.handleHeaderContextMenu(e)}
         >
           <button styleName='header-toggleButton'
@@ -370,7 +371,7 @@ class StorageItem extends React.Component {
             onClick={(e) => this.handleHeaderInfoClick(e)}
           >
             <span styleName='header-info-name'>
-              {isFolded ? _.truncate(storage.name, {length: 1, omission: ''}) : storage.name}
+              {isFolded ? _.truncate(storage.name, { length: 1, omission: '' }) : storage.name}
             </span>
             {isFolded &&
               <span styleName='header-info--folded-tooltip'>

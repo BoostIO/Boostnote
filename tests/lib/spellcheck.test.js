@@ -14,7 +14,7 @@ it('should test that checkWord does not marks words that do not contain a typo',
   const editor = jest.fn()
   editor.getRange = jest.fn(() => testWord)
   editor.markText = jest.fn()
-  const range = {anchor: {line: 1, ch: 0}, head: {line: 1, ch: 10}}
+  const range = { anchor: { line: 1, ch: 0 }, head: { line: 1, ch: 10 } }
   const mockDictionary = jest.fn()
   mockDictionary.check = jest.fn(() => true)
   systemUnderTest.setDictionaryForTestsOnly(mockDictionary)
@@ -31,7 +31,7 @@ it('should test that checkWord should marks words that contain a typo', function
   const editor = jest.fn()
   editor.getRange = jest.fn(() => testWord)
   editor.markText = jest.fn()
-  const range = {anchor: {line: 1, ch: 0}, head: {line: 1, ch: 10}}
+  const range = { anchor: { line: 1, ch: 0 }, head: { line: 1, ch: 10 } }
   const mockDictionary = jest.fn()
   mockDictionary.check = jest.fn(() => false)
   systemUnderTest.setDictionaryForTestsOnly(mockDictionary)
@@ -40,14 +40,14 @@ it('should test that checkWord should marks words that contain a typo', function
 
   expect(editor.getRange).toHaveBeenCalledWith(range.anchor, range.head)
   expect(mockDictionary.check).toHaveBeenCalledWith(testWord)
-  expect(editor.markText).toHaveBeenCalledWith(range.anchor, range.head, {'className': systemUnderTest.CSS_ERROR_CLASS})
+  expect(editor.markText).toHaveBeenCalledWith(range.anchor, range.head, { 'className': systemUnderTest.CSS_ERROR_CLASS })
 })
 
 it('should test that setLanguage clears all marks', function () {
   const dummyMarks = [
-    {clear: jest.fn()},
-    {clear: jest.fn()},
-    {clear: jest.fn()}
+    { clear: jest.fn() },
+    { clear: jest.fn() },
+    { clear: jest.fn() }
   ]
   const editor = jest.fn()
   editor.getAllMarks = jest.fn(() => dummyMarks)
@@ -102,8 +102,8 @@ it('should test that checkMultiLineRange performs checks for each word in the st
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {line: 2, ch: 4}
-  const rangeTo = {line: 3, ch: 36}
+  const rangeFrom = { line: 2, ch: 4 }
+  const rangeTo = { line: 3, ch: 36 }
 
   systemUnderTest.checkMultiLineRange(editor, rangeFrom, rangeTo)
 
@@ -136,8 +136,8 @@ it('should test that checkMultiLineRange works correct even when the range is in
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {line: 3, ch: 36}
-  const rangeTo = {line: 2, ch: 4}
+  const rangeFrom = { line: 3, ch: 36 }
+  const rangeTo = { line: 2, ch: 4 }
 
   systemUnderTest.checkMultiLineRange(editor, rangeFrom, rangeTo)
 
@@ -170,8 +170,8 @@ it('should test that checkMultiLineRange works for single line', function () {
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {line: 5, ch: 14}
-  const rangeTo = {line: 5, ch: 39}
+  const rangeFrom = { line: 5, ch: 14 }
+  const rangeTo = { line: 5, ch: 39 }
 
   systemUnderTest.checkMultiLineRange(editor, rangeFrom, rangeTo)
 
@@ -196,8 +196,8 @@ it('should test that checkMultiLineRange works for single word', function () {
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {line: 7, ch: 6}
-  const rangeTo = {line: 7, ch: 6}
+  const rangeFrom = { line: 7, ch: 6 }
+  const rangeTo = { line: 7, ch: 6 }
 
   systemUnderTest.checkMultiLineRange(editor, rangeFrom, rangeTo)
 
@@ -221,18 +221,18 @@ it('should make sure that liveSpellcheck don\'t work if the spellcheck is not en
 
 it('should make sure that liveSpellcheck works for a range of changes', function () {
   const editor = jest.fn()
-  const marks = [{clear: jest.fn()}, {clear: jest.fn()}]
+  const marks = [{ clear: jest.fn() }, { clear: jest.fn() }]
   editor.findMarks = jest.fn(() => marks)
   const checkMultiLineRangeSpy = jest.spyOn(systemUnderTest, 'checkMultiLineRange').mockImplementation()
 
-  const inputChangeRange = {from: {line: 0, ch: 2}, to: {line: 1, ch: 1}}
-  const inputChangeRangeTo = {from: {line: 0, ch: 2}, to: {line: 1, ch: 2}}
+  const inputChangeRange = { from: { line: 0, ch: 2 }, to: { line: 1, ch: 1 } }
+  const inputChangeRangeTo = { from: { line: 0, ch: 2 }, to: { line: 1, ch: 2 } }
 
   systemUnderTest.setDictionaryForTestsOnly({})
   systemUnderTest.checkChangeRange(editor, inputChangeRange, inputChangeRangeTo)
 
-  expect(checkMultiLineRangeSpy).toHaveBeenCalledWith(editor, {line: 0, ch: 1}, {line: 1, ch: 3})
-  expect(editor.findMarks).toHaveBeenCalledWith({line: 0, ch: 1}, {line: 1, ch: 3})
+  expect(checkMultiLineRangeSpy).toHaveBeenCalledWith(editor, { line: 0, ch: 1 }, { line: 1, ch: 3 })
+  expect(editor.findMarks).toHaveBeenCalledWith({ line: 0, ch: 1 }, { line: 1, ch: 3 })
   expect(marks[0].clear).toHaveBeenCalled()
   expect(marks[1].clear).toHaveBeenCalled()
   checkMultiLineRangeSpy.mockRestore()
@@ -240,18 +240,18 @@ it('should make sure that liveSpellcheck works for a range of changes', function
 
 it('should make sure that liveSpellcheck works if ranges are inverted', function () {
   const editor = jest.fn()
-  const marks = [{clear: jest.fn()}, {clear: jest.fn()}]
+  const marks = [{ clear: jest.fn() }, { clear: jest.fn() }]
   editor.findMarks = jest.fn(() => marks)
   const checkMultiLineRangeSpy = jest.spyOn(systemUnderTest, 'checkMultiLineRange').mockImplementation()
 
-  const inputChangeRange = {from: {line: 0, ch: 2}, to: {line: 1, ch: 2}}
-  const inputChangeRangeTo = {from: {line: 0, ch: 2}, to: {line: 1, ch: 1}}
+  const inputChangeRange = { from: { line: 0, ch: 2 }, to: { line: 1, ch: 2 } }
+  const inputChangeRangeTo = { from: { line: 0, ch: 2 }, to: { line: 1, ch: 1 } }
 
   systemUnderTest.setDictionaryForTestsOnly({})
   systemUnderTest.checkChangeRange(editor, inputChangeRange, inputChangeRangeTo)
 
-  expect(checkMultiLineRangeSpy).toHaveBeenCalledWith(editor, {line: 0, ch: 1}, {line: 1, ch: 3})
-  expect(editor.findMarks).toHaveBeenCalledWith({line: 0, ch: 1}, {line: 1, ch: 3})
+  expect(checkMultiLineRangeSpy).toHaveBeenCalledWith(editor, { line: 0, ch: 1 }, { line: 1, ch: 3 })
+  expect(editor.findMarks).toHaveBeenCalledWith({ line: 0, ch: 1 }, { line: 1, ch: 3 })
   expect(marks[0].clear).toHaveBeenCalled()
   expect(marks[1].clear).toHaveBeenCalled()
   checkMultiLineRangeSpy.mockRestore()
@@ -272,8 +272,8 @@ it('should make sure that liveSpellcheck works for a single word with change at 
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {from: {line: 7, ch: 6}, to: {line: 7, ch: 6}}
-  const rangeTo = {from: {line: 7, ch: 6}, to: {line: 7, ch: 6}}
+  const rangeFrom = { from: { line: 7, ch: 6 }, to: { line: 7, ch: 6 } }
+  const rangeTo = { from: { line: 7, ch: 6 }, to: { line: 7, ch: 6 } }
 
   systemUnderTest.checkChangeRange(editor, rangeFrom, rangeTo)
 
@@ -296,8 +296,8 @@ it('should make sure that liveSpellcheck works for a single word with change in 
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {from: {line: 7, ch: 9}, to: {line: 7, ch: 9}}
-  const rangeTo = {from: {line: 7, ch: 9}, to: {line: 7, ch: 9}}
+  const rangeFrom = { from: { line: 7, ch: 9 }, to: { line: 7, ch: 9 } }
+  const rangeTo = { from: { line: 7, ch: 9 }, to: { line: 7, ch: 9 } }
 
   systemUnderTest.checkChangeRange(editor, rangeFrom, rangeTo)
 
@@ -320,8 +320,8 @@ it('should make sure that liveSpellcheck works for a single word with change at 
     'In ex neque, volutpat quis ullamcorper in, vestibulum vel ligula. Quisque lobortis eget neque quis ullamcorper. Nunc purus lorem, scelerisque in malesuada id, congue a magna. Donec rutrum maximus egestas. Nulla ornare libero quis odio ultricies iaculis. Suspendisse consectetur bibendum purus ac blandit. Donec et neque quis dolor eleifend tempus. Fusce fringilla risus id venenatis rutrum. Mauris commodo posuere ipsum, sit amet hendrerit risus lacinia quis. Aenean placerat ultricies ante id dapibus. Donec imperdiet eros quis porttitor accumsan. Vestibulum ut nulla luctus velit feugiat elementum. Nam vel pharetra nisl. Nullam risus tellus, tempor quis ipsum et, pretium rutrum ipsum.\n' +
     '\n' +
     'Fusce molestie leo at facilisis mollis. Vivamus iaculis facilisis fermentum. Vivamus blandit id nisi sit amet porta. Nunc luctus porta blandit. Sed ac consequat eros, eu fringilla lorem. In blandit pharetra sollicitudin. Vivamus placerat risus ut ex faucibus, nec vehicula sapien imperdiet. Praesent luctus, leo eget ultrices cursus, neque ante porttitor mauris, id tempus tellus urna at ex. Curabitur elementum id quam vitae condimentum. Proin sit amet magna vel metus blandit iaculis. Phasellus viverra libero in lacus gravida, id laoreet ligula dapibus. Cras commodo arcu eget mi dignissim, et lobortis elit faucibus. Suspendisse potenti. ')
-  const rangeFrom = {from: {line: 7, ch: 14}, to: {line: 7, ch: 14}}
-  const rangeTo = {from: {line: 7, ch: 14}, to: {line: 7, ch: 14}}
+  const rangeFrom = { from: { line: 7, ch: 14 }, to: { line: 7, ch: 14 } }
+  const rangeTo = { from: { line: 7, ch: 14 }, to: { line: 7, ch: 14 } }
 
   systemUnderTest.checkChangeRange(editor, rangeFrom, rangeTo)
 

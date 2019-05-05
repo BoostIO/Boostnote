@@ -210,7 +210,8 @@ class FolderSelect extends React.Component {
     const optionList = options
       .map((option, index) => {
         return (
-          <div styleName={index === this.state.optionIndex
+          <div
+            styleName={index === this.state.optionIndex
               ? 'search-optionList-item--active'
               : 'search-optionList-item'
             }
@@ -218,7 +219,7 @@ class FolderSelect extends React.Component {
             onClick={(e) => this.handleOptionClick(option.storage.key, option.folder.key)(e)}
           >
             <span styleName='search-optionList-item-name'
-              style={{borderColor: option.folder.color}}
+              style={{ borderColor: option.folder.color }}
             >
               {option.folder.name}
               <span styleName='search-optionList-item-name-surfix'>in {option.storage.name}</span>
@@ -228,15 +229,16 @@ class FolderSelect extends React.Component {
       })
 
     return (
-      <div className={_.isString(className)
+      <div
+        className={_.isString(className)
           ? 'FolderSelect ' + className
           : 'FolderSelect'
         }
         styleName={this.state.status === 'SEARCH'
           ? 'root--search'
           : this.state.status === 'FOCUS'
-          ? 'root--focus'
-          : 'root'
+            ? 'root--focus'
+            : 'root'
         }
         ref='root'
         tabIndex='0'
@@ -261,7 +263,7 @@ class FolderSelect extends React.Component {
               {optionList}
             </div>
           </div>
-          : <div styleName='idle' style={{color: currentOption.folder.color}}>
+          : <div styleName='idle' style={{ color: currentOption.folder.color }}>
             <div styleName='idle-label'>
               <i className='fa fa-folder' />
               <span styleName='idle-label-name'>

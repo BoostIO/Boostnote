@@ -56,7 +56,9 @@ class TopBar extends React.Component {
       search: '',
       isSearching: false
     })
-    this.refs.search.childNodes[0].blur
+
+    // commented next line as it has no effect - removing OK?
+    // this.refs.search.childNodes[0].blur
     router.push('/searched')
     e.preventDefault()
   }
@@ -86,7 +88,8 @@ class TopBar extends React.Component {
     }
 
     // When the key is an alphabet, del, enter or ctr
-    if (e.keyCode <= 90 || e.keyCode >= 186 && e.keyCode <= 222) {
+    // Note: Liniting complaint about mixed usage of || and && --> are braces required to fix it?
+    if (e.keyCode <= 90 || e.keyCode >= 186 && e.keyCode <= 222) { // eslint-disable-line
       this.setState({
         isAlphabet: true
       })
@@ -205,15 +208,15 @@ class TopBar extends React.Component {
           </div>
         </div>
         {location.pathname === '/trashed' ? ''
-        : <NewNoteButton
-          {..._.pick(this.props, [
-            'dispatch',
-            'data',
-            'config',
-            'params',
-            'location'
-          ])}
-        />}
+          : <NewNoteButton
+            {..._.pick(this.props, [
+              'dispatch',
+              'data',
+              'config',
+              'params',
+              'location'
+            ])}
+          />}
       </div>
     )
   }

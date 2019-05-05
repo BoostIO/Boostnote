@@ -161,7 +161,7 @@ function dummyLegacyStorage (storagePath, override = {}) {
       folderNotes.push(noteData)
     }
     notesData = notesData.concat(folderNotes)
-    CSON.writeFileSync(path.join(storagePath, jsonData.folders[j].key, 'data.json'), {notes: folderNotes.map((note) => _.omit(note, ['folder']))})
+    CSON.writeFileSync(path.join(storagePath, jsonData.folders[j].key, 'data.json'), { notes: folderNotes.map((note) => _.omit(note, ['folder'])) })
   }
 
   return {

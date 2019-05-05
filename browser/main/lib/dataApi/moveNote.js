@@ -1,7 +1,6 @@
 const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
-const fs = require('fs')
 const CSON = require('@rokt33r/season')
 const keygen = require('browser/lib/keygen')
 const sander = require('sander')
@@ -58,7 +57,7 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
             })
         })
         .then(function checkFolderExistsAndPrepareNoteData (newStorage) {
-          if (_.find(newStorage.folders, {key: newFolderKey}) == null) throw new Error('Target folder doesn\'t exist.')
+          if (_.find(newStorage.folders, { key: newFolderKey }) == null) throw new Error('Target folder doesn\'t exist.')
 
           noteData.folder = newFolderKey
           noteData.key = newNoteKey

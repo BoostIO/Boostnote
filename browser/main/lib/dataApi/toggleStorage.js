@@ -15,8 +15,10 @@ function toggleStorage (key, isOpen) {
     console.error(err)
     return Promise.reject(err)
   }
-  const targetStorage = _.find(cachedStorageList, {key: key})
-  if (targetStorage == null) return Promise.reject('Storage')
+  const targetStorage = _.find(cachedStorageList, { key: key })
+  // Note:
+  // Promise.reject should be creating new Error('Storage') - not changed as the calling side have to handle it properly
+  if (targetStorage == null) return Promise.reject('Storage') // eslint-disable-line
 
   targetStorage.isOpen = isOpen
   localStorage.setItem('storages', JSON.stringify(cachedStorageList))

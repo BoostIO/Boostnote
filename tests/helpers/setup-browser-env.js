@@ -7,7 +7,7 @@ document.body.createTextRange = function () {
     setEnd: function () {},
     setStart: function () {},
     getBoundingClientRect: function () {
-      return {right: 0}
+      return { right: 0 }
     },
     getClientRects: function () {
       return {

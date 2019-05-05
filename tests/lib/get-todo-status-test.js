@@ -37,4 +37,3 @@ test('getTodoStatus should return a correct hash object', t => {
     t.is(getTodoStatus(input).completed, expected.completed, `Test for getTodoStatus() input: ${input} expected: ${expected.completed}`)
   })
 })
-

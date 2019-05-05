@@ -1,5 +1,3 @@
-'use strict'
-
 jest.mock('fs')
 const fs = require('fs')
 const path = require('path')
@@ -50,7 +48,7 @@ it('should test that copyAttachment works correctly assuming correct working of 
   const storageKey = 'storageKey'
   const noteKey = 'noteKey'
   const dummyUniquePath = 'dummyPath'
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   const dummyReadStream = {}
 
   dummyReadStream.pipe = jest.fn()
@@ -76,7 +74,7 @@ it('should test that copyAttachment works correctly assuming correct working of 
 })
 
 it('should test that copyAttachment creates a new folder if the attachment folder doesn\'t exist', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   const noteKey = 'noteKey'
   const attachmentFolderPath = path.join(dummyStorage.path, systemUnderTest.DESTINATION_FOLDER)
   const attachmentFolderNoteKyPath = path.join(dummyStorage.path, systemUnderTest.DESTINATION_FOLDER, noteKey)
@@ -105,7 +103,7 @@ it('should test that copyAttachment creates a new folder if the attachment folde
 })
 
 it('should test that copyAttachment don\'t uses a random file name if not intended ', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   const dummyReadStream = {}
 
   dummyReadStream.pipe = jest.fn()
@@ -127,7 +125,7 @@ it('should test that copyAttachment don\'t uses a random file name if not intend
 })
 
 it('should test that copyAttachment with url (with extension, without query)', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
 
   const dummyReadStream = {
     pipe: jest.fn(),
@@ -162,7 +160,7 @@ it('should test that copyAttachment with url (with extension, without query)', f
 })
 
 it('should test that copyAttachment with url (with extension, with query)', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
 
   const dummyReadStream = {
     pipe: jest.fn(),
@@ -197,7 +195,7 @@ it('should test that copyAttachment with url (with extension, with query)', func
 })
 
 it('should test that copyAttachment with url (without extension, without query)', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
 
   const dummyReadStream = {
     pipe: jest.fn(),
@@ -232,7 +230,7 @@ it('should test that copyAttachment with url (without extension, without query)'
 })
 
 it('should test that copyAttachment with url (without extension, with query)', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
 
   const dummyReadStream = {
     pipe: jest.fn(),
@@ -474,7 +472,7 @@ it('should make sure that "removeStorageAndNoteReferences" works with markdown c
 })
 
 it('should delete the correct attachment folder if a note is deleted', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   const storageKey = 'storageKey'
   const noteKey = 'noteKey'
   findStorage.findStorage = jest.fn(() => dummyStorage)
@@ -487,7 +485,7 @@ it('should delete the correct attachment folder if a note is deleted', function 
 })
 
 it('should test that deleteAttachmentsNotPresentInNote deletes all unreferenced attachments ', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   const noteKey = 'noteKey'
   const storageKey = 'storageKey'
   const markdownContent = ''
@@ -516,7 +514,7 @@ it('should test that deleteAttachmentsNotPresentInNote deletes all unreferenced 
 })
 
 it('should test that deleteAttachmentsNotPresentInNote does not delete referenced attachments', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   const noteKey = 'noteKey'
   const storageKey = 'storageKey'
   const dummyFilesInFolder = ['file1.txt', 'file2.pdf', 'file3.jpg']
@@ -627,15 +625,15 @@ it('should test that moveAttachments returns a correct modified content version'
 })
 
 it('should test that cloneAttachments modifies the content of the new note correctly', function () {
-  const oldNote = {key: 'oldNoteKey', content: 'oldNoteContent', storage: 'storageKey', type: 'MARKDOWN_NOTE'}
-  const newNote = {key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKey', type: 'MARKDOWN_NOTE'}
+  const oldNote = { key: 'oldNoteKey', content: 'oldNoteContent', storage: 'storageKey', type: 'MARKDOWN_NOTE' }
+  const newNote = { key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKey', type: 'MARKDOWN_NOTE' }
   const testInput =
     'Test input' +
     '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNote.key + path.win32.sep + 'image.jpg](imageName}) \n' +
     '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + oldNote.key + path.posix.sep + 'pdf.pdf](pdf})'
   newNote.content = testInput
   findStorage.findStorage = jest.fn()
-  findStorage.findStorage.mockReturnValue({path: 'dummyStoragePath'})
+  findStorage.findStorage.mockReturnValue({ path: 'dummyStoragePath' })
 
   const expectedOutput =
     'Test input' +
@@ -649,10 +647,10 @@ it('should test that cloneAttachments modifies the content of the new note corre
 it('should test that cloneAttachments finds all attachments and copies them to the new location', function () {
   const storagePathOld = 'storagePathOld'
   const storagePathNew = 'storagePathNew'
-  const dummyStorageOld = {path: storagePathOld}
-  const dummyStorageNew = {path: storagePathNew}
-  const oldNote = {key: 'oldNoteKey', content: 'oldNoteContent', storage: 'storageKeyOldNote', type: 'MARKDOWN_NOTE'}
-  const newNote = {key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKeyNewNote', type: 'MARKDOWN_NOTE'}
+  const dummyStorageOld = { path: storagePathOld }
+  const dummyStorageNew = { path: storagePathNew }
+  const oldNote = { key: 'oldNoteKey', content: 'oldNoteContent', storage: 'storageKeyOldNote', type: 'MARKDOWN_NOTE' }
+  const newNote = { key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKeyNewNote', type: 'MARKDOWN_NOTE' }
   const testInput =
     'Test input' +
     '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + oldNote.key + path.win32.sep + 'image.jpg](imageName}) \n' +
@@ -660,7 +658,7 @@ it('should test that cloneAttachments finds all attachments and copies them to t
   oldNote.content = testInput
   newNote.content = testInput
 
-  const copyFileSyncResp = {to: jest.fn()}
+  const copyFileSyncResp = { to: jest.fn() }
   sander.copyFileSync = jest.fn()
   sander.copyFileSync.mockReturnValue(copyFileSyncResp)
   findStorage.findStorage = jest.fn()
@@ -686,8 +684,8 @@ it('should test that cloneAttachments finds all attachments and copies them to t
 })
 
 it('should test that cloneAttachments finds all attachments and copies them to the new location', function () {
-  const oldNote = {key: 'oldNoteKey', content: 'oldNoteContent', storage: 'storageKeyOldNote', type: 'SOMETHING_ELSE'}
-  const newNote = {key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKeyNewNote', type: 'SOMETHING_ELSE'}
+  const oldNote = { key: 'oldNoteKey', content: 'oldNoteContent', storage: 'storageKeyOldNote', type: 'SOMETHING_ELSE' }
+  const newNote = { key: 'newNoteKey', content: 'oldNoteContent', storage: 'storageKeyNewNote', type: 'SOMETHING_ELSE' }
   const testInput = 'Test input'
   oldNote.content = testInput
   newNote.content = testInput
@@ -724,7 +722,7 @@ it('should test that isAttachmentLink works correctly', function () {
 })
 
 it('should test that handleAttachmentLinkPaste copies the attachments to the new location', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -744,7 +742,7 @@ it('should test that handleAttachmentLinkPaste copies the attachments to the new
 })
 
 it('should test that handleAttachmentLinkPaste copies the attachments to the new location - win32 path', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -764,7 +762,7 @@ it('should test that handleAttachmentLinkPaste copies the attachments to the new
 })
 
 it('should test that handleAttachmentLinkPaste don\'t try to copy the file if it does not exist - win32 path', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -785,7 +783,7 @@ it('should test that handleAttachmentLinkPaste don\'t try to copy the file if it
 })
 
 it('should test that handleAttachmentLinkPaste don\'t try to copy the file if it does not exist -- posix', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -806,7 +804,7 @@ it('should test that handleAttachmentLinkPaste don\'t try to copy the file if it
 })
 
 it('should test that handleAttachmentLinkPaste copies multiple attachments if multiple were pasted', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -830,7 +828,7 @@ it('should test that handleAttachmentLinkPaste copies multiple attachments if mu
 })
 
 it('should test that handleAttachmentLinkPaste returns the correct modified paste text', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -849,7 +847,7 @@ it('should test that handleAttachmentLinkPaste returns the correct modified past
 })
 
 it('should test that handleAttachmentLinkPaste returns the correct modified paste text if multiple links are posted', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -873,7 +871,7 @@ it('should test that handleAttachmentLinkPaste returns the correct modified past
 })
 
 it('should test that handleAttachmentLinkPaste calls the copy method correct if multiple links are posted where one file was found and one was not', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -900,7 +898,7 @@ it('should test that handleAttachmentLinkPaste calls the copy method correct if 
 })
 
 it('should test that handleAttachmentLinkPaste returns the correct modified paste text if the file was not found', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -919,7 +917,7 @@ it('should test that handleAttachmentLinkPaste returns the correct modified past
 })
 
 it('should test that handleAttachmentLinkPaste returns the correct modified paste text if multiple files were not found', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -939,7 +937,7 @@ it('should test that handleAttachmentLinkPaste returns the correct modified past
 })
 
 it('should test that handleAttachmentLinkPaste returns the correct modified paste text if one file was found and one was not found', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'
@@ -963,7 +961,7 @@ it('should test that handleAttachmentLinkPaste returns the correct modified past
 })
 
 it('should test that handleAttachmentLinkPaste returns the correct modified paste text if one file was found and one was not found', function () {
-  const dummyStorage = {path: 'dummyStoragePath'}
+  const dummyStorage = { path: 'dummyStoragePath' }
   findStorage.findStorage = jest.fn(() => dummyStorage)
   const pastedNoteKey = 'b1e06f81-8266-49b9-b438-084003c2e723'
   const newNoteKey = 'abc234-8266-49b9-b438-084003c2e723'

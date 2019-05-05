@@ -35,11 +35,13 @@ var project = 'boostnote';
 \`\`\`
 `
 
+/* eslint-disable */
 const katex = `
 $$
 c = \pm\sqrt{a^2 + b^2}
 $$
-`
+` 
+/* eslint-disable */
 
 const checkboxes = `
 - [ ] Unchecked

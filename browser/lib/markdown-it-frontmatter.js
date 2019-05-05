@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = function frontMatterPlugin (md) {
   function frontmatter (state, startLine, endLine, silent) {
     if (startLine !== 0 || state.src.substr(startLine, state.eMarks[0]) !== '---') {

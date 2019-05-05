@@ -1,24 +1,33 @@
 {
-  "extends": ["standard", "standard-jsx", "plugin:react/recommended"],
-  "plugins": ["react"],
+  "extends": [
+    "react-app"
+  ],
   "rules": {
     "no-useless-escape": 0,
-    "prefer-const": ["warn", {
-      "destructuring": "all"
-    }],
+    "prefer-const": [
+      "warn",
+      {
+        "destructuring": "all"
+      }
+    ],
     "no-unused-vars": "warn",
     "no-undef": "warn",
     "no-lone-blocks": "warn",
+    "no-loop-func": 0,
+    "default-case": 0,
+    "no-useless-concat": 0,
     "react/prop-types": 0,
     "react/no-string-refs": 0,
     "react/no-find-dom-node": "warn",
     "react/no-render-return-value": "warn",
-    "react/no-deprecated": "warn"
+    "react/no-deprecated": "warn",
+    "jsx-a11y/alt-text": 0
   },
   "globals": {
     "FileReader": true,
     "localStorage": true,
-    "fetch": true
+    "fetch": true,
+    "Image": true
   },
   "env": {
     "jest": true

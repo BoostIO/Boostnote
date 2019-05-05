@@ -10,8 +10,9 @@
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava --serial",
     "jest": "jest",
-    "fix": "eslint . --fix",
-    "lint": "eslint .",
+    "lint": "standardx **/*.js --verbose | snazzy",
+    "lint:fix": "standardx **/*.js --fix | snazzy",
+    "prettier": "prettier-standard",
     "dev": "node dev-scripts/dev.js",
     "watch": "webpack-dev-server --hot"
   },
@@ -120,6 +121,7 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "babel-core": "^6.14.0",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^22.4.3",
     "babel-loader": "^6.2.0",
     "babel-plugin-react-transform": "^2.0.0",
@@ -139,31 +141,39 @@
     "dom-storage": "^2.0.2",
     "electron": "3.0.8",
     "electron-packager": "^12.2.0",
-    "eslint": "^3.13.1",
+    "eslint": "^5.16.0",
+    "eslint-config-react-app": "^4.0.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-config-standard-jsx": "^3.2.0",
+    "eslint-plugin-flowtype": "^3.7.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.8.2",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "faker": "^3.1.0",
     "grunt": "^0.4.5",
     "grunt-electron-installer": "2.1.0",
     "history": "^1.17.0",
-    "husky": "^1.1.0",
+    "husky": "^2.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.3",
     "jest-localstorage-mock": "^2.2.0",
     "jsdom": "^9.4.2",
     "json-loader": "^0.5.4",
+    "lint-staged": "^8.1.6",
     "merge-stream": "^1.0.0",
     "mock-require": "^3.0.1",
     "nib": "^1.1.0",
+    "prettier-standard": "^9.1.1",
     "react-css-modules": "^3.7.6",
     "react-input-autosize": "^1.1.0",
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",
     "react-test-renderer": "^15.6.2",
     "signale": "^1.2.1",
-    "standard": "^8.4.0",
+    "snazzy": "^8.0.0",
+    "standard": "^12.0.1",
+    "standardx": "^3.0.1",
     "style-loader": "^0.12.4",
     "stylus": "^0.52.4",
     "stylus-loader": "^2.3.1",
@@ -196,9 +206,26 @@
       "jest-localstorage-mock"
     ]
   },
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx,mjs}": [
+        "npm run prettier",
+        "git add"
+      ]
+    }
+  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint"
+    }
+  },
+  "standard": {
+    "globals": [
+      "FileReader",
+      "Image"
+    ],
+    "env": {
+      "jest": true
     }
   }
 }

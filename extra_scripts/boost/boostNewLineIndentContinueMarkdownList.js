@@ -1,3 +1,4 @@
+/* globals CodeMirror, define */
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // Common JS
     mod(require('../codemirror/lib/codemirror'))
@@ -7,8 +8,6 @@
     mod(CodeMirror)
   }
 })(function (CodeMirror) {
-  'use strict'
-
   var listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
   var emptyListRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/
   var unorderedListRE = /[*+-]\s/
@@ -52,30 +51,30 @@
   }
   // Auto-updating Markdown list numbers when a new item is added to the
   // middle of a list
-  function incrementRemainingMarkdownListNumbers(cm, pos) {
-    var startLine = pos.line, lookAhead = 0, skipCount = 0
-    var startItem = listRE.exec(cm.getLine(startLine)), startIndent = startItem[1]
+  function incrementRemainingMarkdownListNumbers (cm, pos) {
+    var startLine = pos.line; var lookAhead = 0; var skipCount = 0
+    var startItem = listRE.exec(cm.getLine(startLine)); var startIndent = startItem[1]
 
     do {
       lookAhead += 1
       var nextLineNumber = startLine + lookAhead
-      var nextLine = cm.getLine(nextLineNumber), nextItem = listRE.exec(nextLine)
+      var nextLine = cm.getLine(nextLineNumber); var nextItem = listRE.exec(nextLine)
 
       if (nextItem) {
         var nextIndent = nextItem[1]
         var newNumber = (parseInt(startItem[3], 10) + lookAhead - skipCount)
-        var nextNumber = (parseInt(nextItem[3], 10)), itemNumber = nextNumber
+        var nextNumber = (parseInt(nextItem[3], 10)); var itemNumber = nextNumber
 
         if (startIndent === nextIndent && !isNaN(nextNumber)) {
           if (newNumber === nextNumber) itemNumber = nextNumber + 1
           if (newNumber > nextNumber) itemNumber = newNumber + 1
           cm.replaceRange(
             nextLine.replace(listRE, nextIndent + itemNumber + nextItem[4] + nextItem[5]),
-          {
-            line: nextLineNumber, ch: 0
-          }, {
-            line: nextLineNumber, ch: nextLine.length
-          })
+            {
+              line: nextLineNumber, ch: 0
+            }, {
+              line: nextLineNumber, ch: nextLine.length
+            })
         } else {
           if (startIndent.length > nextIndent.length) return
           // This doesn't run if the next line immediatley indents, as it is

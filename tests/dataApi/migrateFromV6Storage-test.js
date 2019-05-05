@@ -42,7 +42,7 @@ test.serial('Migrate legacy storage into v1 storage', (t) => {
         })
       dummyData.notes
         .forEach(function (targetNote) {
-          t.true(_.find(noteMap, {title: targetNote.title, folder: targetNote.folder}) != null)
+          t.true(_.find(noteMap, { title: targetNote.title, folder: targetNote.folder }) != null)
         })
 
       // Check legacy folder directory is removed

@@ -36,7 +36,7 @@ function updateFolder (storageKey, folderKey, input) {
 
   return resolveStorageData(targetStorage)
     .then(function updateFolder (storage) {
-      const targetFolder = _.find(storage.folders, {key: folderKey})
+      const targetFolder = _.find(storage.folders, { key: folderKey })
       if (targetFolder == null) throw new Error('Target folder doesn\'t exist.')
       targetFolder.name = input.name
       targetFolder.color = input.color

@@ -1,3 +1,4 @@
+import i18n from 'browser/lib/i18n'
 const uniqueSlug = require('unique-slug')
 const fs = require('fs')
 const path = require('path')
@@ -7,7 +8,7 @@ const fse = require('fs-extra')
 const escapeStringRegexp = require('escape-string-regexp')
 const sander = require('sander')
 const url = require('url')
-import i18n from 'browser/lib/i18n'
+const _ = require('lodash')
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
@@ -108,29 +109,29 @@ function getOrientation (file) {
  */
 function fixRotate (file) {
   return Promise.all([getImage(file), getOrientation(file)])
-  .then(([img, orientation]) => {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    if (orientation > 4 && orientation < 9) {
-      canvas.width = img.height
-      canvas.height = img.width
-    } else {
-      canvas.width = img.width
-      canvas.height = img.height
-    }
-    switch (orientation) {
-      case 2: ctx.transform(-1, 0, 0, 1, img.width, 0); break
-      case 3: ctx.transform(-1, 0, 0, -1, img.width, img.height); break
-      case 4: ctx.transform(1, 0, 0, -1, 0, img.height); break
-      case 5: ctx.transform(0, 1, 1, 0, 0, 0); break
-      case 6: ctx.transform(0, 1, -1, 0, img.height, 0); break
-      case 7: ctx.transform(0, -1, -1, 0, img.height, img.width); break
-      case 8: ctx.transform(0, -1, 1, 0, 0, img.width); break
-      default: break
-    }
-    ctx.drawImage(img, 0, 0)
-    return canvas.toDataURL()
-  })
+    .then(([img, orientation]) => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      if (orientation > 4 && orientation < 9) {
+        canvas.width = img.height
+        canvas.height = img.width
+      } else {
+        canvas.width = img.width
+        canvas.height = img.height
+      }
+      switch (orientation) {
+        case 2: ctx.transform(-1, 0, 0, 1, img.width, 0); break
+        case 3: ctx.transform(-1, 0, 0, -1, img.width, img.height); break
+        case 4: ctx.transform(1, 0, 0, -1, 0, img.height); break
+        case 5: ctx.transform(0, 1, 1, 0, 0, 0); break
+        case 6: ctx.transform(0, 1, -1, 0, img.height, 0); break
+        case 7: ctx.transform(0, -1, -1, 0, img.height, img.width); break
+        case 8: ctx.transform(0, -1, 1, 0, 0, img.width); break
+        default: break
+      }
+      ctx.drawImage(img, 0, 0)
+      return canvas.toDataURL()
+    })
 }
 
 /**
@@ -144,24 +145,25 @@ function fixRotate (file) {
  * @param {boolean} useRandomName determines whether a random filename for the new file is used. If false the source file name is used
  * @return {Promise<String>} name (inclusive extension) of the generated file
  */
+// Note: Disabled linting for reject but reject should return new Error(type)
 function copyAttachment (sourceFilePath, storageKey, noteKey, useRandomName = true) {
   return new Promise((resolve, reject) => {
     if (!sourceFilePath) {
-      reject('sourceFilePath has to be given')
+      reject('sourceFilePath has to be given') // eslint-disable-line
     }
 
     if (!storageKey) {
-      reject('storageKey has to be given')
+      reject('storageKey has to be given') // eslint-disable-line
     }
 
     if (!noteKey) {
-      reject('noteKey has to be given')
+      reject('noteKey has to be given') // eslint-disable-line
     }
 
     try {
       const isBase64 = typeof sourceFilePath === 'object' && sourceFilePath.type === 'base64'
       if (!isBase64 && !fs.existsSync(sourceFilePath)) {
-        return reject('source file does not exist')
+        return reject('source file does not exist') // eslint-disable-line
       }
 
       const sourcePath = sourceFilePath.sourceFilePath || sourceFilePath
@@ -249,7 +251,7 @@ function fixLocalURLS (renderedHTML, storagePath) {
     - `(?:\\\/|%5C)[-.\\w]+` will either match `/3b6f8bd6-4edd-4b15-96e0-eadc4475b564` or `/f939b2c3.jpg`
     - `(?:\\\/|%5C)` match the path seperator. `\\\/` for posix systems and `%5C` for windows.
   */
-  return renderedHTML.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '(?:(?:\\\/|%5C)[-.\\w]+)+', 'g'), function (match) {
+  return renderedHTML.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '(?:(?:\\\/|%5C)[-.\\w]+)+', 'g'), function (match) { // eslint-disable-line
     var encodedPathSeparators = new RegExp(mdurl.encode(path.win32.sep) + '|' + mdurl.encode(path.posix.sep), 'g')
     return match.replace(encodedPathSeparators, path.sep).replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER, 'g'), 'file:///' + path.join(storagePath, DESTINATION_FOLDER))
   })
@@ -394,7 +396,8 @@ function handlePasteImageEvent (codeEditor, storageKey, noteKey, dataTransferIte
   reader.onloadend = function () {
     base64data = reader.result.replace(/^data:image\/png;base64,/, '')
     base64data += base64data.replace('+', ' ')
-    const binaryData = new Buffer(base64data, 'base64').toString('binary')
+    // Todo: new Buffer is deprecated --> use Buffer.alloc() or Buffer.from() instead
+    const binaryData = new Buffer(base64data, 'base64').toString('binary') // eslint-disable-line
     fs.writeFileSync(imagePath, binaryData, 'binary')
     const imageReferencePath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, imageName)
     const imageMd = generateAttachmentMarkdown(imageName, imageReferencePath, true)
@@ -498,19 +501,19 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
 
     for (let j = 0; j < promiseArray.length; j++) {
       promiseArray[j]
-      .then((fileName) => {
-        const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName)
-        markDownContent = markDownContent.replace(attachmentPaths[j], newPath)
-      })
-      .catch((e) => {
-        console.error('File does not exist in path: ' + attachmentPaths[j])
-      })
-      .finally(() => {
-        numResolvedPromises++
-        if (numResolvedPromises === promiseArray.length) {
-          resolve(markDownContent)
-        }
-      })
+        .then((fileName) => {
+          const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName)
+          markDownContent = markDownContent.replace(attachmentPaths[j], newPath)
+        })
+        .catch((e) => {
+          console.error('File does not exist in path: ' + attachmentPaths[j])
+        })
+        .finally(() => {
+          numResolvedPromises++
+          if (numResolvedPromises === promiseArray.length) {
+            resolve(markDownContent)
+          }
+        })
     }
   })
 }
@@ -686,7 +689,7 @@ function handleAttachmentLinkPaste (storageKey, noteKey, linkText) {
           .then((fileExists) => {
             if (!fileExists) {
               const fileNotFoundRegexp = new RegExp('!?' + escapeStringRegexp('[') + '[\\w|\\d|\\s|\\.]*\\]\\(\\s*' + STORAGE_FOLDER_PLACEHOLDER + '[\\w|\\d|\\-|' + PATH_SEPARATORS + ']*' + escapeStringRegexp(path.basename(absPathOfAttachment)) + escapeStringRegexp(')'))
-              replaceInstructions.push({regexp: fileNotFoundRegexp, replacement: this.generateFileNotFoundMarkdown()})
+              replaceInstructions.push({ regexp: fileNotFoundRegexp, replacement: this.generateFileNotFoundMarkdown() })
               return Promise.resolve()
             }
             return this.copyAttachment(absPathOfAttachment, storageKey, noteKey)

@@ -133,7 +133,7 @@ export function isObjectEqual (a, b) {
 }
 
 export function isMarkdownTitleURL (str) {
-  return /(^#{1,6}\s)(?:\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str)
+  return /(^#{1,6}\s)(?:\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str) // eslint-disable-line
 }
 
 export default {

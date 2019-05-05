@@ -61,8 +61,8 @@ class MarkdownSplitEditor extends React.Component {
       const timer = setInterval(() => {
         time = frame / frames
         scrollPos = time < 0.5
-                  ? 2 * time * time // ease in
-                  : -1 + (4 - 2 * time) * time // ease out
+          ? 2 * time * time // ease in
+          : -1 + (4 - 2 * time) * time // ease out
         if (e.doc) _.set(previewDoc, 'body.scrollTop', targetTop + scrollPos * distance)
         else _.get(this, 'refs.code.editor').scrollTo(0, targetTop + scrollPos * distance)
         if (frame >= frames) {
@@ -78,8 +78,8 @@ class MarkdownSplitEditor extends React.Component {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
-    const checkedMatch = /^\s*[\+\-\*] \[x\]/i
-    const uncheckedMatch = /^\s*[\+\-\*] \[ \]/
+    const checkedMatch = /^\s*[\+\-\*] \[x\]/i // eslint-disable-line
+    const uncheckedMatch = /^\s*[\+\-\*] \[ \]/ // eslint-disable-line
     const checkReplace = /\[x\]/i
     const uncheckReplace = /\[ \]/
     if (idMatch.test(e.target.getAttribute('id'))) {
@@ -136,7 +136,7 @@ class MarkdownSplitEditor extends React.Component {
   }
 
   render () {
-    const {config, value, storageKey, noteKey, linesHighlighted} = this.props
+    const { config, value, storageKey, noteKey, linesHighlighted } = this.props
     const storage = findStorage(storageKey)
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -179,8 +179,8 @@ class MarkdownSplitEditor extends React.Component {
           enableSmartPaste={config.editor.enableSmartPaste}
           hotkey={config.hotkey}
           switchPreview={config.editor.switchPreview}
-       />
-        <div styleName='slider' style={{left: this.state.codeEditorWidthInPercent + '%'}} onMouseDown={e => this.handleMouseDown(e)} >
+        />
+        <div styleName='slider' style={{ left: this.state.codeEditorWidthInPercent + '%' }} onMouseDown={e => this.handleMouseDown(e)} >
           <div styleName='slider-hitbox' />
         </div>
         <MarkdownPreview
@@ -209,7 +209,7 @@ class MarkdownSplitEditor extends React.Component {
           customCSS={config.preview.customCSS}
           allowCustomCSS={config.preview.allowCustomCSS}
           lineThroughCheckbox={config.preview.lineThroughCheckbox}
-       />
+        />
       </div>
     )
   }

@@ -17,14 +17,14 @@ import iconv from 'iconv-lite'
 
 import { isMarkdownTitleURL } from 'browser/lib/utils'
 import styles from '../components/CodeEditor.styl'
-const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
+import TurndownService from 'turndown'
+import { languageMaps } from '../lib/CMLanguageList'
+import snippetManager from '../lib/SnippetManager'
+import { generateInEditor, tocExistsInEditor } from 'browser/lib/markdown-toc-generator'
+const { ipcRenderer, remote, clipboard } = require('electron')
 const spellcheck = require('browser/lib/spellcheck')
 const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
-import TurndownService from 'turndown'
-import {languageMaps} from '../lib/CMLanguageList'
-import snippetManager from '../lib/SnippetManager'
-import {generateInEditor, tocExistsInEditor} from 'browser/lib/markdown-toc-generator'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -113,7 +113,7 @@ export default class CodeEditor extends React.Component {
 
       function makeOverlay (query, style) {
         query = new RegExp(
-          query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'),
+          query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), // eslint-disable-line
           'gi'
         )
         return {
@@ -313,7 +313,7 @@ export default class CodeEditor extends React.Component {
     this.textEditorInterface = new TextEditorInterface(this.editor)
     this.tableEditor = new TableEditor(this.textEditorInterface)
     if (this.props.spellCheck) {
-      this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+      this.editor.addPanel(this.createSpellCheckPanel(), { position: 'bottom' })
     }
 
     eventEmitter.on('code:format-table', this.formatTable)
@@ -597,7 +597,7 @@ export default class CodeEditor extends React.Component {
         const elem = document.getElementById('editor-bottom-panel')
         elem.parentNode.removeChild(elem)
       } else {
-        this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+        this.editor.addPanel(this.createSpellCheckPanel(), { position: 'bottom' })
       }
     }
 
@@ -748,7 +748,7 @@ export default class CodeEditor extends React.Component {
       ch: 1
     }
     this.editor.setCursor(cursor)
-    const top = this.editor.charCoords({line: num, ch: 0}, 'local').top
+    const top = this.editor.charCoords({ line: num, ch: 0 }, 'local').top
     const middleHeight = this.editor.getScrollerElement().offsetHeight / 2
     this.editor.scrollTo(null, top - middleHeight - 5)
   }
@@ -804,7 +804,7 @@ export default class CodeEditor extends React.Component {
   handlePaste (editor, forceSmartPaste) {
     const { storageKey, noteKey, fetchUrlTitle, enableSmartPaste } = this.props
 
-    const isURL = str => /(?:^\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str)
+    const isURL = str => /(?:^\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str) // eslint-disable-line
 
     const isInLinkTag = editor => {
       const startCursor = editor.getCursor('start')
@@ -834,7 +834,8 @@ export default class CodeEditor extends React.Component {
         return true
       }
 
-      let line = line = cursor.line - 1
+      // Todo: Check if it's OK to remove duplicate line in next statement
+      let line = line = cursor.line - 1 // eslint-disable-line
       while (line >= 0) {
         token = editor.getTokenAt({
           ch: 3,
@@ -1061,23 +1062,21 @@ export default class CodeEditor extends React.Component {
     } = this.props
     const fontFamily = normalizeEditorFontFamily(this.props.fontFamily)
     const width = this.props.width
-    return (<
-      div className={
+    return (<div
+      className={
         className == null ? 'CodeEditor' : `CodeEditor ${className}`
       }
       ref='root'
       tabIndex='-1'
-      style={
-      {
+      style={{
         fontFamily,
         fontSize: fontSize,
         width: width
-      }
-      }
+      }}
       onDrop={
         e => this.handleDropImage(e)
       }
-      />
+    />
     )
   }
 

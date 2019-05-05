@@ -3,12 +3,12 @@ import Main from './Main'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
-require('!!style!css!stylus?sourceMap!./global.styl')
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
+import i18n from 'browser/lib/i18n'
+require('!!style!css!stylus?sourceMap!./global.styl') // eslint-disable-line
 require('./lib/ipcClient')
 require('../lib/customMeta')
-import i18n from 'browser/lib/i18n'
 
 const electron = require('electron')
 

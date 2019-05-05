@@ -14,7 +14,7 @@ class ModalBase extends React.Component {
   }
 
   close () {
-    if (modalBase != null) modalBase.setState({component: null, componentProps: null, isHidden: true})
+    if (modalBase != null) modalBase.setState({ component: null, componentProps: null, isHidden: true })
     // Toggle overflow style on NoteList
     const list = document.querySelector('.NoteList__list___browser-main-NoteList-')
     list.style.overflow = 'auto'
@@ -36,7 +36,9 @@ class ModalBase extends React.Component {
 
 const el = document.createElement('div')
 document.body.appendChild(el)
-const modalBase = ReactDOM.render(<ModalBase />, el)
+
+// Note: Use React.createPortal instead - for now just disabled linting error
+const modalBase = ReactDOM.render(<ModalBase />, el) // eslint-disable-line
 
 export function openModal (component, props) {
   if (modalBase == null) { return }
@@ -44,7 +46,7 @@ export function openModal (component, props) {
   const list = document.querySelector('.NoteList__list___browser-main-NoteList-')
   list.style.overflow = 'hidden'
   document.body.setAttribute('data-modal', 'open')
-  modalBase.setState({component: component, componentProps: props, isHidden: false})
+  modalBase.setState({ component: component, componentProps: props, isHidden: false })
 }
 
 export function closeModal () {

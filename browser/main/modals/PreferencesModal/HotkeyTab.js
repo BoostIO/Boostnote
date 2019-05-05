@@ -22,25 +22,25 @@ class HotkeyTab extends React.Component {
 
   componentDidMount () {
     this.handleSettingDone = () => {
-      this.setState({keymapAlert: {
+      this.setState({ keymapAlert: {
         type: 'success',
         message: i18n.__('Successfully applied!')
-      }})
+      } })
     }
     this.handleSettingError = (err) => {
       if (
         this.state.config.hotkey.toggleMain === '' ||
         this.state.config.hotkey.toggleMode === ''
       ) {
-        this.setState({keymapAlert: {
+        this.setState({ keymapAlert: {
           type: 'success',
           message: i18n.__('Successfully applied!')
-        }})
+        } })
       } else {
-        this.setState({keymapAlert: {
+        this.setState({ keymapAlert: {
           type: 'error',
           message: err.message != null ? err.message : i18n.__('An error occurred!')
-        }})
+        } })
       }
     }
     this.oldHotkey = this.state.config.hotkey

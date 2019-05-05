@@ -1,5 +1,3 @@
-'use strict'
-
 import sanitizeHtml from 'sanitize-html'
 import { escapeHtmlCharacters } from './utils'
 import url from 'url'
@@ -96,11 +94,11 @@ function sanitizeInline (html, options) {
 
 function naughtyHRef (href, options) {
   // href = href.replace(/[\x00-\x20]+/g, '')
-  href = href.replace(/<\!\-\-.*?\-\-\>/g, '')
+  href = href.replace(/<\!\-\-.*?\-\-\>/g, '') // eslint-disable-line
 
-  const matches = href.match(/^([a-zA-Z]+)\:/)
+  const matches = href.match(/^([a-zA-Z]+)\:/) // eslint-disable-line
   if (!matches) {
-    if (href.match(/^[\/\\]{2}/)) {
+    if (href.match(/^[\/\\]{2}/)) { // eslint-disable-line
       return !options.allowProtocolRelative
     }
 

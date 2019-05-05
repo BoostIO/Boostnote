@@ -99,9 +99,9 @@ class SnippetTab extends React.Component {
     const { isActive, snippet, isDeletable } = this.props
     return (
       <div styleName={isActive
-          ? 'root--active'
-          : 'root'
-        }
+        ? 'root--active'
+        : 'root'
+      }
       >
         {!this.state.isRenaming
           ? <button styleName='button'

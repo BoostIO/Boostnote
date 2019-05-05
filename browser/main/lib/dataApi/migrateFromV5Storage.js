@@ -12,7 +12,7 @@ function migrateFromV5Storage (storageKey, data) {
     const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
     if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
 
-    targetStorage = _.find(cachedStorageList, {key: storageKey})
+    targetStorage = _.find(cachedStorageList, { key: storageKey })
     if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
   } catch (e) {
     return Promise.reject(e)

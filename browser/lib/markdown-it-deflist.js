@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = function definitionListPlugin (md) {
   var isSpace = md.utils.isSpace
 

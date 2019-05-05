@@ -1,5 +1,5 @@
-const {remote} = require('electron')
-const {Menu} = remote.require('electron')
+const { remote } = require('electron')
+const { Menu } = remote.require('electron')
 const spellcheck = require('./spellcheck')
 
 /**
@@ -14,7 +14,7 @@ const buildEditorContextMenu = function (editor, event) {
   if (editor == null || event == null || event.pageX == null || event.pageY == null) {
     return null
   }
-  const cursor = editor.coordsChar({left: event.pageX, top: event.pageY})
+  const cursor = editor.coordsChar({ left: event.pageX, top: event.pageY })
   const wordRange = editor.findWordAt(cursor)
   const word = editor.getRange(wordRange.anchor, wordRange.head)
   const existingMarks = editor.findMarks(wordRange.anchor, wordRange.head) || []

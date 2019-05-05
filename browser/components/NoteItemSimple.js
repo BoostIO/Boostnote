@@ -25,10 +25,11 @@ const NoteItemSimple = ({
   pathname,
   storage
 }) => (
-  <div styleName={isActive
-    ? 'item-simple--active'
-    : 'item-simple'
-  }
+  <div
+    styleName={isActive
+      ? 'item-simple--active'
+      : 'item-simple'
+    }
     key={note.key}
     onClick={e => handleNoteClick(e, note.key)}
     onContextMenu={e => handleNoteContextMenu(e, note.key)}
@@ -63,7 +64,7 @@ NoteItemSimple.propTypes = {
     storage: PropTypes.string.isRequired,
     key: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    title: PropTypes.string.isrequired
+    title: PropTypes.string.isRequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
   handleNoteContextMenu: PropTypes.func.isRequired,

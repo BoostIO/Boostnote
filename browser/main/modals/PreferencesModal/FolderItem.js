@@ -61,13 +61,14 @@ class FolderItem extends React.Component {
       // After the color picker has been painted, re-calculate its position
       // by comparing its dimensions to the host dimensions.
       const { hostBoundingBox } = this.props
-      const colorPickerNode = ReactDOM.findDOMNode(this.refs.colorPicker)
+      // Note: Avoid findDOMNode --> refactor to a ref later
+      const colorPickerNode = ReactDOM.findDOMNode(this.refs.colorPicker) // eslint-disable-line
       const colorPickerBox = colorPickerNode.getBoundingClientRect()
       const offsetTop = hostBoundingBox.bottom - colorPickerBox.bottom
       const folder = Object.assign({}, this.state.folder, {
         colorPickerPos: {
           left: 25,
-          top: offsetTop < 0 ? offsetTop - 5 : 0  // subtract 5px for aestetics
+          top: offsetTop < 0 ? offsetTop - 5 : 0 // subtract 5px for aestetics
         }
       })
       this.setState({ folder })
@@ -120,7 +121,7 @@ class FolderItem extends React.Component {
         ref='root'
       >
         <div styleName='folderItem-left'>
-          <button styleName='folderItem-left-colorButton' style={{color: this.state.folder.color}}
+          <button styleName='folderItem-left-colorButton' style={{ color: this.state.folder.color }}
             onClick={(e) => !this.state.folder.showColumnPicker && this.handleColorButtonClick(e)}
           >
             {this.state.folder.showColumnPicker
@@ -223,7 +224,7 @@ class FolderItem extends React.Component {
         onDoubleClick={(e) => this.handleEditButtonClick(e)}
       >
         <div styleName='folderItem-left'
-          style={{borderColor: folder.color}}
+          style={{ borderColor: folder.color }}
         >
           <span styleName='folderItem-left-name'>{folder.name}</span>
           <span styleName='folderItem-left-key'>({folder.key})</span>

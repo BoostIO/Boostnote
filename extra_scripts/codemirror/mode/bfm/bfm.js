@@ -1,16 +1,16 @@
-(function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
-    mod(require("../codemirror/lib/codemirror"), require("../codemirror/mode/gfm/gfm"), require("../codemirror/mode/yaml-frontmatter/yaml-frontmatter"))
-  else if (typeof define == "function" && define.amd) // AMD
-    define(["../codemirror/lib/codemirror", "../codemirror/mode/gfm/gfm", "../codemirror/mode/yaml-frontmatter/yaml-frontmatter"], mod)
-  else // Plain browser env
+/* globals CodeMirror, define */
+(function (mod) {
+  if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
+    mod(require('../codemirror/lib/codemirror'), require('../codemirror/mode/gfm/gfm'), require('../codemirror/mode/yaml-frontmatter/yaml-frontmatter'))
+  } else if (typeof define === 'function' && define.amd) { // AMD
+    define(['../codemirror/lib/codemirror', '../codemirror/mode/gfm/gfm', '../codemirror/mode/yaml-frontmatter/yaml-frontmatter'], mod)
+  } else { // Plain browser env
     mod(CodeMirror)
-})(function(CodeMirror) {
-  'use strict'
-
+  }
+})(function (CodeMirror) {
   const fencedCodeRE = /^(~~~+|```+)[ \t]*([\w+#-]+)?(?:\(((?:\s*\w[-\w]*(?:=(?:'(?:.*?[^\\])?'|"(?:.*?[^\\])?"|(?:[^'"][^\s]*)))?)*)\))?(?::([^:]*)(?::(\d+))?)?\s*$/
 
-  function getMode(name, params, config, cm) {
+  function getMode (name, params, config, cm) {
     if (!name) {
       return null
     }
@@ -50,7 +50,7 @@
     const baseMode = CodeMirror.getMode(config, baseConfig)
 
     return {
-      startState: function() {
+      startState: function () {
         return {
           baseState: CodeMirror.startState(baseMode),
 
@@ -66,7 +66,7 @@
           rowIndex: 0
         }
       },
-      copyState: function(s) {
+      copyState: function (s) {
         return {
           baseState: CodeMirror.copyState(baseMode, s.baseState),
 
@@ -84,7 +84,7 @@
           rowIndex: s.rowIndex
         }
       },
-      token: function(stream, state) {
+      token: function (stream, state) {
         const initialPos = stream.pos
 
         if (state.fencedEndRE && stream.match(state.fencedEndRE)) {
@@ -93,8 +93,7 @@
           state.fencedState = null
 
           stream.pos = initialPos
-        }
-        else {
+        } else {
           if (state.fencedMode) {
             return state.fencedMode.token(stream, state.fencedState)
           }
@@ -112,15 +111,20 @@
           }
         }
 
+        // Note disable linting - check if it's safe to change to tripple equals
+        // eslint-disable-next-line
         if (stream != state.streamSeen || Math.min(state.basePos, state.overlayPos) < stream.start) {
           state.streamSeen = stream
           state.basePos = state.overlayPos = stream.start
         }
 
+        // eslint-disable-next-line
         if (stream.start == state.basePos) {
           state.baseCur = baseMode.token(stream, state.baseState)
           state.basePos = stream.pos
         }
+
+        // eslint-disable-next-line
         if (stream.start == state.overlayPos) {
           stream.pos = stream.start
           state.overlayCur = this.overlayToken(stream, state)
@@ -130,15 +134,13 @@
 
         if (state.overlayCur == null) {
           return state.baseCur
-        }
-        else if (state.baseCur != null && state.combineTokens) {
+        } else if (state.baseCur != null && state.combineTokens) {
           return state.baseCur + ' ' + state.overlayCur
-        }
-        else {
+        } else {
           return state.overlayCur
         }
       },
-      overlayToken: function(stream, state) {
+      overlayToken: function (stream, state) {
         state.combineTokens = false
 
         if (state.fencedEndRE && stream.match(state.fencedEndRE)) {
@@ -198,7 +200,7 @@
         return null
       },
       electricChars: baseMode.electricChars,
-      innerMode: function(state) {
+      innerMode: function (state) {
         if (state.fencedMode) {
           return {
             mode: state.fencedMode,
@@ -211,7 +213,7 @@
           }
         }
       },
-      blankLine: function(state) {
+      blankLine: function (state) {
         state.inTable = false
 
         if (state.fencedMode) {
@@ -226,8 +228,8 @@
   CodeMirror.defineMIME('text/x-bfm', 'bfm')
 
   CodeMirror.modeInfo.push({
-    name: "Boost Flavored Markdown",
-    mime: "text/x-bfm",
-    mode: "bfm"
+    name: 'Boost Flavored Markdown',
+    mime: 'text/x-bfm',
+    mode: 'bfm'
   })
 })

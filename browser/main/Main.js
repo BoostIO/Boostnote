@@ -1,3 +1,4 @@
+/* globals CodeMirror */
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
@@ -184,7 +185,7 @@ class Main extends React.Component {
     const { config } = this.props
     const { ui } = config
 
-    const newUI = Object.assign(ui, {showMenuBar: !ui.showMenuBar})
+    const newUI = Object.assign(ui, { showMenuBar: !ui.showMenuBar })
     const newConfig = Object.assign(config, newUI)
     ConfigManager.set(newConfig)
   }

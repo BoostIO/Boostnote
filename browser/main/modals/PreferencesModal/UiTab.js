@@ -32,16 +32,16 @@ class UiTab extends React.Component {
     CodeMirror.autoLoadMode(this.customCSSCM.getCodeMirror(), 'css')
     this.customCSSCM.getCodeMirror().setSize('400px', '400px')
     this.handleSettingDone = () => {
-      this.setState({UiAlert: {
+      this.setState({ UiAlert: {
         type: 'success',
         message: i18n.__('Successfully applied!')
-      }})
+      } })
     }
     this.handleSettingError = (err) => {
-      this.setState({UiAlert: {
+      this.setState({ UiAlert: {
         type: 'error',
         message: err.message != null ? err.message : i18n.__('An error occurred!')
-      }})
+      } })
     }
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
@@ -131,8 +131,8 @@ class UiTab extends React.Component {
       checkHighLight.setAttribute('href', `../node_modules/codemirror/theme/${newCodemirrorTheme.split(' ')[0]}.css`)
     }
     this.setState({ config: newConfig, codemirrorTheme: newCodemirrorTheme }, () => {
-      const {ui, editor, preview} = this.props.config
-      this.currentConfig = {ui, editor, preview}
+      const { ui, editor, preview } = this.props.config
+      this.currentConfig = { ui, editor, preview }
       if (_.isEqual(this.currentConfig, this.state.config)) {
         this.props.haveToSave()
       } else {
@@ -271,18 +271,18 @@ class UiTab extends React.Component {
           </div>
           {
             global.process.platform === 'win32'
-            ? <div styleName='group-checkBoxSection'>
-              <label>
-                <input onChange={(e) => this.handleUIChange(e)}
-                  checked={this.state.config.ui.disableDirectWrite}
-                  refs='uiD2w'
-                  disabled={OSX}
-                  type='checkbox'
-                />&nbsp;
-                {i18n.__('Disable Direct Write (It will be applied after restarting)')}
-              </label>
-            </div>
-            : null
+              ? <div styleName='group-checkBoxSection'>
+                <label>
+                  <input onChange={(e) => this.handleUIChange(e)}
+                    checked={this.state.config.ui.disableDirectWrite}
+                    refs='uiD2w'
+                    disabled={OSX}
+                    type='checkbox'
+                  />&nbsp;
+                  {i18n.__('Disable Direct Write (It will be applied after restarting)')}
+                </label>
+              </div>
+              : null
           }
 
           <div styleName='group-header2'>Tags</div>
@@ -359,7 +359,7 @@ class UiTab extends React.Component {
                   })
                 }
               </select>
-              <div styleName='code-mirror' style={{fontFamily}}>
+              <div styleName='code-mirror' style={{ fontFamily }}>
                 <ReactCodeMirror
                   ref={e => (this.codeMirrorInstance = e)}
                   value={codemirrorSampleCode}
@@ -756,10 +756,10 @@ class UiTab extends React.Component {
                 ref='previewSanitize'
                 onChange={(e) => this.handleUIChange(e)}
               >
-                <option value='STRICT'>✅ {i18n.__('Only allow secure html tags (recommended)')}
+                <option value='STRICT'><span role='img' aria-label='Strict - Only allow secure html - check mark symbol'>✅</span> {i18n.__('Only allow secure html tags (recommended)')}
                 </option>
-                <option value='ALLOW_STYLES'>⚠️ {i18n.__('Allow styles')}</option>
-                <option value='NONE'>❌ {i18n.__('Allow dangerous html tags')}</option>
+                <option value='ALLOW_STYLES'><span role='img' aria-label='Allow styles - warning symbol'>⚠️</span> {i18n.__('Allow styles')}</option>
+                <option value='NONE'><span role='img' aria-label='None - allow dangerous html tags - cross symbol'>❌</span> {i18n.__('Allow dangerous html tags')}</option>
               </select>
             </div>
           </div>
@@ -839,7 +839,7 @@ class UiTab extends React.Component {
                 type='checkbox'
               />&nbsp;
               {i18n.__('Allow custom CSS for preview')}
-              <div style={{fontFamily}}>
+              <div style={{ fontFamily }}>
                 <ReactCodeMirror
                   width='400px'
                   height='400px'

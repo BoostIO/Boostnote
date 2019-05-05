@@ -77,7 +77,7 @@ class MarkdownNoteDetail extends React.Component {
     if (!this.state.isMovingNote && (isNewNote || hasDeletedTags)) {
       if (this.saveQueue != null) this.saveNow()
       this.setState({
-        note: Object.assign({linesHighlighted: []}, nextProps.note)
+        note: Object.assign({ linesHighlighted: [] }, nextProps.note)
       }, () => {
         this.refs.content.reload()
         if (this.refs.tags) this.refs.tags.reset()
@@ -111,7 +111,7 @@ class MarkdownNoteDetail extends React.Component {
 
   updateNote (note) {
     note.updatedAt = new Date()
-    this.setState({note}, () => {
+    this.setState({ note }, () => {
       this.save()
     })
   }
@@ -242,7 +242,7 @@ class MarkdownNoteDetail extends React.Component {
 
     if (isTrashed) {
       if (confirmDeleteNote(confirmDeletion, true)) {
-        const {note, dispatch} = this.props
+        const { note, dispatch } = this.props
         dataApi
           .deleteNote(note.storage, note.key)
           .then((data) => {
@@ -308,9 +308,9 @@ class MarkdownNoteDetail extends React.Component {
   handleToggleLockButton (event, noteStatus) {
     // first argument event is not used
     if (noteStatus === 'CODE') {
-      this.setState({isLockButtonShown: true})
+      this.setState({ isLockButtonShown: true })
     } else {
-      this.setState({isLockButtonShown: false})
+      this.setState({ isLockButtonShown: false })
     }
   }
 

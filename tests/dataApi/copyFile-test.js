@@ -32,4 +32,3 @@ test.after((t) => {
   fs.rmdirSync(srcFolder)
   fs.rmdirSync(dstFolder)
 })
-

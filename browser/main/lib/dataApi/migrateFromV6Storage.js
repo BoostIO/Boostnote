@@ -64,8 +64,9 @@ function migrateFromV5Storage (storagePath) {
           })
 
           const noteDirPath = path.join(storagePath, 'notes')
+          // Note: We could probably use a forEach instead of map
           notes
-            .map(function saveNote (note) {
+            .map(function saveNote (note) { // eslint-disable-line
               CSON.writeFileSync(path.join(noteDirPath, note.key) + '.cson', note)
             })
           return true
@@ -86,4 +87,3 @@ function migrateFromV5Storage (storagePath) {
 }
 
 module.exports = migrateFromV5Storage
-

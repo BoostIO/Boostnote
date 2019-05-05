@@ -54,7 +54,7 @@ FolderList.propTypes = {
 class SortableFolderListComponent extends React.Component {
   constructor (props) {
     super(props)
-    this.onSortEnd = ({oldIndex, newIndex}) => {
+    this.onSortEnd = ({ oldIndex, newIndex }) => {
       const { storage } = this.props
       dataApi
         .reorderFolder(storage.key, oldIndex, newIndex)

@@ -46,7 +46,7 @@ export function generateInEditor (editor) {
   }
 
   function addTocAtCursorPosition () {
-    const toc = generate(editor.getRange(editor.getCursor(), {line: Infinity}))
+    const toc = generate(editor.getRange(editor.getCursor(), { line: Infinity }))
     editor.replaceRange(wrapTocWithEol(toc, editor), editor.getCursor())
   }
 

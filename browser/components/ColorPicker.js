@@ -18,6 +18,14 @@ class ColorPicker extends React.Component {
     this.handleConfirm = this.handleConfirm.bind(this)
   }
 
+  static getDerivedStateFromProps (nextProps, prevState) {
+    if (nextProps.color !== prevState.color) {
+      return {
+        color: nextProps.color
+      }
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     this.onColorChange(nextProps.color)
   }
@@ -44,13 +52,22 @@ class ColorPicker extends React.Component {
     }
 
     return (
-      <div styleName='colorPicker' style={{top: `${alignY}px`, left: `${alignX}px`}}>
+      <div
+        styleName='colorPicker'
+        style={{ top: `${alignY}px`, left: `${alignX}px` }}
+      >
         <div styleName='cover' onClick={onCancel} />
         <SketchPicker color={color} onChange={this.onColorChange} />
         <div styleName='footer'>
-          <button styleName='btn-reset' onClick={onReset}>Reset</button>
-          <button styleName='btn-cancel' onClick={onCancel}>Cancel</button>
-          <button styleName='btn-confirm' onClick={this.handleConfirm}>Confirm</button>
+          <button styleName='btn-reset' onClick={onReset}>
+            Reset
+          </button>
+          <button styleName='btn-cancel' onClick={onCancel}>
+            Cancel
+          </button>
+          <button styleName='btn-confirm' onClick={this.handleConfirm}>
+            Confirm
+          </button>
         </div>
       </div>
     )

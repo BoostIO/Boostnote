@@ -121,7 +121,7 @@ class Markdown {
       slugify: require('./slugify')
     })
     this.md.use(require('markdown-it-kbd'))
-    this.md.use(require('markdown-it-admonition'), {types: ['note', 'hint', 'attention', 'caution', 'danger', 'error']})
+    this.md.use(require('markdown-it-admonition'), { types: ['note', 'hint', 'attention', 'caution', 'danger', 'error'] })
     this.md.use(require('markdown-it-abbr'))
     this.md.use(require('markdown-it-sub'))
     this.md.use(require('markdown-it-sup'))
@@ -147,7 +147,7 @@ class Markdown {
       },
       gallery: token => {
         const content = token.content.split('\n').slice(0, -1).map(line => {
-          const match = /!\[[^\]]*]\(([^\)]*)\)/.exec(line)
+          const match = /!\[[^\]]*]\(([^\)]*)\)/.exec(line) // eslint-disable-line
           if (match) {
             return match[1]
           } else {

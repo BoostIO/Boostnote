@@ -187,6 +187,7 @@ module.exports = function (grunt) {
       return
     }
 
+    // eslint-disable-next-line
     ChildProcess.exec(`codesign --verbose --deep --force --sign \"${OSX_COMMON_NAME}\" dist/Boostnote-darwin-x64/Boostnote.app`,
       function (err, stdout, stderr) {
         grunt.log.writeln(stdout)
@@ -238,7 +239,6 @@ module.exports = function (grunt) {
         break
       default:
         done()
-        return
     }
   })
 
@@ -306,6 +306,9 @@ module.exports = function (grunt) {
 
     const root = path.join(__dirname, 'node_modules/codemirror/theme/')
 
+    // Note:
+    // Map doesn't return a value - probably using forEach would be better
+    // eslint-disable-next-line
     const colors = fs.readdirSync(root).filter(file => file !== 'solarized.css').map(file => {
       const css = parseCSS(fs.readFileSync(path.join(root, file), 'utf8'))
 

@@ -9,8 +9,8 @@ const ListButton = ({
 }) => (
   <button styleName={isTagActive ? 'non-active-button' : 'active-button'} onClick={onClick}>
     <img src={isTagActive
-        ? '../resources/icon/icon-list.svg'
-        : '../resources/icon/icon-list-active.svg'
+      ? '../resources/icon/icon-list.svg'
+      : '../resources/icon/icon-list-active.svg'
     }
     />
     <span styleName='tooltip'>{i18n.__('Notes')}</span>

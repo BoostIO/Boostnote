@@ -36,7 +36,8 @@ class StarButton extends React.Component {
     const { className } = this.props
 
     return (
-      <button className={_.isString(className)
+      <button
+        className={_.isString(className)
           ? 'StarButton ' + className
           : 'StarButton'
         }

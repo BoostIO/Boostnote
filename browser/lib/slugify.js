@@ -13,5 +13,5 @@ module.exports = function slugify (title) {
 
   slug = slug.replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
 
-  return encodeURI(slug).replace(/\-+$/, '')
+  return encodeURI(slug).replace(/\-+$/, '') // eslint-disable-line
 }

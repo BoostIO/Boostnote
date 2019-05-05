@@ -34,12 +34,12 @@ class Preferences extends React.Component {
   }
 
   switchTeam (teamId) {
-    this.setState({currentTeamId: teamId})
+    this.setState({ currentTeamId: teamId })
   }
 
   handleNavButtonClick (tab) {
     return (e) => {
-      this.setState({currentTab: tab})
+      this.setState({ currentTab: tab })
     }
   }
 
@@ -64,7 +64,7 @@ class Preferences extends React.Component {
           <HotkeyTab
             dispatch={dispatch}
             config={config}
-            haveToSave={alert => this.setState({HotkeyAlert: alert})}
+            haveToSave={alert => this.setState({ HotkeyAlert: alert })}
           />
         )
       case 'UI':
@@ -72,7 +72,7 @@ class Preferences extends React.Component {
           <UiTab
             dispatch={dispatch}
             config={config}
-            haveToSave={alert => this.setState({UIAlert: alert})}
+            haveToSave={alert => this.setState({ UIAlert: alert })}
           />
         )
       case 'CROWDFUNDING':
@@ -84,7 +84,7 @@ class Preferences extends React.Component {
           <Blog
             dispatch={dispatch}
             config={config}
-            haveToSave={alert => this.setState({BlogAlert: alert})}
+            haveToSave={alert => this.setState({ BlogAlert: alert })}
           />
         )
       case 'SNIPPET':
@@ -127,20 +127,21 @@ class Preferences extends React.Component {
     const content = this.renderContent()
 
     const tabs = [
-      {target: 'STORAGES', label: i18n.__('Storage')},
-      {target: 'HOTKEY', label: i18n.__('Hotkeys'), Hotkey: this.state.HotkeyAlert},
-      {target: 'UI', label: i18n.__('Interface'), UI: this.state.UIAlert},
-      {target: 'INFO', label: i18n.__('About')},
-      {target: 'CROWDFUNDING', label: i18n.__('Crowdfunding')},
-      {target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert},
-      {target: 'SNIPPET', label: i18n.__('Snippets')}
+      { target: 'STORAGES', label: i18n.__('Storage') },
+      { target: 'HOTKEY', label: i18n.__('Hotkeys'), Hotkey: this.state.HotkeyAlert },
+      { target: 'UI', label: i18n.__('Interface'), UI: this.state.UIAlert },
+      { target: 'INFO', label: i18n.__('About') },
+      { target: 'CROWDFUNDING', label: i18n.__('Crowdfunding') },
+      { target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert },
+      { target: 'SNIPPET', label: i18n.__('Snippets') }
     ]
 
     const navButtons = tabs.map((tab) => {
       const isActive = this.state.currentTab === tab.target
       const isUiHotkeyTab = _.isObject(tab[tab.label]) && tab.label === tab[tab.label].tab
       return (
-        <button styleName={isActive
+        <button
+          styleName={isActive
             ? 'nav-button--active'
             : 'nav-button'
           }

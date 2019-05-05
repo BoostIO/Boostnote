@@ -6,7 +6,7 @@ import i18n from 'browser/lib/i18n'
 
 const OSX = global.process.platform === 'darwin'
 const FullscreenButton = ({
- onClick
+  onClick
 }) => {
   const hotkey = (OSX ? i18n.__('Command(⌘)') : i18n.__('Ctrl(^)')) + '+B'
   return (

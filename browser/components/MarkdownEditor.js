@@ -127,7 +127,7 @@ class MarkdownEditor extends React.Component {
 
   handleDoubleClick (e) {
     if (this.state.isLocked) return
-    this.setState({keyPressed: new Set()})
+    this.setState({ keyPressed: new Set() })
     const { config } = this.props
     if (config.editor.switchPreview === 'DBL_CLICK') {
       this.setState({
@@ -159,8 +159,8 @@ class MarkdownEditor extends React.Component {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
-    const checkedMatch = /^\s*[\+\-\*] \[x\]/i
-    const uncheckedMatch = /^\s*[\+\-\*] \[ \]/
+    const checkedMatch = /^\s*[\+\-\*] \[x\]/i // eslint-disable-line
+    const uncheckedMatch = /^\s*[\+\-\*] \[ \]/ // eslint-disable-line
     const checkReplace = /\[x\]/i
     const uncheckReplace = /\[ \]/
     if (idMatch.test(e.target.getAttribute('id'))) {
@@ -266,7 +266,7 @@ class MarkdownEditor extends React.Component {
   }
 
   render () {
-    const {className, value, config, storageKey, noteKey, linesHighlighted} = this.props
+    const { className, value, config, storageKey, noteKey, linesHighlighted } = this.props
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -279,7 +279,8 @@ class MarkdownEditor extends React.Component {
     const storage = findStorage(storageKey)
 
     return (
-      <div className={className == null
+      <div
+        className={className == null
           ? 'MarkdownEditor'
           : `MarkdownEditor ${className}`
         }
@@ -288,7 +289,8 @@ class MarkdownEditor extends React.Component {
         onKeyDown={(e) => this.handleKeyDown(e)}
         onKeyUp={(e) => this.handleKeyUp(e)}
       >
-        <CodeEditor styleName={this.state.status === 'CODE'
+        <CodeEditor
+          styleName={this.state.status === 'CODE'
             ? 'codeEditor'
             : 'codeEditor--hide'
           }
@@ -320,7 +322,8 @@ class MarkdownEditor extends React.Component {
           hotkey={config.hotkey}
           switchPreview={config.editor.switchPreview}
         />
-        <MarkdownPreview styleName={this.state.status === 'PREVIEW'
+        <MarkdownPreview
+          styleName={this.state.status === 'PREVIEW'
             ? 'preview'
             : 'preview--hide'
           }

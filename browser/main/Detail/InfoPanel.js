@@ -7,7 +7,7 @@ import i18n from 'browser/lib/i18n'
 
 class InfoPanel extends React.Component {
   copyNoteLink () {
-    const {noteLink} = this.props
+    const { noteLink } = this.props
     this.refs.noteLink.select()
     copy(noteLink)
   }
@@ -17,7 +17,7 @@ class InfoPanel extends React.Component {
       storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, exportAsPdf, wordCount, letterCount, type, print
     } = this.props
     return (
-      <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
+      <div className='infoPanel' styleName='control-infoButton-panel' style={{ display: 'none' }}>
         <div>
           <p styleName='modification-date'>{updatedAt}</p>
           <p styleName='modification-date-desc'>{i18n.__('MODIFICATION DATE')}</p>

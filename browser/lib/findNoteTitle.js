@@ -20,6 +20,10 @@ export function findNoteTitle (value, enableFrontMatterTitle, frontMatterTitleFi
   }
 
   if (title === null) {
+    // Note:
+    // Not every case of below some is returning a boolean
+    // --> could probably be improved by returning null;
+    // eslint-disable-next-line
     splitted.some((line, index) => {
       const trimmedLine = line.trim()
       const trimmedNextLine = splitted[index + 1] === undefined ? '' : splitted[index + 1].trim()
@@ -35,6 +39,8 @@ export function findNoteTitle (value, enableFrontMatterTitle, frontMatterTitleFi
 
   if (title === null) {
     title = ''
+    // Note: Some is not returning a value in every case
+    // eslint-disable-next-line
     splitted.some((line) => {
       if (line.trim().length > 0) {
         title = line.trim()

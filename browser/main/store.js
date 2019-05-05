@@ -25,6 +25,8 @@ function data (state = defaultDataMap(), action) {
         state.storageMap.set(storage.key, storage)
       })
 
+      // Note: Some is not returning a value in every case
+      // eslint-disable-next-line
       action.notes.some((note) => {
         if (note === undefined) return true
         const uniqueKey = note.key
@@ -50,172 +52,172 @@ function data (state = defaultDataMap(), action) {
       })
       return state
     case 'UPDATE_NOTE':
-      {
-        const note = action.note
-        const uniqueKey = note.key
-        const folderKey = note.storage + '-' + note.folder
-        const oldNote = state.noteMap.get(uniqueKey)
+    {
+      const note = action.note
+      const uniqueKey = note.key
+      const folderKey = note.storage + '-' + note.folder
+      const oldNote = state.noteMap.get(uniqueKey)
 
-        state = Object.assign({}, state)
-        state.noteMap = new Map(state.noteMap)
-        state.noteMap.set(uniqueKey, note)
+      state = Object.assign({}, state)
+      state.noteMap = new Map(state.noteMap)
+      state.noteMap.set(uniqueKey, note)
 
-        updateStarredChange(oldNote, note, state, uniqueKey)
+      updateStarredChange(oldNote, note, state, uniqueKey)
 
-        if (oldNote == null || oldNote.isTrashed !== note.isTrashed) {
-          state.trashedSet = new Set(state.trashedSet)
-          if (note.isTrashed) {
-            state.trashedSet.add(uniqueKey)
-            state.starredSet.delete(uniqueKey)
-            removeFromTags(note.tags, state, uniqueKey)
-          } else {
-            state.trashedSet.delete(uniqueKey)
+      if (oldNote == null || oldNote.isTrashed !== note.isTrashed) {
+        state.trashedSet = new Set(state.trashedSet)
+        if (note.isTrashed) {
+          state.trashedSet.add(uniqueKey)
+          state.starredSet.delete(uniqueKey)
+          removeFromTags(note.tags, state, uniqueKey)
+        } else {
+          state.trashedSet.delete(uniqueKey)
 
-            assignToTags(note.tags, state, uniqueKey)
+          assignToTags(note.tags, state, uniqueKey)
 
-            if (note.isStarred) {
-              state.starredSet.add(uniqueKey)
-            }
+          if (note.isStarred) {
+            state.starredSet.add(uniqueKey)
           }
         }
-
-        // Update storageNoteMap if oldNote doesn't exist
-        if (oldNote == null) {
-          state.storageNoteMap = new Map(state.storageNoteMap)
-          let storageNoteSet = state.storageNoteMap.get(note.storage)
-          storageNoteSet = new Set(storageNoteSet)
-          storageNoteSet.add(uniqueKey)
-          state.storageNoteMap.set(note.storage, storageNoteSet)
-        }
-
-        // Update foldermap if folder changed or post created
-        updateFolderChange(oldNote, note, state, folderKey, uniqueKey)
-
-        if (oldNote != null) {
-          updateTagChanges(oldNote, note, state, uniqueKey)
-        } else {
-          assignToTags(note.tags, state, uniqueKey)
-        }
-
-        return state
       }
+
+      // Update storageNoteMap if oldNote doesn't exist
+      if (oldNote == null) {
+        state.storageNoteMap = new Map(state.storageNoteMap)
+        let storageNoteSet = state.storageNoteMap.get(note.storage)
+        storageNoteSet = new Set(storageNoteSet)
+        storageNoteSet.add(uniqueKey)
+        state.storageNoteMap.set(note.storage, storageNoteSet)
+      }
+
+      // Update foldermap if folder changed or post created
+      updateFolderChange(oldNote, note, state, folderKey, uniqueKey)
+
+      if (oldNote != null) {
+        updateTagChanges(oldNote, note, state, uniqueKey)
+      } else {
+        assignToTags(note.tags, state, uniqueKey)
+      }
+
+      return state
+    }
     case 'MOVE_NOTE':
-      {
-        const originNote = action.originNote
-        const originKey = originNote.key
-        const note = action.note
-        const uniqueKey = note.key
-        const folderKey = note.storage + '-' + note.folder
-        const oldNote = state.noteMap.get(uniqueKey)
+    {
+      const originNote = action.originNote
+      const originKey = originNote.key
+      const note = action.note
+      const uniqueKey = note.key
+      const folderKey = note.storage + '-' + note.folder
+      const oldNote = state.noteMap.get(uniqueKey)
 
-        state = Object.assign({}, state)
-        state.noteMap = new Map(state.noteMap)
-        state.noteMap.delete(originKey)
-        state.noteMap.set(uniqueKey, note)
+      state = Object.assign({}, state)
+      state.noteMap = new Map(state.noteMap)
+      state.noteMap.delete(originKey)
+      state.noteMap.set(uniqueKey, note)
 
-        // If storage chanced, origin key must be discarded
-        if (originKey !== uniqueKey) {
-          // From isStarred
-          if (originNote.isStarred) {
-            state.starredSet = new Set(state.starredSet)
-            state.starredSet.delete(originKey)
-          }
-
-          if (originNote.isTrashed) {
-            state.trashedSet = new Set(state.trashedSet)
-            state.trashedSet.delete(originKey)
-          }
-
-          // From storageNoteMap
-          state.storageNoteMap = new Map(state.storageNoteMap)
-          let noteSet = state.storageNoteMap.get(originNote.storage)
-          noteSet = new Set(noteSet)
-          noteSet.delete(originKey)
-          state.storageNoteMap.set(originNote.storage, noteSet)
-
-          // From folderNoteMap
-          state.folderNoteMap = new Map(state.folderNoteMap)
-          const originFolderKey = originNote.storage + '-' + originNote.folder
-          let originFolderList = state.folderNoteMap.get(originFolderKey)
-          originFolderList = new Set(originFolderList)
-          originFolderList.delete(originKey)
-          state.folderNoteMap.set(originFolderKey, originFolderList)
-
-          removeFromTags(originNote.tags, state, originKey)
+      // If storage chanced, origin key must be discarded
+      if (originKey !== uniqueKey) {
+        // From isStarred
+        if (originNote.isStarred) {
+          state.starredSet = new Set(state.starredSet)
+          state.starredSet.delete(originKey)
         }
 
-        updateStarredChange(oldNote, note, state, uniqueKey)
-
-        if (oldNote == null || oldNote.isTrashed !== note.isTrashed) {
+        if (originNote.isTrashed) {
           state.trashedSet = new Set(state.trashedSet)
-          if (note.isTrashed) {
-            state.trashedSet.add(uniqueKey)
-          } else {
-            state.trashedSet.delete(uniqueKey)
-          }
+          state.trashedSet.delete(originKey)
         }
-
-        // Update storageNoteMap if oldNote doesn't exist
-        if (oldNote == null) {
-          state.storageNoteMap = new Map(state.storageNoteMap)
-          let noteSet = state.storageNoteMap.get(note.storage)
-          noteSet = new Set(noteSet)
-          noteSet.add(uniqueKey)
-          state.storageNoteMap.set(folderKey, noteSet)
-        }
-
-        // Update foldermap if folder changed or post created
-        updateFolderChange(oldNote, note, state, folderKey, uniqueKey)
-
-        // Remove from old folder map
-        if (oldNote != null) {
-          updateTagChanges(oldNote, note, state, uniqueKey)
-        } else {
-          assignToTags(note.tags, state, uniqueKey)
-        }
-
-        return state
-      }
-    case 'DELETE_NOTE':
-      {
-        const uniqueKey = action.noteKey
-        const targetNote = state.noteMap.get(uniqueKey)
-
-        state = Object.assign({}, state)
 
         // From storageNoteMap
         state.storageNoteMap = new Map(state.storageNoteMap)
-        let noteSet = state.storageNoteMap.get(targetNote.storage)
+        let noteSet = state.storageNoteMap.get(originNote.storage)
         noteSet = new Set(noteSet)
-        noteSet.delete(uniqueKey)
-        state.storageNoteMap.set(targetNote.storage, noteSet)
+        noteSet.delete(originKey)
+        state.storageNoteMap.set(originNote.storage, noteSet)
 
-        if (targetNote != null) {
-          // From isStarred
-          if (targetNote.isStarred) {
-            state.starredSet = new Set(state.starredSet)
-            state.starredSet.delete(uniqueKey)
-          }
+        // From folderNoteMap
+        state.folderNoteMap = new Map(state.folderNoteMap)
+        const originFolderKey = originNote.storage + '-' + originNote.folder
+        let originFolderList = state.folderNoteMap.get(originFolderKey)
+        originFolderList = new Set(originFolderList)
+        originFolderList.delete(originKey)
+        state.folderNoteMap.set(originFolderKey, originFolderList)
 
-          if (targetNote.isTrashed) {
-            state.trashedSet = new Set(state.trashedSet)
-            state.trashedSet.delete(uniqueKey)
-          }
-
-          // From folderNoteMap
-          const folderKey = targetNote.storage + '-' + targetNote.folder
-          state.folderNoteMap = new Map(state.folderNoteMap)
-          let folderSet = state.folderNoteMap.get(folderKey)
-          folderSet = new Set(folderSet)
-          folderSet.delete(uniqueKey)
-          state.folderNoteMap.set(folderKey, folderSet)
-
-          removeFromTags(targetNote.tags, state, uniqueKey)
-        }
-        state.noteMap = new Map(state.noteMap)
-        state.noteMap.delete(uniqueKey)
-        return state
+        removeFromTags(originNote.tags, state, originKey)
       }
+
+      updateStarredChange(oldNote, note, state, uniqueKey)
+
+      if (oldNote == null || oldNote.isTrashed !== note.isTrashed) {
+        state.trashedSet = new Set(state.trashedSet)
+        if (note.isTrashed) {
+          state.trashedSet.add(uniqueKey)
+        } else {
+          state.trashedSet.delete(uniqueKey)
+        }
+      }
+
+      // Update storageNoteMap if oldNote doesn't exist
+      if (oldNote == null) {
+        state.storageNoteMap = new Map(state.storageNoteMap)
+        let noteSet = state.storageNoteMap.get(note.storage)
+        noteSet = new Set(noteSet)
+        noteSet.add(uniqueKey)
+        state.storageNoteMap.set(folderKey, noteSet)
+      }
+
+      // Update foldermap if folder changed or post created
+      updateFolderChange(oldNote, note, state, folderKey, uniqueKey)
+
+      // Remove from old folder map
+      if (oldNote != null) {
+        updateTagChanges(oldNote, note, state, uniqueKey)
+      } else {
+        assignToTags(note.tags, state, uniqueKey)
+      }
+
+      return state
+    }
+    case 'DELETE_NOTE':
+    {
+      const uniqueKey = action.noteKey
+      const targetNote = state.noteMap.get(uniqueKey)
+
+      state = Object.assign({}, state)
+
+      // From storageNoteMap
+      state.storageNoteMap = new Map(state.storageNoteMap)
+      let noteSet = state.storageNoteMap.get(targetNote.storage)
+      noteSet = new Set(noteSet)
+      noteSet.delete(uniqueKey)
+      state.storageNoteMap.set(targetNote.storage, noteSet)
+
+      if (targetNote != null) {
+        // From isStarred
+        if (targetNote.isStarred) {
+          state.starredSet = new Set(state.starredSet)
+          state.starredSet.delete(uniqueKey)
+        }
+
+        if (targetNote.isTrashed) {
+          state.trashedSet = new Set(state.trashedSet)
+          state.trashedSet.delete(uniqueKey)
+        }
+
+        // From folderNoteMap
+        const folderKey = targetNote.storage + '-' + targetNote.folder
+        state.folderNoteMap = new Map(state.folderNoteMap)
+        let folderSet = state.folderNoteMap.get(folderKey)
+        folderSet = new Set(folderSet)
+        folderSet.delete(uniqueKey)
+        state.folderNoteMap.set(folderKey, folderSet)
+
+        removeFromTags(targetNote.tags, state, uniqueKey)
+      }
+      state.noteMap = new Map(state.noteMap)
+      state.noteMap.delete(uniqueKey)
+      return state
+    }
     case 'UPDATE_FOLDER':
     case 'REORDER_FOLDER':
     case 'EXPORT_FOLDER':
