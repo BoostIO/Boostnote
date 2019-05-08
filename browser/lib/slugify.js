@@ -4,7 +4,7 @@ module.exports = function slugify (title) {
       .replace(/^\s+/, '')
       .replace(/\s+$/, '')
       .replace(/\s+/g, '-')
-      .replace(/[\]\[\!\'\#\$\%\&\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~\`]/g, '')
+      .replace(/[\]\[\!\'\#\$\%\&\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '')
   )
 
   return slug
