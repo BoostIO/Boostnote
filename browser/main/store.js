@@ -469,16 +469,11 @@ function getOrInitItem (target, key) {
 
 const history = createHistory()
 
-// Query not available in HashHistory with ReactRouter >= v4
-// Relevant Issue https://github.com/ReactTraining/react-router/issues/4410#issuecomment-293772446
-// --> moved from query to search - so we only need query-string parsing/stringify for noteKey.
-//     (No need to add query to history with a listener)
-
 const reducer = combineReducers({
   data,
   config,
   status,
-  router: connectRouter(history) // I think we could also go with-out connected-router as we're using history with imports directly
+  router: connectRouter(history)
 })
 
 const store = createStore(reducer, undefined, compose(

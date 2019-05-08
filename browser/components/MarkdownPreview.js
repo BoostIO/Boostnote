@@ -1023,7 +1023,8 @@ export default class MarkdownPreview extends React.Component {
 
     if (!href) return
 
-    const regexNoteInternalLink = /main.html#(.+)/
+    const regexNoteInternalLink = process.env.NODE_ENV === 'production' ? /main.production.html#(.+)/ : /main.development.html#(.+)/
+
     if (regexNoteInternalLink.test(linkHash)) {
       const targetId = mdurl.encode(linkHash.match(regexNoteInternalLink)[1])
       const targetElement = this.refs.root.contentWindow.document.getElementById(

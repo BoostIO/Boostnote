@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+
+  <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
+  <link rel="shortcut icon" href="../resources/favicon.ico">
+  <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="../node_modules/katex/dist/katex.min.css">
+  <link rel="stylesheet" href="../node_modules/codemirror/addon/dialog/dialog.css">
+  <link rel="stylesheet" href="../extra_scripts/codemirror/mode/bfm/bfm.css">
+
+  <title>Boostnote</title>
+
+  <style>
+    @font-face {
+      font-family: 'OpenSans';
+      src: url('../resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+      url('../resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+      url('../resources/fonts/Lato-Regular.ttf') format('truetype');
+      font-style: normal;
+      font-weight: normal;
+      text-rendering: optimizeLegibility;
+    }
+
+    @font-face {
+      font-family: 'Lato';
+      src: url('../resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+      url('../resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+      url('../resources/fonts/Lato-Regular.ttf') format('truetype');
+      font-style: normal;
+      font-weight: normal;
+      text-rendering: optimizeLegibility;
+    }
+
+    #loadingCover {
+      background-color: #f4f4f4;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      box-sizing: border-box;
+      padding: 65px 0;
+      font-family: sans-serif;
+    }
+
+    #loadingCover img {
+      display: block;
+      margin: 75px auto 5px;
+      width: 160px;
+      height: 160px;
+    }
+
+    #loadingCover .message {
+      font-size: 30px;
+      text-align: center;
+      line-height: 1.6;
+      font-weight: 100;
+      color: #888;
+    }
+
+    .CodeEditor {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .CodeMirror-ruler {
+      border-left-color: rgba(142, 142, 142, 0.5);
+      mix-blend-mode: difference;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loadingCover">
+    <img src="../resources/app.png">
+    <div class='message'>
+      <i class="fa fa-spinner fa-spin" spin></i>
+    </div>
+  </div>
+
+  <div id="content"></div>
+
+  <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+  <script src="../node_modules/codemirror/mode/meta.js"></script>
+  <script src="../node_modules/codemirror-mode-elixir/dist/elixir.js"></script>
+  <script src="../node_modules/codemirror/addon/mode/overlay.js"></script>
+  <script src="../node_modules/codemirror/addon/mode/loadmode.js"></script>
+  <script src="../node_modules/codemirror/addon/mode/simple.js"></script>
+  <script src="../node_modules/codemirror/addon/mode/multiplex.js"></script>
+  <script src="../node_modules/codemirror/keymap/sublime.js"></script>
+  <script src="../node_modules/codemirror/keymap/vim.js"></script>
+  <script src="../node_modules/codemirror/keymap/emacs.js"></script>
+  <script src="../node_modules/codemirror/addon/runmode/runmode.js"></script>
+  <script src="../node_modules/codemirror/addon/display/panel.js"></script>
+  <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
+  <script src="../node_modules/codemirror/mode/markdown/markdown.js"></script>
+  <script src="../node_modules/codemirror/mode/gfm/gfm.js"></script>
+  <script src="../node_modules/codemirror/mode/yaml/yaml.js"></script>
+  <script src="../node_modules/codemirror/mode/yaml-frontmatter/yaml-frontmatter.js"></script>
+
+  <script src="../extra_scripts/boost/boostNewLineIndentContinueMarkdownList.js"></script>
+  <script src="../extra_scripts/codemirror/mode/bfm/bfm.js"></script>
+  <script src="../extra_scripts/codemirror/addon/hyperlink/hyperlink.js"></script>
+  <script src="../extra_scripts/codemirror/mode/bfm/bfm.js"></script>
+
+  <script src="../node_modules/codemirror/addon/edit/closebrackets.js"></script>
+  <script src="../node_modules/codemirror/addon/edit/matchbrackets.js"></script>
+
+  <script src="../node_modules/codemirror/addon/search/search.js"></script>
+  <script src="../node_modules/codemirror/addon/search/searchcursor.js"></script>
+  <script src="../node_modules/codemirror/addon/scroll/annotatescrollbar.js"></script>
+  <script src="../node_modules/codemirror/addon/scroll/scrollpastend.js"></script>
+  <script src="../node_modules/codemirror/addon/search/matchesonscrollbar.js"></script>
+  <script src="../node_modules/codemirror/addon/search/jump-to-line.js"></script>
+
+  <script src="../node_modules/codemirror/addon/fold/brace-fold.js"></script>
+  <script src="../node_modules/codemirror/addon/fold/markdown-fold.js"></script>
+  <script src="../node_modules/codemirror/addon/fold/foldgutter.js"></script>
+  <script src="../node_modules/codemirror/addon/fold/foldcode.js"></script>
+
+  <script src="../node_modules/codemirror/addon/dialog/dialog.js"></script>
+  <script src="../node_modules/codemirror/addon/display/rulers.js"></script>
+
+  <script src="../node_modules/raphael/raphael.min.js"></script>
+  <script src="../node_modules/flowchart.js/release/flowchart.min.js"></script>
+  <script>
+    window._ = require('lodash')
+  </script>
+
+  <script src="../node_modules/@rokt33r/js-sequence-diagrams/dist/sequence-diagram-min.js"></script>
+  <script src="../node_modules/react/umd/react.production.min.js"></script>
+  <script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
+  <script src="../node_modules/redux/dist/redux.min.js"></script>
+  <script src="../node_modules/react-redux/dist/react-redux.min.js"></script>
+  <script type='text/javascript'>
+    const electron = require('electron')
+    electron.webFrame.setVisualZoomLevelLimits(1, 1)
+    var scriptUrl = window._.find(electron.remote.process.argv, (a) => a === '--hot')
+      ? 'http://localhost:8080/assets/main.js'
+      : '../compiled/main.js'
+    var scriptEl = document.createElement('script')
+    scriptEl.setAttribute('type', 'text/javascript')
+    scriptEl.setAttribute('src', scriptUrl)
+    document.body.appendChild(scriptEl)
+  </script>
+  <style>
+    .ace_search {
+      background-color: #d9d9d9;
+    }
+  </style>
+</body>
+
+</html>

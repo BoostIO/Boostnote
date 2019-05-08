@@ -22,19 +22,14 @@ class NewNoteButton extends React.Component {
     }
 
     this.handleNewNoteButtonClick = this.handleNewNoteButtonClick.bind(this)
-
-    // why is there a newNoteHandler?!
-    this.newNoteHandler = () => {
-      this.handleNewNoteButtonClick()
-    }
   }
 
   componentDidMount () {
-    eventEmitter.on('top:new-note', this.newNoteHandler)
+    eventEmitter.on('top:new-note', this.handleNewNoteButtonClick)
   }
 
   componentWillUnmount () {
-    eventEmitter.off('top:new-note', this.newNoteHandler)
+    eventEmitter.off('top:new-note', this.handleNewNoteButtonClick)
   }
 
   handleNewNoteButtonClick (e) {
