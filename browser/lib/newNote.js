@@ -1,4 +1,3 @@
-// import { hashHistory } from 'react-router'
 import { history } from 'browser/main/store'
 import dataApi from 'browser/main/lib/dataApi'
 import ee from 'browser/main/lib/eventEmitter'
