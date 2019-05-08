@@ -41,8 +41,9 @@ function sortByAlphabetical (a, b) {
     const floatA = parseFloat(matchA[1])
     const floatB = parseFloat(matchB[1])
 
-    if (Math.abs(floatA - floatB) > 0.01) {
-      return floatA - floatB
+    const diff = floatA - floatB
+    if (diff !== 0) {
+      return diff
     }
 
     // The float values are equal. We will compare the full title.
