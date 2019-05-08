@@ -7,11 +7,14 @@ function replaceDiacritics (str) {
 }
 
 module.exports = function slugify (title) {
-  let slug = title.trim()
+  const slug = encodeURI(
+    title.trim()
+      .toLowerCase()
+      .replace(/^\s+/, '')
+      .replace(/\s+$/, '')
+      .replace(/\s+/g, '-')
+      .replace(/[\]\[\!\'\#\$\%\&\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~\`]/g, '')
+  )
 
-  slug = replaceDiacritics(slug)
-
-  slug = slug.replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
-
-  return encodeURI(slug).replace(/\-+$/, '')
+  return slug
 }
