@@ -202,7 +202,7 @@ export default class CodeEditor extends React.Component {
             }
             cm.execCommand('goLineEnd')
           } else if (
-            !charBeforeCursor.match(/\t|\s|\r|\n/) &&
+            !charBeforeCursor.match(/\t|\s|\r|\n|\$/) &&
             cursor.ch > 1
           ) {
             // text expansion on tab key if the char before is alphabet
@@ -489,7 +489,7 @@ export default class CodeEditor extends React.Component {
   getWordBeforeCursor (line, lineNumber, cursorPosition) {
     let wordBeforeCursor = ''
     const originCursorPosition = cursorPosition
-    const emptyChars = /\t|\s|\r|\n/
+    const emptyChars = /\t|\s|\r|\n|\$/
 
     // to prevent the word is long that will crash the whole app
     // the safeStop is there to stop user to expand words that longer than 20 chars
