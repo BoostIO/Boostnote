@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
-import { history } from 'browser/main/store'
 import modal from 'browser/main/lib/modal'
 import CreateFolderModal from 'browser/main/modals/CreateFolderModal'
 import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
@@ -12,6 +11,7 @@ import _ from 'lodash'
 import { SortableElement } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
+import { push } from 'connected-react-router'
 
 const { remote } = require('electron')
 const { dialog } = remote
@@ -134,14 +134,14 @@ class StorageItem extends React.Component {
   }
 
   handleHeaderInfoClick (e) {
-    const { storage } = this.props
-    history.push('/storages/' + storage.key)
+    const { storage, dispatch } = this.props
+    dispatch(push('/storages/' + storage.key))
   }
 
   handleFolderButtonClick (folderKey) {
     return (e) => {
-      const { storage } = this.props
-      history.push('/storages/' + storage.key + '/folders/' + folderKey)
+      const { storage, dispatch } = this.props
+      dispatch(push('/storages/' + storage.key + '/folders/' + folderKey))
     }
   }
 

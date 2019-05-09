@@ -14,7 +14,6 @@ import NoteItemSimple from 'browser/components/NoteItemSimple'
 import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import path from 'path'
-import { history } from 'browser/main/store'
 import { push, replace } from 'connected-react-router'
 import copy from 'copy-to-clipboard'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
@@ -746,10 +745,10 @@ class NoteList extends React.Component {
           selectedNoteKeys: [note.key]
         })
 
-        history.push({
+        dispatch(push({
           pathname: location.pathname,
           search: queryString.stringify({key: note.key})
-        })
+        }))
       })
   }
 
@@ -758,9 +757,7 @@ class NoteList extends React.Component {
     return copy(noteLink)
   }
 
-  // Navigate seems unused
   navigate (sender, pathname) {
-    // const { router } = this.context
     const { dispatch } = this.props
     dispatch(push({
       pathname,
@@ -931,10 +928,10 @@ class NoteList extends React.Component {
                 type: 'UPDATE_NOTE',
                 note: note
               })
-              history.push({
+              dispatch(push({
                 pathname: location.pathname,
                 search: queryString.stringify({key: getNoteKey(note)})
-              })
+              }))
             })
           })
         })

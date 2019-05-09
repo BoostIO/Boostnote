@@ -12,10 +12,11 @@ import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import eventEmitter from 'browser/main/lib/eventEmitter'
-import { store, history } from 'browser/main/store'
+import { store } from 'browser/main/store'
 import i18n from 'browser/lib/i18n'
 import { getLocales } from 'browser/lib/Languages'
 import applyShortcuts from 'browser/main/lib/shortcutManager'
+import { push } from 'connected-react-router'
 const path = require('path')
 const electron = require('electron')
 const { remote } = electron
@@ -131,7 +132,7 @@ class Main extends React.Component {
           .then(() => data.storage)
       })
       .then(storage => {
-        history.push('/storages/' + storage.key)
+        store.dispatch(push('/storages/' + storage.key))
       })
       .catch(err => {
         throw err

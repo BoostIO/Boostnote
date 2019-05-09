@@ -8,7 +8,6 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
-import { history } from 'browser/main/store'
 import ee from 'browser/main/lib/eventEmitter'
 import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
@@ -31,6 +30,7 @@ import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
 import queryString from 'query-string'
+import { replace } from 'connected-react-router'
 
 const electron = require('electron')
 const { remote } = electron
@@ -166,12 +166,12 @@ class SnippetNoteDetail extends React.Component {
             originNote: note,
             note: newNote
           })
-          history.replace({
+          dispatch(replace({
             pathname: location.pathname,
             search: queryString.stringify({
               key: newNote.key
             })
-          })
+          }))
           this.setState({
             isMovingNote: false
           })
