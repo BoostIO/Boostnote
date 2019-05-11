@@ -11,6 +11,9 @@ class RenameTagModal extends React.Component {
     super(props)
 
     this.nameInput = null
+
+    this.handleChange = this.handleChange.bind(this)
+
     this.setTextInputRef = el => {
       this.nameInput = el
     }
@@ -100,7 +103,7 @@ class RenameTagModal extends React.Component {
             placeholder={i18n.__('Tag Name')}
             ref={this.setTextInputRef}
             value={this.state.name}
-            onChange={(e) => this.handleChange(e)}
+            onChange={this.handleChange}
             onKeyDown={(e) => this.handleInputKeyDown(e)}
           />
           <button styleName='control-confirmButton'
