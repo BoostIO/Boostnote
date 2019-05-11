@@ -19,6 +19,7 @@ class TagSelect extends React.Component {
     }
 
     this.handleAddTag = this.handleAddTag.bind(this)
+    this.handleRenameTag = this.handleRenameTag.bind(this)
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
     this.onInputKeyDown = this.onInputKeyDown.bind(this)
@@ -81,6 +82,7 @@ class TagSelect extends React.Component {
     this.buildSuggestions()
 
     ee.on('editor:add-tag', this.handleAddTag)
+    ee.on('sidebar:rename-tag', this.handleRenameTag)
   }
 
   componentDidUpdate () {
@@ -89,10 +91,21 @@ class TagSelect extends React.Component {
 
   componentWillUnmount () {
     ee.off('editor:add-tag', this.handleAddTag)
+    ee.off('sidebar:rename-tag', this.handleRenameTag)
   }
 
   handleAddTag () {
     this.refs.newTag.input.focus()
+  }
+
+  handleRenameTag (event, tagChange) {
+    let { value } = this.props
+    const { tag, updatedTag } = tagChange
+    const newTags = value.slice()
+
+    newTags[value.indexOf(tag)] = updatedTag
+    this.value = newTags
+    this.props.onChange()
   }
 
   handleTagLabelClick (tag) {

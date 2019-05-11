@@ -6,6 +6,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
 import { hashHistory } from 'react-router'
+import ee from 'browser/main/lib/eventEmitter'
 
 class RenameTagModal extends React.Component {
   constructor (props) {
@@ -85,6 +86,7 @@ class RenameTagModal extends React.Component {
         if (window.location.hash.includes(tag)) {
           hashHistory.replace(`/tags/${updatedTag}`)
         }
+        ee.emit('sidebar:rename-tag', { tag, updatedTag })
         this.props.close()
       })
   }
