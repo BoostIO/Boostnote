@@ -895,6 +895,18 @@ export default class MarkdownPreview extends React.Component {
       this.setImgOnClickEventHelper(img, rect)
       imgObserver.observe(parentEl, config)
     }
+
+    const aList = markdownPreviewIframe.contentWindow.document.body.querySelectorAll('a')
+    for (const a of aList) {
+      const hashLink = a.hash.substr(1)
+      if (hashLink !== '') {
+        const targetEl = markdownPreviewIframe.contentWindow.document.getElementById(hashLink)
+        const dataLine = targetEl.dataset.line
+        a.onclick = () => {
+          this.scrollTo(dataLine)
+        }
+      }
+    }
   }
 
   setImgOnClickEventHelper (img, rect) {
