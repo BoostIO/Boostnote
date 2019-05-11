@@ -21,8 +21,6 @@ class RenameTagModal extends React.Component {
     this.refs.name.select()
   }
 
-  handleCloseButtonClick (e) {
-    this.props.close()
   }
 
   handleChange (e) {
@@ -82,6 +80,8 @@ class RenameTagModal extends React.Component {
   }
 
   render () {
+    const { close } = this.props
+
     return (
       <div styleName='root'
         tabIndex='-1'
@@ -90,7 +90,7 @@ class RenameTagModal extends React.Component {
         <div styleName='header'>
           <div styleName='title'>{i18n.__('Rename Tag')}</div>
         </div>
-        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
+        <ModalEscButton handleEscButtonClick={close} />
 
         <div styleName='control'>
           <input styleName='control-input'
