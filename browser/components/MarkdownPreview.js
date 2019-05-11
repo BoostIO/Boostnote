@@ -898,6 +898,7 @@ export default class MarkdownPreview extends React.Component {
 
     const aList = markdownPreviewIframe.contentWindow.document.body.querySelectorAll('a')
     for (const a of aList) {
+      // Removes a hash
       const hashLink = a.hash.substr(1)
       if (hashLink !== '') {
         const targetEl = markdownPreviewIframe.contentWindow.document.getElementById(hashLink)
