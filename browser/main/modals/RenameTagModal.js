@@ -5,6 +5,7 @@ import styles from './RenameModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
+import { hashHistory } from 'react-router'
 
 class RenameTagModal extends React.Component {
   constructor (props) {
@@ -81,6 +82,9 @@ class RenameTagModal extends React.Component {
         })
       })
       .then(() => {
+        if (window.location.hash.includes(tag)) {
+          hashHistory.replace(`/tags/${updatedTag}`)
+        }
         this.props.close()
       })
   }
