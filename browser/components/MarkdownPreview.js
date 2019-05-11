@@ -900,8 +900,11 @@ export default class MarkdownPreview extends React.Component {
     for (const a of aList) {
       // Removes a hash
       const hashLink = a.hash.substr(1)
-      if (hashLink !== '') {
-        const targetEl = markdownPreviewIframe.contentWindow.document.getElementById(hashLink)
+      const fileRegExp = new RegExp('^file://')
+      const mainHtmlRegExp = new RegExp('/lib/main.html')
+      const isHeadingInMarkdownPreview = fileRegExp.test(a.href) && mainHtmlRegExp.test(a.href)
+      const targetEl = markdownPreviewIframe.contentWindow.document.getElementById(hashLink)
+      if (hashLink !== '' && isHeadingInMarkdownPreview && targetEl) {
         const dataLine = targetEl.dataset.line
         a.onclick = () => {
           this.scrollTo(dataLine)
