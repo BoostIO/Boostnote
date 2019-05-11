@@ -208,7 +208,7 @@
   "lint-staged": {
     "linters": {
       "*.{js,jsx,mjs}": [
-        "npm run lint:fix",
+        "npm run lint",
         "git add"
       ]
     }
