@@ -255,7 +255,7 @@ export default class MarkdownPreview extends React.Component {
       return
     }
     // No contextMenu was passed to us -> execute our own link-opener
-    if (event.target.tagName.toLowerCase() === 'a') {
+    if (event.target.tagName.toLowerCase() === 'a' && event.target.getAttribute('href')) {
       const href = event.target.href
       const isLocalFile = href.startsWith('file:')
       if (isLocalFile) {
@@ -670,14 +670,14 @@ export default class MarkdownPreview extends React.Component {
     )
   }
 
-  GetCodeThemeLink (theme) {
-    theme = consts.THEMES.some(_theme => _theme === theme) &&
-      theme !== 'default'
-      ? theme
-      : 'elegant'
-    return theme.startsWith('solarized')
-      ? `${appPath}/node_modules/codemirror/theme/solarized.css`
-      : `${appPath}/node_modules/codemirror/theme/${theme}.css`
+  GetCodeThemeLink (name) {
+    const theme = consts.THEMES.find(theme => theme.name === name)
+
+    if (theme) {
+      return `${appPath}/${theme.path}`
+    } else {
+      return `${appPath}/node_modules/codemirror/theme/elegant.css`
+    }
   }
 
   rewriteIframe () {
@@ -735,9 +735,9 @@ export default class MarkdownPreview extends React.Component {
       }
     )
 
-    codeBlockTheme = consts.THEMES.some(_theme => _theme === codeBlockTheme)
-      ? codeBlockTheme
-      : 'default'
+    codeBlockTheme = consts.THEMES.find(theme => theme.name === codeBlockTheme)
+
+    const codeBlockThemeClassName = codeBlockTheme ? codeBlockTheme.className : 'cm-s-default'
 
     _.forEach(
       this.refs.root.contentWindow.document.querySelectorAll('.code code'),
@@ -760,14 +760,11 @@ export default class MarkdownPreview extends React.Component {
               })
             }
           }
+
           el.parentNode.appendChild(copyIcon)
           el.innerHTML = ''
-          if (codeBlockTheme.indexOf('solarized') === 0) {
-            const [refThema, color] = codeBlockTheme.split(' ')
-            el.parentNode.className += ` cm-s-${refThema} cm-s-${color}`
-          } else {
-            el.parentNode.className += ` cm-s-${codeBlockTheme}`
-          }
+          el.parentNode.className += ` ${codeBlockThemeClassName}`
+
           CodeMirror.runMode(content, syntax.mime, el, {
             tabSize: indentSize
           })
