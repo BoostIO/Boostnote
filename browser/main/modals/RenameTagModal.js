@@ -10,6 +10,11 @@ class RenameTagModal extends React.Component {
   constructor (props) {
     super(props)
 
+    this.nameInput = null
+    this.setTextInputRef = el => {
+      this.nameInput = el
+    }
+
     this.state = {
       name: props.tagName,
       oldName: props.tagName
@@ -17,15 +22,13 @@ class RenameTagModal extends React.Component {
   }
 
   componentDidMount () {
-    this.refs.name.focus()
-    this.refs.name.select()
-  }
-
+    this.nameInput.focus()
+    this.nameInput.select()
   }
 
   handleChange (e) {
     this.setState({
-      name: this.refs.name.value
+      name: this.nameInput.value
     })
   }
 
@@ -95,7 +98,7 @@ class RenameTagModal extends React.Component {
         <div styleName='control'>
           <input styleName='control-input'
             placeholder={i18n.__('Tag Name')}
-            ref='name'
+            ref={this.setTextInputRef}
             value={this.state.name}
             onChange={(e) => this.handleChange(e)}
             onKeyDown={(e) => this.handleInputKeyDown(e)}
