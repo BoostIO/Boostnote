@@ -898,18 +898,8 @@ export default class MarkdownPreview extends React.Component {
 
     const aList = markdownPreviewIframe.contentWindow.document.body.querySelectorAll('a')
     for (const a of aList) {
-      // Removes a hash
-      const hashLink = a.hash.substr(1)
-      const fileRegExp = new RegExp('^file://')
-      const mainHtmlRegExp = new RegExp('/lib/main.html')
-      const isHeadingInMarkdownPreview = fileRegExp.test(a.href) && mainHtmlRegExp.test(a.href)
-      const targetEl = markdownPreviewIframe.contentWindow.document.getElementById(hashLink)
-      if (hashLink !== '' && isHeadingInMarkdownPreview && targetEl) {
-        const dataLine = targetEl.dataset.line
-        a.onclick = () => {
-          this.scrollTo(dataLine)
-        }
-      }
+      a.removeEventListener('click', this.linkClickHandler)
+      a.addEventListener('click', this.linkClickHandler)
     }
   }
 
@@ -1036,9 +1026,10 @@ export default class MarkdownPreview extends React.Component {
 
     if (!href) return
 
-    const regexNoteInternalLink = /main.html#(.+)/
+    const extractId = /(main.html)*#/
+    const regexNoteInternalLink = new RegExp(`${extractId.source}(.+)`)
     if (regexNoteInternalLink.test(linkHash)) {
-      const targetId = mdurl.encode(linkHash.match(regexNoteInternalLink)[1])
+      const targetId = mdurl.encode(linkHash.replace(extractId, ''))
       const targetElement = this.refs.root.contentWindow.document.getElementById(
         targetId
       )
