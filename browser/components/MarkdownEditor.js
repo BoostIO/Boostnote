@@ -159,8 +159,8 @@ class MarkdownEditor extends React.Component {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
-    const checkedMatch = /^\s*>?\s*[+\-*] \[x]/i
-    const uncheckedMatch = /^\s*>?\s*[+\-*] \[ ]/
+    const checkedMatch = /^(\s*>?)*\s*[+\-*] \[x]/i
+    const uncheckedMatch = /^(\s*>?)*\s*[+\-*] \[ ]/
     const checkReplace = /\[x]/i
     const uncheckReplace = /\[ ]/
     if (idMatch.test(e.target.getAttribute('id'))) {
