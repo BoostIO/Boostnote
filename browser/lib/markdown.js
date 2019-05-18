@@ -243,6 +243,22 @@ class Markdown {
       }
     })
 
+    // Gantt support
+    this.md.use(require('markdown-it-plantuml'), {
+      openMarker: '@startgantt',
+      closeMarker: '@endgantt',
+      generateSource: function (umlCode) {
+        const stripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
+        // Currently PlantUML server doesn't support Ditaa in SVG, so we set the format as PNG at the moment.
+        const serverAddress = stripTrailingSlash(config.preview.plantUMLServerAddress) + '/svg'
+        const s = unescape(encodeURIComponent(umlCode))
+        const zippedCode = deflate.encode64(
+          deflate.zip_deflate(`@startgantt\n${s}\n@endgantt`, 9)
+        )
+        return `${serverAddress}/${zippedCode}`
+      }
+    })
+
     // Override task item
     this.md.block.ruler.at('paragraph', function (state, startLine/*, endLine */) {
       let content, terminate, i, l, token
