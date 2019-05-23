@@ -1026,9 +1026,10 @@ export default class MarkdownPreview extends React.Component {
 
     if (!href) return
 
-    const regexNoteInternalLink = new RegExp('(main.html)?#')
+    const extractId = /(main.html)?#/
+    const regexNoteInternalLink = new RegExp(`${extractId.source}(.+)`)
     if (regexNoteInternalLink.test(linkHash)) {
-      const targetId = mdurl.encode(linkHash.replace(regexNoteInternalLink, ''))
+      const targetId = mdurl.encode(linkHash.replace(extractId, ''))
       const targetElement = this.refs.root.contentWindow.document.getElementById(
         targetId
       )
