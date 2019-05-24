@@ -82,6 +82,10 @@ body[data-theme="dracula"]
     border-left 1px solid $ui-dracula-borderColor
     background-color $ui-dracula-noteDetail-backgroundColor
     
-img, span, div
-  -webkit-user-drag none
-  user-select none
+div
+  > button, div
+    -webkit-user-drag none
+    user-select none
+    > img, span
+      -webkit-user-drag none
+      user-select none
