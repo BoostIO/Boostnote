@@ -15,7 +15,7 @@ module.exports = function sanitizePlugin (md, options) {
           options
         )
       }
-      if (state.tokens[tokenIdx].type === '_fence') {
+      if (state.tokens[tokenIdx].type.match(/.*_fence$/)) {
         // escapeHtmlCharacters has better performance
         state.tokens[tokenIdx].content = escapeHtmlCharacters(
           state.tokens[tokenIdx].content,
