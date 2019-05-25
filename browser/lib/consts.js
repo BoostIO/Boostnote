@@ -3,14 +3,43 @@ const fs = require('sander')
 const { remote } = require('electron')
 const { app } = remote
 
-const themePath = process.env.NODE_ENV === 'production'
-  ? path.join(app.getAppPath(), './node_modules/codemirror/theme')
-  : require('path').resolve('./node_modules/codemirror/theme')
-const themes = fs.readdirSync(themePath)
-  .map((themePath) => {
-    return themePath.substring(0, themePath.lastIndexOf('.'))
-  })
-themes.splice(themes.indexOf('solarized'), 1, 'solarized dark', 'solarized light')
+const CODEMIRROR_THEME_PATH = 'node_modules/codemirror/theme'
+const CODEMIRROR_EXTRA_THEME_PATH = 'extra_scripts/codemirror/theme'
+
+const isProduction = process.env.NODE_ENV === 'production'
+const paths = [
+  isProduction ? path.join(app.getAppPath(), CODEMIRROR_THEME_PATH) : path.resolve(CODEMIRROR_THEME_PATH),
+  isProduction ? path.join(app.getAppPath(), CODEMIRROR_EXTRA_THEME_PATH) : path.resolve(CODEMIRROR_EXTRA_THEME_PATH)
+]
+
+const themes = paths
+  .map(directory => fs.readdirSync(directory).map(file => {
+    const name = file.substring(0, file.lastIndexOf('.'))
+
+    return {
+      name,
+      path: path.join(directory.split(/\//g).slice(-3).join('/'), file),
+      className: `cm-s-${name}`
+    }
+  }))
+  .reduce((accumulator, value) => accumulator.concat(value), [])
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+themes.splice(themes.findIndex(({ name }) => name === 'solarized'), 1, {
+  name: 'solarized dark',
+  path: `${CODEMIRROR_THEME_PATH}/solarized.css`,
+  className: `cm-s-solarized cm-s-dark`
+}, {
+  name: 'solarized light',
+  path: `${CODEMIRROR_THEME_PATH}/solarized.css`,
+  className: `cm-s-solarized cm-s-light`
+})
+
+themes.splice(0, 0, {
+  name: 'default',
+  path: `${CODEMIRROR_THEME_PATH}/elegant.css`,
+  className: `cm-s-default`
+})
 
 const snippetFile = process.env.NODE_ENV !== 'test'
   ? path.join(app.getPath('userData'), 'snippets.json')
@@ -35,7 +64,7 @@ const consts = {
     'Dodger Blue',
     'Violet Eggplant'
   ],
-  THEMES: ['default'].concat(themes),
+  THEMES: themes,
   SNIPPET_FILE: snippetFile,
   DEFAULT_EDITOR_FONT_FAMILY: [
     'Monaco',

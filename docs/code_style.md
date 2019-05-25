@@ -80,3 +80,10 @@ class MyComponent extends React.Component {
   }
 }
 ```
+
+## React Hooks
+Existing code will be kept class-based and will only be changed to functional components with hooks if it improves readability or makes things more reusable. 
+
+For new components it's OK to use hooks with functional components but don't mix hooks & class-based components within a feature - just for code style / readability reasons. 
+
+Read more about hooks in the [React hooks introduction](https://reactjs.org/docs/hooks-intro.html).

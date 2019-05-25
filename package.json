@@ -1,7 +1,7 @@
 {
   "name": "boost",
   "productName": "Boostnote",
-  "version": "0.11.15",
+   "version": "0.11.16",
   "main": "index.js",
   "description": "Boostnote",
   "license": "GPL-3.0",
@@ -161,6 +161,7 @@
     "jest-localstorage-mock": "^2.2.0",
     "jsdom": "^9.4.2",
     "json-loader": "^0.5.4",
+    "markdownlint": "^0.11.0",
     "merge-stream": "^1.0.0",
     "mock-require": "^3.0.1",
     "nib": "^1.1.0",
