@@ -304,21 +304,21 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '        <p data-line="6">\n' +
-    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '            <img src="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
     '        </p>\n' +
     '        <pre class="fence" data-line="8">\n' +
     '            <span class="filename"></span>\n' +
-    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + 'f939b2c3.jpg</div>\n' +
+    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + 'f939b2c3.jpg</div>\n' +
     '        </pre>\n' +
     '        <pre class="fence" data-line="10">\n' +
     '            <span class="filename"></span>\n' +
-    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + 'f939b2c3.jpg</div>\n' +
+    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + 'f939b2c3.jpg</div>\n' +
     '        </pre>\n' +
     '    </body>\n' +
     '</html>'
@@ -353,10 +353,10 @@ it('should replace the ":storage" path with the actual storage path when they ha
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
