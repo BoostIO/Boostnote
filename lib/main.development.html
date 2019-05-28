@@ -72,6 +72,10 @@
       border-left-color: rgba(142, 142, 142, 0.5);
       mix-blend-mode: difference;
     }
+
+    .CodeMirror-lint-tooltip {
+      z-index: 1003;
+    }
   </style>
 </head>
 
@@ -126,7 +130,9 @@
   <script src="../node_modules/codemirror/addon/dialog/dialog.js"></script>
   <script src="../node_modules/codemirror/addon/display/rulers.js"></script>
 
+  <script src="../node_modules/jsonlint-mod/lib/jsonlint.js"></script>
   <script src="../node_modules/codemirror/addon/lint/lint.js"></script>
+  <script src="../node_modules/codemirror/addon/lint/json-lint.js"></script>
 
   <script src="../node_modules/raphael/raphael.min.js"></script>
   <script src="../node_modules/flowchart.js/release/flowchart.min.js"></script>

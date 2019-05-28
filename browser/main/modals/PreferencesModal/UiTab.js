@@ -30,7 +30,9 @@ class UiTab extends React.Component {
   componentDidMount () {
     CodeMirror.autoLoadMode(this.codeMirrorInstance.getCodeMirror(), 'javascript')
     CodeMirror.autoLoadMode(this.customCSSCM.getCodeMirror(), 'css')
+    CodeMirror.autoLoadMode(this.customMarkdownLintConfigCM.getCodeMirror(), 'javascript')
     this.customCSSCM.getCodeMirror().setSize('400px', '400px')
+    this.customMarkdownLintConfigCM.getCodeMirror().setSize('400px', '200px')
     this.handleSettingDone = () => {
       this.setState({UiAlert: {
         type: 'success',
@@ -101,7 +103,9 @@ class UiTab extends React.Component {
         matchingTriples: this.refs.matchingTriples.value,
         explodingPairs: this.refs.explodingPairs.value,
         spellcheck: this.refs.spellcheck.checked,
-        enableSmartPaste: this.refs.enableSmartPaste.checked
+        enableSmartPaste: this.refs.enableSmartPaste.checked,
+        enableMarkdownLint: this.refs.enableMarkdownLint.checked,
+        customMarkdownLintConfig: this.customMarkdownLintConfigCM.getCodeMirror().getValue()
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -635,6 +639,34 @@ class UiTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
                 type='text'
               />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Custom MarkdownLint Rules')}
+            </div>
+            <div styleName='group-section-control'>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.enableMarkdownLint}
+                ref='enableMarkdownLint'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable MarkdownLint')}
+              <div style={{fontFamily, display: this.state.config.editor.enableMarkdownLint ? 'block' : 'none'}}>
+                <ReactCodeMirror
+                  width='400px'
+                  height='200px'
+                  onChange={e => this.handleUIChange(e)}
+                  ref={e => (this.customMarkdownLintConfigCM = e)}
+                  value={config.editor.customMarkdownLintConfig}
+                  options={{
+                    lineNumbers: true,
+                    mode: 'application/json',
+                    theme: codemirrorTheme,
+                    lint: true,
+                    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
+                  }} />
+              </div>
             </div>
           </div>
 
