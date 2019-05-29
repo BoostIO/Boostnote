@@ -119,6 +119,7 @@ class UiTab extends React.Component {
         breaks: this.refs.previewBreaks.checked,
         smartArrows: this.refs.previewSmartArrows.checked,
         sanitize: this.refs.previewSanitize.value,
+        mermaidHTMLLabel: this.refs.previewMermaidHTMLLabel.checked,
         allowCustomCSS: this.refs.previewAllowCustomCSS.checked,
         lineThroughCheckbox: this.refs.lineThroughCheckbox.checked,
         customCSS: this.customCSSCM.getCodeMirror().getValue()
@@ -767,6 +768,16 @@ class UiTab extends React.Component {
                 <option value='NONE'>❌ {i18n.__('Allow dangerous html tags')}</option>
               </select>
             </div>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.preview.mermaidHTMLLabel}
+                ref='previewMermaidHTMLLabel'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable HTML label in mermaid flowcharts')}
+            </label>
           </div>
           <div styleName='group-section'>
             <div styleName='group-section-label'>

@@ -78,7 +78,8 @@ export const DEFAULT_CONFIG = {
     smartArrows: false,
     allowCustomCSS: false,
     customCSS: '',
-    sanitize: 'STRICT', // 'STRICT', 'ALLOW_STYLES', 'NONE'
+    sanitize: 'STRICT', // 'STRICT', 'ALLOW_STYLES', 'NONE',
+    mermaidHTMLLabel: false,
     lineThroughCheckbox: true
   },
   blog: {
