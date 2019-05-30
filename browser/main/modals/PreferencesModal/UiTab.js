@@ -135,7 +135,7 @@ class UiTab extends React.Component {
       const theme = consts.THEMES.find(theme => theme.name === newCodemirrorTheme)
 
       if (theme) {
-        checkHighLight.setAttribute('href', `../${theme.path}`)
+        checkHighLight.setAttribute('href', theme.path)
       }
     }
 

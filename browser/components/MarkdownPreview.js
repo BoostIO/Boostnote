@@ -673,11 +673,7 @@ export default class MarkdownPreview extends React.Component {
   GetCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
-    if (theme) {
-      return `${appPath}/${theme.path}`
-    } else {
-      return `${appPath}/node_modules/codemirror/theme/elegant.css`
-    }
+    return theme ? theme.path : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
   rewriteIframe () {
