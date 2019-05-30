@@ -3,6 +3,9 @@ const copyFile = require('browser/main/lib/dataApi/copyFile')
 
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
+const execSync = require('child_process').execSync
+const removeDirCommand = os.platform() === 'win32' ? 'rmdir /s /q ' : 'rm -rf '
 
 const testFile = 'test.txt'
 const srcFolder = path.join(__dirname, '🤔')
@@ -29,7 +32,7 @@ test('`copyFile` should handle encoded URI on src path', (t) => {
 test.after((t) => {
   fs.unlinkSync(srcPath)
   fs.unlinkSync(dstPath)
-  fs.rmdirSync(srcFolder)
-  fs.rmdirSync(dstFolder)
+  execSync(removeDirCommand + '"' + srcFolder + '"')
+  execSync(removeDirCommand + '"' + dstFolder + '"')
 })
 
