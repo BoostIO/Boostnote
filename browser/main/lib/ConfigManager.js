@@ -140,7 +140,7 @@ function get () {
     const theme = consts.THEMES.find(theme => theme.name === config.editor.theme)
 
     if (theme) {
-      editorTheme.setAttribute('href', theme.path)
+      editorTheme.setAttribute('href', win ? theme.path : `../${theme.path}`)
     } else {
       config.editor.theme = 'default'
     }
@@ -182,7 +182,7 @@ function set (updates) {
   const newTheme = consts.THEMES.find(theme => theme.name === newConfig.editor.theme)
 
   if (newTheme) {
-    editorTheme.setAttribute('href', newTheme.path)
+    editorTheme.setAttribute('href', win ? newTheme.path : `../${newTheme.path}`)
   }
 
   ipcRenderer.send('config-renew', {

@@ -45,6 +45,7 @@ const CSS_FILES = [
   `${appPath}/node_modules/codemirror/lib/codemirror.css`,
   `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
+const win = global.process.platform === 'win32'
 
 function buildStyle (
   fontFamily,
@@ -673,7 +674,9 @@ export default class MarkdownPreview extends React.Component {
   GetCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
-    return theme ? theme.path : `${appPath}/node_modules/codemirror/theme/elegant.css`
+    return theme
+      ? (win ? theme.path : `../${theme.path}`)
+      : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
   rewriteIframe () {

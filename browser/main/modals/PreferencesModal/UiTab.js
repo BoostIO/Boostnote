@@ -14,6 +14,7 @@ import { getLanguages } from 'browser/lib/Languages'
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 
 const OSX = global.process.platform === 'darwin'
+const win = global.process.platform === 'win32'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -135,7 +136,7 @@ class UiTab extends React.Component {
       const theme = consts.THEMES.find(theme => theme.name === newCodemirrorTheme)
 
       if (theme) {
-        checkHighLight.setAttribute('href', theme.path)
+        checkHighLight.setAttribute('href', win ? theme.path : `../${theme.path}`)
       }
     }
 
