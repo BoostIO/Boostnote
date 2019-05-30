@@ -476,7 +476,8 @@ const reducer = combineReducers({
   router: connectRouter(history)
 })
 
-const store = createStore(reducer, undefined, compose(
-  applyMiddleware(routerMiddleware(history)), DevTools.instrument()))
+const store = createStore(reducer, undefined, process.env.NODE_ENV === 'development'
+  ? compose(applyMiddleware(routerMiddleware(history)), DevTools.instrument())
+  : applyMiddleware(routerMiddleware(history)))
 
 export { store, history }
