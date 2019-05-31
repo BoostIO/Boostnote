@@ -32,6 +32,7 @@ class Markdown {
 
     const updatedOptions = Object.assign(defaultOptions, options)
     this.md = markdownit(updatedOptions)
+    this.md.linkify.set({ fuzzyLink: false })
 
     if (updatedOptions.sanitize !== 'NONE') {
       const allowedTags = ['iframe', 'input', 'b',
