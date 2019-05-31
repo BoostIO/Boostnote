@@ -675,7 +675,7 @@ export default class MarkdownPreview extends React.Component {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
     return theme
-      ? (win ? theme.path : `../${theme.path}`)
+      ? (win ? theme.path : `${appPath}/${theme.path}`)
       : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
