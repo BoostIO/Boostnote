@@ -4,6 +4,7 @@ import styles from './NewNoteModal.styl'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
 import { createMarkdownNote, createSnippetNote } from 'browser/lib/newNote'
+import queryString from 'query-string'
 
 class NewNoteModal extends React.Component {
   constructor (props) {
@@ -21,7 +22,8 @@ class NewNoteModal extends React.Component {
   }
 
   handleMarkdownNoteButtonClick (e) {
-    const { storage, folder, dispatch, location, params, config } = this.props
+    const { storage, folder, dispatch, location, config } = this.props
+    const params = location.search !== '' && queryString.parse(location.search)
     if (!this.lock) {
       this.lock = true
       createMarkdownNote(storage, folder, dispatch, location, params, config).then(() => {
@@ -38,7 +40,8 @@ class NewNoteModal extends React.Component {
   }
 
   handleSnippetNoteButtonClick (e) {
-    const { storage, folder, dispatch, location, params, config } = this.props
+    const { storage, folder, dispatch, location, config } = this.props
+    const params = location.search !== '' && queryString.parse(location.search)
     if (!this.lock) {
       this.lock = true
       createSnippetNote(storage, folder, dispatch, location, params, config).then(() => {

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { push } from 'connected-react-router'
 import CSSModules from 'browser/lib/CSSModules'
 import dataApi from 'browser/main/lib/dataApi'
 import styles from './SideNav.styl'
@@ -62,7 +63,7 @@ class SideNav extends React.Component {
     })
 
     if (selectedButton === 0) {
-      const { data, dispatch, location, params } = this.props
+      const { data, dispatch, location, match: { params } } = this.props
 
       const notes = data.noteMap
         .map(note => note)
@@ -92,7 +93,7 @@ class SideNav extends React.Component {
             if (index !== -1) {
               tags.splice(index, 1)
 
-              this.context.router.push(`/tags/${tags.map(tag => encodeURIComponent(tag)).join(' ')}`)
+              dispatch(push(`/tags/${tags.map(tag => encodeURIComponent(tag)).join(' ')}`))
             }
           }
         })
@@ -104,13 +105,13 @@ class SideNav extends React.Component {
   }
 
   handleHomeButtonClick (e) {
-    const { router } = this.context
-    router.push('/home')
+    const { dispatch } = this.props
+    dispatch(push('/home'))
   }
 
   handleStarredButtonClick (e) {
-    const { router } = this.context
-    router.push('/starred')
+    const { dispatch } = this.props
+    dispatch(push('/starred'))
   }
 
   handleTagContextMenu (e, tag) {
@@ -190,18 +191,18 @@ class SideNav extends React.Component {
   }
 
   handleTrashedButtonClick (e) {
-    const { router } = this.context
-    router.push('/trashed')
+    const { dispatch } = this.props
+    dispatch(push('/trashed'))
   }
 
   handleSwitchFoldersButtonClick () {
-    const { router } = this.context
-    router.push('/home')
+    const { dispatch } = this.props
+    dispatch(push('/home'))
   }
 
   handleSwitchTagsButtonClick () {
-    const { router } = this.context
-    router.push('/alltags')
+    const { dispatch } = this.props
+    dispatch(push('/alltags'))
   }
 
   onSortEnd (storage) {
@@ -348,8 +349,8 @@ class SideNav extends React.Component {
   }
 
   handleClickTagListItem (name) {
-    const { router } = this.context
-    router.push(`/tags/${encodeURIComponent(name)}`)
+    const { dispatch } = this.props
+    dispatch(push(`/tags/${encodeURIComponent(name)}`))
   }
 
   handleSortTagsByChange (e) {
@@ -367,8 +368,7 @@ class SideNav extends React.Component {
   }
 
   handleClickNarrowToTag (tag) {
-    const { router } = this.context
-    const { location } = this.props
+    const { dispatch, location } = this.props
     const listOfTags = this.getActiveTags(location.pathname)
     const indexOfTag = listOfTags.indexOf(tag)
     if (indexOfTag > -1) {
@@ -376,7 +376,7 @@ class SideNav extends React.Component {
     } else {
       listOfTags.push(tag)
     }
-    router.push(`/tags/${encodeURIComponent(listOfTags.join(' '))}`)
+    dispatch(push(`/tags/${encodeURIComponent(listOfTags.join(' '))}`))
   }
 
   emptyTrash (entries) {

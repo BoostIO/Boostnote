@@ -11,6 +11,10 @@ const consts = require('browser/lib/consts')
 
 let isInitialized = false
 
+const DEFAULT_MARKDOWN_LINT_CONFIG = `{
+  "default": true
+}`
+
 export const DEFAULT_CONFIG = {
   zoom: 1,
   isSideNavFolded: false,
@@ -59,7 +63,9 @@ export const DEFAULT_CONFIG = {
     enableFrontMatterTitle: true,
     frontMatterTitleField: 'title',
     spellcheck: false,
-    enableSmartPaste: false
+    enableSmartPaste: false,
+    enableMarkdownLint: false,
+    customMarkdownLintConfig: DEFAULT_MARKDOWN_LINT_CONFIG
   },
   preview: {
     fontSize: '14',
