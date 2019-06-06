@@ -518,6 +518,19 @@ class SnippetNoteDetail extends React.Component {
     ])
   }
 
+  handleWrapLineButtonClick (e) {
+    context.popup([
+      {
+        label: 'on',
+        click: (e) => this.handleWrapLineItemClick(e, true)
+      },
+      {
+        label: 'off',
+        click: (e) => this.handleWrapLineItemClick(e, false)
+      }
+    ])
+  }
+
   handleIndentSizeItemClick (e, indentSize) {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
@@ -538,6 +551,22 @@ class SnippetNoteDetail extends React.Component {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
       indentType
+    })
+    ConfigManager.set({
+      editor
+    })
+    dispatch({
+      type: 'SET_CONFIG',
+      config: {
+        editor
+      }
+    })
+  }
+
+  handleWrapLineItemClick (e, lineWrapping) {
+    const { config, dispatch } = this.props
+    const editor = Object.assign({}, config.editor, {
+      lineWrapping
     })
     ConfigManager.set({
       editor
