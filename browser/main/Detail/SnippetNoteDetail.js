@@ -720,6 +720,7 @@ class SnippetNoteDetail extends React.Component {
             mode={snippet.mode || (autoDetect ? null : config.editor.snippetDefaultLanguage)}
             value={snippet.content}
             linesHighlighted={snippet.linesHighlighted}
+            lineWrapping={config.editor.lineWrapping}
             theme={config.editor.theme}
             fontFamily={config.editor.fontFamily}
             fontSize={editorFontSize}

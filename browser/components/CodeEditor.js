@@ -267,7 +267,7 @@ export default class CodeEditor extends React.Component {
       value: this.props.value,
       linesHighlighted: this.props.linesHighlighted,
       lineNumbers: this.props.displayLineNumbers,
-      lineWrapping: true,
+      lineWrapping: this.props.lineWrapping,
       theme: this.props.theme,
       indentUnit: this.props.indentSize,
       tabSize: this.props.indentSize,
@@ -564,6 +564,10 @@ export default class CodeEditor extends React.Component {
 
     if (prevProps.displayLineNumbers !== this.props.displayLineNumbers) {
       this.editor.setOption('lineNumbers', this.props.displayLineNumbers)
+    }
+
+    if (prevProps.lineWrapping !== this.props.lineWrapping) {
+      this.editor.setOption('lineWrapping', this.props.lineWrapping)
     }
 
     if (prevProps.scrollPastEnd !== this.props.scrollPastEnd) {
