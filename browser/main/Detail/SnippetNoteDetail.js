@@ -929,6 +929,12 @@ class SnippetNoteDetail extends React.Component {
             size: {config.editor.indentSize}&nbsp;
             <i className='fa fa-caret-down' />
           </button>
+          <button
+            onClick={(e) => this.handleWrapLineButtonClick(e)}
+          >
+            Wrap Line: {config.editor.lineWrapping ? 'on' : 'off'}&nbsp;
+            <i className='fa fa-caret-down' />
+          </button>
         </div>
 
         <StatusBar
