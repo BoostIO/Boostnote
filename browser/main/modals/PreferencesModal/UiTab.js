@@ -883,7 +883,6 @@ class UiTab extends React.Component {
                   onChange={e => this.handleUIChange(e)}
                   ref={e => (this.customCSSCM = e)}
                   value={config.preview.customCSS}
-                  defaultValue={'/* Drop Your Custom CSS Code Here */\n'}
                   options={{
                     lineNumbers: true,
                     mode: 'css',
