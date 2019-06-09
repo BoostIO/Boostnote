@@ -152,7 +152,13 @@ function get () {
 
 function set (updates) {
   const currentConfig = get()
-  const newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, updates)
+
+  let arrangedUpdates = updates
+  if (updates.preview !== undefined && updates.preview.customCSS === "") {
+    arrangedUpdates.preview.customCSS = DEFAULT_CONFIG.preview.customCSS
+  }
+
+  const newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, arrangedUpdates);
   if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
 
