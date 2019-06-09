@@ -345,6 +345,10 @@ export default class MarkdownPreview extends React.Component {
       customCSS
     )
     let body = this.markdown.render(noteContent)
+    body = attachmentManagement.fixLocalURLS(
+      body,
+      this.props.storagePath
+    )
     const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     files.forEach(file => {
       if (global.process.platform === 'win32') {
