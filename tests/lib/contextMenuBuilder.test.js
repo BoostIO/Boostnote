@@ -4,8 +4,8 @@ jest.mock('electron', () => {
 })
 
 const spellcheck = require('browser/lib/spellcheck')
-const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
-const buildMarkdownPreviewContextMenu = require('browser/lib/contextMenuBuilder')
+const buildEditorContextMenu = require('browser/lib/contextMenuBuilder').buildEditorContextMenu
+const buildMarkdownPreviewContextMenu = require('browser/lib/contextMenuBuilder').buildMarkdownPreviewContextMenu
 
 beforeEach(() => {
   menuBuilderParameter = null
