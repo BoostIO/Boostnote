@@ -9,7 +9,6 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
-import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import markdown from 'browser/lib/markdownTextHelper'
 import StatusBar from '../StatusBar'
@@ -30,6 +29,8 @@ import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoStatus'
 import striptags from 'striptags'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
+import queryString from 'query-string'
+import { replace } from 'connected-react-router'
 
 class MarkdownNoteDetail extends React.Component {
   constructor (props) {
@@ -140,6 +141,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleFolderChange (e) {
+    const { dispatch } = this.props
     const { note } = this.state
     const value = this.refs.folder.value
     const splitted = value.split('-')
@@ -159,12 +161,12 @@ class MarkdownNoteDetail extends React.Component {
             originNote: note,
             note: newNote
           })
-          hashHistory.replace({
+          dispatch(replace({
             pathname: location.pathname,
-            query: {
+            search: queryString.stringify({
               key: newNote.key
-            }
-          })
+            })
+          }))
           this.setState({
             isMovingNote: false
           })
@@ -491,7 +493,7 @@ class MarkdownNoteDetail extends React.Component {
         <InfoPanel
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[${note.title}](:note:${location.query.key})`}
+          noteLink={`[${note.title}](:note:${queryString.parse(location.search).key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.exportAsMd}

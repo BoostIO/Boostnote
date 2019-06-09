@@ -1021,10 +1021,13 @@ export default class MarkdownPreview extends React.Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const href = e.target.getAttribute('href')
-    const linkHash = href.split('/').pop()
+    const rawHref = e.target.getAttribute('href')
+    const parser = document.createElement('a')
+    parser.href = e.target.getAttribute('href')
+    const { href, hash } = parser
+    const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
 
-    if (!href) return
+    if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 
     const extractId = /(main.html)?#/
     const regexNoteInternalLink = new RegExp(`${extractId.source}(.+)`)

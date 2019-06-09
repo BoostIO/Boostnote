@@ -10,6 +10,7 @@ import StatusBar from '../StatusBar'
 import i18n from 'browser/lib/i18n'
 import debounceRender from 'react-debounce-render'
 import searchFromNotes from 'browser/lib/search'
+import queryString from 'query-string'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -36,11 +37,11 @@ class Detail extends React.Component {
   }
 
   render () {
-    const { location, data, params, config } = this.props
+    const { location, data, match: { params }, config } = this.props
+    const noteKey = location.search !== '' && queryString.parse(location.search).key
     let note = null
 
-    if (location.query.key != null) {
-      const noteKey = location.query.key
+    if (location.search !== '') {
       const allNotes = data.noteMap.map(note => note)
       const trashedNotes = data.trashedSet.toJS().map(uniqueKey => data.noteMap.get(uniqueKey))
       let displayedNotes = allNotes

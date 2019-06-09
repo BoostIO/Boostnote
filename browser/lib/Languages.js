@@ -62,10 +62,12 @@ const languages = [
   {
     name: 'Spanish',
     locale: 'es-ES'
-  }, {
+  },
+  {
     name: 'Turkish',
     locale: 'tr'
-  }, {
+  },
+  {
     name: 'Thai',
     locale: 'th'
   }
@@ -82,4 +84,3 @@ module.exports = {
     return languages
   }
 }
-

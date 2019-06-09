@@ -3,7 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
