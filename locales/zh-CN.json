@@ -220,5 +220,6 @@
 	"Render newlines in Markdown paragraphs as <br>":"在 Markdown 段落中使用 <br> 换行",
 	"Spellcheck disabled": "Spellcheck disabled",
 	"Show menu bar": "Show menu bar",
-	"Auto Detect": "Auto Detect"
+	"Auto Detect": "Auto Detect",
+	"Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

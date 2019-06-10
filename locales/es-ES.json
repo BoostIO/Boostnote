@@ -158,5 +158,6 @@
 	"Spellcheck disabled": "Deshabilitar corrector ortográfico",
 	"Show menu bar": "Mostrar barra del menú",
 	"Auto Detect": "Detección automática",
-	"Snippet Default Language": "Lenguaje por defecto de los fragmentos de código"
+	"Snippet Default Language": "Lenguaje por defecto de los fragmentos de código",
+	"Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

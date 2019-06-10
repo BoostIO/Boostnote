@@ -219,5 +219,6 @@
 	"⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠": "⚠ このノートのストレージに存在しない添付ファイルへのリンクを貼り付けました。添付ファイルへのリンクの貼り付けは同一ストレージ内でのみサポートされています。代わりに添付ファイルをドラッグアンドドロップしてください！ ⚠",
 	"Spellcheck disabled": "スペルチェック無効",
 	"Show menu bar": "メニューバーを表示",
-	"Auto Detect": "自動検出"
+	"Auto Detect": "自動検出",
+	"Wrap line in Snippet Note": "行を右端で折り返す（Snippet Note）"
 }
