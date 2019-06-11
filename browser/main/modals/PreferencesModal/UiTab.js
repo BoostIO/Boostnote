@@ -91,6 +91,7 @@ class UiTab extends React.Component {
         enableRulers: this.refs.enableEditorRulers.value === 'true',
         rulers: this.refs.editorRulers.value.replace(/[^0-9,]/g, '').split(','),
         displayLineNumbers: this.refs.editorDisplayLineNumbers.checked,
+        lineWrapping: this.refs.editorLineWrapping.checked,
         switchPreview: this.refs.editorSwitchPreview.value,
         keyMap: this.refs.editorKeyMap.value,
         snippetDefaultLanguage: this.refs.editorSnippetDefaultLanguage.value,
