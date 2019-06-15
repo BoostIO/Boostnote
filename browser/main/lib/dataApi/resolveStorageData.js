@@ -21,6 +21,7 @@ function resolveStorageData (storageCache) {
   } catch (err) {
     if (err.code === 'ENOENT') {
       console.warn('boostnote.json file doesn\'t exist the given path')
+      window.alert('Boostnote disk not found, try reconnecting disk')
       CSON.writeFileSync(boostnoteJSONPath, {folders: [], version: '1.0'})
     } else {
       console.error(err)
