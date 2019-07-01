@@ -45,7 +45,6 @@ function initAwsMobileAnalytics () {
   if (getSendEventCond()) return
   AWS.config.credentials.get((err) => {
     if (!err) {
-      console.log('Cognito Identity ID: ' + AWS.config.credentials.identityId)
       recordDynamicCustomEvent('APP_STARTED')
       recordStaticCustomEvent()
     }
@@ -58,7 +57,7 @@ function recordDynamicCustomEvent (type, options = {}) {
     mobileAnalyticsClient.recordEvent(type, options)
   } catch (analyticsError) {
     if (analyticsError instanceof ReferenceError) {
-      console.log(analyticsError.name + ': ' + analyticsError.message)
+      console.error(analyticsError.name + ': ' + analyticsError.message)
     }
   }
 }
@@ -71,7 +70,7 @@ function recordStaticCustomEvent () {
     })
   } catch (analyticsError) {
     if (analyticsError instanceof ReferenceError) {
-      console.log(analyticsError.name + ': ' + analyticsError.message)
+      console.error(analyticsError.name + ': ' + analyticsError.message)
     }
   }
 }

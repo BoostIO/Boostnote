@@ -21,21 +21,20 @@
     color white
 
 .zoom
-  display none
-  // navButtonColor()
-  // color rgba(0,0,0,.54)
-  // height 20px
-  // display flex
-  // padding 0
-  // align-items center
-  // background-color transparent
-  // &:hover
-  //   color $ui-active-color
-  // &:active
-  //   color $ui-active-color
-  // span
-  //   margin-left 5px
-  
+  navButtonColor()
+  color rgba(0,0,0,.54)
+  height 20px
+  display flex
+  padding 0
+  align-items center
+  background-color transparent
+  &:hover
+    color $ui-active-color
+  &:active
+    color $ui-active-color
+  span
+    margin-left 5px
+
 .update
   navButtonColor()
   height 24px
@@ -47,6 +46,14 @@
 
 .update-icon
   color $brand-color
+
+body[data-theme="default"]
+  .zoom
+    color $ui-text-color
+
+body[data-theme="white"]
+  .zoom
+    color $ui-text-color
 
 body[data-theme="dark"]
   .root
@@ -70,3 +77,25 @@ body[data-theme="dark"]
     navDarkButtonColor()
     border-color $ui-dark-borderColor
     border-left 1px solid $ui-dark-borderColor
+
+body[data-theme="monokai"]
+   navButtonColor()
+  .zoom
+    border-color $ui-dark-borderColor
+    color $ui-monokai-text-color
+    &:hover
+      transition 0.15s
+      color $ui-monokai-active-color
+    &:active
+      color $ui-monokai-active-color
+
+body[data-theme="dracula"]
+   navButtonColor()
+  .zoom
+    border-color $ui-dark-borderColor
+    color $ui-dracula-text-color
+    &:hover
+      transition 0.15s
+      color $ui-dracula-active-color
+    &:active
+      color $ui-dracula-active-color

@@ -3,6 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoPanel.styl'
 import copy from 'copy-to-clipboard'
+import i18n from 'browser/lib/i18n'
 
 class InfoPanel extends React.Component {
   copyNoteLink () {
@@ -13,13 +14,13 @@ class InfoPanel extends React.Component {
 
   render () {
     const {
-      storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, wordCount, letterCount, type, print
+      storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, exportAsPdf, wordCount, letterCount, type, print
     } = this.props
     return (
       <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
         <div>
           <p styleName='modification-date'>{updatedAt}</p>
-          <p styleName='modification-date-desc'>MODIFICATION DATE</p>
+          <p styleName='modification-date-desc'>{i18n.__('MODIFICATION DATE')}</p>
         </div>
 
         <hr />
@@ -29,11 +30,11 @@ class InfoPanel extends React.Component {
           : <div styleName='count-wrap'>
             <div styleName='count-number'>
               <p styleName='infoPanel-defaul-count'>{wordCount}</p>
-              <p styleName='infoPanel-sub-count'>Words</p>
+              <p styleName='infoPanel-sub-count'>{i18n.__('Words')}</p>
             </div>
             <div styleName='count-number'>
               <p styleName='infoPanel-defaul-count'>{letterCount}</p>
-              <p styleName='infoPanel-sub-count'>Letters</p>
+              <p styleName='infoPanel-sub-count'>{i18n.__('Letters')}</p>
             </div>
           </div>
         }
@@ -45,17 +46,17 @@ class InfoPanel extends React.Component {
 
         <div>
           <p styleName='infoPanel-default'>{storageName}</p>
-          <p styleName='infoPanel-sub'>STORAGE</p>
+          <p styleName='infoPanel-sub'>{i18n.__('STORAGE')}</p>
         </div>
 
         <div>
           <p styleName='infoPanel-default'>{folderName}</p>
-          <p styleName='infoPanel-sub'>FOLDER</p>
+          <p styleName='infoPanel-sub'>{i18n.__('FOLDER')}</p>
         </div>
 
         <div>
           <p styleName='infoPanel-default'>{createdAt}</p>
-          <p styleName='infoPanel-sub'>CREATION DATE</p>
+          <p styleName='infoPanel-sub'>{i18n.__('CREATION DATE')}</p>
         </div>
 
         <div>
@@ -63,30 +64,35 @@ class InfoPanel extends React.Component {
           <button onClick={() => this.copyNoteLink()} styleName='infoPanel-copyButton'>
             <i className='fa fa-clipboard' />
           </button>
-          <p styleName='infoPanel-sub'>NOTE LINK</p>
+          <p styleName='infoPanel-sub'>{i18n.__('NOTE LINK')}</p>
         </div>
 
         <hr />
 
         <div id='export-wrap'>
-          <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsMd(e, 'export-md')}>
             <i className='fa fa-file-code-o' />
-            <p>.md</p>
+            <p>{i18n.__('.md')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => exportAsTxt(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsTxt(e, 'export-txt')}>
             <i className='fa fa-file-text-o' />
-            <p>.txt</p>
+            <p>{i18n.__('.txt')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => exportAsHtml(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsHtml(e, 'export-html')}>
             <i className='fa fa-html5' />
-            <p>.html</p>
+            <p>{i18n.__('.html')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => print(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsPdf(e, 'export-pdf')}>
+            <i className='fa fa-file-pdf-o' />
+            <p>{i18n.__('.pdf')}</p>
+          </button>
+
+          <button styleName='export--enable' onClick={(e) => print(e, 'print')}>
             <i className='fa fa-print' />
-            <p>Print</p>
+            <p>{i18n.__('Print')}</p>
           </button>
         </div>
       </div>
@@ -103,6 +109,7 @@ InfoPanel.propTypes = {
   exportAsMd: PropTypes.func.isRequired,
   exportAsTxt: PropTypes.func.isRequired,
   exportAsHtml: PropTypes.func.isRequired,
+  exportAsPdf: PropTypes.func.isRequired,
   wordCount: PropTypes.number,
   letterCount: PropTypes.number,
   type: PropTypes.string.isRequired,

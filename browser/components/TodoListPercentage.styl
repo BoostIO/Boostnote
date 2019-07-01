@@ -1,4 +1,5 @@
 .percentageBar
+  display: flex
   position absolute
   top 72px
   right 0px
@@ -30,6 +31,20 @@
   color #f4f4f4
   font-weight 600
 
+.todoClear
+  display flex
+  justify-content: flex-end
+  position absolute
+  z-index 120
+  width 100%
+  height 100%
+  padding 2px 10px
+
+.todoClearText
+  color #f4f4f4
+  cursor pointer
+  font-weight 500
+
 body[data-theme="dark"]
   .percentageBar
     background-color #444444
@@ -39,7 +54,10 @@ body[data-theme="dark"]
 
   .percentageText
     color $ui-dark-text-color
-    
+  
+  .todoClearText
+    color $ui-dark-text-color
+
 body[data-theme="solarized-dark"]
   .percentageBar
     background-color #002b36
@@ -49,3 +67,29 @@ body[data-theme="solarized-dark"]
 
   .percentageText
     color #fdf6e3
+
+  .todoClearText
+    color #fdf6e3
+
+body[data-theme="monokai"]
+  .percentageBar
+    background-color: $ui-monokai-borderColor
+
+  .progressBar
+    background-color $ui-monokai-active-color
+
+  .percentageText
+    color $ui-monokai-text-color
+
+body[data-theme="dracula"]
+  .percentageBar
+    background-color $ui-dracula-borderColor
+
+  .progressBar
+    background-color: $ui-dracula-active-color
+
+  .percentageText
+    color $ui-dracula-text-color
+
+  .percentageText
+    color $ui-dracula-text-color

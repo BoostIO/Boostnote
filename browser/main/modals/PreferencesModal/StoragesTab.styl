@@ -1,8 +1,4 @@
-@import('./Tab')
-
-.root
-  padding 15px
-  color $ui-text-color
+@import('./ConfigTab')
 
 .list
   margin-bottom 15px
@@ -158,7 +154,7 @@ body[data-theme="dark"]
   .addStorage-body-control-cancelButton
     colorDarkDefaultButton()
     border-color $ui-dark-borderColor
-    
+
 
 
 body[data-theme="solarized-dark"]
@@ -199,3 +195,78 @@ body[data-theme="solarized-dark"]
     colorDarkDefaultButton()
     border-color $ui-solarized-dark-borderColor
 
+body[data-theme="monokai"]
+  .root
+    color $ui-monokai-text-color
+
+  .folderList-item
+    border-bottom $ui-monokai-borderColor
+
+  .folderList-empty
+    color $ui-monokai-text-color
+
+  .list-empty
+    color $ui-monokai-text-color
+  .list-control-addStorageButton
+    border-color $ui-monokai-button-backgroundColor
+    background-color $ui-monokai-button-backgroundColor
+    color $ui-monokai-text-color
+
+  .addStorage-header
+    color $ui-monokai-text-color
+    border-color $ui-monokai-borderColor
+
+  .addStorage-body-section-name-input
+    border-color $$ui-monokai-borderColor
+
+  .addStorage-body-section-type-description
+    color $ui-monokai-text-color
+
+  .addStorage-body-section-path-button
+    colorPrimaryButton()
+  .addStorage-body-control
+    border-color $ui-monokai-borderColor
+
+  .addStorage-body-control-createButton
+    colorDarkPrimaryButton()
+  .addStorage-body-control-cancelButton
+    colorDarkDefaultButton()
+    border-color $ui-monokai-borderColor
+
+body[data-theme="dracula"]
+  .root
+    color $ui-dracula-text-color
+
+  .folderList-item
+    border-bottom $ui-dracula-borderColor
+
+  .folderList-empty
+    color $ui-dracula-text-color
+
+  .list-empty
+    color $ui-dracula-text-color
+  .list-control-addStorageButton
+    border-color $ui-dracula-button-backgroundColor
+    background-color $ui-dracula-button-backgroundColor
+    color $ui-dracula-text-color
+
+  .addStorage-header
+    color $ui-dracula-text-color
+    border-color $ui-dracula-borderColor
+
+  .addStorage-body-section-name-input
+    border-color $$ui-dracula-borderColor
+
+  .addStorage-body-section-type-description
+    color $ui-dracula-text-color
+
+  .addStorage-body-section-path-button
+    colorPrimaryButton()
+  .addStorage-body-control
+    border-color $ui-dracula-borderColor
+
+  .addStorage-body-control-createButton
+    colorDarkPrimaryButton()
+  .addStorage-body-control-cancelButton
+    colorDarkDefaultButton()
+    border-color $ui-dracula-borderColor

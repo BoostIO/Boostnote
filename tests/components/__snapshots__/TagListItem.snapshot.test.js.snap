@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TagListItem renders correctly 1`] = `
+<div
+  className="tagList-itemContainer"
+  onContextMenu={[Function]}
+>
+  <div
+    className="tagList-itemNarrow"
+  />
+  <button
+    className="tagList-item"
+    onClick={[Function]}
+  >
+    <span
+      className="tagList-item-color"
+      style={
+        Object {
+          "backgroundColor": "#000",
+        }
+      }
+    />
+    <span
+      className="tagList-item-name"
+    >
+      # Test
+      <span
+        className="tagList-item-count"
+      />
+    </span>
+  </button>
+</div>
+`;

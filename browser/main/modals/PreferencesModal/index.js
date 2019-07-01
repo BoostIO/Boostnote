@@ -6,11 +6,14 @@ import UiTab from './UiTab'
 import InfoTab from './InfoTab'
 import Crowdfunding from './Crowdfunding'
 import StoragesTab from './StoragesTab'
+import SnippetTab from './SnippetTab'
+import Blog from './Blog'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './PreferencesModal.styl'
 import RealtimeNotification from 'browser/components/RealtimeNotification'
 import _ from 'lodash'
+import i18n from 'browser/lib/i18n'
 
 class Preferences extends React.Component {
   constructor (props) {
@@ -19,7 +22,8 @@ class Preferences extends React.Component {
     this.state = {
       currentTab: 'STORAGES',
       UIAlert: '',
-      HotkeyAlert: ''
+      HotkeyAlert: '',
+      BlogAlert: ''
     }
   }
 
@@ -75,6 +79,22 @@ class Preferences extends React.Component {
         return (
           <Crowdfunding />
         )
+      case 'BLOG':
+        return (
+          <Blog
+            dispatch={dispatch}
+            config={config}
+            haveToSave={alert => this.setState({BlogAlert: alert})}
+          />
+        )
+      case 'SNIPPET':
+        return (
+          <SnippetTab
+            dispatch={dispatch}
+            config={config}
+            data={data}
+          />
+        )
       case 'STORAGES':
       default:
         return (
@@ -107,11 +127,13 @@ class Preferences extends React.Component {
     const content = this.renderContent()
 
     const tabs = [
-      {target: 'STORAGES', label: 'Storage'},
-      {target: 'HOTKEY', label: 'Hotkeys', Hotkey: this.state.HotkeyAlert},
-      {target: 'UI', label: 'Interface', UI: this.state.UIAlert},
-      {target: 'INFO', label: 'About'},
-      {target: 'CROWDFUNDING', label: 'Crowdfunding'}
+      {target: 'STORAGES', label: i18n.__('Storage')},
+      {target: 'HOTKEY', label: i18n.__('Hotkeys'), Hotkey: this.state.HotkeyAlert},
+      {target: 'UI', label: i18n.__('Interface'), UI: this.state.UIAlert},
+      {target: 'INFO', label: i18n.__('About')},
+      {target: 'CROWDFUNDING', label: i18n.__('Crowdfunding')},
+      {target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert},
+      {target: 'SNIPPET', label: i18n.__('Snippets')}
     ]
 
     const navButtons = tabs.map((tab) => {
@@ -140,7 +162,7 @@ class Preferences extends React.Component {
         onKeyDown={(e) => this.handleKeyDown(e)}
       >
         <div styleName='top-bar'>
-          <p>Your preferences for Boostnote</p>
+          <p>{i18n.__('Your preferences for Boostnote')}</p>
         </div>
         <ModalEscButton handleEscButtonClick={(e) => this.handleEscButtonClick(e)} />
         <div styleName='nav'>

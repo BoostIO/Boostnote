@@ -1,0 +1,128 @@
+.TagSelect
+  .react-autosuggest__input
+    box-sizing border-box
+    border none
+    background-color transparent
+    outline none
+    padding 2px 4px
+    margin 0px 2px 2px
+    font-size 13px
+    height 23px
+
+  ul
+    position fixed
+    z-index 999
+    box-sizing border-box
+    list-style none
+    padding 0
+    margin 0
+
+    border-radius 4px
+    margin .5rem 0 0
+    background-color $ui-noteList-backgroundColor
+    border 1px solid rgba(0,0,0,.3)
+    box-shadow .05em .2em .6em rgba(0,0,0,.2)
+    text-shadow none
+
+    &:empty,
+    &[hidden]
+      display none
+
+    &:before
+      content ""
+      position absolute
+      top -7px
+      left 14px
+      width 0 height 0
+      padding 6px
+      background-color $ui-noteList-backgroundColor
+      border inherit
+      border-right 0
+      border-bottom 0
+      -webkit-transform rotate(45deg)
+      transform rotate(45deg)
+
+    li
+      position relative
+      padding 6px 18px 6px 10px
+      cursor pointer
+
+    li[aria-selected="true"]
+      background-color alpha($ui-button--active-backgroundColor, 40%)
+      color $ui-text-color
+
+body[data-theme="dark"]
+  .TagSelect
+    .react-autosuggest__input
+      color $ui-dark-text-color
+
+    ul
+      border-color $ui-dark-borderColor
+      background-color $ui-dark-noteList-backgroundColor
+      color $ui-dark-text-color
+
+      &:before
+        background-color $ui-dark-noteList-backgroundColor
+
+      li[aria-selected="true"]
+        background-color $ui-dark-button--active-backgroundColor
+        color $ui-dark-text-color
+
+body[data-theme="monokai"]
+  .TagSelect
+    .react-autosuggest__input
+      color $ui-monokai-text-color
+
+    ul
+      border-color $ui-monokai-borderColor
+      background-color $ui-monokai-noteList-backgroundColor
+      color $ui-monokai-text-color
+
+      &:before
+        background-color $ui-dark-noteList-backgroundColor
+
+      li[aria-selected="true"]
+        background-color $ui-monokai-button-backgroundColor
+        color $ui-monokai-text-color
+
+body[data-theme="dracula"]
+  .TagSelect
+    .react-autosuggest__input
+      color $ui-dracula-text-color
+
+    ul
+      border-color $ui-dracula-borderColor
+      background-color $ui-dracula-noteList-backgroundColor
+      color $ui-dracula-text-color
+
+      &:before
+        background-color $ui-dark-noteList-backgroundColor
+
+      li[aria-selected="true"]
+        background-color $ui-dracula-button-backgroundColor
+        color $ui-dracula-text-color
+
+body[data-theme="solarized-dark"]
+  .TagSelect
+    .react-autosuggest__input
+      color $ui-solarized-dark-text-color
+
+    ul
+      border-color $ui-solarized-dark-borderColor
+      background-color $ui-solarized-dark-noteList-backgroundColor
+      color $ui-solarized-dark-text-color
+
+      &:before
+        background-color $ui-solarized-dark-noteList-backgroundColor
+
+      li[aria-selected="true"]
+        background-color $ui-dark-button--active-backgroundColor
+        color $ui-solarized-dark-text-color
+
+body[data-theme="white"]
+  .TagSelect
+    ul
+      background-color $ui-white-noteList-backgroundColor
+
+      li[aria-selected="true"]
+        background-color $ui-button--active-backgroundColor

@@ -16,8 +16,8 @@ const NavToggleButton = ({isFolded, handleToggleButtonClick}) => (
     onClick={(e) => handleToggleButtonClick(e)}
   >
     {isFolded
-     ? <i className='fa fa-angle-double-right' />
-     : <i className='fa fa-angle-double-left' />
+     ? <i className='fa fa-angle-double-right fa-2x' />
+     : <i className='fa fa-angle-double-left fa-2x' />
     }
   </button>
 )

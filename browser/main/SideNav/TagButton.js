@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SwitchButton.styl'
+import i18n from 'browser/lib/i18n'
 
 const TagButton = ({
   onClick, isTagActive
@@ -12,7 +13,7 @@ const TagButton = ({
         : '../resources/icon/icon-tag.svg'
     }
     />
-    <span styleName='tooltip'>Tags</span>
+    <span styleName='tooltip'>{i18n.__('Tags')}</span>
   </button>
 )
 

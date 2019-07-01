@@ -13,6 +13,7 @@
   border none
   overflow ellipsis
   font-size 14px
+  align-items: center
   &:first-child
     margin-top 0
   &:hover
@@ -22,7 +23,7 @@
   &:active
     color $$ui-button-default-color
     background-color alpha($ui-button-default--active-backgroundColor, 20%)
-    
+
 .folderList-item--active
   @extend .folderList-item
   color #1EC38B
@@ -34,9 +35,7 @@
 .folderList-item-name
   display block
   flex 1
-  padding 0 12px
-  height 26px
-  line-height 26px
+  padding-right: 10px
   border-width 0 0 0 2px
   border-style solid
   border-color transparent
@@ -59,8 +58,8 @@
   opacity 0
   border-top-right-radius 2px
   border-bottom-right-radius 2px
-  height 26px
-  line-height 26px
+  height 34px
+  line-height 32px
 
 .folderList-item:hover, .folderList-item--active:hover
   .folderList-item-tooltip
@@ -69,8 +68,19 @@
 .folderList-item-name--folded
   @extend .folderList-item-name
   padding-left 7px
-  text
+  .folderList-item-icon
     font-size 9px
+
+.folderList-item-icon
+  padding-right: 10px
+
+.folderList-item-reorder
+  font-size: 9px
+  padding: 10px 8px 10px 9px;
+  color: rgba(147, 147, 149, 0.3)
+  cursor: ns-resize
+  &:before
+    content: "\f142 \f142"
 
 body[data-theme="white"]
   .folderList-item
@@ -128,3 +138,41 @@ body[data-theme="solarized-dark"]
     &:hover
       color $ui-solarized-dark-text-color
       background-color $ui-solarized-dark-button-backgroundColor
+
+body[data-theme="monokai"]
+  .folderList-item
+    &:hover
+      background-color $ui-monokai-button-backgroundColor
+      color $ui-monokai-text-color
+    &:active
+      color $ui-monokai-text-color
+      background-color $ui-monokai-button-backgroundColor
+
+  .folderList-item--active
+    @extend .folderList-item
+    color $ui-monokai-text-color
+    background-color $ui-monokai-button-backgroundColor
+    &:active
+      background-color $ui-monokai-button-backgroundColor
+    &:hover
+      color $ui-monokai-text-color
+      background-color $ui-monokai-button-backgroundColor
+
+body[data-theme="dracula"]
+  .folderList-item
+    &:hover
+      background-color $ui-dracula-button-backgroundColor
+      color $ui-dracula-text-color
+    &:active
+      color $ui-dracula-text-color
+      background-color $ui-dracula-button-backgroundColor
+
+  .folderList-item--active
+    @extend .folderList-item
+    color $ui-dracula-text-color
+    background-color $ui-dracula-button-backgroundColor
+    &:active
+      background-color $ui-dracula-button-backgroundColor
+    &:hover
+      color $ui-dracula-text-color
+      background-color $ui-dracula-button-backgroundColor

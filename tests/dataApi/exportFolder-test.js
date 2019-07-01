@@ -13,6 +13,7 @@ const TestDummy = require('../fixtures/TestDummy')
 const os = require('os')
 const faker = require('faker')
 const fs = require('fs')
+const sander = require('sander')
 
 const storagePath = path.join(os.tmpdir(), 'test/export-note')
 
@@ -59,4 +60,9 @@ test.serial('Export a folder', (t) => {
       filePath = path.join(storagePath, 'input2.md')
       t.false(fs.existsSync(filePath))
     })
+})
+
+test.after.always(function after () {
+  localStorage.clear()
+  sander.rimrafSync(storagePath)
 })

@@ -1,56 +1,59 @@
 import copyFile from 'browser/main/lib/dataApi/copyFile'
-import {findStorage} from 'browser/lib/findStorage'
+import { findStorage } from 'browser/lib/findStorage'
 
 const fs = require('fs')
 const path = require('path')
 
-const LOCAL_STORED_REGEX = /!\[(.*?)\]\(\s*?\/:storage\/(.*\.\S*?)\)/gi
-const IMAGES_FOLDER_NAME = 'images'
+const attachmentManagement = require('./attachmentManagement')
 
 /**
- * Export note together with images
+ * Export note together with attachments
  *
- * If images is stored in the storage, creates 'images' subfolder in target directory
- * and copies images to it. Changes links to images in the content of the note
+ * If attachments are stored in the storage, creates 'attachments' subfolder in target directory
+ * and copies attachments to it. Changes links to images in the content of the note
  *
+ * @param {String} nodeKey key of the node that should be exported
  * @param {String} storageKey or storage path
  * @param {String} noteContent Content to export
  * @param {String} targetPath Path to exported file
  * @param {function} outputFormatter
  * @return {Promise.<*[]>}
  */
-function exportNote (storageKey, noteContent, targetPath, outputFormatter) {
+function exportNote (nodeKey, storageKey, noteContent, targetPath, outputFormatter) {
   const storagePath = path.isAbsolute(storageKey) ? storageKey : findStorage(storageKey).path
   const exportTasks = []
 
   if (!storagePath) {
     throw new Error('Storage path is not found')
   }
-
-  let exportedData = noteContent.replace(LOCAL_STORED_REGEX, (match, dstFilename, srcFilename) => {
-    if (!path.extname(dstFilename)) {
-      dstFilename += path.extname(srcFilename)
-    }
-
-    const dstRelativePath = path.join(IMAGES_FOLDER_NAME, dstFilename)
-
+  const attachmentsAbsolutePaths = attachmentManagement.getAbsolutePathsOfAttachmentsInContent(
+    noteContent,
+    storagePath
+  )
+  attachmentsAbsolutePaths.forEach(attachment => {
     exportTasks.push({
-      src: path.join(IMAGES_FOLDER_NAME, srcFilename),
-      dst: dstRelativePath
+      src: attachment,
+      dst: attachmentManagement.DESTINATION_FOLDER
     })
-
-    return `![${dstFilename}](${dstRelativePath})`
   })
 
+  let exportedData = attachmentManagement.removeStorageAndNoteReferences(
+    noteContent,
+    nodeKey
+  )
+
   if (outputFormatter) {
-    exportedData = outputFormatter(exportedData, exportTasks)
+    exportedData = outputFormatter(exportedData, exportTasks, path.dirname(targetPath))
+  } else {
+    exportedData = Promise.resolve(exportedData)
   }
 
   const tasks = prepareTasks(exportTasks, storagePath, path.dirname(targetPath))
 
   return Promise.all(tasks.map((task) => copyFile(task.src, task.dst)))
-  .then(() => {
-    return saveToFile(exportedData, targetPath)
+  .then(() => exportedData)
+  .then(data => {
+    return saveToFile(data, targetPath)
   }).catch((err) => {
     rollbackExport(tasks)
     throw err

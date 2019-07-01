@@ -22,7 +22,7 @@ function dummyBoostnoteJSONData (override = {}, isLegacy = false) {
   if (override.folders == null) {
     data.folders = []
 
-    var folderCount = Math.floor((Math.random() * 5)) + 1
+    var folderCount = Math.floor((Math.random() * 5)) + 2
     for (var i = 0; i < folderCount; i++) {
       var key = keygen()
       while (data.folders.some((folder) => folder.key === key)) {
@@ -105,11 +105,11 @@ function dummyStorage (storagePath, override = {}) {
 
   sander.writeFileSync(path.join(storagePath, 'boostnote.json'), JSON.stringify(jsonData))
   var notesData = []
-  var noteCount = Math.floor((Math.random() * 15)) + 1
+  var noteCount = Math.floor((Math.random() * 15)) + 2
   for (var i = 0; i < noteCount; i++) {
-    var key = keygen()
+    var key = keygen(true)
     while (notesData.some((note) => note.key === key)) {
-      key = keygen()
+      key = keygen(true)
     }
 
     var noteData = dummyNote({
@@ -149,9 +149,9 @@ function dummyLegacyStorage (storagePath, override = {}) {
     var folderNotes = []
     var noteCount = Math.floor((Math.random() * 5)) + 1
     for (var i = 0; i < noteCount; i++) {
-      var key = keygen(6)
+      var key = keygen(true)
       while (folderNotes.some((note) => note.key === key)) {
-        key = keygen(6)
+        key = keygen(true)
       }
 
       var noteData = dummyNote({

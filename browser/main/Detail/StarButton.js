@@ -3,6 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StarButton.styl'
 import _ from 'lodash'
+import i18n from 'browser/lib/i18n'
 
 class StarButton extends React.Component {
   constructor (props) {
@@ -53,7 +54,7 @@ class StarButton extends React.Component {
             : '../resources/icon/icon-star.svg'
           }
         />
-        <span styleName='tooltip'>Star</span>
+        <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Star')}</span>
       </button>
     )
   }

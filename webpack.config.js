@@ -28,7 +28,14 @@ var config = Object.assign({}, skeleton, {
     publicPath: 'http://localhost:8080/assets/'
   },
   debug: true,
-  devtool: 'cheap-module-eval-source-map'
+  devtool: 'cheap-module-eval-source-map',
+  devServer: {
+    port: 8080,
+    hot: true,
+    inline: true,
+    quiet: false,
+    publicPath: 'http://localhost:8080/assets/'
+  }
 })
 
 module.exports = config

@@ -7,6 +7,7 @@
   background-color $ui-noteDetail-backgroundColor
   box-shadow none
   padding 20px 40px
+  overflow hidden
 
 .lock-button
   padding-bottom 3px
@@ -44,7 +45,7 @@
   margin 0 30px
 .body-noteEditor
   absolute top bottom left right
-  
+
 body[data-theme="white"]
   .root
     box-shadow $note-detail-box-shadow
@@ -70,3 +71,21 @@ body[data-theme="solarized-dark"]
   .root
     border-left 1px solid $ui-solarized-dark-borderColor
     background-color $ui-solarized-dark-noteDetail-backgroundColor
+
+body[data-theme="monokai"]
+  .root
+    border-left 1px solid $ui-monokai-borderColor
+    background-color $ui-monokai-noteDetail-backgroundColor
+
+body[data-theme="dracula"]
+  .root
+    border-left 1px solid $ui-dracula-borderColor
+    background-color $ui-dracula-noteDetail-backgroundColor
+    
+div
+  > button, div
+    -webkit-user-drag none
+    user-select none
+    > img, span
+      -webkit-user-drag none
+      user-select none

@@ -5,9 +5,9 @@
       "presets": ["react-hmre"]
     },
     "test": {
-      "presets": ["react", "es2015"],
+      "presets": ["env" ,"react", "es2015"],
       "plugins": [
-        [ "babel-plugin-webpack-alias", { "config": "${PWD}/webpack.config.js" } ]
+        [ "babel-plugin-webpack-alias", { "config": "<rootDir>/webpack.config.js" } ]
       ]
     }
   }

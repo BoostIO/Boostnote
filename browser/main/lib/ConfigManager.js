@@ -1,5 +1,7 @@
 import _ from 'lodash'
 import RcParser from 'browser/lib/RcParser'
+import i18n from 'browser/lib/i18n'
+import ee from 'browser/main/lib/eventEmitter'
 
 const OSX = global.process.platform === 'darwin'
 const win = global.process.platform === 'win32'
@@ -9,35 +11,62 @@ const consts = require('browser/lib/consts')
 
 let isInitialized = false
 
+const DEFAULT_MARKDOWN_LINT_CONFIG = `{
+  "default": true
+}`
+
 export const DEFAULT_CONFIG = {
   zoom: 1,
   isSideNavFolded: false,
   listWidth: 280,
   navWidth: 200,
-  sortBy: 'UPDATED_AT', // 'CREATED_AT', 'UPDATED_AT', 'APLHABETICAL'
+  sortBy: {
+    default: 'UPDATED_AT' // 'CREATED_AT', 'UPDATED_AT', 'APLHABETICAL'
+  },
+  sortTagsBy: 'ALPHABETICAL', // 'ALPHABETICAL', 'COUNTER'
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   amaEnabled: true,
   hotkey: {
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
+    toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
+    toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
+    deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
+    pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
+    toggleMenuBar: 'Alt'
   },
   ui: {
+    language: 'en',
     theme: 'default',
     closeToTray: true,
     showCopyNotification: true,
     disableDirectWrite: false,
-    defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
+    defaultNote: 'ALWAYS_ASK', // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
+    showMenuBar: false
   },
   editor: {
     theme: 'base16-light',
     keyMap: 'sublime',
     fontSize: '14',
-    fontFamily: win ? 'Segoe UI' : 'Monaco, Consolas',
+    fontFamily: win ? 'Consolas' : 'Monaco',
     indentType: 'space',
     indentSize: '2',
+    enableRulers: false,
+    rulers: [80, 120],
     displayLineNumbers: true,
-    switchPreview: 'BLUR', // Available value: RIGHTCLICK, BLUR
+    matchingPairs: '()[]{}\'\'""$$**``~~__',
+    matchingTriples: '```"""\'\'\'',
+    explodingPairs: '[]{}``$$',
+    switchPreview: 'BLUR', // 'BLUR', 'DBL_CLICK', 'RIGHTCLICK'
+    delfaultStatus: 'PREVIEW', // 'PREVIEW', 'CODE'
     scrollPastEnd: false,
-    type: 'SPLIT'
+    type: 'SPLIT', // 'SPLIT', 'EDITOR_PREVIEW'
+    fetchUrlTitle: true,
+    enableTableEditor: false,
+    enableFrontMatterTitle: true,
+    frontMatterTitleField: 'title',
+    spellcheck: false,
+    enableSmartPaste: false,
+    enableMarkdownLint: false,
+    customMarkdownLintConfig: DEFAULT_MARKDOWN_LINT_CONFIG
   },
   preview: {
     fontSize: '14',
@@ -48,8 +77,26 @@ export const DEFAULT_CONFIG = {
     latexInlineClose: '$',
     latexBlockOpen: '$$',
     latexBlockClose: '$$',
-    scrollPastEnd: false
-  }
+    plantUMLServerAddress: 'http://www.plantuml.com/plantuml',
+    scrollPastEnd: false,
+    scrollSync: true,
+    smartQuotes: true,
+    breaks: true,
+    smartArrows: false,
+    allowCustomCSS: false,
+    customCSS: '',
+    sanitize: 'STRICT', // 'STRICT', 'ALLOW_STYLES', 'NONE'
+    lineThroughCheckbox: true
+  },
+  blog: {
+    type: 'wordpress', // Available value: wordpress, add more types in the future plz
+    address: 'http://wordpress.com/wp-json',
+    authMethod: 'JWT', // Available value: JWT, USER
+    token: '',
+    username: '',
+    password: ''
+  },
+  coloredTags: {}
 }
 
 function validate (config) {
@@ -92,16 +139,12 @@ function get () {
       document.head.appendChild(editorTheme)
     }
 
-    config.editor.theme = consts.THEMES.some((theme) => theme === config.editor.theme)
-      ? config.editor.theme
-      : 'default'
+    const theme = consts.THEMES.find(theme => theme.name === config.editor.theme)
 
-    if (config.editor.theme !== 'default') {
-      if (config.editor.theme.startsWith('solarized')) {
-        editorTheme.setAttribute('href', '../node_modules/codemirror/theme/solarized.css')
-      } else {
-        editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + config.editor.theme + '.css')
-      }
+    if (theme) {
+      editorTheme.setAttribute('href', `../${theme.path}`)
+    } else {
+      config.editor.theme = 'default'
     }
   }
 
@@ -120,9 +163,15 @@ function set (updates) {
     document.body.setAttribute('data-theme', 'white')
   } else if (newConfig.ui.theme === 'solarized-dark') {
     document.body.setAttribute('data-theme', 'solarized-dark')
+  } else if (newConfig.ui.theme === 'monokai') {
+    document.body.setAttribute('data-theme', 'monokai')
+  } else if (newConfig.ui.theme === 'dracula') {
+    document.body.setAttribute('data-theme', 'dracula')
   } else {
     document.body.setAttribute('data-theme', 'default')
   }
+
+  i18n.setLocale(newConfig.ui.language)
 
   let editorTheme = document.getElementById('editorTheme')
   if (editorTheme == null) {
@@ -131,29 +180,38 @@ function set (updates) {
     editorTheme.setAttribute('rel', 'stylesheet')
     document.head.appendChild(editorTheme)
   }
-  const newTheme = consts.THEMES.some((theme) => theme === newConfig.editor.theme)
-    ? newConfig.editor.theme
-    : 'default'
 
-  if (newTheme !== 'default') {
-    if (newTheme.startsWith('solarized')) {
-      editorTheme.setAttribute('href', '../node_modules/codemirror/theme/solarized.css')
-    } else {
-      editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + newTheme + '.css')
-    }
+  const newTheme = consts.THEMES.find(theme => theme.name === newConfig.editor.theme)
+
+  if (newTheme) {
+    editorTheme.setAttribute('href', `../${newTheme.path}`)
   }
 
   ipcRenderer.send('config-renew', {
     config: get()
   })
+  ee.emit('config-renew')
 }
 
 function assignConfigValues (originalConfig, rcConfig) {
   const config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
   config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, originalConfig.hotkey, rcConfig.hotkey)
+  config.blog = Object.assign({}, DEFAULT_CONFIG.blog, originalConfig.blog, rcConfig.blog)
   config.ui = Object.assign({}, DEFAULT_CONFIG.ui, originalConfig.ui, rcConfig.ui)
   config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
   config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)
+
+  rewriteHotkey(config)
+
+  return config
+}
+
+function rewriteHotkey (config) {
+  const keys = [...Object.keys(config.hotkey)]
+  keys.forEach(key => {
+    config.hotkey[key] = config.hotkey[key].replace(/Cmd\s/g, 'Command ')
+    config.hotkey[key] = config.hotkey[key].replace(/Opt\s/g, 'Option ')
+  })
   return config
 }
 
