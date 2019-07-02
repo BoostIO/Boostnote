@@ -7,6 +7,10 @@ import MarkdownNoteDetail from './MarkdownNoteDetail'
 import SnippetNoteDetail from './SnippetNoteDetail'
 import ee from 'browser/main/lib/eventEmitter'
 import StatusBar from '../StatusBar'
+import i18n from 'browser/lib/i18n'
+import debounceRender from 'react-debounce-render'
+import searchFromNotes from 'browser/lib/search'
+import queryString from 'query-string'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -32,35 +36,39 @@ class Detail extends React.Component {
     ee.off('detail:delete', this.deleteHandler)
   }
 
-  confirmDeletion (permanent) {
-    if (this.props.config.ui.confirmDeletion || permanent) {
-      const electron = require('electron')
-      const { remote } = electron
-      const { dialog } = remote
+  render () {
+    const { location, data, match: { params }, config } = this.props
+    const noteKey = location.search !== '' && queryString.parse(location.search).key
+    let note = null
 
-      const alertConfig = {
-        type: 'warning',
-        message: 'Confirm note deletion',
-        detail: 'This will permanently remove this note.',
-        buttons: ['Confirm', 'Cancel']
+    if (location.search !== '') {
+      const allNotes = data.noteMap.map(note => note)
+      const trashedNotes = data.trashedSet.toJS().map(uniqueKey => data.noteMap.get(uniqueKey))
+      let displayedNotes = allNotes
+
+      if (location.pathname.match(/\/searched/)) {
+        const searchStr = params.searchword
+        displayedNotes = searchStr === undefined || searchStr === '' ? allNotes
+          : searchFromNotes(allNotes, searchStr)
       }
 
-      const dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), alertConfig)
-      return dialogueButtonIndex === 0
-    }
+      if (location.pathname.match(/\/tags/)) {
+        const listOfTags = params.tagname.split(' ')
+        displayedNotes = data.noteMap.map(note => note).filter(note =>
+          listOfTags.every(tag => note.tags.includes(tag))
+        )
+      }
 
-    return true
-  }
+      if (location.pathname.match(/\/trashed/)) {
+        displayedNotes = trashedNotes
+      } else {
+        displayedNotes = _.differenceWith(displayedNotes, trashedNotes, (note, trashed) => note.key === trashed.key)
+      }
 
-  render () {
-    const { location, data, config } = this.props
-    let note = null
-    if (location.query.key != null) {
-      const splitted = location.query.key.split('-')
-      const storageKey = splitted.shift()
-      const noteKey = splitted.shift()
-
-      note = data.noteMap.get(storageKey + '-' + noteKey)
+      const noteKeys = displayedNotes.map(note => note.key)
+      if (noteKeys.includes(noteKey)) {
+        note = data.noteMap.get(noteKey)
+      }
     }
 
     if (note == null) {
@@ -70,7 +78,7 @@ class Detail extends React.Component {
           tabIndex='0'
         >
           <div styleName='empty'>
-            <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br />to create a new note</div>
+            <div styleName='empty-message'>{OSX ? i18n.__('Command(⌘)') : i18n.__('Ctrl(^)')} + N<br />{i18n.__('to create a new note')}</div>
           </div>
           <StatusBar
             {..._.pick(this.props, ['config', 'location', 'dispatch'])}
@@ -84,7 +92,6 @@ class Detail extends React.Component {
         <SnippetNoteDetail
           note={note}
           config={config}
-          confirmDeletion={(permanent) => this.confirmDeletion(permanent)}
           ref='root'
           {..._.pick(this.props, [
             'dispatch',
@@ -101,7 +108,6 @@ class Detail extends React.Component {
       <MarkdownNoteDetail
         note={note}
         config={config}
-        confirmDeletion={(permanent) => this.confirmDeletion(permanent)}
         ref='root'
         {..._.pick(this.props, [
           'dispatch',
@@ -123,4 +129,4 @@ Detail.propTypes = {
   ignorePreviewPointerEvents: PropTypes.bool
 }
 
-export default CSSModules(Detail, styles)
+export default debounceRender(CSSModules(Detail, styles))

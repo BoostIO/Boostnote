@@ -5,8 +5,8 @@
   width 52px
   display flex
   align-items center
-  position absolute
-  right 165px
+  position: relative
+  top 2px
   .active
     background-color #1EC38B
     width 33px
@@ -40,6 +40,11 @@
   opacity 0
   transition 0.1s
 
+.tooltip:lang(ja)
+  @extend .tooltip
+  left -8px
+  width 70px
+
 body[data-theme="dark"]
   .control-fullScreenButton
     topBarButtonDark()
@@ -55,4 +60,18 @@ body[data-theme="solarized-dark"]
       background-color #002B36
     .active
       background-color #1EC38B
+      box-shadow 2px 0px 7px #222222
+
+body[data-theme="monokai"]
+  .control-toggleModeButton
+      background-color #373831
+    .active
+      background-color #f92672
+      box-shadow 2px 0px 7px #222222
+
+body[data-theme="dracula"]
+  .control-toggleModeButton
+      background-color #44475a
+    .active
+      background-color #bd93f9
       box-shadow 2px 0px 7px #222222

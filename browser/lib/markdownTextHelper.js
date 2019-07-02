@@ -22,7 +22,7 @@ export function strip (input) {
       .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, '$1')
       .replace(/>/g, '')
       .replace(/^\s{1,2}\[(.*?)\]: (\S+)( ".*?")?\s*$/g, '')
-      .replace(/^#{1,6}\s*([^#]*)\s*(#{1,6})?/gm, '$1')
+      .replace(/^#{1,6}\s*/gm, '')
       .replace(/(`{3,})(.*?)\1/gm, '$2')
       .replace(/^-{3,}\s*$/g, '')
       .replace(/`(.+?)`/g, '$1')

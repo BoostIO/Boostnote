@@ -1,21 +1,16 @@
-@import('./Tab')
+@import('./ConfigTab')
 
-.root
-  padding 15px
-  white-space pre
-  line-height 1.4
-  color alpha($ui-text-color, 90%)
-  width 100%
-  font-size 14px
 p
   font-size 16px
+  line-height 1.4
 
 .cf-link
-  width 250px
   height 35px
   border-radius 2px
   border none
   background-color alpha(#1EC38B, 90%)
+  padding-left 20px
+  padding-right 20px
   &:hover
     background-color #1EC38B
     transition 0.2s
@@ -28,9 +23,21 @@ p
 body[data-theme="dark"]
   p
     color $ui-dark-text-color
-    
+
 body[data-theme="solarized-dark"]
   .root
     color $ui-solarized-dark-text-color
   p
     color $ui-solarized-dark-text-color
+
+body[data-theme="monokai"]
+  .root
+    color $ui-monokai-text-color
+  p
+    color $ui-monokai-text-color
+
+body[data-theme="dracula"]
+  .root
+    color $ui-dracula-text-color
+  p
+    color $ui-dracula-text-color

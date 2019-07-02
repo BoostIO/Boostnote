@@ -16,6 +16,7 @@ function validateInput (input) {
   switch (input.type) {
     case 'MARKDOWN_NOTE':
       if (!_.isString(input.content)) input.content = ''
+      if (!_.isArray(input.linesHighlighted)) input.linesHighlighted = []
       break
     case 'SNIPPET_NOTE':
       if (!_.isString(input.description)) input.description = ''
@@ -23,7 +24,8 @@ function validateInput (input) {
         input.snippets = [{
           name: '',
           mode: 'text',
-          content: ''
+          content: '',
+          linesHighlighted: []
         }]
       }
       break
@@ -52,12 +54,12 @@ function createNote (storageKey, input) {
       return storage
     })
     .then(function saveNote (storage) {
-      let key = keygen()
+      let key = keygen(true)
       let isUnique = false
       while (!isUnique) {
         try {
           sander.statSync(path.join(storage.path, 'notes', key + '.cson'))
-          key = keygen()
+          key = keygen(true)
         } catch (err) {
           if (err.code === 'ENOENT') {
             isUnique = true

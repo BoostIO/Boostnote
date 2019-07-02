@@ -1,10 +1,12 @@
 const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
+const fs = require('fs')
 const CSON = require('@rokt33r/season')
 const keygen = require('browser/lib/keygen')
 const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
+const attachmentManagement = require('./attachmentManagement')
 
 function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
   let oldStorage, newStorage
@@ -37,12 +39,12 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
           return resolveStorageData(newStorage)
             .then(function findNewNoteKey (_newStorage) {
               newStorage = _newStorage
-              newNoteKey = keygen()
+              newNoteKey = keygen(true)
               let isUnique = false
               while (!isUnique) {
                 try {
                   sander.statSync(path.join(newStorage.path, 'notes', newNoteKey + '.cson'))
-                  newNoteKey = keygen()
+                  newNoteKey = keygen(true)
                 } catch (err) {
                   if (err.code === 'ENOENT') {
                     isUnique = true
@@ -62,11 +64,20 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
           noteData.key = newNoteKey
           noteData.storage = newStorageKey
           noteData.updatedAt = new Date()
+          noteData.oldContent = noteData.content
 
           return noteData
         })
+        .then(function moveAttachments (noteData) {
+          if (oldStorage.path === newStorage.path) {
+            return noteData
+          }
+
+          noteData.content = attachmentManagement.moveAttachments(oldStorage.path, newStorage.path, noteKey, newNoteKey, noteData.content)
+          return noteData
+        })
         .then(function writeAndReturn (noteData) {
-          CSON.writeFileSync(path.join(newStorage.path, 'notes', noteData.key + '.cson'), _.omit(noteData, ['key', 'storage']))
+          CSON.writeFileSync(path.join(newStorage.path, 'notes', noteData.key + '.cson'), _.omit(noteData, ['key', 'storage', 'oldContent']))
           return noteData
         })
         .then(function deleteOldNote (data) {

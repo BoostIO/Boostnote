@@ -1,0 +1,27 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Boostnote",
+      "group": "build",
+      "type": "npm",
+      "script": "watch",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+      },
+      "problemMatcher": {
+        "pattern":[
+          {
+            "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
+            "file": 1,
+            "location": 2,
+            "message": 3
+          }
+        ]
+      }
+    }
+  ]
+}

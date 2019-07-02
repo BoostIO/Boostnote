@@ -23,6 +23,7 @@
         "lineNumber": true
     },
     "sortBy": "UPDATED_AT",
+    "sortTagsBy": "ALPHABETICAL",
     "ui": {
         "closeToTray": false,
         "defaultNote": "ALWAYS_ASK",

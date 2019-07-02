@@ -8,7 +8,8 @@ function resolveStorageData (storageCache) {
     key: storageCache.key,
     name: storageCache.name,
     type: storageCache.type,
-    path: storageCache.path
+    path: storageCache.path,
+    isOpen: storageCache.isOpen
   }
 
   const boostnoteJSONPath = path.join(storageCache.path, 'boostnote.json')
@@ -30,13 +31,9 @@ function resolveStorageData (storageCache) {
 
   const version = parseInt(storage.version, 10)
   if (version >= 1) {
-    if (version > 1) {
-      console.log('The repository version is newer than one of current app.')
-    }
     return Promise.resolve(storage)
   }
 
-  console.log('Transform Legacy storage', storage.path)
   return migrateFromV6Storage(storage.path)
     .then(() => storage)
 }

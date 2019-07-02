@@ -1,3 +1,4 @@
 node_modules/
 compiled/
 dist/
+extra_scripts/

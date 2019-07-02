@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ToggleModeButton.styl'
+import i18n from 'browser/lib/i18n'
 
 const ToggleModeButton = ({
   onClick, editorType
@@ -13,7 +14,7 @@ const ToggleModeButton = ({
     <div styleName={editorType === 'EDITOR_PREVIEW' ? 'active' : 'non-active'} onClick={() => onClick('EDITOR_PREVIEW')}>
       <img styleName='item-star' src={editorType === 'EDITOR_PREVIEW' ? '' : '../resources/icon/icon-mode-split-on-active.svg'} />
     </div>
-    <span styleName='tooltip'>Toggle Mode</span>
+    <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Toggle Mode')}</span>
   </div>
 )
 

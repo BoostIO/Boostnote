@@ -16,7 +16,7 @@ function copyFile (srcPath, dstPath) {
     const dstFolder = path.dirname(dstPath)
     if (!fs.existsSync(dstFolder)) fs.mkdirSync(dstFolder)
 
-    const input = fs.createReadStream(srcPath)
+    const input = fs.createReadStream(decodeURI(srcPath))
     const output = fs.createWriteStream(dstPath)
 
     output.on('error', reject)

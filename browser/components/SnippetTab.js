@@ -2,6 +2,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SnippetTab.styl'
 import context from 'browser/lib/context'
+import i18n from 'browser/lib/i18n'
 
 class SnippetTab extends React.Component {
   constructor (props) {
@@ -28,7 +29,7 @@ class SnippetTab extends React.Component {
   handleContextMenu (e) {
     context.popup([
       {
-        label: 'Rename',
+        label: i18n.__('Rename'),
         click: (e) => this.handleRenameClick(e)
       }
     ])
@@ -54,10 +55,10 @@ class SnippetTab extends React.Component {
         this.handleRename()
         break
       case 27:
-        this.setState({
-          name: this.props.snippet.name,
+        this.setState((prevState, props) => ({
+          name: props.snippet.name,
           isRenaming: false
-        })
+        }))
         break
     }
   }
@@ -114,7 +115,7 @@ class SnippetTab extends React.Component {
             {snippet.name.trim().length > 0
               ? snippet.name
               : <span styleName='button-unnamed'>
-                Unnamed
+                {i18n.__('Unnamed')}
               </span>
             }
           </button>

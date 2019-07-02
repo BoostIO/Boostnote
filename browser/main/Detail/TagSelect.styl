@@ -3,19 +3,18 @@
   align-items center
   user-select none
   vertical-align middle
-  width 100%
-  overflow-x scroll
+  width 96%
+  overflow-x auto
   white-space nowrap
-  margin-top 31px
+  top 50px
   position absolute
-
-.root::-webkit-scrollbar
-  display none
+  &::-webkit-scrollbar
+    height 8px
 
 .tag
   display flex
   align-items center
-  margin 0px 2px
+  margin 0px 2px 2px
   padding 2px 4px
   background-color alpha($ui-tag-backgroundColor, 3%)
   border-radius 4px
@@ -39,16 +38,9 @@
 
 .tag-label
   font-size 13px
-  color: $ui-text-color
+  color $ui-text-color
   padding 4px 16px 4px 8px
-
-.newTag
-  box-sizing border-box
-  border none
-  background-color transparent
-  outline none
-  padding 0 4px
-  font-size 13px
+  cursor pointer
 
 body[data-theme="dark"]
   .tag
@@ -62,11 +54,6 @@ body[data-theme="dark"]
   .tag-label
     color $ui-dark-text-color
 
-  .newTag
-    border-color none
-    background-color transparent
-    color $ui-dark-text-color
-    
 body[data-theme="solarized-dark"]
   .tag
     background-color $ui-solarized-dark-tag-backgroundColor
@@ -78,7 +65,24 @@ body[data-theme="solarized-dark"]
   .tag-label
     color $ui-solarized-dark-text-color
 
-  .newTag
-    border-color none
+body[data-theme="monokai"]
+  .tag
+    background-color $ui-monokai-tag-backgroundColor
+
+  .tag-removeButton
+    border-color $ui-button--focus-borderColor
     background-color transparent
-    color $ui-solarized-dark-text-color
+
+  .tag-label
+    color $ui-monokai-text-color
+
+body[data-theme="dracula"]
+  .tag
+    background-color $ui-dracula-tag-backgroundColor
+
+  .tag-removeButton
+    border-color $ui-dracula-button--focus-borderColor
+    background-color transparent
+
+  .tag-label
+    color $ui-dracula-borderColor

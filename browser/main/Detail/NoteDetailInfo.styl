@@ -13,6 +13,7 @@ $info-margin-under-border = 30px
   display flex
   align-items center
   padding 0 20px
+  z-index 99
 
 .info-left
   padding 0 10px
@@ -97,4 +98,13 @@ body[data-theme="solarized-dark"]
   .info
     border-color $ui-solarized-dark-borderColor
     background-color $ui-solarized-dark-noteDetail-backgroundColor
-    
+
+body[data-theme="monokai"]
+  .info
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-noteDetail-backgroundColor
+
+body[data-theme="dracula"]
+  .info
+    border-color $ui-dracula-borderColor
+    background-color $ui-dracula-noteDetail-backgroundColor

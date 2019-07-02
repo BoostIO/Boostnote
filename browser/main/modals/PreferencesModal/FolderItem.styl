@@ -2,6 +2,7 @@
   height 35px
   box-sizing border-box
   padding 2.5px 15px
+  display flex
   &:hover
     background-color darken(white, 3%)
 
@@ -18,7 +19,10 @@
   border-left solid 2px transparent
   padding 0 10px
   line-height 30px
-  float left
+  flex 1
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
 .folderItem-left-danger
   color $danger-color
   font-weight bold
@@ -52,12 +56,13 @@
   outline none
 
 .folderItem-right
-  float right
+  -webkit-box-flex: 1
+  white-space nowrap
 
 .folderItem-right-button
   vertical-align middle
   height 25px
-  margin-top 2.5px
+  margin-top 2px
   colorDefaultButton()
   border-radius 2px
   border $ui-border
@@ -126,3 +131,49 @@ body[data-theme="solarized-dark"]
 
   .folderItem-right-dangerButton
     colorSolarizedDarkPrimaryButton()
+
+body[data-theme="monokai"]
+  .folderItem
+    &:hover
+      background-color $ui-monokai-button-backgroundColor
+
+  .folderItem-left-danger
+    color $danger-color
+
+  .folderItem-left-key
+    color $ui-dark-inactive-text-color
+
+  .folderItem-left-colorButton
+    colorMonokaiPrimaryButton()
+
+  .folderItem-right-button
+    colorMonokaiPrimaryButton()
+
+  .folderItem-right-confirmButton
+    colorMonokaiPrimaryButton()
+
+  .folderItem-right-dangerButton
+    colorMonokaiPrimaryButton()
+
+body[data-theme="dracula"]
+  .folderItem
+    &:hover
+      background-color $ui-dracula-button-backgroundColor
+
+  .folderItem-left-danger
+    color $danger-color
+
+  .folderItem-left-key
+    color $ui-dark-inactive-text-color
+
+  .folderItem-left-colorButton
+    colorDraculaPrimaryButton()
+
+  .folderItem-right-button
+    colorDraculaPrimaryButton()
+
+  .folderItem-right-confirmButton
+    colorDraculaPrimaryButton()
+
+  .folderItem-right-dangerButton
+    colorDraculaPrimaryButton()

@@ -1,0 +1,39 @@
+.colorPicker
+  position fixed
+  z-index 2
+  display flex
+  flex-direction column
+
+.cover
+  position fixed
+  top 0
+  right 0
+  bottom 0
+  left 0
+
+.footer
+  display flex
+  justify-content center
+  z-index 2
+  align-items center
+  & > button + button
+    margin-left 10px
+
+.btn-cancel,
+.btn-confirm,
+.btn-reset
+  vertical-align middle
+  height 25px
+  margin-top 2.5px
+  border-radius 2px
+  border none
+  padding 0 5px
+  background-color $default-button-background
+  &:hover
+    background-color $default-button-background--hover
+.btn-confirm
+  background-color #1EC38B
+  &:hover
+    background-color darken(#1EC38B, 25%)
+
+

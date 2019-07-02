@@ -3,6 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './FolderSelect.styl'
 import _ from 'lodash'
+import i18n from 'browser/lib/i18n'
 
 class FolderSelect extends React.Component {
   constructor (props) {
@@ -249,7 +250,7 @@ class FolderSelect extends React.Component {
             <input styleName='search-input'
               ref='search'
               value={this.state.search}
-              placeholder='Folder...'
+              placeholder={i18n.__('Folder...')}
               onChange={(e) => this.handleSearchInputChange(e)}
               onBlur={(e) => this.handleSearchInputBlur(e)}
               onKeyDown={(e) => this.handleSearchInputKeyDown(e)}

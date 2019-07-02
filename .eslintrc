@@ -3,7 +3,9 @@
   "plugins": ["react"],
   "rules": {
     "no-useless-escape": 0,
-    "prefer-const": "warn",
+    "prefer-const": ["warn", {
+      "destructuring": "all"
+    }],
     "no-unused-vars": "warn",
     "no-undef": "warn",
     "no-lone-blocks": "warn",
@@ -17,5 +19,8 @@
     "FileReader": true,
     "localStorage": true,
     "fetch": true
+  },
+  "env": {
+    "jest": true
   }
 }

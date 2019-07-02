@@ -3,8 +3,9 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './RenameFolderModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import ModalEscButton from 'browser/components/ModalEscButton'
+import i18n from 'browser/lib/i18n'
 
 class RenameFolderModal extends React.Component {
   constructor (props) {
@@ -72,13 +73,13 @@ class RenameFolderModal extends React.Component {
         onKeyDown={(e) => this.handleKeyDown(e)}
       >
         <div styleName='header'>
-          <div styleName='title'>Rename Folder</div>
+          <div styleName='title'>{i18n.__('Rename Folder')}</div>
         </div>
         <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
 
         <div styleName='control'>
           <input styleName='control-input'
-            placeholder='Folder Name'
+            placeholder={i18n.__('Folder Name')}
             ref='name'
             value={this.state.name}
             onChange={(e) => this.handleChange(e)}
@@ -87,7 +88,7 @@ class RenameFolderModal extends React.Component {
           <button styleName='control-confirmButton'
             onClick={(e) => this.handleConfirmButtonClick(e)}
           >
-            Confirm
+            {i18n.__('Confirm')}
           </button>
         </div>
       </div>

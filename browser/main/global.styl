@@ -15,6 +15,15 @@ body
   font-weight 200
   -webkit-font-smoothing antialiased
 
+::-webkit-scrollbar
+  width 12px
+
+::-webkit-scrollbar-corner
+  background-color: transparent;
+
+::-webkit-scrollbar-thumb
+  background-color rgba(0, 0, 0, 0.15)
+
 button, input, select, textarea
   font-family DEFAULT_FONTS
 
@@ -85,9 +94,12 @@ modalBackColor = white
     absolute top left bottom right
     background-color modalBackColor
     z-index modalZIndex + 1
-    
+
 
 body[data-theme="dark"]
+  background-color $ui-dark-backgroundColor
+  ::-webkit-scrollbar-thumb
+    background-color rgba(0, 0, 0, 0.3)
   .ModalBase
     .modalBack
       background-color $ui-dark-backgroundColor
@@ -108,15 +120,66 @@ body[data-theme="dark"]
   background #B1D7FE
 ::selection
   background #B1D7FE
+.CodeMirror-foldmarker
+  font-family: arial
+
+.CodeMirror-foldgutter
+  width: .7em
+
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded
+  cursor: pointer
+
+.CodeMirror-foldgutter-open:after
+  content: "\25BE"
+
+.CodeMirror-foldgutter-folded:after
+  content: "\25B8"
+
+.CodeMirror-hover
+  padding 2px 4px 0 4px
+  position absolute
+  z-index 99
+
+.CodeMirror-hyperlink
+  cursor pointer
+
 
 .sortableItemHelper
   z-index modalZIndex + 5
 
 body[data-theme="solarized-dark"]
+  background-color $ui-solarized-dark-backgroundColor
+  ::-webkit-scrollbar-thumb
+    background-color rgba(0, 0, 0, 0.3)
   .ModalBase
     .modalBack
       background-color $ui-solarized-dark-backgroundColor
   .sortableItemHelper
     color: $ui-solarized-dark-text-color
 
+body[data-theme="monokai"]
+  background-color $ui-monokai-backgroundColor
+  ::-webkit-scrollbar-thumb
+    background-color rgba(0, 0, 0, 0.3)
+  .ModalBase
+    .modalBack
+      background-color $ui-monokai-backgroundColor
+  .sortableItemHelper
+    color: $ui-monokai-text-color
 
+body[data-theme="dracula"]
+  background-color $ui-dracula-backgroundColor
+  ::-webkit-scrollbar-thumb
+    background-color rgba(0, 0, 0, 0.3)
+  .ModalBase
+    .modalBack
+      background-color $ui-dracula-backgroundColor
+  .sortableItemHelper
+    color: $ui-dracula-text-color
+
+body[data-theme="default"]
+  .SideNav ::-webkit-scrollbar-thumb
+    background-color rgba(255, 255, 255, 0.3)
+
+@import '../styles/Detail/TagSelect.styl'

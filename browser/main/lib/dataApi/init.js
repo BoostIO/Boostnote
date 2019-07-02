@@ -4,6 +4,7 @@ const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
 const consts = require('browser/lib/consts')
 const path = require('path')
+const fs = require('fs')
 const CSON = require('@rokt33r/season')
 /**
  * @return {Object} all storages and notes
@@ -19,11 +20,14 @@ const CSON = require('@rokt33r/season')
  * 2. legacy
  * 3. empty directory
  */
+
 function init () {
   const fetchStorages = function () {
     let rawStorages
     try {
       rawStorages = JSON.parse(window.localStorage.getItem('storages'))
+      // Remove storages who's location is inaccesible.
+      rawStorages = rawStorages.filter(storage => fs.existsSync(storage.path))
       if (!_.isArray(rawStorages)) throw new Error('Cached data is not valid.')
     } catch (e) {
       console.warn('Failed to parse cached data from localStorage', e)
@@ -36,6 +40,7 @@ function init () {
 
   const fetchNotes = function (storages) {
     const findNotesFromEachStorage = storages
+    .filter(storage => fs.existsSync(storage.path))
       .map((storage) => {
         return resolveStorageNotes(storage)
           .then((notes) => {
@@ -51,7 +56,11 @@ function init () {
               }
             })
             if (unknownCount > 0) {
-              CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+              try {
+                CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+              } catch (e) {
+                console.log('Error writting boostnote.json: ' + e + ' from init.js')
+              }
             }
             return notes
           })

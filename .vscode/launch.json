@@ -1,0 +1,41 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "BoostNote Main",
+      "protocol": "inspector",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "runtimeArgs": [
+        "--remote-debugging-port=9223",
+        "--hot",
+        "${workspaceFolder}/index.js"
+      ],
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      }
+    },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "BoostNote Renderer",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///*": "${webRoot}/*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "BostNote All",
+      "configurations": ["BoostNote Main", "BoostNote Renderer"]
+    }
+  ]
+}

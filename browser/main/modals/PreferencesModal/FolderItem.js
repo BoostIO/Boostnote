@@ -4,9 +4,10 @@ import CSSModules from 'browser/lib/CSSModules'
 import ReactDOM from 'react-dom'
 import styles from './FolderItem.styl'
 import dataApi from 'browser/main/lib/dataApi'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import { SketchPicker } from 'react-color'
 import { SortableElement, SortableHandle } from 'react-sortable-hoc'
+import i18n from 'browser/lib/i18n'
 
 class FolderItem extends React.Component {
   constructor (props) {
@@ -150,12 +151,12 @@ class FolderItem extends React.Component {
           <button styleName='folderItem-right-confirmButton'
             onClick={(e) => this.handleConfirmButtonClick(e)}
           >
-            Confirm
+            {i18n.__('Confirm')}
           </button>
           <button styleName='folderItem-right-button'
             onClick={(e) => this.handleCancelButtonClick(e)}
           >
-            Cancel
+            {i18n.__('Cancel')}
           </button>
         </div>
       </div>
@@ -179,18 +180,18 @@ class FolderItem extends React.Component {
     return (
       <div styleName='folderItem'>
         <div styleName='folderItem-left'>
-          Are you sure to <span styleName='folderItem-left-danger'>delete</span> this folder?
+          {i18n.__('Are you sure to ')} <span styleName='folderItem-left-danger'>{i18n.__(' delete')}</span> {i18n.__('this folder?')}
         </div>
         <div styleName='folderItem-right'>
           <button styleName='folderItem-right-dangerButton'
             onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
           >
-            Confirm
+            {i18n.__('Confirm')}
           </button>
           <button styleName='folderItem-right-button'
             onClick={(e) => this.handleCancelButtonClick(e)}
           >
-            Cancel
+            {i18n.__('Cancel')}
           </button>
         </div>
       </div>
@@ -231,12 +232,12 @@ class FolderItem extends React.Component {
           <button styleName='folderItem-right-button'
             onClick={(e) => this.handleEditButtonClick(e)}
           >
-            Edit
+            {i18n.__('Edit')}
           </button>
           <button styleName='folderItem-right-button'
             onClick={(e) => this.handleDeleteButtonClick(e)}
           >
-            Delete
+            {i18n.__('Delete')}
           </button>
         </div>
       </div>

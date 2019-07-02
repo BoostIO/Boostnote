@@ -3,10 +3,11 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './CreateFolderModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import consts from 'browser/lib/consts'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+import i18n from 'browser/lib/i18n'
 
 class CreateFolderModal extends React.Component {
   constructor (props) {
@@ -79,12 +80,12 @@ class CreateFolderModal extends React.Component {
         onKeyDown={(e) => this.handleKeyDown(e)}
       >
         <div styleName='header'>
-          <div styleName='title'>Create new folder</div>
+          <div styleName='title'>{i18n.__('Create new folder')}</div>
         </div>
         <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
         <div styleName='control'>
           <div styleName='control-folder'>
-            <div styleName='control-folder-label'>Folder name</div>
+            <div styleName='control-folder-label'>{i18n.__('Folder name')}</div>
             <input styleName='control-folder-input'
               ref='name'
               value={this.state.name}
@@ -95,7 +96,7 @@ class CreateFolderModal extends React.Component {
           <button styleName='control-confirmButton'
             onClick={(e) => this.handleConfirmButtonClick(e)}
           >
-            Create
+            {i18n.__('Create')}
           </button>
         </div>
       </div>

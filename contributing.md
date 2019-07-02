@@ -1,18 +1,30 @@
 # Contributing to Boostnote (English)
 
-### When you open an issue of a bug report
-There are no issue template. But there is a request.
+### When you open an issue or a bug report
+There is an issue template for you to follow. Please provide as much information as you can according to the template.
 
-**Please paste screenshots of Boostnote with developer tool open**
+Thank you in advance for your help.
 
-Thank you for your help in advance.
+### When you open a pull request
+There is a pull request template for your to follow. Please fill in the template before submitting your code. Your pull request will be reviewed faster if we know exactly what it does.
 
-### About copyright of Pull Request
+Make sure that you have:
+- Checked [`code_style.md`](docs/code_style.md) for information on code style
+- Write tests for your code and run test with the following command
+```
+npm run test
+```
+- Lint your code using the following command
+```
+npm run lint
+```
 
-If you make a pull request, It means you agree to transfer the copyright of the code changes to BoostIO.
+### Concerning Copyright
 
-It doesn't mean Boostnote will become a paid app. If we want to earn some money, We will try other way, which is some kind of cloud storage, Mobile app integration or some SPECIAL features.
-Because GPL v3 is too strict to be compatible with any other License, We thought this is needed to replace the license with much freer one(like BSD, MIT) somewhen.
+By making a pull request you agree to transfer ownership of your code to BoostIO.
+
+This doesn't mean Boostnote will become a paid app. If we want to earn money, we will find other way. Potentially some kind of cloud storage, mobile app integration, or some premium features.
+GPL v3 is too strict to be compatible with another license, so we thought it might be necessary to replace the license with a more open one (like BSD, MIT) eventually.
 
 ---
 
@@ -86,4 +98,23 @@ Pull requestをすることはその変化分のコードの著作権をBoostIO�
 如果您提供了一个Pull Request，这表示您将您所修改的代码的著作权移交给BoostIO。  
 
 这并不表示Boostnote会成为一个需要付费的软件。如果我们想获得收益，我们会尝试一些其他的方法，比如说云存储、绑定手机软件等。  
-因为GPLv3过于严格，不能和其他的一些协议兼容，所以我们有可能在将来会把BoostNote的协议改为一些较为宽松的协议，比如说BSD、MIT。  
+因为GPLv3过于严格，不能和其他的一些协议兼容，所以我们有可能在将来会把BoostNote的协议改为一些较为宽松的协议，比如说BSD、MIT。
+
+---
+
+# Contributing to Boostnote (Français)
+
+### Lorsque vous signalez un problème ou un bug
+Il n'y a pas de modèle pour un signaler problème. Mais nous vous demandons :
+
+**Merci de founir une capture d'écran de Boostnote avec l'outil de développement ouvert**
+(vous pouvez l'ouvrir avec `Ctrl+Shift+I`)
+
+Merci en avance pour votre aide.
+
+### À propos des droits d'auteurs et des requêtes (`Pull Request`)
+
+Si vous faites une requête, vous acceptez de transmettre les modifications du code à BoostIO.
+
+Cela ne veut pas dire que Boostnote deviendra une application payante. Si nous voulons gagner de l'argent, nous trouverons un autre moyen, comme un service de sauvegarde sur le Cloud, une application mobile ou des options payantes.
+Puisque GPL v3 est trop strict pour être compatible avec n'importe quelle autre licence, nous pensons avoir un jour besoin de la remplacer avec une licence bien plus libre (comme BSD, MIT).

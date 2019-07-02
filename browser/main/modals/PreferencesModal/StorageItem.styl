@@ -9,13 +9,17 @@
   box-sizing border-box
   border-bottom $default-border
   margin-bottom 5px
+  display flex
 
 .header-label
-  float left
   cursor pointer
   &:hover
     .header-label-editButton
       opacity 1
+  flex 1
+  white-space nowrap
+  text-overflow ellipsis
+  overflow hidden
 
 .header-label-path
   color $ui-inactive-text-color
@@ -38,8 +42,8 @@
   outline none
 
 .header-control
-  float right
-
+  -webkit-box-flex: 1
+  white-space nowrap
 .header-control-button
   width 30px
   height 25px

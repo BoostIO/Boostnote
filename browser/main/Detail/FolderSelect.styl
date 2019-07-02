@@ -36,7 +36,7 @@
   height 34px
   width 20px
   line-height 34px
-  
+
 .search-input
   vertical-align middle
   position relative
@@ -71,7 +71,7 @@
   overflow ellipsis
   cursor pointer
   &:hover
-    background-color $ui-button--hover-backgroundColor 
+    background-color $ui-button--hover-backgroundColor
 
 .search-optionList-item--active
   @extend .search-optionList-item
@@ -133,3 +133,55 @@ body[data-theme="dark"]
       color $ui-dark-button--active-color
   .search-optionList-item-name-surfix
     color $ui-dark-inactive-text-color
+
+body[data-theme="monokai"]
+ .root
+    color $ui-dark-text-color
+    &:hover
+      color white
+      background-color $ui-monokai-button--hover-backgroundColor
+      border-color $ui-monokai-borderColor
+
+  .search-optionList
+    color white
+    border-color $ui-monokai-borderColor
+    background-color $ui-monokai-button-backgroundColor
+
+  .search-optionList-item
+    &:hover
+      background-color lighten($ui-monokai-button--hover-backgroundColor, 15%)
+
+  .search-optionList-item--active
+    background-color $ui-monokai-button--active-backgroundColor
+    color $ui-monokai-button--active-color
+    &:hover
+      background-color $ui-monokai-button--active-backgroundColor
+      color $ui-monokai-button--active-color
+  .search-optionList-item-name-surfix
+    color $ui-monokai-inactive-text-color
+
+body[data-theme="dracula"]
+ .root
+    color $ui-dracula-text-color
+    &:hover
+      color #f8f8f2
+      background-color $ui-dark-button--hover-backgroundColor
+      border-color $ui-dracula-borderColor
+
+  .search-optionList
+    color #f8f8f2
+    border-color $ui-dracula-borderColor
+    background-color $ui-dracula-button-backgroundColor
+
+  .search-optionList-item
+    &:hover
+      background-color lighten($ui-dracula-button--hover-backgroundColor, 15%)
+
+  .search-optionList-item--active
+    background-color $ui-dracula-button--active-backgroundColor
+    color $ui-dracula-button--active-color
+    &:hover
+      background-color $ui-dark-button--hover-backgroundColor
+      color $ui-dracula-button--active-color
+  .search-optionList-item-name-surfix
+    color $ui-dracula-inactive-text-color

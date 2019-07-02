@@ -69,7 +69,8 @@ function importAll (storage, data) {
             isStarred: false,
             title: article.title,
             content: '# ' + article.title + '\n\n' + article.content,
-            key: noteKey
+            key: noteKey,
+            linesHighlighted: article.linesHighlighted
           }
           notes.push(newNote)
         } else {
@@ -87,7 +88,8 @@ function importAll (storage, data) {
             snippets: [{
               name: article.mode,
               mode: article.mode,
-              content: article.content
+              content: article.content,
+              linesHighlighted: article.linesHighlighted
             }]
           }
           notes.push(newNote)

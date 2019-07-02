@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TrashButton.styl'
+import i18n from 'browser/lib/i18n'
 
 const TrashButton = ({
   onClick
@@ -10,7 +11,7 @@ const TrashButton = ({
     onClick={(e) => onClick(e)}
   >
     <img styleName='iconInfo' src='../resources/icon/icon-trash.svg' />
-    <span styleName='tooltip'>Trash</span>
+    <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Trash')}</span>
   </button>
 )
 

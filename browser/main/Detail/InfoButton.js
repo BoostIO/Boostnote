@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoButton.styl'
+import i18n from 'browser/lib/i18n'
 
 const InfoButton = ({
   onClick
@@ -10,7 +11,7 @@ const InfoButton = ({
     onClick={(e) => onClick(e)}
   >
     <img className='infoButton' src='../resources/icon/icon-info.svg' />
-    <span styleName='tooltip'>Info</span>
+    <span styleName='tooltip'>{i18n.__('Info')}</span>
   </button>
 )
 

@@ -36,7 +36,8 @@ test(t => {
     ['`MY_TITLE`', 'MY_TITLE'],
     ['MY_TITLE', 'MY_TITLE'],
     // I have no idea for it...
-    ['```test', '`test']
+    ['```test', '`test'],
+    ['# C# Features', 'C# Features']
   ]
 
   testCases.forEach(testCase => {
