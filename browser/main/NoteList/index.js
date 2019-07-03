@@ -146,7 +146,7 @@ class NoteList extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    const { dispatch, location } = this.props
+    const { data, dispatch, location } = this.props
     const { selectedNoteKeys } = this.state
     const visibleNoteKeys = this.notes && this.notes.map(note => note.key)
     const note = this.notes && this.notes[0]
@@ -154,7 +154,7 @@ class NoteList extends React.Component {
     const prevKey = prevProps.location.search && queryString.parse(prevProps.location.search).key
     const noteKey = visibleNoteKeys.includes(prevKey) ? prevKey : note && note.key
 
-    ee.emitIpc('tray:update', _.sortBy(this.notes, note => new Date(note.updatedAt).getTime()).reverse().slice(0, 10))
+    ee.emitIpc('tray:update', data.noteMap.map((note) => note).sort(sortByUpdatedAt).slice(0, 10).filter(note => note.title !== ''))
 
     if (note && location.search === '') {
       if (!location.pathname.match(/\/searched/)) this.contextNotes = this.getContextNotes()
