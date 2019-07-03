@@ -81,11 +81,7 @@ const buildMarkdownPreviewContextMenu = function (markdownPreview, event) {
 
   // Default context menu inclusions
   const template = [{
-    role: 'cut'
-  }, {
     role: 'copy'
-  }, {
-    role: 'paste'
   }, {
     role: 'selectall'
   }]
