@@ -584,6 +584,7 @@ function deleteAttachmentFolder (storageKey, noteKey) {
  * @param noteKey NoteKey of the current note. Is used to determine the belonging attachment folder.
  */
 function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey) {
+  console.log('deleteAtt')
   if (storageKey == null || noteKey == null || markdownContent == null) {
     return
   }
@@ -617,8 +618,6 @@ function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey
         }
       })
     })
-  } else {
-    console.info('Attachment folder ("' + attachmentFolder + '") did not exist..')
   }
 }
 

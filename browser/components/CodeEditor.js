@@ -53,6 +53,7 @@ export default class CodeEditor extends React.Component {
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
     }
+    const debouncedDeletionOfAttachments = _.debounce(attachmentManagement.deleteAttachmentsNotPresentInNote, 30000)
     this.blurHandler = (editor, e) => {
       ipcRenderer.send('editor:focused', false)
       if (e == null) return null
@@ -64,16 +65,11 @@ export default class CodeEditor extends React.Component {
         el = el.parentNode
       }
       this.props.onBlur != null && this.props.onBlur(e)
-
       const {
         storageKey,
         noteKey
       } = this.props
-      attachmentManagement.deleteAttachmentsNotPresentInNote(
-        this.editor.getValue(),
-        storageKey,
-        noteKey
-      )
+      debouncedDeletionOfAttachments(this.editor.getValue(), storageKey, noteKey)
     }
     this.pasteHandler = (editor, e) => {
       e.preventDefault()
