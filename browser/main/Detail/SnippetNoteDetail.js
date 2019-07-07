@@ -62,7 +62,8 @@ class SnippetNoteDetail extends React.Component {
     if (showFullScreen === undefined || showFullScreen === true) {
       // Main window, check for updates from children
       ipcRenderer.on('update-note-state', (_, noteData) => {
-        this.setState({note: noteData})
+        const { note } = this.state
+        if (noteData.key === note.key) this.setState({note: noteData})
       })
     }
   }
