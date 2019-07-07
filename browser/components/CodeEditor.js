@@ -48,13 +48,18 @@ export default class CodeEditor extends React.Component {
       leading: false,
       trailing: true
     })
+    this.state = {
+      editorFocused: false
+    }
     this.changeHandler = (editor, changeObject) => this.handleChange(editor, changeObject)
     this.highlightHandler = (editor, changeObject) => this.handleHighlight(editor, changeObject)
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
+      this.setState({editorFocused: true})
     }
     this.blurHandler = (editor, e) => {
       ipcRenderer.send('editor:focused', false)
+      this.setState({editorFocused: false})
       if (e == null) return null
       let el = e.relatedTarget
       while (el != null) {
@@ -535,6 +540,11 @@ export default class CodeEditor extends React.Component {
     }
     if (prevProps.keyMap !== this.props.keyMap) {
       needRefresh = true
+    }
+    const { editorFocused } = this.state
+    const { value } = this.props
+    if (prevProps.value !== value && !editorFocused) {
+      this.editor.setValue(this.props.value)
     }
     if (prevProps.enableMarkdownLint !== enableMarkdownLint || prevProps.customMarkdownLintConfig !== customMarkdownLintConfig) {
       if (!enableMarkdownLint) {

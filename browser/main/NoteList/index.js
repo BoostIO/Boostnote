@@ -22,10 +22,12 @@ import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import context from 'browser/lib/context'
 import queryString from 'query-string'
+import { ipcRenderer } from 'electron'
 
 const { remote } = require('electron')
 const { dialog } = remote
 const WP_POST_PATH = '/wp/v2/posts'
+const singleNoteWindow = require('../../../lib/note-window')
 
 const regexMatchStartingTitleNumber = new RegExp('^([0-9]*\.?[0-9]+).*$')
 
@@ -571,6 +573,7 @@ class NoteList extends React.Component {
     const publishLabel = i18n.__('Publish Blog')
     const updateLabel = i18n.__('Update Blog')
     const openBlogLabel = i18n.__('Open Blog')
+    const openInNewWindow = i18n.__('Open in new window')
 
     const templates = []
 
@@ -598,6 +601,9 @@ class NoteList extends React.Component {
       }, {
         label: copyNoteLink,
         click: this.copyNoteLink.bind(this, note)
+      }, {
+        label: openInNewWindow,
+        click: () => this.openInNewWindow.bind(this)(note)
       })
       if (note.type === 'MARKDOWN_NOTE') {
         if (note.blog && note.blog.blogLink && note.blog.blogId) {
@@ -617,6 +623,17 @@ class NoteList extends React.Component {
       }
     }
     context.popup(templates)
+  }
+
+  openInNewWindow (note) {
+    const { dispatch } = this.props
+    singleNoteWindow.createNewWindow('lib', note)
+    ipcRenderer.on('update-note-state', (_, noteData) => {
+      dispatch({
+        type: 'UPDATE_NOTE',
+        note: noteData
+      })
+    })
   }
 
   updateSelectedNotes (updateFunc, cleanSelection = true) {

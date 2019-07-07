@@ -31,6 +31,7 @@ import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
 import queryString from 'query-string'
 import { replace } from 'connected-react-router'
+import { ipcRenderer } from 'electron'
 
 class MarkdownNoteDetail extends React.Component {
   constructor (props) {
@@ -53,6 +54,15 @@ class MarkdownNoteDetail extends React.Component {
 
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
     this.generateToc = () => this.handleGenerateToc()
+
+    const { showFullScreen } = this.props.data
+
+    if (showFullScreen === undefined || showFullScreen === true) {
+      // Main window, check for updates from children
+      ipcRenderer.on('update-note-state', (_, noteData) => {
+        this.setState({note: noteData})
+      })
+    }
   }
 
   focus () {
@@ -136,6 +146,11 @@ class MarkdownNoteDetail extends React.Component {
           type: 'UPDATE_NOTE',
           note: note
         })
+        const { showFullScreen } = this.props.data
+        if (showFullScreen !== undefined && showFullScreen === false) {
+          // Window is not main window, send update event to main window
+          ipcRenderer.send('update-note-state', note)
+        }
         AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
       })
   }
@@ -404,6 +419,12 @@ class MarkdownNoteDetail extends React.Component {
     const storageKey = note.storage
     const folderKey = note.folder
 
+    let renderFullScreenButton = true
+    const { showFullScreen } = this.props.data
+    if (showFullScreen !== undefined && showFullScreen === false) {
+      renderFullScreenButton = false
+    }
+
     const options = []
     data.storageMap.forEach((storage, index) => {
       storage.folders.forEach((folder) => {
@@ -482,7 +503,9 @@ class MarkdownNoteDetail extends React.Component {
           )
         })()}
 
-        <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} />
+        {
+          renderFullScreenButton ? <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} /> : null
+        }
 
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
 

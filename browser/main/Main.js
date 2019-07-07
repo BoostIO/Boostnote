@@ -19,7 +19,7 @@ import applyShortcuts from 'browser/main/lib/shortcutManager'
 import { push } from 'connected-react-router'
 const path = require('path')
 const electron = require('electron')
-const { remote } = electron
+const { remote, ipcRenderer } = electron
 
 class Main extends React.Component {
   constructor (props) {
@@ -38,8 +38,14 @@ class Main extends React.Component {
       isLeftSliderFocused: false,
       fullScreen: false,
       noteDetailWidth: 0,
-      mainBodyWidth: 0
+      mainBodyWidth: 0,
+      globRenderFlag: 1
     }
+
+    ipcRenderer.on('set-current-note', (_, result) => {
+      this.setState({globRenderFlag: 2})
+      this.setState({currentNoteKey: result.key})
+    })
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
   }
@@ -299,7 +305,23 @@ class Main extends React.Component {
 
   render () {
     const { config } = this.props
-
+    if (this.state.globRenderFlag !== 1) {
+      this.props.location.search = `?key=${this.state.currentNoteKey}`
+      this.props.data.showFullScreen = false
+      return (
+        <Detail
+          style={{ left: 0 }}
+          {..._.pick(this.props, [
+            'dispatch',
+            'data',
+            'config',
+            'match',
+            'location'
+          ])}
+          ignorePreviewPointerEvents={this.state.isRightSliderFocused}
+        />
+      )
+    }
     // the width of the navigation bar when it is folded/collapsed
     const foldedNavigationWidth = 44
 
