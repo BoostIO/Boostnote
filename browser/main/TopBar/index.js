@@ -71,7 +71,7 @@ class TopBar extends React.Component {
     this.refs.search.childNodes[0].blur
     dispatch(push('/searched'))
     e.preventDefault()
-    this.debouncedUpdateKeyword("")
+    this.debouncedUpdateKeyword('')
   }
 
   handleKeyDown (e) {
