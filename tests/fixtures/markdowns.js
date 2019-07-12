@@ -109,6 +109,62 @@ const footnote = `
 hello-world: https://github.com/BoostIO/Boostnote/
 `
 
+const plantUmlMindMap = `
+@startmindmap
+* Debian
+** Ubuntu
+*** Linux Mint
+*** Kubuntu
+*** Lubuntu
+*** KDE Neon
+** LMDE
+** SolydXK
+** SteamOS
+** Raspbian with a very long name
+*** <s>Raspmbc</s> => OSMC
+*** <s>Raspyfi</s> => Volumio
+@endmindmap
+`
+
+const plantUmlGantt = `
+@startgantt
+[Prototype design] lasts 15 days
+[Test prototype] lasts 10 days
+[Test prototype] starts at [Prototype design]'s end
+@endgantt
+`
+
+const plantUmlWbs = `
+@startwbs
+* Business Process Modelling WBS
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+@endwbs
+`
+
+const plantUmlUml = `
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor customer
+actor clerk
+rectangle checkout {
+  customer -- (checkout)
+  (checkout) .> (payment) : include
+  (help) .> (checkout) : extends
+  (checkout) -- clerk
+}
+@enduml
+`
+
 export default {
   basic,
   codeblock,
@@ -121,5 +177,9 @@ export default {
   supTexts,
   deflists,
   shortcuts,
-  footnote
+  footnote,
+  plantUmlMindMap,
+  plantUmlGantt,
+  plantUmlWbs,
+  plantUmlUml
 }
