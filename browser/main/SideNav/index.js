@@ -440,7 +440,7 @@ class SideNav extends React.Component {
 
     const style = {}
     if (!isFolded) style.width = this.props.width
-    const isTagActive = location.pathname.match(/tag/)
+    const isTagActive = /tag/.test(location.pathname)
     return (
       <div className='SideNav'
         styleName={isFolded ? 'root--folded' : 'root'}

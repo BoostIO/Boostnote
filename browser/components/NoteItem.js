@@ -148,15 +148,14 @@ NoteItem.propTypes = {
     tags: PropTypes.array,
     isStarred: PropTypes.bool.isRequired,
     isTrashed: PropTypes.bool.isRequired,
-    blog: {
+    blog: PropTypes.shape({
       blogLink: PropTypes.string,
       blogId: PropTypes.number
-    }
+    })
   }),
   handleNoteClick: PropTypes.func.isRequired,
   handleNoteContextMenu: PropTypes.func.isRequired,
-  handleDragStart: PropTypes.func.isRequired,
-  handleDragEnd: PropTypes.func.isRequired
+  handleDragStart: PropTypes.func.isRequired
 }
 
 export default CSSModules(NoteItem, styles)
