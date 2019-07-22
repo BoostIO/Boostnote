@@ -220,5 +220,6 @@
 	"Spellcheck disabled": "スペルチェック無効",
 	"Show menu bar": "メニューバーを表示",
 	"Auto Detect": "自動検出",
-	"Enable HTML label in mermaid flowcharts": "mermaid flowchartでHTMLラベルを有効にする  ⚠ このオプションには潜在的なXSSの危険性があります。"
+	"Enable HTML label in mermaid flowcharts": "mermaid flowchartでHTMLラベルを有効にする  ⚠ このオプションには潜在的なXSSの危険性があります。",
+	"Wrap line in Snippet Note": "行を右端で折り返す（Snippet Note）"
 }

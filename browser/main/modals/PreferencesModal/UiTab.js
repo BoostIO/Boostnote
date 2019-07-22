@@ -92,6 +92,7 @@ class UiTab extends React.Component {
         enableRulers: this.refs.enableEditorRulers.value === 'true',
         rulers: this.refs.editorRulers.value.replace(/[^0-9,]/g, '').split(','),
         displayLineNumbers: this.refs.editorDisplayLineNumbers.checked,
+        lineWrapping: this.refs.editorLineWrapping.checked,
         switchPreview: this.refs.editorSwitchPreview.value,
         keyMap: this.refs.editorKeyMap.value,
         snippetDefaultLanguage: this.refs.editorSnippetDefaultLanguage.value,
@@ -544,6 +545,17 @@ class UiTab extends React.Component {
                 type='checkbox'
               />&nbsp;
               {i18n.__('Show line numbers in the editor')}
+            </label>
+          </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.lineWrapping}
+                ref='editorLineWrapping'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Wrap line in Snippet Note')}
             </label>
           </div>
 

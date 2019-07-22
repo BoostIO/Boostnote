@@ -50,6 +50,7 @@ export const DEFAULT_CONFIG = {
     fontFamily: win ? 'Consolas' : 'Monaco',
     indentType: 'space',
     indentSize: '2',
+    lineWrapping: true,
     enableRulers: false,
     rulers: [80, 120],
     displayLineNumbers: true,
