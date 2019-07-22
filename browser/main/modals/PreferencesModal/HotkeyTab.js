@@ -3,7 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
@@ -170,6 +170,26 @@ class HotkeyTab extends React.Component {
                 ref='pasteSmartly'
                 value={config.hotkey.pasteSmartly}
                 type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Insert Current Date')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={config.hotkey.insertDate}
+                type='text'
+                disabled='true'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Insert Current Date and Time')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={config.hotkey.insertDateTime}
+                type='text'
+                disabled='true'
               />
             </div>
           </div>

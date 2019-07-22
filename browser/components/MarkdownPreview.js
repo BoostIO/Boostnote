@@ -45,6 +45,7 @@ const CSS_FILES = [
   `${appPath}/node_modules/codemirror/lib/codemirror.css`,
   `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
+const win = global.process.platform === 'win32'
 
 function buildStyle (
   fontFamily,
@@ -345,6 +346,10 @@ export default class MarkdownPreview extends React.Component {
       customCSS
     )
     let body = this.markdown.render(noteContent)
+    body = attachmentManagement.fixLocalURLS(
+      body,
+      this.props.storagePath
+    )
     const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     files.forEach(file => {
       if (global.process.platform === 'win32') {
@@ -674,11 +679,9 @@ export default class MarkdownPreview extends React.Component {
   GetCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
-    if (theme) {
-      return `${appPath}/${theme.path}`
-    } else {
-      return `${appPath}/node_modules/codemirror/theme/elegant.css`
-    }
+    return theme
+      ? (win ? theme.path : `${appPath}/${theme.path}`)
+      : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
   rewriteIframe () {
@@ -897,6 +900,12 @@ export default class MarkdownPreview extends React.Component {
       this.setImgOnClickEventHelper(img, rect)
       imgObserver.observe(parentEl, config)
     }
+
+    const aList = markdownPreviewIframe.contentWindow.document.body.querySelectorAll('a')
+    for (const a of aList) {
+      a.removeEventListener('click', this.linkClickHandler)
+      a.addEventListener('click', this.linkClickHandler)
+    }
   }
 
   setImgOnClickEventHelper (img, rect) {
@@ -1017,14 +1026,18 @@ export default class MarkdownPreview extends React.Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const href = e.target.getAttribute('href')
-    const linkHash = href.split('/').pop()
+    const rawHref = e.target.getAttribute('href')
+    const parser = document.createElement('a')
+    parser.href = e.target.getAttribute('href')
+    const { href, hash } = parser
+    const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
 
-    if (!href) return
+    if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 
-    const regexNoteInternalLink = /main.html#(.+)/
+    const extractId = /(main.html)?#/
+    const regexNoteInternalLink = new RegExp(`${extractId.source}(.+)`)
     if (regexNoteInternalLink.test(linkHash)) {
-      const targetId = mdurl.encode(linkHash.match(regexNoteInternalLink)[1])
+      const targetId = mdurl.encode(linkHash.replace(extractId, ''))
       const targetElement = this.refs.root.contentWindow.document.getElementById(
         targetId
       )

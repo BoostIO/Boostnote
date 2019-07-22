@@ -1,17 +1,11 @@
-import diacritics from 'diacritics-map'
-
-function replaceDiacritics (str) {
-  return str.replace(/[À-ž]/g, function (ch) {
-    return diacritics[ch] || ch
-  })
-}
-
 module.exports = function slugify (title) {
-  let slug = title.trim()
+  const slug = encodeURI(
+    title.trim()
+      .replace(/^\s+/, '')
+      .replace(/\s+$/, '')
+      .replace(/\s+/g, '-')
+      .replace(/[\]\[\!\'\#\$\%\&\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '')
+  )
 
-  slug = replaceDiacritics(slug)
-
-  slug = slug.replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
-
-  return encodeURI(slug).replace(/\-+$/, '')
+  return slug
 }

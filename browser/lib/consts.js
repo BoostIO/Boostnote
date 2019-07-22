@@ -7,6 +7,7 @@ const CODEMIRROR_THEME_PATH = 'node_modules/codemirror/theme'
 const CODEMIRROR_EXTRA_THEME_PATH = 'extra_scripts/codemirror/theme'
 
 const isProduction = process.env.NODE_ENV === 'production'
+
 const paths = [
   isProduction ? path.join(app.getAppPath(), CODEMIRROR_THEME_PATH) : path.resolve(CODEMIRROR_THEME_PATH),
   isProduction ? path.join(app.getAppPath(), CODEMIRROR_EXTRA_THEME_PATH) : path.resolve(CODEMIRROR_EXTRA_THEME_PATH)

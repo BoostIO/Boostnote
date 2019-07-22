@@ -3,7 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import consts from 'browser/lib/consts'
 import ReactCodeMirror from 'react-codemirror'
 import CodeMirror from 'codemirror'
@@ -14,6 +14,7 @@ import { getLanguages } from 'browser/lib/Languages'
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 
 const OSX = global.process.platform === 'darwin'
+const win = global.process.platform === 'win32'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -30,7 +31,9 @@ class UiTab extends React.Component {
   componentDidMount () {
     CodeMirror.autoLoadMode(this.codeMirrorInstance.getCodeMirror(), 'javascript')
     CodeMirror.autoLoadMode(this.customCSSCM.getCodeMirror(), 'css')
+    CodeMirror.autoLoadMode(this.customMarkdownLintConfigCM.getCodeMirror(), 'javascript')
     this.customCSSCM.getCodeMirror().setSize('400px', '400px')
+    this.customMarkdownLintConfigCM.getCodeMirror().setSize('400px', '200px')
     this.handleSettingDone = () => {
       this.setState({UiAlert: {
         type: 'success',
@@ -101,7 +104,9 @@ class UiTab extends React.Component {
         matchingTriples: this.refs.matchingTriples.value,
         explodingPairs: this.refs.explodingPairs.value,
         spellcheck: this.refs.spellcheck.checked,
-        enableSmartPaste: this.refs.enableSmartPaste.checked
+        enableSmartPaste: this.refs.enableSmartPaste.checked,
+        enableMarkdownLint: this.refs.enableMarkdownLint.checked,
+        customMarkdownLintConfig: this.customMarkdownLintConfigCM.getCodeMirror().getValue()
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -132,7 +137,7 @@ class UiTab extends React.Component {
       const theme = consts.THEMES.find(theme => theme.name === newCodemirrorTheme)
 
       if (theme) {
-        checkHighLight.setAttribute('href', `../${theme.path}`)
+        checkHighLight.setAttribute('href', win ? theme.path : `../${theme.path}`)
       }
     }
 
@@ -638,6 +643,34 @@ class UiTab extends React.Component {
               />
             </div>
           </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Custom MarkdownLint Rules')}
+            </div>
+            <div styleName='group-section-control'>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.enableMarkdownLint}
+                ref='enableMarkdownLint'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable MarkdownLint')}
+              <div style={{fontFamily, display: this.state.config.editor.enableMarkdownLint ? 'block' : 'none'}}>
+                <ReactCodeMirror
+                  width='400px'
+                  height='200px'
+                  onChange={e => this.handleUIChange(e)}
+                  ref={e => (this.customMarkdownLintConfigCM = e)}
+                  value={config.editor.customMarkdownLintConfig}
+                  options={{
+                    lineNumbers: true,
+                    mode: 'application/json',
+                    theme: codemirrorTheme,
+                    lint: true,
+                    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
+                  }} />
+              </div>
+            </div>
+          </div>
 
           <div styleName='group-header2'>{i18n.__('Preview')}</div>
           <div styleName='group-section'>
@@ -862,7 +895,6 @@ class UiTab extends React.Component {
                   onChange={e => this.handleUIChange(e)}
                   ref={e => (this.customCSSCM = e)}
                   value={config.preview.customCSS}
-                  defaultValue={'/* Drop Your Custom CSS Code Here */\n'}
                   options={{
                     lineNumbers: true,
                     mode: 'css',
