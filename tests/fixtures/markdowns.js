@@ -104,6 +104,11 @@ Term 2 with *inline markup*
 `
 const shortcuts = '<kbd>Ctrl</kbd>\n\n[[Ctrl]]'
 
+const footnote = `
+^[hello-world]
+hello-world: https://github.com/BoostIO/Boostnote/
+`
+
 export default {
   basic,
   codeblock,
@@ -115,5 +120,6 @@ export default {
   subTexts,
   supTexts,
   deflists,
-  shortcuts
+  shortcuts,
+  footnote
 }

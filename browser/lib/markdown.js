@@ -289,7 +289,9 @@ class Markdown {
           case 'list_item_open':
           case 'paragraph_open':
           case 'table_open':
-            token.attrPush(['data-line', token.map[0]])
+            if (token.map) {
+              token.attrPush(['data-line', token.map[0]])
+            }
         }
       })
       const result = originalRender.call(this.md.renderer, tokens, options, env)
