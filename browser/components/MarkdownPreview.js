@@ -325,7 +325,7 @@ export default class MarkdownPreview extends React.Component {
       body,
       this.props.storagePath
     )
-    const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
+    const files = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     files.forEach(file => {
       if (global.process.platform === 'win32') {
         file = file.replace('file:///', '')
@@ -637,7 +637,7 @@ export default class MarkdownPreview extends React.Component {
 
     this.getWindow().document.getElementById(
       'codeTheme'
-    ).href = this.GetCodeThemeLink(codeBlockTheme)
+    ).href = this.getCodeThemeLink(codeBlockTheme)
     this.getWindow().document.getElementById('style').innerHTML = buildStyle(
       fontFamily,
       fontSize,
@@ -650,11 +650,11 @@ export default class MarkdownPreview extends React.Component {
     )
   }
 
-  GetCodeThemeLink (name) {
+  getCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
-    return theme
-      ? (win ? theme.path : `${appPath}/${theme.path}`)
+    return theme != null
+      ? theme.path
       : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
