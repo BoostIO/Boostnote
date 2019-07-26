@@ -424,7 +424,11 @@ class MarkdownNoteDetail extends React.Component {
         })
       })
     })
-    const currentOption = options.filter((option) => option.storage.key === storageKey && option.folder.key === folderKey)[0]
+    const currentOption = _.find(options, (option) => option.storage.key === storageKey && option.folder.key === folderKey)
+
+    // currentOption may be undefined
+    const storageName = _.get(currentOption, 'storage.name') || ''
+    const folderName = _.get(currentOption, 'folder.name') || ''
 
     const trashTopBar = <div styleName='info'>
       <div styleName='info-left'>
@@ -436,8 +440,8 @@ class MarkdownNoteDetail extends React.Component {
           onClick={(e) => this.handleInfoButtonClick(e)}
         />
         <InfoPanelTrashed
-          storageName={currentOption.storage.name}
-          folderName={currentOption.folder.name}
+          storageName={storageName}
+          folderName={folderName}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsHtml={this.exportAsHtml}
@@ -502,8 +506,8 @@ class MarkdownNoteDetail extends React.Component {
         />
 
         <InfoPanel
-          storageName={currentOption.storage.name}
-          folderName={currentOption.folder.name}
+          storageName={storageName}
+          folderName={folderName}
           noteLink={`[${note.title}](:note:${queryString.parse(location.search).key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
