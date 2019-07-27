@@ -12,19 +12,18 @@ const { remote } = electron
 const ipc = electron.ipcRenderer
 const fs = require('fs')
 
-function browseFolder(searchForFolder) {
+function browseFolder (searchForFolder) {
   const dialog = remote.dialog
 
   const defaultPath = remote.app.getPath('home')
-  const browseProperties = searchForFolder ?
-  {
+  const browseProperties = searchForFolder
+  ? {
     title: i18n.__('Select Directory'),
     defaultPath,
     properties: ['openDirectory', 'createDirectory']
-  } : 
-  {
-    title: i18n.__('Select File'),
-    defaultPath,
+  }
+  : {
+    title: i18n.__('Select File'), defaultPath
   }
   return new Promise((resolve, reject) => {
     dialog.showOpenDialog(browseProperties, function (targetPaths) {
@@ -35,7 +34,7 @@ function browseFolder(searchForFolder) {
 }
 
 class ImpExpTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -50,7 +49,7 @@ class ImpExpTab extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.handleSettingDone = () => {
       this.setState({ImpExpAlert: {
         type: 'success',
@@ -67,12 +66,12 @@ class ImpExpTab extends React.Component {
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ipc.removeListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.removeListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  handleSaveImport(e) {
+  handleSaveImport (e) {
     const newConfig = {
       hotkey: this.state.config.hotkey,
       ui: this.state.config.ui,
@@ -91,7 +90,7 @@ class ImpExpTab extends React.Component {
     this.props.haveToSave()
   }
 
-  handleImportPathBrowseButtonClick(e) {
+  handleImportPathBrowseButtonClick (e) {
     browseFolder(false)
       .then((targetPath) => {
         if (targetPath.length > 0) {
@@ -108,7 +107,7 @@ class ImpExpTab extends React.Component {
       })
   }
 
-  handleExportPathBrowseButtonClick(e) {
+  handleExportPathBrowseButtonClick (e) {
     browseFolder(true)
       .then((targetPath) => {
         if (targetPath.length > 0) {
@@ -125,7 +124,7 @@ class ImpExpTab extends React.Component {
       })
   }
 
-  importConfig(e) {
+  importConfig (e) {
     if (!this.state.newImport.path.endsWith('boostnote.config')) {
       alert(i18n.__('Please choose a valid \'boostnote.config\' file.'))
       return false
@@ -144,8 +143,8 @@ class ImpExpTab extends React.Component {
     this.handleSaveImport(e)
   }
 
-  exportConfig(e) {
-    if (this.state.newExport.path === "") {
+  exportConfig (e) {
+    if (this.state.newExport.path === '') {
       alert(i18n.__('Please choose a directory for export file.'))
       return false
     }
@@ -153,12 +152,12 @@ class ImpExpTab extends React.Component {
       `${this.state.newExport.path}/boostnote.config`,
       JSON.stringify(this.state.config), (err) => {
         if (err) {
-          return console.log(err);
+          return console.log(err)
         }
-      });
+      })
   }
 
-  clearMessage() {
+  clearMessage () {
     _.debounce(() => {
       this.setState({
         keymapAlert: null
@@ -166,7 +165,7 @@ class ImpExpTab extends React.Component {
     }, 2000)()
   }
 
-  render() {
+  render () {
     const ImpExpAlert = this.state.ImpExpAlert
     const ImpExpAlertElement = ImpExpAlert != null
       ? <p className={`alert ${ImpExpAlert.type}`}>
@@ -230,9 +229,6 @@ class ImpExpTab extends React.Component {
             {ImpExpAlertElement}
           </div>
         </div>
-        <div styleName='group'>
-        </div>
-
       </div>
     )
   }
