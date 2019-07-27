@@ -1,0 +1,160 @@
+@import('./ConfigTab')
+
+.impExp
+  margin-bottom 15px
+
+.impExp-header
+  font-size 24px
+  color $ui-text-color
+  padding 5px
+  border-bottom $default-border
+  margin-bottom 15px
+
+.impExp-body-section
+  margin-bottom 15px
+  display flex
+  line-height 30px
+
+.impExp-body-section-label
+  width 150px
+  margin-right 60px
+  margin-top 5px
+
+.impExp-body-section-name
+  flex 1
+.impExp-body-section-name-input
+  height 30px
+  vertical-align middle
+  width 150px
+  font-size 12px
+  border solid 1px $border-color
+  border-radius 2px
+  padding 0 5px
+
+.impExp-body-section-path
+  flex 1
+.impExp-body-section-path-input
+  height 30px
+  vertical-align middle
+  width 150px
+  font-size 12px
+  border-style solid
+  border-width 1px 0 1px 1px
+  border-color $border-color
+  border-top-left-radius 2px
+  border-bottom-left-radius 2px
+  padding 0 5px
+  margin-top 4px
+.impExp-body-section-path-button
+  margin-top 4px
+  height 30px
+  border none
+  border-top-right-radius 2px
+  border-bottom-right-radius 2px
+  colorPrimaryButton()
+  vertical-align middle
+.impExp-body-control
+  border-top $default-border
+  padding-top 10px
+  box-sizing border-box
+  height 40px
+  text-align right
+
+.impExp-button-control
+  position relative
+
+.impExp-submit-leftButton
+  colorPrimaryButton()
+  border none
+  border-radius 2px
+  font-size $tab--button-font-size
+  height $tab--button-height
+  padding 0 15px
+  margin-left 25px
+
+body[data-theme="dark"]
+  .root
+    padding 15px
+    color $ui-dark-text-color
+
+  .impExp-header
+    color $ui-dark-text-color
+    border-color $ui-dark-borderColor
+
+  .impExp-body-section-name-input
+    border-color $ui-dark-borderColor
+
+  .impExp-body-section-path-button
+    colorPrimaryButton()
+      
+  .impExp-body-control
+    border-color $ui-dark-borderColor
+
+  .impExp-submit-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+
+
+
+body[data-theme="solarized-dark"]
+  .root
+    color $ui-solarized-dark-text-color
+
+  .impExp-header
+    color $ui-solarized-dark-text-color
+    border-color $ui-solarized-dark-borderColor
+
+  .impExp-body-section-name-input
+    border-color $$ui-solarized-dark-borderColor
+
+  .impExp-body-section-path-button
+    colorPrimaryButton()
+
+  .impExp-body-control
+    border-color $ui-solarized-dark-borderColor
+
+  .impExp-submit-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-solarized-dark-borderColor
+
+body[data-theme="monokai"]
+  .root
+    color $ui-monokai-text-color
+
+  .impExp-header
+    color $ui-monokai-text-color
+    border-color $ui-monokai-borderColor
+
+  .impExp-body-section-name-input
+    border-color $$ui-monokai-borderColor
+
+  .impExp-body-section-path-button
+    colorPrimaryButton()
+
+  .impExp-body-control
+    border-color $ui-monokai-borderColor
+
+  .impExp-submit-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-monokai-borderColor
+
+body[data-theme="dracula"]
+  .root
+    color $ui-dracula-text-color
+
+  .impExp-header
+    color $ui-dracula-text-color
+    border-color $ui-dracula-borderColor
+
+  .impExp-body-section-name-input
+    border-color $$ui-dracula-borderColor
+
+  .impExp-body-section-path-button
+    colorPrimaryButton()
+
+  .impExp-body-control
+    border-color $ui-dracula-borderColor
+
+  .impExp-submit-leftButton
+    colorDraculaPrimaryButton()
+    border-color $ui-dracula-borderColor
