@@ -60,7 +60,7 @@ class InfoPanel extends React.Component {
         </div>
 
         <div>
-          <input styleName='infoPanel-noteLink' ref='noteLink' value={noteLink} onClick={(e) => { e.target.select() }} />
+          <input styleName='infoPanel-noteLink' ref='noteLink' defaultValue={noteLink} onClick={(e) => { e.target.select() }} />
           <button onClick={() => this.copyNoteLink()} styleName='infoPanel-copyButton'>
             <i className='fa fa-clipboard' />
           </button>

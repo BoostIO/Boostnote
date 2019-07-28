@@ -22,7 +22,7 @@ class FolderList extends React.Component {
     })
 
     return (
-      <div styleName='folderList'>
+      <div>
         {folderList.length > 0
           ? folderList
           : <div styleName='folderList-empty'>{i18n.__('No Folders')}</div>

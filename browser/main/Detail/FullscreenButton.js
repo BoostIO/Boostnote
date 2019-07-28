@@ -11,7 +11,7 @@ const FullscreenButton = ({
   const hotkey = (OSX ? i18n.__('Command(⌘)') : i18n.__('Ctrl(^)')) + '+B'
   return (
     <button styleName='control-fullScreenButton' title={i18n.__('Fullscreen')} onMouseDown={(e) => onClick(e)}>
-      <img styleName='iconInfo' src='../resources/icon/icon-full.svg' />
+      <img src='../resources/icon/icon-full.svg' />
       <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Fullscreen')}({hotkey})</span>
     </button>
   )

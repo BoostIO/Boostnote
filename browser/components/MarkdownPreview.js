@@ -18,23 +18,19 @@ import mdurl from 'mdurl'
 import exportNote from 'browser/main/lib/dataApi/exportNote'
 import { escapeHtmlCharacters } from 'browser/lib/utils'
 import yaml from 'js-yaml'
-import context from 'browser/lib/context'
-import i18n from 'browser/lib/i18n'
-import fs from 'fs'
 import { render } from 'react-dom'
 import Carousel from 'react-image-carousel'
 import ConfigManager from '../main/lib/ConfigManager'
 
 const { remote, shell } = require('electron')
 const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
+const buildMarkdownPreviewContextMenu = require('browser/lib/contextMenuBuilder').buildMarkdownPreviewContextMenu
 
 const { app } = remote
 const path = require('path')
 const fileUrl = require('file-url')
 
 const dialog = remote.dialog
-
-const uri2path = require('file-uri-to-path')
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const appPath = fileUrl(
@@ -45,6 +41,7 @@ const CSS_FILES = [
   `${appPath}/node_modules/codemirror/lib/codemirror.css`,
   `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
+const win = global.process.platform === 'win32'
 
 function buildStyle (
   fontFamily,
@@ -249,30 +246,9 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handleContextMenu (event) {
-    // If a contextMenu handler was passed to us, use it instead of the self-defined one -> return
-    if (_.isFunction(this.props.onContextMenu)) {
-      this.props.onContextMenu(event)
-      return
-    }
-    // No contextMenu was passed to us -> execute our own link-opener
-    if (event.target.tagName.toLowerCase() === 'a' && event.target.getAttribute('href')) {
-      const href = event.target.href
-      const isLocalFile = href.startsWith('file:')
-      if (isLocalFile) {
-        const absPath = uri2path(href)
-        try {
-          if (fs.lstatSync(absPath).isFile()) {
-            context.popup([
-              {
-                label: i18n.__('Show in explorer'),
-                click: (e) => shell.showItemInFolder(absPath)
-              }
-            ])
-          }
-        } catch (e) {
-          console.log('Error while evaluating if the file is locally available', e)
-        }
-      }
+    const menu = buildMarkdownPreviewContextMenu(this, event)
+    if (menu != null) {
+      menu.popup(remote.getCurrentWindow())
     }
   }
 
@@ -345,7 +321,11 @@ export default class MarkdownPreview extends React.Component {
       customCSS
     )
     let body = this.markdown.render(noteContent)
-    const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
+    body = attachmentManagement.fixLocalURLS(
+      body,
+      this.props.storagePath
+    )
+    const files = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     files.forEach(file => {
       if (global.process.platform === 'win32') {
         file = file.replace('file:///', '')
@@ -580,6 +560,7 @@ export default class MarkdownPreview extends React.Component {
     if (
       prevProps.smartQuotes !== this.props.smartQuotes ||
       prevProps.sanitize !== this.props.sanitize ||
+      prevProps.mermaidHTMLLabel !== this.props.mermaidHTMLLabel ||
       prevProps.smartArrows !== this.props.smartArrows ||
       prevProps.breaks !== this.props.breaks ||
       prevProps.lineThroughCheckbox !== this.props.lineThroughCheckbox
@@ -657,7 +638,7 @@ export default class MarkdownPreview extends React.Component {
 
     this.getWindow().document.getElementById(
       'codeTheme'
-    ).href = this.GetCodeThemeLink(codeBlockTheme)
+    ).href = this.getCodeThemeLink(codeBlockTheme)
     this.getWindow().document.getElementById('style').innerHTML = buildStyle(
       fontFamily,
       fontSize,
@@ -670,14 +651,12 @@ export default class MarkdownPreview extends React.Component {
     )
   }
 
-  GetCodeThemeLink (name) {
+  getCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
-    if (theme) {
-      return `${appPath}/${theme.path}`
-    } else {
-      return `${appPath}/node_modules/codemirror/theme/elegant.css`
-    }
+    return theme != null
+      ? theme.path
+      : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
   rewriteIframe () {
@@ -703,7 +682,8 @@ export default class MarkdownPreview extends React.Component {
       showCopyNotification,
       storagePath,
       noteKey,
-      sanitize
+      sanitize,
+      mermaidHTMLLabel
     } = this.props
     let { value, codeBlockTheme } = this.props
 
@@ -845,7 +825,7 @@ export default class MarkdownPreview extends React.Component {
     _.forEach(
       this.refs.root.contentWindow.document.querySelectorAll('.mermaid'),
       el => {
-        mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme)
+        mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme, mermaidHTMLLabel)
       }
     )
 

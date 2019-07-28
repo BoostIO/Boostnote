@@ -362,14 +362,14 @@ class StorageItem extends React.Component {
             <button styleName='header-addFolderButton'
               onClick={(e) => this.handleAddFolderButtonClick(e)}
             >
-              <img styleName='iconTag' src='../resources/icon/icon-plus.svg' />
+              <img src='../resources/icon/icon-plus.svg' />
             </button>
           }
 
           <button styleName='header-info'
             onClick={(e) => this.handleHeaderInfoClick(e)}
           >
-            <span styleName='header-info-name'>
+            <span>
               {isFolded ? _.truncate(storage.name, {length: 1, omission: ''}) : storage.name}
             </span>
             {isFolded &&
@@ -380,7 +380,7 @@ class StorageItem extends React.Component {
           </button>
         </div>
         {this.state.isOpen &&
-          <div styleName='folderList' >
+          <div>
             {folderList}
           </div>
         }

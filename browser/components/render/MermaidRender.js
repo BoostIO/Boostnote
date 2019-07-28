@@ -19,7 +19,7 @@ function getId () {
   return id
 }
 
-function render (element, content, theme) {
+function render (element, content, theme, enableHTMLLabel) {
   try {
     const height = element.attributes.getNamedItem('data-height')
     if (height && height.value !== 'undefined') {
@@ -29,7 +29,8 @@ function render (element, content, theme) {
     mermaidAPI.initialize({
       theme: isDarkTheme ? 'dark' : 'default',
       themeCSS: isDarkTheme ? darkThemeStyling : '',
-      useMaxWidth: false
+      useMaxWidth: false,
+      flowchart: { htmlLabels: enableHTMLLabel }
     })
     mermaidAPI.render(getId(), content, (svgGraph) => {
       element.innerHTML = svgGraph

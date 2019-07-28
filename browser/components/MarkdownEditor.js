@@ -304,6 +304,7 @@ class MarkdownEditor extends React.Component {
           enableRulers={config.editor.enableRulers}
           rulers={config.editor.rulers}
           displayLineNumbers={config.editor.displayLineNumbers}
+          lineWrapping
           matchingPairs={config.editor.matchingPairs}
           matchingTriples={config.editor.matchingTriples}
           explodingPairs={config.editor.explodingPairs}
@@ -340,6 +341,7 @@ class MarkdownEditor extends React.Component {
           smartArrows={config.preview.smartArrows}
           breaks={config.preview.breaks}
           sanitize={config.preview.sanitize}
+          mermaidHTMLLabel={config.preview.mermaidHTMLLabel}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
           onDoubleClick={(e) => this.handleDoubleClick(e)}

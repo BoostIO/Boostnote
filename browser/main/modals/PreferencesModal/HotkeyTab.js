@@ -173,6 +173,26 @@ class HotkeyTab extends React.Component {
               />
             </div>
           </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Insert Current Date')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={config.hotkey.insertDate}
+                type='text'
+                disabled='true'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Insert Current Date and Time')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={config.hotkey.insertDateTime}
+                type='text'
+                disabled='true'
+              />
+            </div>
+          </div>
           <div styleName='group-control'>
             <button styleName='group-control-leftButton'
               onClick={(e) => this.handleHintToggleButtonClick(e)}

@@ -10,7 +10,7 @@ const PermanentDeleteButton = ({
   <button styleName='control-trashButton--in-trash'
     onClick={(e) => onClick(e)}
   >
-    <img styleName='iconInfo' src='../resources/icon/icon-trash.svg' />
+    <img src='../resources/icon/icon-trash.svg' />
     <span styleName='tooltip'>{i18n.__('Permanent Delete')}</span>
   </button>
 )

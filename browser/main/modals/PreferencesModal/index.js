@@ -147,7 +147,7 @@ class Preferences extends React.Component {
           key={tab.target}
           onClick={(e) => this.handleNavButtonClick(tab.target)(e)}
         >
-          <span styleName='nav-button-label'>
+          <span>
             {tab.label}
           </span>
           {isUiHotkeyTab ? this.haveToSaveNotif(tab[tab.label].type, tab[tab.label].message) : null}

@@ -2,6 +2,7 @@ import markdownit from 'markdown-it'
 import sanitize from './markdown-it-sanitize-html'
 import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
+import mdurl from 'mdurl'
 import smartArrows from 'markdown-it-smartarrows'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
@@ -150,9 +151,9 @@ class Markdown {
         const content = token.content.split('\n').slice(0, -1).map(line => {
           const match = /!\[[^\]]*]\(([^\)]*)\)/.exec(line)
           if (match) {
-            return match[1]
+            return mdurl.encode(match[1])
           } else {
-            return line
+            return mdurl.encode(line)
           }
         }).join('\n')
 
@@ -288,7 +289,9 @@ class Markdown {
           case 'list_item_open':
           case 'paragraph_open':
           case 'table_open':
-            token.attrPush(['data-line', token.map[0]])
+            if (token.map) {
+              token.attrPush(['data-line', token.map[0]])
+            }
         }
       })
       const result = originalRender.call(this.md.renderer, tokens, options, env)

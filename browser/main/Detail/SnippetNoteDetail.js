@@ -518,6 +518,19 @@ class SnippetNoteDetail extends React.Component {
     ])
   }
 
+  handleWrapLineButtonClick (e) {
+    context.popup([
+      {
+        label: 'on',
+        click: (e) => this.handleWrapLineItemClick(e, true)
+      },
+      {
+        label: 'off',
+        click: (e) => this.handleWrapLineItemClick(e, false)
+      }
+    ])
+  }
+
   handleIndentSizeItemClick (e, indentSize) {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
@@ -538,6 +551,22 @@ class SnippetNoteDetail extends React.Component {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
       indentType
+    })
+    ConfigManager.set({
+      editor
+    })
+    dispatch({
+      type: 'SET_CONFIG',
+      config: {
+        editor
+      }
+    })
+  }
+
+  handleWrapLineItemClick (e, lineWrapping) {
+    const { config, dispatch } = this.props
+    const editor = Object.assign({}, config.editor, {
+      lineWrapping
     })
     ConfigManager.set({
       editor
@@ -720,6 +749,7 @@ class SnippetNoteDetail extends React.Component {
             mode={snippet.mode || (autoDetect ? null : config.editor.snippetDefaultLanguage)}
             value={snippet.content}
             linesHighlighted={snippet.linesHighlighted}
+            lineWrapping={config.editor.lineWrapping}
             theme={config.editor.theme}
             fontFamily={config.editor.fontFamily}
             fontSize={editorFontSize}
@@ -778,7 +808,7 @@ class SnippetNoteDetail extends React.Component {
 
     const detailTopBar = <div styleName='info'>
       <div styleName='info-left'>
-        <div styleName='info-left-top'>
+        <div>
           <FolderSelect styleName='info-left-top-folderSelect'
             value={this.state.note.storage + '-' + this.state.note.folder}
             ref='folder'
@@ -897,6 +927,12 @@ class SnippetNoteDetail extends React.Component {
             onClick={(e) => this.handleIndentSizeButtonClick(e)}
           >
             size: {config.editor.indentSize}&nbsp;
+            <i className='fa fa-caret-down' />
+          </button>
+          <button
+            onClick={(e) => this.handleWrapLineButtonClick(e)}
+          >
+            Wrap Line: {config.editor.lineWrapping ? 'on' : 'off'}&nbsp;
             <i className='fa fa-caret-down' />
           </button>
         </div>

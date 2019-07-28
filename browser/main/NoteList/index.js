@@ -1140,7 +1140,7 @@ class NoteList extends React.Component {
               }
               onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
             >
-              <img styleName='iconTag' src='../resources/icon/icon-column.svg' />
+              <img src='../resources/icon/icon-column.svg' />
             </button>
             <button title={i18n.__('Compressed View')} styleName={config.listStyle === 'SMALL'
                 ? 'control-button--active'
@@ -1148,7 +1148,7 @@ class NoteList extends React.Component {
               }
               onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
             >
-              <img styleName='iconTag' src='../resources/icon/icon-column-list.svg' />
+              <img src='../resources/icon/icon-column-list.svg' />
             </button>
           </div>
         </div>

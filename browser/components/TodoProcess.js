@@ -25,10 +25,10 @@ const TodoProcess = ({
 )
 
 TodoProcess.propTypes = {
-  todoStatus: {
+  todoStatus: PropTypes.exact({
     total: PropTypes.number.isRequired,
     completed: PropTypes.number.isRequired
-  }
+  })
 }
 
 export default CSSModules(TodoProcess, styles)

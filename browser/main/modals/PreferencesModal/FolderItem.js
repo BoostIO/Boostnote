@@ -225,7 +225,7 @@ class FolderItem extends React.Component {
         <div styleName='folderItem-left'
           style={{borderColor: folder.color}}
         >
-          <span styleName='folderItem-left-name'>{folder.name}</span>
+          <span>{folder.name}</span>
           <span styleName='folderItem-left-key'>({folder.key})</span>
         </div>
         <div styleName='folderItem-right'>
@@ -288,10 +288,10 @@ class Handle extends React.Component {
 
 class SortableFolderItemComponent extends React.Component {
   render () {
-    const StyledHandle = CSSModules(Handle, this.props.styles)
+    const StyledHandle = CSSModules(Handle, styles)
     const DragHandle = SortableHandle(StyledHandle)
 
-    const StyledFolderItem = CSSModules(FolderItem, this.props.styles)
+    const StyledFolderItem = CSSModules(FolderItem, styles)
 
     return (
       <div>

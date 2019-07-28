@@ -158,5 +158,7 @@
 	"Spellcheck disabled": "Deshabilitar corrector ortográfico",
 	"Show menu bar": "Mostrar barra del menú",
 	"Auto Detect": "Detección automática",
-	"Snippet Default Language": "Lenguaje por defecto de los fragmentos de código"
+	"Snippet Default Language": "Lenguaje por defecto de los fragmentos de código",
+	"Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
+	"Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

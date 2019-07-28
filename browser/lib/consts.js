@@ -7,6 +7,7 @@ const CODEMIRROR_THEME_PATH = 'node_modules/codemirror/theme'
 const CODEMIRROR_EXTRA_THEME_PATH = 'extra_scripts/codemirror/theme'
 
 const isProduction = process.env.NODE_ENV === 'production'
+
 const paths = [
   isProduction ? path.join(app.getAppPath(), CODEMIRROR_THEME_PATH) : path.resolve(CODEMIRROR_THEME_PATH),
   isProduction ? path.join(app.getAppPath(), CODEMIRROR_EXTRA_THEME_PATH) : path.resolve(CODEMIRROR_EXTRA_THEME_PATH)
@@ -18,7 +19,7 @@ const themes = paths
 
     return {
       name,
-      path: path.join(directory.split(/\//g).slice(-3).join('/'), file),
+      path: path.join(directory, file),
       className: `cm-s-${name}`
     }
   }))
@@ -27,17 +28,16 @@ const themes = paths
 
 themes.splice(themes.findIndex(({ name }) => name === 'solarized'), 1, {
   name: 'solarized dark',
-  path: `${CODEMIRROR_THEME_PATH}/solarized.css`,
+  path: path.join(paths[0], 'solarized.css'),
   className: `cm-s-solarized cm-s-dark`
 }, {
   name: 'solarized light',
-  path: `${CODEMIRROR_THEME_PATH}/solarized.css`,
+  path: path.join(paths[0], 'solarized.css'),
   className: `cm-s-solarized cm-s-light`
 })
-
 themes.splice(0, 0, {
   name: 'default',
-  path: `${CODEMIRROR_THEME_PATH}/elegant.css`,
+  path: path.join(paths[0], 'elegant.css'),
   className: `cm-s-default`
 })
 

@@ -182,5 +182,7 @@
 	"Snippet Default Language": "ทำการ Snippet ภาษาที่เป็นค่าเริ่มต้น",
 	"Spellcheck disabled": "Spellcheck disabled",
 	"Show menu bar": "Show menu bar",
-	"Auto Detect": "Auto Detect"
+	"Auto Detect": "Auto Detect",
+	"Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
+	"Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }
