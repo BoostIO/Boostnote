@@ -106,7 +106,7 @@ export default class CodeEditor extends React.Component {
     const component = this
 
     if (component.searchState) cm.removeOverlay(component.searchState)
-    if (msg.length < 3) return
+    if (msg.length < 1) return
 
     cm.operation(function () {
       component.searchState = makeOverlay(msg, 'searching')
