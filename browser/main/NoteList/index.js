@@ -154,7 +154,7 @@ class NoteList extends React.Component {
     const prevKey = prevProps.location.search && queryString.parse(prevProps.location.search).key
     const noteKey = visibleNoteKeys.includes(prevKey) ? prevKey : note && note.key
 
-    ee.emitIpc('tray:update', data.noteMap.map((note) => note).sort(sortByUpdatedAt).slice(0, 10).filter(note => note.title !== ''))
+    ee.emitIpc('tray:update', data.noteMap.map((note) => note).sort(sortByUpdatedAt).slice(0, 10).filter(note => note.title !== '' && !note.isTrashed))
 
     if (note && location.search === '') {
       if (!location.pathname.match(/\/searched/)) this.contextNotes = this.getContextNotes()
