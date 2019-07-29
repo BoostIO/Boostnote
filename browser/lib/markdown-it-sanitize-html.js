@@ -96,6 +96,10 @@ function sanitizeInline (html, options) {
 
 function naughtyHRef (href, options) {
   // href = href.replace(/[\x00-\x20]+/g, '')
+  if (!href) {
+    // No href
+    return false
+  }
   href = href.replace(/<\!\-\-.*?\-\-\>/g, '')
 
   const matches = href.match(/^([a-zA-Z]+)\:/)
