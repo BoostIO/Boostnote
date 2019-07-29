@@ -88,6 +88,7 @@ class NoteList extends React.Component {
     this.importFromFileHandler = this.importFromFile.bind(this)
     this.jumpNoteByHash = this.jumpNoteByHashHandler.bind(this)
     this.handleNoteListKeyUp = this.handleNoteListKeyUp.bind(this)
+    this.handleNoteListBlur = this.handleNoteListBlur.bind(this)
     this.getNoteKeyFromTargetIndex = this.getNoteKeyFromTargetIndex.bind(this)
     this.cloneNote = this.cloneNote.bind(this)
     this.deleteNote = this.deleteNote.bind(this)
@@ -346,6 +347,13 @@ class NoteList extends React.Component {
     if (!e.ctrlKey) {
       this.setState({ ctrlKeyDown: false })
     }
+  }
+
+  handleNoteListBlur () {
+    this.setState({
+      shiftKeyDown: false,
+      ctrlKeyDown: false
+    })
   }
 
   getNotes () {
@@ -1155,6 +1163,7 @@ class NoteList extends React.Component {
           tabIndex='-1'
           onKeyDown={(e) => this.handleNoteListKeyDown(e)}
           onKeyUp={this.handleNoteListKeyUp}
+          onBlur={this.handleNoteListBlur}
         >
           {noteList}
         </div>
