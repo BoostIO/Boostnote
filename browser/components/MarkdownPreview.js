@@ -247,8 +247,11 @@ export default class MarkdownPreview extends React.Component {
 
   handleContextMenu (event) {
     const menu = buildMarkdownPreviewContextMenu(this, event)
-    if (menu != null) {
+    const switchPreview = ConfigManager.get().editor.switchPreview
+    if (menu != null && switchPreview !== 'RIGHTCLICK') {
       menu.popup(remote.getCurrentWindow())
+    } else if (_.isFunction(this.props.onContextMenu)) {
+      this.props.onContextMenu(event)
     }
   }
 
