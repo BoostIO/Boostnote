@@ -699,7 +699,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   render () {
-    const { data, config, location } = this.props
+    const { data, dispatch, config, location } = this.props
     const { note } = this.state
 
     const storageKey = note.storage
@@ -823,6 +823,7 @@ class SnippetNoteDetail extends React.Component {
           saveTagsAlphabetically={config.ui.saveTagsAlphabetically}
           showTagsAlphabetically={config.ui.showTagsAlphabetically}
           data={data}
+          dispatch={dispatch}
           onChange={(e) => this.handleChange(e)}
           coloredTags={config.coloredTags}
         />
