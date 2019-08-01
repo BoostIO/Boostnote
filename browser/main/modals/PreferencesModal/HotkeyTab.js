@@ -76,13 +76,13 @@ class HotkeyTab extends React.Component {
 
   handleHotkeyChange (e) {
     const { config } = this.state
-    config.hotkey = {
+    config.hotkey = Object.assign({}, config.hotkey, {
       toggleMain: this.refs.toggleMain.value,
       toggleMode: this.refs.toggleMode.value,
       deleteNote: this.refs.deleteNote.value,
       pasteSmartly: this.refs.pasteSmartly.value,
       toggleMenuBar: this.refs.toggleMenuBar.value
-    }
+    })
     this.setState({
       config
     })
