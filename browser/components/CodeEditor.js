@@ -836,6 +836,17 @@ export default class CodeEditor extends React.Component {
     this.editor.setCursor(cursor)
   }
 
+  /**
+   * Update content of one line
+   * @param {Number} lineNumber
+   * @param {String} content
+   */
+  setLineContent (lineNumber, content) {
+    const prevContent = this.editor.getLine(lineNumber)
+    const prevContentLength = prevContent ? prevContent.length : 0
+    this.editor.replaceRange(content, { line: lineNumber, ch: 0 }, { line: lineNumber, ch: prevContentLength })
+  }
+
   handleDropImage (dropEvent) {
     dropEvent.preventDefault()
     const {
