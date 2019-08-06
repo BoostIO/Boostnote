@@ -102,7 +102,7 @@ class Main extends React.Component {
               {
                 name: 'example.js',
                 mode: 'javascript',
-                content: "var boostnote = document.getElementById('enjoy').innerHTML\n\nconsole.log(boostnote)",
+                content: "var boostnote = document.getElementById('hello').innerHTML\n\nconsole.log(boostnote)",
                 linesHighlighted: []
               }
             ]
