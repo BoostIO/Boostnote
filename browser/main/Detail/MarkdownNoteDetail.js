@@ -152,7 +152,6 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleFolderChange (e) {
-    const { dispatch } = this.props
     const { note } = this.state
     const value = this.refs.folder.value
     const splitted = value.split('-')

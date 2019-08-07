@@ -169,6 +169,7 @@ class Main extends React.Component {
       }
     })
 
+    // eslint-disable-next-line no-undef
     delete CodeMirror.keyMap.emacs['Ctrl-V']
 
     eventEmitter.on('editor:fullscreen', this.toggleFullScreen)

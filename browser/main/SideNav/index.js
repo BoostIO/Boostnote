@@ -22,9 +22,10 @@ import context from 'browser/lib/context'
 import { remote } from 'electron'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import ColorPicker from 'browser/components/ColorPicker'
+import { every, sortBy } from 'lodash'
 
 function matchActiveTags (tags, activeTags) {
-  return _.every(activeTags, v => tags.indexOf(v) >= 0)
+  return every(activeTags, v => tags.indexOf(v) >= 0)
 }
 
 class SideNav extends React.Component {
@@ -283,7 +284,7 @@ class SideNav extends React.Component {
     const { colorPicker } = this.state
     const activeTags = this.getActiveTags(location.pathname)
     const relatedTags = this.getRelatedTags(activeTags, data.noteMap)
-    let tagList = _.sortBy(data.tagNoteMap.map(
+    let tagList = sortBy(data.tagNoteMap.map(
       (tag, name) => ({ name, size: tag.size, related: relatedTags.has(name) })
     ).filter(
       tag => tag.size > 0
@@ -296,7 +297,7 @@ class SideNav extends React.Component {
       })
     }
     if (config.sortTagsBy === 'COUNTER') {
-      tagList = _.sortBy(tagList, item => (0 - item.size))
+      tagList = sortBy(tagList, item => (0 - item.size))
     }
     if (config.ui.showOnlyRelatedTags && (relatedTags.size > 0)) {
       tagList = tagList.filter(

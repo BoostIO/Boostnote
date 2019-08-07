@@ -8,6 +8,7 @@ const escapeStringRegexp = require('escape-string-regexp')
 const sander = require('sander')
 const url = require('url')
 import i18n from 'browser/lib/i18n'
+import { isString } from 'lodash'
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
@@ -19,7 +20,7 @@ const PATH_SEPARATORS = escapeStringRegexp(path.posix.sep) + escapeStringRegexp(
  * @returns {Promise<Image>} Image element created
  */
 function getImage (file) {
-  if (_.isString(file)) {
+  if (isString(file)) {
     return new Promise(resolve => {
       const img = new Image()
       img.onload = () => resolve(img)

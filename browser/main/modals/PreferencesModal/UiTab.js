@@ -14,7 +14,6 @@ import { getLanguages } from 'browser/lib/Languages'
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 
 const OSX = global.process.platform === 'darwin'
-const WIN = global.process.platform === 'win32'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer

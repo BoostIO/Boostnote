@@ -18,7 +18,9 @@
   "globals": {
     "FileReader": true,
     "localStorage": true,
-    "fetch": true
+    "fetch": true,
+    "Image": true,
+    "MutationObserver": true
   },
   "env": {
     "jest": true
