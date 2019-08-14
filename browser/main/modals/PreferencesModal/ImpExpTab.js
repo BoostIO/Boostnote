@@ -144,7 +144,7 @@ class ImpExpTab extends React.Component {
       })
       this.handleSaveImport(e)
     } catch (err) {
-      alert(i18n.__('File is not a valid JSON file.'))
+      alert(i18n.__('\'boostnote.config\' is not a valid JSON file.'))
       return false
     }
   }
