@@ -129,18 +129,24 @@ class ImpExpTab extends React.Component {
       alert(i18n.__('Please choose a valid \'boostnote.config\' file.'))
       return false
     }
-    const externalConfig = JSON.parse(fs.readFileSync(this.state.newImport.path, 'utf-8'))
-    const { config } = this.state
-    config.hotkey = externalConfig.hotkey
-    config.ui = externalConfig.ui
-    config.editor = externalConfig.editor
-    config.preview = externalConfig.preview
-    config.blog = externalConfig.blog
 
-    this.setState({
-      config
-    })
-    this.handleSaveImport(e)
+    try {
+      const externalConfig = JSON.parse(fs.readFileSync(this.state.newImport.path, 'utf-8'))
+      const { config } = this.state
+      config.hotkey = externalConfig.hotkey
+      config.ui = externalConfig.ui
+      config.editor = externalConfig.editor
+      config.preview = externalConfig.preview
+      config.blog = externalConfig.blog
+
+      this.setState({
+        config
+      })
+      this.handleSaveImport(e)
+    } catch (err) {
+      alert(i18n.__('File is not a valid JSON file.'))
+      return false
+    }
   }
 
   exportConfig (e) {
