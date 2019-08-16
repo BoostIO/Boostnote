@@ -7,7 +7,7 @@ import InfoTab from './InfoTab'
 import Crowdfunding from './Crowdfunding'
 import StoragesTab from './StoragesTab'
 import SnippetTab from './SnippetTab'
-import ImpExpTab from './ImpExpTab'
+import BackupTab from './BackupTab'
 import Blog from './Blog'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import CSSModules from 'browser/lib/CSSModules'
@@ -25,7 +25,7 @@ class Preferences extends React.Component {
       UIAlert: '',
       HotkeyAlert: '',
       BlogAlert: '',
-      ImpExpAlert: ''
+      BackupAlert: ''
     }
   }
 
@@ -97,11 +97,11 @@ class Preferences extends React.Component {
             data={data}
           />
         )
-      case 'IMPEXP':
+      case 'BACKUP':
         return (
-          <ImpExpTab
+          <BackupTab
             config={config}
-            haveToSave={alert => this.setState({ImpExpAlert: alert})}
+            haveToSave={alert => this.setState({BackupAlert: alert})}
           />
         )
       case 'STORAGES':
@@ -143,7 +143,7 @@ class Preferences extends React.Component {
       {target: 'CROWDFUNDING', label: i18n.__('Crowdfunding')},
       {target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert},
       {target: 'SNIPPET', label: i18n.__('Snippets')},
-      {target: 'IMPEXP', label: i18n.__('Import/Export'), ImpExp: this.state.ImpExpAlert}
+      {target: 'BACKUP', label: i18n.__('Backup Config'), Backup: this.state.BackupAlert}
     ]
 
     const navButtons = tabs.map((tab) => {
