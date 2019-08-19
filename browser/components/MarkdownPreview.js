@@ -128,7 +128,7 @@ h1, h2 {
 }
 
 h1 {
-  padding-bottom: 4px;
+  padding-bottom: 0.2em;
   margin: 1em 0 8px;
 }
 
