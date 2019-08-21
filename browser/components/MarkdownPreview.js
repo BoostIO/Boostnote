@@ -138,6 +138,7 @@ h2 {
 }
 
 body p {
+  padding-top: 0.2em;
   white-space: normal;
 }
 
