@@ -241,5 +241,6 @@
   "Exploding character pairs": "Exploding character pairs",
   "Custom MarkdownLint Rules": "自定义 MarkdownLint 规则",
   "Enable MarkdownLint": "启用 MarkdownLint",
-  "When scrolling, synchronize preview with editor": "同步滚动"
+  "When scrolling, synchronize preview with editor": "同步滚动",
+  "This will delete all notes in the folder and can not be undone.": "即将删除文件夹中所有笔记，并且不能撤销。"
 }
