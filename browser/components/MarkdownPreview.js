@@ -130,6 +130,7 @@ h1, h2 {
 h1 {
   padding-bottom: 0.2em;
   margin: 1em 0 8px;
+  padding-top: 0.2em;
 }
 
 h2 {
@@ -138,7 +139,6 @@ h2 {
 }
 
 body p {
-  padding-top: 0.2em;
   white-space: normal;
 }
 
