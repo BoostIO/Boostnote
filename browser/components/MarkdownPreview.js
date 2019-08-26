@@ -136,6 +136,7 @@ h1 {
 h2 {
   padding-bottom: 0.2em;
   margin: 1em 0 0.37em;
+  padding-top: 0.2em;
 }
 
 body p {
