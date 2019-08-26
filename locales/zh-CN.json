@@ -227,12 +227,12 @@
   "Insert Current Date": "插入当前日期",
   "Insert Current Date and Time": "插入当前日期和时间",
   "Paste HTML": "粘贴 HTML",
-  "Show/Hide Menu Bar": "切换菜单栏",
+  "Show/Hide Menu Bar": "显示/隐藏 菜单栏",
   "Save tags of a note in alphabetical order": "按字母顺序存储标签",
   "Show tags of a note in alphabetical order": "按字母顺序显示标签",
   "Enable live count of notes": "实时统计标签下笔记个数",
   "New notes are tagged with the filtering tags": "新建的笔记带有在标签列表过滤的标签",
-  "Front matter title field": "front-matter 抽取字段名",
+  "Front matter title field": "从 front-matter 中抽取标题的字段名",
   "Extract title from front matter": "启用从 front-matter 抽取标题",
   "Enable HTML paste": "启用 HTML 粘贴（自动转换 html 到 md）",
   "Enable spellcheck - Experimental feature!! :)": "启用拼写检查 - 实验性功能！！ :)",
@@ -241,7 +241,7 @@
   "Exploding character pairs": "Exploding character pairs",
   "Custom MarkdownLint Rules": "自定义 MarkdownLint 规则",
   "Enable MarkdownLint": "启用 MarkdownLint",
-  "When scrolling, synchronize preview with editor": "同步滚动",
+  "When scrolling, synchronize preview with editor": "滚动编辑页时同步滚动预览页",
   "This will delete all notes in the folder and can not be undone.": "即将删除文件夹中所有笔记，并且不能撤销。",
   "Always Ask": "每次询问"
 }
