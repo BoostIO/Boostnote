@@ -578,6 +578,72 @@ it('should test that deleteAttachmentsNotPresentInNote does nothing if noteKey, 
   expect(fs.unlink).not.toHaveBeenCalled()
 })
 
+it('should test that getAttachmentsPathAndStatus return null if noteKey, storageKey or noteContent was undefined', function () {
+  const noteKey = undefined
+  const storageKey = undefined
+  const markdownContent = ''
+
+  const result = systemUnderTest.getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey)
+  expect(result).toBeNull()
+})
+
+it('should test that getAttachmentsPathAndStatus return null if noteKey, storageKey or noteContent was null', function () {
+  const noteKey = null
+  const storageKey = null
+  const markdownContent = ''
+
+  const result = systemUnderTest.getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey)
+  expect(result).toBeNull()
+})
+
+it('should test that getAttachmentsPathAndStatus return the correct path and status for attachments', async function () {
+  const dummyStorage = {path: 'dummyStoragePath'}
+  const noteKey = 'noteKey'
+  const storageKey = 'storageKey'
+  const markdownContent =
+    'Test input' +
+    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + noteKey + path.win32.sep + 'file2.pdf](file2.pdf) \n'
+  const dummyFilesInFolder = ['file1.txt', 'file2.pdf', 'file3.jpg']
+
+  findStorage.findStorage = jest.fn(() => dummyStorage)
+  fs.existsSync = jest.fn(() => true)
+  fs.readdir = jest.fn((paht, callback) => callback(undefined, dummyFilesInFolder))
+  fs.unlink = jest.fn()
+
+  const targetStorage = findStorage.findStorage(storageKey)
+
+  const attachments = await systemUnderTest.getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey)
+  expect(attachments.length).toBe(3)
+  expect(attachments[0].isInUse).toBe(false)
+  expect(attachments[1].isInUse).toBe(true)
+  expect(attachments[2].isInUse).toBe(false)
+
+  expect(attachments[0].path).toBe(
+    path.join(
+      targetStorage.path,
+      systemUnderTest.DESTINATION_FOLDER,
+      noteKey,
+      dummyFilesInFolder[0]
+    )
+  )
+  expect(attachments[1].path).toBe(
+    path.join(
+      targetStorage.path,
+      systemUnderTest.DESTINATION_FOLDER,
+      noteKey,
+      dummyFilesInFolder[1]
+    )
+  )
+  expect(attachments[2].path).toBe(
+    path.join(
+      targetStorage.path,
+      systemUnderTest.DESTINATION_FOLDER,
+      noteKey,
+      dummyFilesInFolder[2]
+    )
+  )
+})
+
 it('should test that moveAttachments moves attachments only if the source folder existed', function () {
   fse.existsSync = jest.fn(() => false)
   fse.moveSync = jest.fn()
