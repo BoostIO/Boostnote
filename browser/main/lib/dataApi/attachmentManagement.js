@@ -634,7 +634,7 @@ function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey
  list of attachments with their properties */
 function getAttachmentsPathAndStatus (markdownContent, storageKey, noteKey) {
   if (storageKey == null || noteKey == null || markdownContent == null) {
-    return
+    return null
   }
   const targetStorage = findStorage.findStorage(storageKey)
   const attachmentFolder = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
