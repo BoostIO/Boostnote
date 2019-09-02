@@ -102,7 +102,7 @@ class Main extends React.Component {
               {
                 name: 'example.js',
                 mode: 'javascript',
-                content: "var boostnote = document.getElementById('enjoy').innerHTML\n\nconsole.log(boostnote)",
+                content: "var boostnote = document.getElementById('hello').innerHTML\n\nconsole.log(boostnote)",
                 linesHighlighted: []
               }
             ]
@@ -169,6 +169,7 @@ class Main extends React.Component {
       }
     })
 
+    // eslint-disable-next-line no-undef
     delete CodeMirror.keyMap.emacs['Ctrl-V']
 
     eventEmitter.on('editor:fullscreen', this.toggleFullScreen)

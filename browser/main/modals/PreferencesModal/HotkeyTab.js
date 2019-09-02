@@ -81,6 +81,7 @@ class HotkeyTab extends React.Component {
       toggleMode: this.refs.toggleMode.value,
       deleteNote: this.refs.deleteNote.value,
       pasteSmartly: this.refs.pasteSmartly.value,
+      prettifyMarkdown: this.refs.prettifyMarkdown.value,
       toggleMenuBar: this.refs.toggleMenuBar.value,
       insertDate: this.refs.insertDate.value,
       insertDateTime: this.refs.insertDateTime.value
@@ -173,6 +174,16 @@ class HotkeyTab extends React.Component {
                 value={config.hotkey.pasteSmartly}
                 type='text'
               />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Prettify Markdown')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleHotkeyChange(e)}
+                ref='prettifyMarkdown'
+                value={config.hotkey.prettifyMarkdown}
+                type='text' />
             </div>
           </div>
           <div styleName='group-section'>

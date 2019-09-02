@@ -3,7 +3,7 @@
  */
 import PropTypes from 'prop-types'
 import React from 'react'
-import { isArray } from 'lodash'
+import { isArray, sortBy } from 'lodash'
 import invertColor from 'invert-color'
 import CSSModules from 'browser/lib/CSSModules'
 import { getTodoStatus } from 'browser/lib/getTodoStatus'
@@ -43,7 +43,7 @@ const TagElementList = (tags, showTagsAlphabetically, coloredTags) => {
   }
 
   if (showTagsAlphabetically) {
-    return _.sortBy(tags).map(tag => TagElement({ tagName: tag, color: coloredTags[tag] }))
+    return sortBy(tags).map(tag => TagElement({ tagName: tag, color: coloredTags[tag] }))
   } else {
     return tags.map(tag => TagElement({ tagName: tag, color: coloredTags[tag] }))
   }

@@ -8,6 +8,7 @@ const escapeStringRegexp = require('escape-string-regexp')
 const sander = require('sander')
 const url = require('url')
 import i18n from 'browser/lib/i18n'
+import { isString } from 'lodash'
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
@@ -19,7 +20,7 @@ const PATH_SEPARATORS = escapeStringRegexp(path.posix.sep) + escapeStringRegexp(
  * @returns {Promise<Image>} Image element created
  */
 function getImage (file) {
-  if (_.isString(file)) {
+  if (isString(file)) {
     return new Promise(resolve => {
       const img = new Image()
       img.onload = () => resolve(img)
@@ -624,6 +625,76 @@ function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey
 }
 
 /**
+ * @description Get all existing attachments related to a specific note
+ including their status (in use or not) and their path. Return null if there're no attachment related to note or specified parametters are invalid
+ * @param markdownContent markdownContent of the current note
+ * @param storageKey StorageKey of the current note
+ * @param noteKey NoteKey of the currentNote
+ * @return {Promise<Array<{path: String, isInUse: bool}>>} Promise returning the
+ list of attachments with their properties */
+function getAttachmentsPathAndStatus (markdownContent, storageKey, noteKey) {
+  if (storageKey == null || noteKey == null || markdownContent == null) {
+    return null
+  }
+  const targetStorage = findStorage.findStorage(storageKey)
+  const attachmentFolder = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+  const attachmentsInNote = getAttachmentsInMarkdownContent(markdownContent)
+  const attachmentsInNoteOnlyFileNames = []
+  if (attachmentsInNote) {
+    for (let i = 0; i < attachmentsInNote.length; i++) {
+      attachmentsInNoteOnlyFileNames.push(attachmentsInNote[i].replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey + escapeStringRegexp(path.sep), 'g'), ''))
+    }
+  }
+  if (fs.existsSync(attachmentFolder)) {
+    return new Promise((resolve, reject) => {
+      fs.readdir(attachmentFolder, (err, files) => {
+        if (err) {
+          console.error('Error reading directory "' + attachmentFolder + '". Error:')
+          console.error(err)
+          reject(err)
+          return
+        }
+        const attachments = []
+        for (const file of files) {
+          const absolutePathOfFile = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey, file)
+          if (!attachmentsInNoteOnlyFileNames.includes(file)) {
+            attachments.push({ path: absolutePathOfFile, isInUse: false })
+          } else {
+            attachments.push({ path: absolutePathOfFile, isInUse: true })
+          }
+        }
+        resolve(attachments)
+      })
+    })
+  } else {
+    return null
+  }
+}
+
+/**
+ * @description Remove all specified attachment paths
+ * @param attachments attachment paths
+ * @return {Promise} Promise after all attachments are removed */
+function removeAttachmentsByPaths (attachments) {
+  const promises = []
+  for (const attachment of attachments) {
+    const promise = new Promise((resolve, reject) => {
+      fs.unlink(attachment, (err) => {
+        if (err) {
+          console.error('Could not delete "%s"', attachment)
+          console.error(err)
+          reject(err)
+          return
+        }
+        resolve()
+      })
+    })
+    promises.push(promise)
+  }
+  return Promise.all(promises)
+}
+
+/**
  * Clones the attachments of a given note.
  * Copies the attachments to their new destination and updates the content of the new note so that the attachment-links again point to the correct destination.
  * @param oldNote Note that is being cloned
@@ -725,8 +796,10 @@ module.exports = {
   getAbsolutePathsOfAttachmentsInContent,
   importAttachments,
   removeStorageAndNoteReferences,
+  removeAttachmentsByPaths,
   deleteAttachmentFolder,
   deleteAttachmentsNotPresentInNote,
+  getAttachmentsPathAndStatus,
   moveAttachments,
   cloneAttachments,
   isAttachmentLink,

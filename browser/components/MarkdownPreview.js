@@ -41,7 +41,6 @@ const CSS_FILES = [
   `${appPath}/node_modules/codemirror/lib/codemirror.css`,
   `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
-const win = global.process.platform === 'win32'
 
 function buildStyle (
   fontFamily,
@@ -247,8 +246,11 @@ export default class MarkdownPreview extends React.Component {
 
   handleContextMenu (event) {
     const menu = buildMarkdownPreviewContextMenu(this, event)
-    if (menu != null) {
+    const switchPreview = ConfigManager.get().editor.switchPreview
+    if (menu != null && switchPreview !== 'RIGHTCLICK') {
       menu.popup(remote.getCurrentWindow())
+    } else if (_.isFunction(this.props.onContextMenu)) {
+      this.props.onContextMenu(event)
     }
   }
 
@@ -361,7 +363,7 @@ export default class MarkdownPreview extends React.Component {
 
   handleSaveAsPdf () {
     this.exportAsDocument('pdf', (noteContent, exportTasks, targetDir) => {
-      const printout = new remote.BrowserWindow({show: false, webPreferences: {webSecurity: false}})
+      const printout = new remote.BrowserWindow({show: false, webPreferences: {webSecurity: false, javascript: false}})
       printout.loadURL('data:text/html;charset=UTF-8,' + this.htmlContentFormatter(noteContent, exportTasks, targetDir))
       return new Promise((resolve, reject) => {
         printout.webContents.on('did-finish-load', () => {
@@ -556,7 +558,9 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.value !== this.props.value) this.rewriteIframe()
+    // actual rewriteIframe function should be called only once
+    let needsRewriteIframe = false
+    if (prevProps.value !== this.props.value) needsRewriteIframe = true
     if (
       prevProps.smartQuotes !== this.props.smartQuotes ||
       prevProps.sanitize !== this.props.sanitize ||
@@ -566,7 +570,7 @@ export default class MarkdownPreview extends React.Component {
       prevProps.lineThroughCheckbox !== this.props.lineThroughCheckbox
     ) {
       this.initMarkdown()
-      this.rewriteIframe()
+      needsRewriteIframe = true
     }
     if (
       prevProps.fontFamily !== this.props.fontFamily ||
@@ -581,7 +585,16 @@ export default class MarkdownPreview extends React.Component {
       prevProps.customCSS !== this.props.customCSS
     ) {
       this.applyStyle()
+      needsRewriteIframe = true
+    }
+
+    if (needsRewriteIframe) {
       this.rewriteIframe()
+    }
+
+    // Should scroll to top after selecting another note
+    if (prevProps.noteKey !== this.props.noteKey) {
+      this.getWindow().scrollTo(0, 0)
     }
   }
 
@@ -815,6 +828,7 @@ export default class MarkdownPreview extends React.Component {
             canvas.height = height.value + 'vh'
           }
 
+          // eslint-disable-next-line no-unused-vars
           const chart = new Chart(canvas, chartConfig)
         } catch (e) {
           el.className = 'chart-error'
@@ -953,8 +967,6 @@ export default class MarkdownPreview extends React.Component {
       overlay.appendChild(zoomImg)
       document.body.appendChild(overlay)
     }
-
-    this.getWindow().scrollTo(0, 0)
   }
 
   focus () {

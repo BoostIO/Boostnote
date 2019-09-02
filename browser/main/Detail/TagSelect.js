@@ -8,6 +8,7 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import i18n from 'browser/lib/i18n'
 import ee from 'browser/main/lib/eventEmitter'
 import Autosuggest from 'react-autosuggest'
+import { push } from 'connected-react-router'
 
 class TagSelect extends React.Component {
   constructor (props) {
@@ -96,8 +97,11 @@ class TagSelect extends React.Component {
   }
 
   handleTagLabelClick (tag) {
-    const { router } = this.context
-    router.push(`/tags/${tag}`)
+    const { dispatch } = this.props
+
+    // Note: `tag` requires encoding later.
+    //       E.g. % in tag is a problem (see issue #3170) - encodeURIComponent(tag) is not working.
+    dispatch(push(`/tags/${tag}`))
   }
 
   handleTagRemoveButtonClick (tag) {
@@ -255,11 +259,8 @@ class TagSelect extends React.Component {
   }
 }
 
-TagSelect.contextTypes = {
-  router: PropTypes.shape({})
-}
-
 TagSelect.propTypes = {
+  dispatch: PropTypes.func,
   className: PropTypes.string,
   value: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func,
