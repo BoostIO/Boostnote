@@ -1021,22 +1021,24 @@ export default class MarkdownPreview extends React.Component {
     const isStartWithHash = rawHref[0] === '#'
     const { href, hash } = parser
 
-    const maybeExternalLink = /https?:\/\//.test(rawHref)
-    const linkHash = (maybeExternalLink || hash === '') ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
+    const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
 
     const extractIdRegex = /file:\/\/.*main.?\w*.html#/ // file://path/to/main(.development.)html
     const regexNoteInternalLink = new RegExp(`${extractIdRegex.source}(.+)`)
-    if (isStartWithHash || regexNoteInternalLink.test(linkHash)) {
-      const extractedId = isStartWithHash ? linkHash.slice(1) : linkHash.replace(extractIdRegex, '')
-      const targetId = mdurl.encode(extractedId)
-      const targetElement = this.refs.root.contentWindow.document.getElementById(
-        targetId
-      )
+    if (isStartWithHash || regexNoteInternalLink.test(rawHref)) {
+      const posOfHash = linkHash.indexOf('#')
+      if (posOfHash > -1) {
+        const extractedId = linkHash.slice(posOfHash + 1)
+        const targetId = mdurl.encode(extractedId)
+        const targetElement = this.refs.root.contentWindow.document.getElementById(
+          targetId
+        )
 
-      if (targetElement != null) {
-        this.getWindow().scrollTo(0, targetElement.offsetTop)
+        if (targetElement != null) {
+          this.getWindow().scrollTo(0, targetElement.offsetTop)
+        }
+        return
       }
-      return
     }
 
     // this will match the new uuid v4 hash and the old hash
