@@ -85,7 +85,7 @@ class HotkeyTab extends React.Component {
       toggleMenuBar: this.refs.toggleMenuBar.value,
       insertDate: this.refs.insertDate.value,
       insertDateTime: this.refs.insertDateTime.value
-    }
+    })
     this.setState({
       config
     })
