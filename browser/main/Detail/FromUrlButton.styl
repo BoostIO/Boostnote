@@ -1,0 +1,41 @@
+.root
+  top 45px
+  topBarButtonRight()
+  &:hover
+    transition 0.2s
+    color alpha($ui-favorite-star-button-color, 0.6)
+  &:hover .tooltip
+    opacity 1
+
+.tooltip
+  tooltip()
+  position absolute
+  pointer-events none
+  top 50px
+  right 125px
+  width 90px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
+.root--active
+  @extend .root
+  transition 0.15s
+  color $ui-favorite-star-button-color
+  &:hover
+    transition 0.2s
+    color alpha($ui-favorite-star-button-color, 0.6)
+
+.icon
+  transition transform 0.15s
+  height 13px
+
+body[data-theme="dark"]
+  .root
+    topBarButtonDark()
+    &:hover
+      transition 0.2s
+      color alpha($ui-favorite-star-button-color, 0.6)

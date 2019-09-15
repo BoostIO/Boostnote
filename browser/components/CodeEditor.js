@@ -20,12 +20,15 @@ import styles from '../components/CodeEditor.styl'
 const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 const spellcheck = require('browser/lib/spellcheck')
-const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
-import TurndownService from 'turndown'
+const buildEditorContextMenu = require('browser/lib/contextMenuBuilder').buildEditorContextMenu
+import { createTurndownService } from '../lib/turndown'
 import {languageMaps} from '../lib/CMLanguageList'
 import snippetManager from '../lib/SnippetManager'
 import {generateInEditor, tocExistsInEditor} from 'browser/lib/markdown-toc-generator'
 import markdownlint from 'markdownlint'
+import Jsonlint from 'jsonlint-mod'
+import { DEFAULT_CONFIG } from '../main/lib/ConfigManager'
+import prettier from 'prettier'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -36,38 +39,6 @@ const buildCMRulers = (rulers, enableRulers) =>
 
 function translateHotkey (hotkey) {
   return hotkey.replace(/\s*\+\s*/g, '-').replace(/Command/g, 'Cmd').replace(/Control/g, 'Ctrl')
-}
-
-const validatorOfMarkdown = (text, updateLinting) => {
-  const lintOptions = {
-    'strings': {
-      'content': text
-    }
-  }
-
-  return markdownlint(lintOptions, (err, result) => {
-    if (!err) {
-      const foundIssues = []
-      result.content.map(item => {
-        let ruleNames = ''
-        item.ruleNames.map((ruleName, index) => {
-          ruleNames += ruleName
-          if (index === item.ruleNames.length - 1) {
-            ruleNames += ': '
-          } else {
-            ruleNames += '/'
-          }
-        })
-        foundIssues.push({
-          from: CodeMirror.Pos(item.lineNumber, 0),
-          to: CodeMirror.Pos(item.lineNumber, 1),
-          message: ruleNames + item.ruleDescription,
-          severity: 'warning'
-        })
-      })
-      updateLinting(foundIssues)
-    }
-  })
 }
 
 export default class CodeEditor extends React.Component {
@@ -83,6 +54,7 @@ export default class CodeEditor extends React.Component {
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
     }
+    const debouncedDeletionOfAttachments = _.debounce(attachmentManagement.deleteAttachmentsNotPresentInNote, 30000)
     this.blurHandler = (editor, e) => {
       ipcRenderer.send('editor:focused', false)
       if (e == null) return null
@@ -94,16 +66,13 @@ export default class CodeEditor extends React.Component {
         el = el.parentNode
       }
       this.props.onBlur != null && this.props.onBlur(e)
-
       const {
         storageKey,
         noteKey
       } = this.props
-      attachmentManagement.deleteAttachmentsNotPresentInNote(
-        this.editor.getValue(),
-        storageKey,
-        noteKey
-      )
+      if (this.props.deleteUnusedAttachments === true) {
+        debouncedDeletionOfAttachments(this.editor.getValue(), storageKey, noteKey)
+      }
     }
     this.pasteHandler = (editor, e) => {
       e.preventDefault()
@@ -116,6 +85,8 @@ export default class CodeEditor extends React.Component {
     this.searchHandler = (e, msg) => this.handleSearch(msg)
     this.searchState = null
     this.scrollToLineHandeler = this.scrollToLine.bind(this)
+    this.getCodeEditorLintConfig = this.getCodeEditorLintConfig.bind(this)
+    this.validatorOfMarkdown = this.validatorOfMarkdown.bind(this)
 
     this.formatTable = () => this.handleFormatTable()
 
@@ -130,7 +101,7 @@ export default class CodeEditor extends React.Component {
 
     this.editorActivityHandler = () => this.handleEditorActivity()
 
-    this.turndownService = new TurndownService()
+    this.turndownService = createTurndownService()
   }
 
   handleSearch (msg) {
@@ -138,7 +109,7 @@ export default class CodeEditor extends React.Component {
     const component = this
 
     if (component.searchState) cm.removeOverlay(component.searchState)
-    if (msg.length < 3) return
+    if (msg.length < 1) return
 
     cm.operation(function () {
       component.searchState = makeOverlay(msg, 'searching')
@@ -233,23 +204,11 @@ export default class CodeEditor extends React.Component {
       'Cmd-T': function (cm) {
         // Do nothing
       },
-      'Ctrl-/': function (cm) {
-        if (global.process.platform === 'darwin') { return }
+      [translateHotkey(hotkey.insertDate)]: function (cm) {
         const dateNow = new Date()
         cm.replaceSelection(dateNow.toLocaleDateString())
       },
-      'Cmd-/': function (cm) {
-        if (global.process.platform !== 'darwin') { return }
-        const dateNow = new Date()
-        cm.replaceSelection(dateNow.toLocaleDateString())
-      },
-      'Shift-Ctrl-/': function (cm) {
-        if (global.process.platform === 'darwin') { return }
-        const dateNow = new Date()
-        cm.replaceSelection(dateNow.toLocaleString())
-      },
-      'Shift-Cmd-/': function (cm) {
-        if (global.process.platform !== 'darwin') { return }
+      [translateHotkey(hotkey.insertDateTime)]: function (cm) {
         const dateNow = new Date()
         cm.replaceSelection(dateNow.toLocaleString())
       },
@@ -259,6 +218,28 @@ export default class CodeEditor extends React.Component {
           document.execCommand('copy')
         }
         return CodeMirror.Pass
+      },
+      [translateHotkey(hotkey.prettifyMarkdown)]: cm => {
+        // Default / User configured prettier options
+        const currentConfig = JSON.parse(self.props.prettierConfig)
+
+        // Parser type will always need to be markdown so we override the option before use
+        currentConfig.parser = 'markdown'
+
+        // Get current cursor position
+        const cursorPos = cm.getCursor()
+        currentConfig.cursorOffset = cm.doc.indexFromPos(cursorPos)
+
+        // Prettify contents of editor
+        const formattedTextDetails = prettier.formatWithCursor(cm.doc.getValue(), currentConfig)
+
+        const formattedText = formattedTextDetails.formatted
+        const formattedCursorPos = formattedTextDetails.cursorOffset
+        cm.doc.setValue(formattedText)
+
+        // Reset Cursor position to be at the same markdown as was before prettifying
+        const newCursorPos = cm.doc.posFromIndex(formattedCursorPos)
+        cm.doc.setCursor(newCursorPos)
       },
       [translateHotkey(hotkey.pasteSmartly)]: cm => {
         this.handlePaste(cm, true)
@@ -283,20 +264,19 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidMount () {
-    const { rulers, enableRulers } = this.props
+    const { rulers, enableRulers, enableMarkdownLint } = this.props
     eventEmitter.on('line:jump', this.scrollToLineHandeler)
 
     snippetManager.init()
     this.updateDefaultKeyMap()
 
-    const checkMarkdownNoteIsOpening = this.props.mode === 'Boost Flavored Markdown'
     this.value = this.props.value
     this.editor = CodeMirror(this.refs.root, {
       rulers: buildCMRulers(rulers, enableRulers),
       value: this.props.value,
       linesHighlighted: this.props.linesHighlighted,
       lineNumbers: this.props.displayLineNumbers,
-      lineWrapping: true,
+      lineWrapping: this.props.lineWrapping,
       theme: this.props.theme,
       indentUnit: this.props.indentSize,
       tabSize: this.props.indentSize,
@@ -306,10 +286,7 @@ export default class CodeEditor extends React.Component {
       inputStyle: 'textarea',
       dragDrop: false,
       foldGutter: true,
-      lint: checkMarkdownNoteIsOpening ? {
-        'getAnnotations': validatorOfMarkdown,
-        'async': true
-      } : false,
+      lint: enableMarkdownLint ? this.getCodeEditorLintConfig() : false,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
       autoCloseBrackets: {
         pairs: this.props.matchingPairs,
@@ -317,8 +294,11 @@ export default class CodeEditor extends React.Component {
         explode: this.props.explodingPairs,
         override: true
       },
-      extraKeys: this.defaultKeyMap
+      extraKeys: this.defaultKeyMap,
+      prettierConfig: this.props.prettierConfig
     })
+
+    document.querySelector('.CodeMirror-lint-markers').style.display = enableMarkdownLint ? 'inline-block' : 'none'
 
     if (!this.props.mode && this.props.value && this.props.autoDetect) {
       this.autoDetectLanguage(this.props.value)
@@ -546,7 +526,9 @@ export default class CodeEditor extends React.Component {
     let needRefresh = false
     const {
       rulers,
-      enableRulers
+      enableRulers,
+      enableMarkdownLint,
+      customMarkdownLintConfig
     } = this.props
     if (prevProps.mode !== this.props.mode) {
       this.setMode(this.props.mode)
@@ -562,6 +544,16 @@ export default class CodeEditor extends React.Component {
       needRefresh = true
     }
     if (prevProps.keyMap !== this.props.keyMap) {
+      needRefresh = true
+    }
+    if (prevProps.enableMarkdownLint !== enableMarkdownLint || prevProps.customMarkdownLintConfig !== customMarkdownLintConfig) {
+      if (!enableMarkdownLint) {
+        this.editor.setOption('lint', {default: false})
+        document.querySelector('.CodeMirror-lint-markers').style.display = 'none'
+      } else {
+        this.editor.setOption('lint', this.getCodeEditorLintConfig())
+        document.querySelector('.CodeMirror-lint-markers').style.display = 'inline-block'
+      }
       needRefresh = true
     }
 
@@ -582,6 +574,10 @@ export default class CodeEditor extends React.Component {
 
     if (prevProps.displayLineNumbers !== this.props.displayLineNumbers) {
       this.editor.setOption('lineNumbers', this.props.displayLineNumbers)
+    }
+
+    if (prevProps.lineWrapping !== this.props.lineWrapping) {
+      this.editor.setOption('lineWrapping', this.props.lineWrapping)
     }
 
     if (prevProps.scrollPastEnd !== this.props.scrollPastEnd) {
@@ -638,10 +634,63 @@ export default class CodeEditor extends React.Component {
         this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
       }
     }
+    if (prevProps.deleteUnusedAttachments !== this.props.deleteUnusedAttachments) {
+      this.editor.setOption('deleteUnusedAttachments', this.props.deleteUnusedAttachments)
+    }
 
     if (needRefresh) {
       this.editor.refresh()
     }
+  }
+
+  getCodeEditorLintConfig () {
+    const { mode } = this.props
+    const checkMarkdownNoteIsOpen = mode === 'Boost Flavored Markdown'
+
+    return checkMarkdownNoteIsOpen ? {
+      'getAnnotations': this.validatorOfMarkdown,
+      'async': true
+    } : false
+  }
+
+  validatorOfMarkdown (text, updateLinting) {
+    const { customMarkdownLintConfig } = this.props
+    let lintConfigJson
+    try {
+      Jsonlint.parse(customMarkdownLintConfig)
+      lintConfigJson = JSON.parse(customMarkdownLintConfig)
+    } catch (err) {
+      eventEmitter.emit('APP_SETTING_ERROR')
+      return
+    }
+    const lintOptions = {
+      'strings': {
+        'content': text
+      },
+      'config': lintConfigJson
+    }
+
+    return markdownlint(lintOptions, (err, result) => {
+      if (!err) {
+        const foundIssues = []
+        const splitText = text.split('\n')
+        result.content.map(item => {
+          let ruleNames = ''
+          item.ruleNames.map((ruleName, index) => {
+            ruleNames += ruleName
+            ruleNames += (index === item.ruleNames.length - 1) ? ': ' : '/'
+          })
+          const lineNumber = item.lineNumber - 1
+          foundIssues.push({
+            from: CodeMirror.Pos(lineNumber, 0),
+            to: CodeMirror.Pos(lineNumber, splitText[lineNumber].length),
+            message: ruleNames + item.ruleDescription,
+            severity: 'warning'
+          })
+        })
+        updateLinting(foundIssues)
+      }
+    })
   }
 
   setMode (mode) {
@@ -814,6 +863,17 @@ export default class CodeEditor extends React.Component {
     const cursor = this.editor.getCursor()
     this.editor.setValue(value)
     this.editor.setCursor(cursor)
+  }
+
+  /**
+   * Update content of one line
+   * @param {Number} lineNumber
+   * @param {String} content
+   */
+  setLineContent (lineNumber, content) {
+    const prevContent = this.editor.getLine(lineNumber)
+    const prevContentLength = prevContent ? prevContent.length : 0
+    this.editor.replaceRange(content, { line: lineNumber, ch: 0 }, { line: lineNumber, ch: prevContentLength })
   }
 
   handleDropImage (dropEvent) {
@@ -1105,13 +1165,11 @@ export default class CodeEditor extends React.Component {
       }
       ref='root'
       tabIndex='-1'
-      style={
-      {
+      style={{
         fontFamily,
         fontSize: fontSize,
         width: width
-      }
-      }
+      }}
       onDrop={
         e => this.handleDropImage(e)
       }
@@ -1149,7 +1207,10 @@ CodeEditor.propTypes = {
   onChange: PropTypes.func,
   readOnly: PropTypes.bool,
   autoDetect: PropTypes.bool,
-  spellCheck: PropTypes.bool
+  spellCheck: PropTypes.bool,
+  enableMarkdownLint: PropTypes.bool,
+  customMarkdownLintConfig: PropTypes.string,
+  deleteUnusedAttachments: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {
@@ -1161,5 +1222,9 @@ CodeEditor.defaultProps = {
   indentSize: 4,
   indentType: 'space',
   autoDetect: false,
-  spellCheck: false
+  spellCheck: false,
+  enableMarkdownLint: DEFAULT_CONFIG.editor.enableMarkdownLint,
+  customMarkdownLintConfig: DEFAULT_CONFIG.editor.customMarkdownLintConfig,
+  prettierConfig: DEFAULT_CONFIG.editor.prettierConfig,
+  deleteUnusedAttachments: DEFAULT_CONFIG.editor.deleteUnusedAttachments
 }

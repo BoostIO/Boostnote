@@ -8,6 +8,7 @@ const escapeStringRegexp = require('escape-string-regexp')
 const sander = require('sander')
 const url = require('url')
 import i18n from 'browser/lib/i18n'
+import { isString } from 'lodash'
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
@@ -19,7 +20,7 @@ const PATH_SEPARATORS = escapeStringRegexp(path.posix.sep) + escapeStringRegexp(
  * @returns {Promise<Image>} Image element created
  */
 function getImage (file) {
-  if (_.isString(file)) {
+  if (isString(file)) {
     return new Promise(resolve => {
       const img = new Image()
       img.onload = () => resolve(img)
@@ -241,6 +242,10 @@ function migrateAttachments (markdownContent, storagePath, noteKey) {
  * @returns {String} postprocessed HTML in which all :storage references are mapped to the actual paths.
  */
 function fixLocalURLS (renderedHTML, storagePath) {
+  const encodedWin32SeparatorRegex = /%5C/g
+  const storageRegex = new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER, 'g')
+  const storageUrl = 'file:///' + path.join(storagePath, DESTINATION_FOLDER).replace(/\\/g, '/')
+
   /*
     A :storage reference is like `:storage/3b6f8bd6-4edd-4b15-96e0-eadc4475b564/f939b2c3.jpg`.
 
@@ -250,8 +255,7 @@ function fixLocalURLS (renderedHTML, storagePath) {
     - `(?:\\\/|%5C)` match the path seperator. `\\\/` for posix systems and `%5C` for windows.
   */
   return renderedHTML.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '(?:(?:\\\/|%5C)[-.\\w]+)+', 'g'), function (match) {
-    var encodedPathSeparators = new RegExp(mdurl.encode(path.win32.sep) + '|' + mdurl.encode(path.posix.sep), 'g')
-    return match.replace(encodedPathSeparators, path.sep).replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER, 'g'), 'file:///' + path.join(storagePath, DESTINATION_FOLDER))
+    return match.replace(encodedWin32SeparatorRegex, '/').replace(storageRegex, storageUrl)
   })
 }
 
@@ -617,9 +621,77 @@ function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey
         }
       })
     })
-  } else {
-    console.info('Attachment folder ("' + attachmentFolder + '") did not exist..')
   }
+}
+
+/**
+ * @description Get all existing attachments related to a specific note
+ including their status (in use or not) and their path. Return null if there're no attachment related to note or specified parametters are invalid
+ * @param markdownContent markdownContent of the current note
+ * @param storageKey StorageKey of the current note
+ * @param noteKey NoteKey of the currentNote
+ * @return {Promise<Array<{path: String, isInUse: bool}>>} Promise returning the
+ list of attachments with their properties */
+function getAttachmentsPathAndStatus (markdownContent, storageKey, noteKey) {
+  if (storageKey == null || noteKey == null || markdownContent == null) {
+    return null
+  }
+  const targetStorage = findStorage.findStorage(storageKey)
+  const attachmentFolder = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+  const attachmentsInNote = getAttachmentsInMarkdownContent(markdownContent)
+  const attachmentsInNoteOnlyFileNames = []
+  if (attachmentsInNote) {
+    for (let i = 0; i < attachmentsInNote.length; i++) {
+      attachmentsInNoteOnlyFileNames.push(attachmentsInNote[i].replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey + escapeStringRegexp(path.sep), 'g'), ''))
+    }
+  }
+  if (fs.existsSync(attachmentFolder)) {
+    return new Promise((resolve, reject) => {
+      fs.readdir(attachmentFolder, (err, files) => {
+        if (err) {
+          console.error('Error reading directory "' + attachmentFolder + '". Error:')
+          console.error(err)
+          reject(err)
+          return
+        }
+        const attachments = []
+        for (const file of files) {
+          const absolutePathOfFile = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey, file)
+          if (!attachmentsInNoteOnlyFileNames.includes(file)) {
+            attachments.push({ path: absolutePathOfFile, isInUse: false })
+          } else {
+            attachments.push({ path: absolutePathOfFile, isInUse: true })
+          }
+        }
+        resolve(attachments)
+      })
+    })
+  } else {
+    return null
+  }
+}
+
+/**
+ * @description Remove all specified attachment paths
+ * @param attachments attachment paths
+ * @return {Promise} Promise after all attachments are removed */
+function removeAttachmentsByPaths (attachments) {
+  const promises = []
+  for (const attachment of attachments) {
+    const promise = new Promise((resolve, reject) => {
+      fs.unlink(attachment, (err) => {
+        if (err) {
+          console.error('Could not delete "%s"', attachment)
+          console.error(err)
+          reject(err)
+          return
+        }
+        resolve()
+      })
+    })
+    promises.push(promise)
+  }
+  return Promise.all(promises)
 }
 
 /**
@@ -724,8 +796,10 @@ module.exports = {
   getAbsolutePathsOfAttachmentsInContent,
   importAttachments,
   removeStorageAndNoteReferences,
+  removeAttachmentsByPaths,
   deleteAttachmentFolder,
   deleteAttachmentsNotPresentInNote,
+  getAttachmentsPathAndStatus,
   moveAttachments,
   cloneAttachments,
   isAttachmentLink,

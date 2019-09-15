@@ -11,6 +11,10 @@ const consts = require('browser/lib/consts')
 
 let isInitialized = false
 
+const DEFAULT_MARKDOWN_LINT_CONFIG = `{
+  "default": true
+}`
+
 export const DEFAULT_CONFIG = {
   zoom: 1,
   isSideNavFolded: false,
@@ -27,6 +31,9 @@ export const DEFAULT_CONFIG = {
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
     deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
     pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
+    prettifyMarkdown: 'Shift + F',
+    insertDate: OSX ? 'Command + /' : 'Ctrl + /',
+    insertDateTime: OSX ? 'Command + Alt + /' : 'Ctrl + Shift + /',
     toggleMenuBar: 'Alt'
   },
   ui: {
@@ -44,6 +51,7 @@ export const DEFAULT_CONFIG = {
     fontFamily: win ? 'Consolas' : 'Monaco',
     indentType: 'space',
     indentSize: '2',
+    lineWrapping: true,
     enableRulers: false,
     rulers: [80, 120],
     displayLineNumbers: true,
@@ -59,7 +67,16 @@ export const DEFAULT_CONFIG = {
     enableFrontMatterTitle: true,
     frontMatterTitleField: 'title',
     spellcheck: false,
-    enableSmartPaste: false
+    enableSmartPaste: false,
+    enableMarkdownLint: false,
+    customMarkdownLintConfig: DEFAULT_MARKDOWN_LINT_CONFIG,
+    prettierConfig: ` {
+      "trailingComma": "es5",
+      "tabWidth": 4,
+      "semi": false,
+      "singleQuote": true
+    }`,
+    deleteUnusedAttachments: true
   },
   preview: {
     fontSize: '14',
@@ -77,8 +94,10 @@ export const DEFAULT_CONFIG = {
     breaks: true,
     smartArrows: false,
     allowCustomCSS: false,
-    customCSS: '',
+
+    customCSS: '/* Drop Your Custom CSS Code Here */',
     sanitize: 'STRICT', // 'STRICT', 'ALLOW_STYLES', 'NONE'
+    mermaidHTMLLabel: false,
     lineThroughCheckbox: true
   },
   blog: {
@@ -102,7 +121,6 @@ function validate (config) {
 }
 
 function _save (config) {
-  console.log(config)
   window.localStorage.setItem('config', JSON.stringify(config))
 }
 
@@ -135,7 +153,7 @@ function get () {
     const theme = consts.THEMES.find(theme => theme.name === config.editor.theme)
 
     if (theme) {
-      editorTheme.setAttribute('href', `../${theme.path}`)
+      editorTheme.setAttribute('href', theme.path)
     } else {
       config.editor.theme = 'default'
     }
@@ -146,7 +164,13 @@ function get () {
 
 function set (updates) {
   const currentConfig = get()
-  const newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, updates)
+
+  const arrangedUpdates = updates
+  if (updates.preview !== undefined && updates.preview.customCSS === '') {
+    arrangedUpdates.preview.customCSS = DEFAULT_CONFIG.preview.customCSS
+  }
+
+  const newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, arrangedUpdates)
   if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
 
@@ -177,7 +201,7 @@ function set (updates) {
   const newTheme = consts.THEMES.find(theme => theme.name === newConfig.editor.theme)
 
   if (newTheme) {
-    editorTheme.setAttribute('href', `../${newTheme.path}`)
+    editorTheme.setAttribute('href', newTheme.path)
   }
 
   ipcRenderer.send('config-renew', {

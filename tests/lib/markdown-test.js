@@ -68,3 +68,8 @@ test('Markdown.render() should render shortcuts correctly', t => {
   const rendered = md.render(markdownFixtures.shortcuts)
   t.snapshot(rendered)
 })
+
+test('Markdown.render() should render footnote correctly', t => {
+  const rendered = md.render(markdownFixtures.footnote)
+  t.snapshot(rendered)
+})

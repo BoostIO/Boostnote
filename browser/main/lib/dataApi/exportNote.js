@@ -43,7 +43,7 @@ function exportNote (nodeKey, storageKey, noteContent, targetPath, outputFormatt
   )
 
   if (outputFormatter) {
-    exportedData = outputFormatter(exportedData, exportTasks, path.dirname(targetPath))
+    exportedData = outputFormatter(exportedData, exportTasks, targetPath)
   } else {
     exportedData = Promise.resolve(exportedData)
   }

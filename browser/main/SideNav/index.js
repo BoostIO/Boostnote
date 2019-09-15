@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { push } from 'connected-react-router'
 import CSSModules from 'browser/lib/CSSModules'
 import dataApi from 'browser/main/lib/dataApi'
 import styles from './SideNav.styl'
@@ -22,9 +23,10 @@ import context from 'browser/lib/context'
 import { remote } from 'electron'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import ColorPicker from 'browser/components/ColorPicker'
+import { every, sortBy } from 'lodash'
 
 function matchActiveTags (tags, activeTags) {
-  return _.every(activeTags, v => tags.indexOf(v) >= 0)
+  return every(activeTags, v => tags.indexOf(v) >= 0)
 }
 
 class SideNav extends React.Component {
@@ -63,7 +65,7 @@ class SideNav extends React.Component {
     })
 
     if (selectedButton === 0) {
-      const { data, dispatch, location, params } = this.props
+      const { data, dispatch, location, match: { params } } = this.props
 
       const notes = data.noteMap
         .map(note => note)
@@ -93,7 +95,7 @@ class SideNav extends React.Component {
             if (index !== -1) {
               tags.splice(index, 1)
 
-              this.context.router.push(`/tags/${tags.map(tag => encodeURIComponent(tag)).join(' ')}`)
+              dispatch(push(`/tags/${tags.map(tag => encodeURIComponent(tag)).join(' ')}`))
             }
           }
         })
@@ -105,13 +107,13 @@ class SideNav extends React.Component {
   }
 
   handleHomeButtonClick (e) {
-    const { router } = this.context
-    router.push('/home')
+    const { dispatch } = this.props
+    dispatch(push('/home'))
   }
 
   handleStarredButtonClick (e) {
-    const { router } = this.context
-    router.push('/starred')
+    const { dispatch } = this.props
+    dispatch(push('/starred'))
   }
 
   handleTagContextMenu (e, tag) {
@@ -206,18 +208,18 @@ class SideNav extends React.Component {
   }
 
   handleTrashedButtonClick (e) {
-    const { router } = this.context
-    router.push('/trashed')
+    const { dispatch } = this.props
+    dispatch(push('/trashed'))
   }
 
   handleSwitchFoldersButtonClick () {
-    const { router } = this.context
-    router.push('/home')
+    const { dispatch } = this.props
+    dispatch(push('/home'))
   }
 
   handleSwitchTagsButtonClick () {
-    const { router } = this.context
-    router.push('/alltags')
+    const { dispatch } = this.props
+    dispatch(push('/alltags'))
   }
 
   onSortEnd (storage) {
@@ -286,6 +288,7 @@ class SideNav extends React.Component {
           <div styleName='tagList'>
             {this.tagListComponent(data)}
           </div>
+          <NavToggleButton isFolded={isFolded} handleToggleButtonClick={this.handleToggleButtonClick.bind(this)} />
         </div>
       )
     }
@@ -298,7 +301,7 @@ class SideNav extends React.Component {
     const { colorPicker } = this.state
     const activeTags = this.getActiveTags(location.pathname)
     const relatedTags = this.getRelatedTags(activeTags, data.noteMap)
-    let tagList = _.sortBy(data.tagNoteMap.map(
+    let tagList = sortBy(data.tagNoteMap.map(
       (tag, name) => ({ name, size: tag.size, related: relatedTags.has(name) })
     ).filter(
       tag => tag.size > 0
@@ -311,7 +314,7 @@ class SideNav extends React.Component {
       })
     }
     if (config.sortTagsBy === 'COUNTER') {
-      tagList = _.sortBy(tagList, item => (0 - item.size))
+      tagList = sortBy(tagList, item => (0 - item.size))
     }
     if (config.ui.showOnlyRelatedTags && (relatedTags.size > 0)) {
       tagList = tagList.filter(
@@ -364,8 +367,8 @@ class SideNav extends React.Component {
   }
 
   handleClickTagListItem (name) {
-    const { router } = this.context
-    router.push(`/tags/${encodeURIComponent(name)}`)
+    const { dispatch } = this.props
+    dispatch(push(`/tags/${encodeURIComponent(name)}`))
   }
 
   handleSortTagsByChange (e) {
@@ -383,8 +386,7 @@ class SideNav extends React.Component {
   }
 
   handleClickNarrowToTag (tag) {
-    const { router } = this.context
-    const { location } = this.props
+    const { dispatch, location } = this.props
     const listOfTags = this.getActiveTags(location.pathname)
     const indexOfTag = listOfTags.indexOf(tag)
     if (indexOfTag > -1) {
@@ -392,7 +394,7 @@ class SideNav extends React.Component {
     } else {
       listOfTags.push(tag)
     }
-    router.push(`/tags/${encodeURIComponent(listOfTags.join(' '))}`)
+    dispatch(push(`/tags/${encodeURIComponent(listOfTags.join(' '))}`))
   }
 
   emptyTrash (entries) {
@@ -456,7 +458,7 @@ class SideNav extends React.Component {
 
     const style = {}
     if (!isFolded) style.width = this.props.width
-    const isTagActive = location.pathname.match(/tag/)
+    const isTagActive = /tag/.test(location.pathname)
     return (
       <div className='SideNav'
         styleName={isFolded ? 'root--folded' : 'root'}

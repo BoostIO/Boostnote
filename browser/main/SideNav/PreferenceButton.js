@@ -8,7 +8,7 @@ const PreferenceButton = ({
   onClick
 }) => (
   <button styleName='top-menu-preference' onClick={(e) => onClick(e)}>
-    <img styleName='iconTag' src='../resources/icon/icon-setting.svg' />
+    <img src='../resources/icon/icon-setting.svg' />
     <span styleName='tooltip'>{i18n.__('Preferences')}</span>
   </button>
 )

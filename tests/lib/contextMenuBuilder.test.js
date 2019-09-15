@@ -4,12 +4,14 @@ jest.mock('electron', () => {
 })
 
 const spellcheck = require('browser/lib/spellcheck')
-const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
+const buildEditorContextMenu = require('browser/lib/contextMenuBuilder').buildEditorContextMenu
+const buildMarkdownPreviewContextMenu = require('browser/lib/contextMenuBuilder').buildMarkdownPreviewContextMenu
 
 beforeEach(() => {
   menuBuilderParameter = null
 })
 
+// Editor Context Menu
 it('should make sure that no context menu is build if the passed editor instance was null', function () {
   const event = {
     pageX: 12,
@@ -123,4 +125,14 @@ it('should make sure that word suggestions creates a correct menu if there was a
   expect(menuBuilderParameter[6].role).toEqual('paste')
   expect(menuBuilderParameter[7].role).toEqual('selectall')
   expect(spellcheck.getSpellingSuggestion).toHaveBeenCalledWith(wordToCorrect)
+})
+
+// Markdown Preview Context Menu
+it('should make sure that no context menu is built if the Markdown Preview instance was null', function () {
+  const event = {
+    pageX: 12,
+    pageY: 12
+  }
+  buildMarkdownPreviewContextMenu(null, event)
+  expect(menuBuilderParameter).toEqual(null)
 })

@@ -8,7 +8,6 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
-import {hashHistory} from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
@@ -18,7 +17,6 @@ import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
 import {findNoteTitle} from 'browser/lib/findNoteTitle'
-import convertModeName from 'browser/lib/convertModeName'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import FullscreenButton from './FullscreenButton'
 import TrashButton from './TrashButton'
@@ -31,6 +29,8 @@ import { formatDate } from 'browser/lib/date-formatter'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
+import queryString from 'query-string'
+import { replace } from 'connected-react-router'
 
 const electron = require('electron')
 const { remote } = electron
@@ -166,12 +166,12 @@ class SnippetNoteDetail extends React.Component {
             originNote: note,
             note: newNote
           })
-          hashHistory.replace({
+          dispatch(replace({
             pathname: location.pathname,
-            query: {
+            search: queryString.stringify({
               key: newNote.key
-            }
-          })
+            })
+          }))
           this.setState({
             isMovingNote: false
           })
@@ -518,6 +518,19 @@ class SnippetNoteDetail extends React.Component {
     ])
   }
 
+  handleWrapLineButtonClick (e) {
+    context.popup([
+      {
+        label: 'on',
+        click: (e) => this.handleWrapLineItemClick(e, true)
+      },
+      {
+        label: 'off',
+        click: (e) => this.handleWrapLineItemClick(e, false)
+      }
+    ])
+  }
+
   handleIndentSizeItemClick (e, indentSize) {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
@@ -538,6 +551,22 @@ class SnippetNoteDetail extends React.Component {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
       indentType
+    })
+    ConfigManager.set({
+      editor
+    })
+    dispatch({
+      type: 'SET_CONFIG',
+      config: {
+        editor
+      }
+    })
+  }
+
+  handleWrapLineItemClick (e, lineWrapping) {
+    const { config, dispatch } = this.props
+    const editor = Object.assign({}, config.editor, {
+      lineWrapping
     })
     ConfigManager.set({
       editor
@@ -670,7 +699,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   render () {
-    const { data, config, location } = this.props
+    const { data, dispatch, config, location } = this.props
     const { note } = this.state
 
     const storageKey = note.storage
@@ -720,6 +749,7 @@ class SnippetNoteDetail extends React.Component {
             mode={snippet.mode || (autoDetect ? null : config.editor.snippetDefaultLanguage)}
             value={snippet.content}
             linesHighlighted={snippet.linesHighlighted}
+            lineWrapping={config.editor.lineWrapping}
             theme={config.editor.theme}
             fontFamily={config.editor.fontFamily}
             fontSize={editorFontSize}
@@ -778,7 +808,7 @@ class SnippetNoteDetail extends React.Component {
 
     const detailTopBar = <div styleName='info'>
       <div styleName='info-left'>
-        <div styleName='info-left-top'>
+        <div>
           <FolderSelect styleName='info-left-top-folderSelect'
             value={this.state.note.storage + '-' + this.state.note.folder}
             ref='folder'
@@ -793,6 +823,7 @@ class SnippetNoteDetail extends React.Component {
           saveTagsAlphabetically={config.ui.saveTagsAlphabetically}
           showTagsAlphabetically={config.ui.showTagsAlphabetically}
           data={data}
+          dispatch={dispatch}
           onChange={(e) => this.handleChange(e)}
           coloredTags={config.coloredTags}
         />
@@ -814,7 +845,7 @@ class SnippetNoteDetail extends React.Component {
         <InfoPanel
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[${note.title}](:note:${location.query.key})`}
+          noteLink={`[${note.title}](:note:${queryString.parse(location.search).key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.showWarning}
@@ -897,6 +928,12 @@ class SnippetNoteDetail extends React.Component {
             onClick={(e) => this.handleIndentSizeButtonClick(e)}
           >
             size: {config.editor.indentSize}&nbsp;
+            <i className='fa fa-caret-down' />
+          </button>
+          <button
+            onClick={(e) => this.handleWrapLineButtonClick(e)}
+          >
+            Wrap Line: {config.editor.lineWrapping ? 'on' : 'off'}&nbsp;
             <i className='fa fa-caret-down' />
           </button>
         </div>

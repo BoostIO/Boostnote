@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
-import { hashHistory } from 'react-router'
 import modal from 'browser/main/lib/modal'
 import CreateFolderModal from 'browser/main/modals/CreateFolderModal'
 import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
@@ -12,6 +11,7 @@ import _ from 'lodash'
 import { SortableElement } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
+import { push } from 'connected-react-router'
 
 const { remote } = require('electron')
 const { dialog } = remote
@@ -134,14 +134,14 @@ class StorageItem extends React.Component {
   }
 
   handleHeaderInfoClick (e) {
-    const { storage } = this.props
-    hashHistory.push('/storages/' + storage.key)
+    const { storage, dispatch } = this.props
+    dispatch(push('/storages/' + storage.key))
   }
 
   handleFolderButtonClick (folderKey) {
     return (e) => {
-      const { storage } = this.props
-      hashHistory.push('/storages/' + storage.key + '/folders/' + folderKey)
+      const { storage, dispatch } = this.props
+      dispatch(push('/storages/' + storage.key + '/folders/' + folderKey))
     }
   }
 
@@ -362,14 +362,14 @@ class StorageItem extends React.Component {
             <button styleName='header-addFolderButton'
               onClick={(e) => this.handleAddFolderButtonClick(e)}
             >
-              <img styleName='iconTag' src='../resources/icon/icon-plus.svg' />
+              <img src='../resources/icon/icon-plus.svg' />
             </button>
           }
 
           <button styleName='header-info'
             onClick={(e) => this.handleHeaderInfoClick(e)}
           >
-            <span styleName='header-info-name'>
+            <span>
               {isFolded ? _.truncate(storage.name, {length: 1, omission: ''}) : storage.name}
             </span>
             {isFolded &&
@@ -380,7 +380,7 @@ class StorageItem extends React.Component {
           </button>
         </div>
         {this.state.isOpen &&
-          <div styleName='folderList' >
+          <div>
             {folderList}
           </div>
         }

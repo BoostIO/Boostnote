@@ -21,7 +21,7 @@ function uniqueSlug (slug, slugs, opts) {
 }
 
 function linkify (token) {
-  token.content = mdlink(token.content, '#' + token.slug)
+  token.content = mdlink(token.content, `#${decodeURI(token.slug)}`)
   return token
 }
 

@@ -287,7 +287,11 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '        </p>\n' +
     '        <pre class="fence" data-line="8">\n' +
     '            <span class="filename"></span>\n' +
-    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">:storage' + mdurl.encode(path.sep) + noteKey + mdurl.encode(path.sep) + 'f939b2c3.jpg</div>\n' +
+    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">:storage' + mdurl.encode(path.win32.sep) + noteKey + mdurl.encode(path.win32.sep) + 'f939b2c3.jpg</div>\n' +
+    '        </pre>\n' +
+    '        <pre class="fence" data-line="10">\n' +
+    '            <span class="filename"></span>\n' +
+    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">:storage' + mdurl.encode(path.posix.sep) + noteKey + mdurl.encode(path.posix.sep) + 'f939b2c3.jpg</div>\n' +
     '        </pre>\n' +
     '    </body>\n' +
     '</html>'
@@ -300,17 +304,21 @@ it('should replace the all ":storage" path with the actual storage path', functi
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '        <p data-line="6">\n' +
-    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
+    '            <img src="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + 'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
     '        </p>\n' +
     '        <pre class="fence" data-line="8">\n' +
     '            <span class="filename"></span>\n' +
-    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + 'f939b2c3.jpg</div>\n' +
+    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + 'f939b2c3.jpg</div>\n' +
+    '        </pre>\n' +
+    '        <pre class="fence" data-line="10">\n' +
+    '            <span class="filename"></span>\n' +
+    '            <div class="gallery" data-autoplay="undefined" data-height="undefined">file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + 'f939b2c3.jpg</div>\n' +
     '        </pre>\n' +
     '    </body>\n' +
     '</html>'
@@ -345,10 +353,10 @@ it('should replace the ":storage" path with the actual storage path when they ha
     '    <body data-theme="default">\n' +
     '        <h2 data-line="0" id="Headline">Headline</h2>\n' +
     '        <p data-line="2">\n' +
-    '            <img src="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
+    '            <img src="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
-    '            <a href="file:///' + storagePath + path.sep + storageFolder + path.sep + noteKey + path.sep + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
+    '            <a href="file:///' + storagePath + '/' + storageFolder + '/' + noteKey + '/' + '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '    </body>\n' +
     '</html>'
@@ -568,6 +576,72 @@ it('should test that deleteAttachmentsNotPresentInNote does nothing if noteKey, 
   expect(fs.existsSync).not.toHaveBeenCalled()
   expect(fs.readdir).not.toHaveBeenCalled()
   expect(fs.unlink).not.toHaveBeenCalled()
+})
+
+it('should test that getAttachmentsPathAndStatus return null if noteKey, storageKey or noteContent was undefined', function () {
+  const noteKey = undefined
+  const storageKey = undefined
+  const markdownContent = ''
+
+  const result = systemUnderTest.getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey)
+  expect(result).toBeNull()
+})
+
+it('should test that getAttachmentsPathAndStatus return null if noteKey, storageKey or noteContent was null', function () {
+  const noteKey = null
+  const storageKey = null
+  const markdownContent = ''
+
+  const result = systemUnderTest.getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey)
+  expect(result).toBeNull()
+})
+
+it('should test that getAttachmentsPathAndStatus return the correct path and status for attachments', async function () {
+  const dummyStorage = {path: 'dummyStoragePath'}
+  const noteKey = 'noteKey'
+  const storageKey = 'storageKey'
+  const markdownContent =
+    'Test input' +
+    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + noteKey + path.win32.sep + 'file2.pdf](file2.pdf) \n'
+  const dummyFilesInFolder = ['file1.txt', 'file2.pdf', 'file3.jpg']
+
+  findStorage.findStorage = jest.fn(() => dummyStorage)
+  fs.existsSync = jest.fn(() => true)
+  fs.readdir = jest.fn((paht, callback) => callback(undefined, dummyFilesInFolder))
+  fs.unlink = jest.fn()
+
+  const targetStorage = findStorage.findStorage(storageKey)
+
+  const attachments = await systemUnderTest.getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey)
+  expect(attachments.length).toBe(3)
+  expect(attachments[0].isInUse).toBe(false)
+  expect(attachments[1].isInUse).toBe(true)
+  expect(attachments[2].isInUse).toBe(false)
+
+  expect(attachments[0].path).toBe(
+    path.join(
+      targetStorage.path,
+      systemUnderTest.DESTINATION_FOLDER,
+      noteKey,
+      dummyFilesInFolder[0]
+    )
+  )
+  expect(attachments[1].path).toBe(
+    path.join(
+      targetStorage.path,
+      systemUnderTest.DESTINATION_FOLDER,
+      noteKey,
+      dummyFilesInFolder[1]
+    )
+  )
+  expect(attachments[2].path).toBe(
+    path.join(
+      targetStorage.path,
+      systemUnderTest.DESTINATION_FOLDER,
+      noteKey,
+      dummyFilesInFolder[2]
+    )
+  )
 })
 
 it('should test that moveAttachments moves attachments only if the source folder existed', function () {

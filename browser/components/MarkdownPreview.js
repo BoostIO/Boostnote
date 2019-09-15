@@ -18,23 +18,19 @@ import mdurl from 'mdurl'
 import exportNote from 'browser/main/lib/dataApi/exportNote'
 import { escapeHtmlCharacters } from 'browser/lib/utils'
 import yaml from 'js-yaml'
-import context from 'browser/lib/context'
-import i18n from 'browser/lib/i18n'
-import fs from 'fs'
 import { render } from 'react-dom'
 import Carousel from 'react-image-carousel'
 import ConfigManager from '../main/lib/ConfigManager'
 
 const { remote, shell } = require('electron')
 const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
+const buildMarkdownPreviewContextMenu = require('browser/lib/contextMenuBuilder').buildMarkdownPreviewContextMenu
 
 const { app } = remote
 const path = require('path')
 const fileUrl = require('file-url')
 
 const dialog = remote.dialog
-
-const uri2path = require('file-uri-to-path')
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const appPath = fileUrl(
@@ -46,16 +42,31 @@ const CSS_FILES = [
   `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
 
-function buildStyle (
-  fontFamily,
-  fontSize,
-  codeBlockFontFamily,
-  lineNumber,
-  scrollPastEnd,
-  theme,
-  allowCustomCSS,
-  customCSS
-) {
+/**
+ * @param {Object} opts
+ * @param {String} opts.fontFamily
+ * @param {Numberl} opts.fontSize
+ * @param {String} opts.codeBlockFontFamily
+ * @param {String} opts.theme
+ * @param {Boolean} [opts.lineNumber] Should show line number
+ * @param {Boolean} [opts.scrollPastEnd]
+ * @param {Boolean} [opts.optimizeOverflowScroll] Should tweak body style to optimize overflow scrollbar display
+ * @param {Boolean} [opts.allowCustomCSS] Should add custom css
+ * @param {String} [opts.customCSS] Will be added to bottom, only if `opts.allowCustomCSS` is truthy
+ * @returns {String}
+ */
+function buildStyle (opts) {
+  const {
+    fontFamily,
+    fontSize,
+    codeBlockFontFamily,
+    lineNumber,
+    scrollPastEnd,
+    optimizeOverflowScroll,
+    theme,
+    allowCustomCSS,
+    customCSS
+  } = opts
   return `
 @font-face {
   font-family: 'Lato';
@@ -85,12 +96,14 @@ function buildStyle (
        url('${appPath}/resources/fonts/MaterialIcons-Regular.woff') format('woff'),
        url('${appPath}/resources/fonts/MaterialIcons-Regular.ttf') format('truetype');
 }
+
 ${markdownStyle}
 
 body {
   font-family: '${fontFamily.join("','")}';
   font-size: ${fontSize}px;
-  ${scrollPastEnd && 'padding-bottom: 90vh;'}
+  ${scrollPastEnd ? 'padding-bottom: 90vh;' : ''}
+  ${optimizeOverflowScroll ? 'height: 100%;' : ''}
 }
 @media print {
   body {
@@ -249,30 +262,12 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handleContextMenu (event) {
-    // If a contextMenu handler was passed to us, use it instead of the self-defined one -> return
-    if (_.isFunction(this.props.onContextMenu)) {
+    const menu = buildMarkdownPreviewContextMenu(this, event)
+    const switchPreview = ConfigManager.get().editor.switchPreview
+    if (menu != null && switchPreview !== 'RIGHTCLICK') {
+      menu.popup(remote.getCurrentWindow())
+    } else if (_.isFunction(this.props.onContextMenu)) {
       this.props.onContextMenu(event)
-      return
-    }
-    // No contextMenu was passed to us -> execute our own link-opener
-    if (event.target.tagName.toLowerCase() === 'a' && event.target.getAttribute('href')) {
-      const href = event.target.href
-      const isLocalFile = href.startsWith('file:')
-      if (isLocalFile) {
-        const absPath = uri2path(href)
-        try {
-          if (fs.lstatSync(absPath).isFile()) {
-            context.popup([
-              {
-                label: i18n.__('Show in explorer'),
-                click: (e) => shell.showItemInFolder(absPath)
-              }
-            ])
-          }
-        } catch (e) {
-          console.log('Error while evaluating if the file is locally available', e)
-        }
-      }
     }
   }
 
@@ -334,7 +329,7 @@ export default class MarkdownPreview extends React.Component {
       customCSS
     } = this.getStyleParams()
 
-    const inlineStyles = buildStyle(
+    const inlineStyles = buildStyle({
       fontFamily,
       fontSize,
       codeBlockFontFamily,
@@ -343,9 +338,13 @@ export default class MarkdownPreview extends React.Component {
       theme,
       allowCustomCSS,
       customCSS
-    )
+    })
     let body = this.markdown.render(noteContent)
-    const files = [this.GetCodeThemeLink(codeBlockTheme), ...CSS_FILES]
+    body = attachmentManagement.fixLocalURLS(
+      body,
+      this.props.storagePath
+    )
+    const files = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     files.forEach(file => {
       if (global.process.platform === 'win32') {
         file = file.replace('file:///', '')
@@ -381,7 +380,7 @@ export default class MarkdownPreview extends React.Component {
 
   handleSaveAsPdf () {
     this.exportAsDocument('pdf', (noteContent, exportTasks, targetDir) => {
-      const printout = new remote.BrowserWindow({show: false, webPreferences: {webSecurity: false}})
+      const printout = new remote.BrowserWindow({show: false, webPreferences: {webSecurity: false, javascript: false}})
       printout.loadURL('data:text/html;charset=UTF-8,' + this.htmlContentFormatter(noteContent, exportTasks, targetDir))
       return new Promise((resolve, reject) => {
         printout.webContents.on('did-finish-load', () => {
@@ -576,16 +575,19 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.value !== this.props.value) this.rewriteIframe()
+    // actual rewriteIframe function should be called only once
+    let needsRewriteIframe = false
+    if (prevProps.value !== this.props.value) needsRewriteIframe = true
     if (
       prevProps.smartQuotes !== this.props.smartQuotes ||
       prevProps.sanitize !== this.props.sanitize ||
+      prevProps.mermaidHTMLLabel !== this.props.mermaidHTMLLabel ||
       prevProps.smartArrows !== this.props.smartArrows ||
       prevProps.breaks !== this.props.breaks ||
       prevProps.lineThroughCheckbox !== this.props.lineThroughCheckbox
     ) {
       this.initMarkdown()
-      this.rewriteIframe()
+      needsRewriteIframe = true
     }
     if (
       prevProps.fontFamily !== this.props.fontFamily ||
@@ -600,7 +602,16 @@ export default class MarkdownPreview extends React.Component {
       prevProps.customCSS !== this.props.customCSS
     ) {
       this.applyStyle()
+      needsRewriteIframe = true
+    }
+
+    if (needsRewriteIframe) {
       this.rewriteIframe()
+    }
+
+    // Should scroll to top after selecting another note
+    if (prevProps.noteKey !== this.props.noteKey) {
+      this.getWindow().scrollTo(0, 0)
     }
   }
 
@@ -657,27 +668,27 @@ export default class MarkdownPreview extends React.Component {
 
     this.getWindow().document.getElementById(
       'codeTheme'
-    ).href = this.GetCodeThemeLink(codeBlockTheme)
-    this.getWindow().document.getElementById('style').innerHTML = buildStyle(
+    ).href = this.getCodeThemeLink(codeBlockTheme)
+    this.getWindow().document.getElementById('style').innerHTML = buildStyle({
       fontFamily,
       fontSize,
       codeBlockFontFamily,
       lineNumber,
       scrollPastEnd,
+      optimizeOverflowScroll: true,
       theme,
       allowCustomCSS,
       customCSS
-    )
+    })
+    this.getWindow().document.documentElement.style.overflowY = 'hidden'
   }
 
-  GetCodeThemeLink (name) {
+  getCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
-    if (theme) {
-      return `${appPath}/${theme.path}`
-    } else {
-      return `${appPath}/node_modules/codemirror/theme/elegant.css`
-    }
+    return theme != null
+      ? theme.path
+      : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
   rewriteIframe () {
@@ -703,7 +714,8 @@ export default class MarkdownPreview extends React.Component {
       showCopyNotification,
       storagePath,
       noteKey,
-      sanitize
+      sanitize,
+      mermaidHTMLLabel
     } = this.props
     let { value, codeBlockTheme } = this.props
 
@@ -835,6 +847,7 @@ export default class MarkdownPreview extends React.Component {
             canvas.height = height.value + 'vh'
           }
 
+          // eslint-disable-next-line no-unused-vars
           const chart = new Chart(canvas, chartConfig)
         } catch (e) {
           el.className = 'chart-error'
@@ -845,7 +858,7 @@ export default class MarkdownPreview extends React.Component {
     _.forEach(
       this.refs.root.contentWindow.document.querySelectorAll('.mermaid'),
       el => {
-        mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme)
+        mermaidRender(el, htmlTextHelper.decodeEntities(el.innerHTML), theme, mermaidHTMLLabel)
       }
     )
 
@@ -894,6 +907,12 @@ export default class MarkdownPreview extends React.Component {
       const parentEl = img.parentElement
       this.setImgOnClickEventHelper(img, rect)
       imgObserver.observe(parentEl, config)
+    }
+
+    const aList = markdownPreviewIframe.contentWindow.document.body.querySelectorAll('a')
+    for (const a of aList) {
+      a.removeEventListener('click', this.linkClickHandler)
+      a.addEventListener('click', this.linkClickHandler)
     }
   }
 
@@ -967,8 +986,6 @@ export default class MarkdownPreview extends React.Component {
       overlay.appendChild(zoomImg)
       document.body.appendChild(overlay)
     }
-
-    this.getWindow().scrollTo(0, 0)
   }
 
   focus () {
@@ -1015,14 +1032,18 @@ export default class MarkdownPreview extends React.Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const href = e.target.getAttribute('href')
-    const linkHash = href.split('/').pop()
+    const rawHref = e.target.getAttribute('href')
+    const parser = document.createElement('a')
+    parser.href = e.target.getAttribute('href')
+    const { href, hash } = parser
+    const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
 
-    if (!href) return
+    if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 
-    const regexNoteInternalLink = /main.html#(.+)/
+    const extractId = /(main.html)?#/
+    const regexNoteInternalLink = new RegExp(`${extractId.source}(.+)`)
     if (regexNoteInternalLink.test(linkHash)) {
-      const targetId = mdurl.encode(linkHash.match(regexNoteInternalLink)[1])
+      const targetId = mdurl.encode(linkHash.replace(extractId, ''))
       const targetElement = this.refs.root.contentWindow.document.getElementById(
         targetId
       )

@@ -159,24 +159,25 @@ class MarkdownEditor extends React.Component {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
-    const checkedMatch = /^\s*[\+\-\*] \[x\]/i
-    const uncheckedMatch = /^\s*[\+\-\*] \[ \]/
-    const checkReplace = /\[x\]/i
-    const uncheckReplace = /\[ \]/
+    const checkedMatch = /^(\s*>?)*\s*[+\-*] \[x]/i
+    const uncheckedMatch = /^(\s*>?)*\s*[+\-*] \[ ]/
+    const checkReplace = /\[x]/i
+    const uncheckReplace = /\[ ]/
     if (idMatch.test(e.target.getAttribute('id'))) {
       const lineIndex = parseInt(e.target.getAttribute('id').match(idMatch)[1], 10) - 1
       const lines = this.refs.code.value
         .split('\n')
 
       const targetLine = lines[lineIndex]
+      let newLine = targetLine
 
       if (targetLine.match(checkedMatch)) {
-        lines[lineIndex] = targetLine.replace(checkReplace, '[ ]')
+        newLine = targetLine.replace(checkReplace, '[ ]')
       }
       if (targetLine.match(uncheckedMatch)) {
-        lines[lineIndex] = targetLine.replace(uncheckReplace, '[x]')
+        newLine = targetLine.replace(uncheckReplace, '[x]')
       }
-      this.refs.code.setValue(lines.join('\n'))
+      this.refs.code.setLineContent(lineIndex, newLine)
     }
   }
 
@@ -304,6 +305,7 @@ class MarkdownEditor extends React.Component {
           enableRulers={config.editor.enableRulers}
           rulers={config.editor.rulers}
           displayLineNumbers={config.editor.displayLineNumbers}
+          lineWrapping
           matchingPairs={config.editor.matchingPairs}
           matchingTriples={config.editor.matchingTriples}
           explodingPairs={config.editor.explodingPairs}
@@ -319,6 +321,10 @@ class MarkdownEditor extends React.Component {
           enableSmartPaste={config.editor.enableSmartPaste}
           hotkey={config.hotkey}
           switchPreview={config.editor.switchPreview}
+          enableMarkdownLint={config.editor.enableMarkdownLint}
+          customMarkdownLintConfig={config.editor.customMarkdownLintConfig}
+          prettierConfig={config.editor.prettierConfig}
+          deleteUnusedAttachments={config.editor.deleteUnusedAttachments}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
@@ -338,6 +344,7 @@ class MarkdownEditor extends React.Component {
           smartArrows={config.preview.smartArrows}
           breaks={config.preview.breaks}
           sanitize={config.preview.sanitize}
+          mermaidHTMLLabel={config.preview.mermaidHTMLLabel}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
           onDoubleClick={(e) => this.handleDoubleClick(e)}
