@@ -7,6 +7,7 @@ import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
+import { isEmpty } from 'lodash'
 
 class RenameTagModal extends React.Component {
   constructor (props) {
@@ -33,7 +34,9 @@ class RenameTagModal extends React.Component {
 
   handleChange (e) {
     this.setState({
-      name: this.nameInput.value
+      name: this.nameInput.value,
+      showerror: false,
+      errormessage: ''
     })
   }
 
@@ -57,12 +60,19 @@ class RenameTagModal extends React.Component {
     }
   }
 
+  showError (message) {
+    this.setState({
+      showerror: true,
+      errormessage: message
+    })
+  }
+
   renameTag (tag, updatedTag) {
     const { data, dispatch } = this.props
 
     const notes = data.noteMap
       .map(note => note)
-      .filter(note => note.tags.indexOf(tag) !== -1)
+      .filter(note => note.tags.indexOf(tag) !== -1 && note.tags.indexOf(updatedTag))
       .map(note => {
         note = Object.assign({}, note)
         note.tags = note.tags.slice()
@@ -71,6 +81,12 @@ class RenameTagModal extends React.Component {
 
         return note
       })
+
+    if (isEmpty(notes)) {
+      this.showError(i18n.__('Tag exists'))
+
+      return
+    }
 
     Promise
       .all(notes.map(note => dataApi.updateNote(note.storage, note.key, note)))
@@ -93,6 +109,7 @@ class RenameTagModal extends React.Component {
 
   render () {
     const { close } = this.props
+    const { errormessage } = this.state
 
     return (
       <div styleName='root'
@@ -118,6 +135,7 @@ class RenameTagModal extends React.Component {
             {i18n.__('Confirm')}
           </button>
         </div>
+        <div className='error' styleName='error'>{errormessage}</div>
       </div>
     )
   }
