@@ -100,7 +100,7 @@ class TagSelect extends React.Component {
   }
 
   handleRenameTag (event, tagChange) {
-    let { value } = this.props
+    const { value } = this.props
     const { tag, updatedTag } = tagChange
     const newTags = value.slice()
 
