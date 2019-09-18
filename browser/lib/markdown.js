@@ -195,8 +195,9 @@ class Markdown {
       }
     })
 
+    const plantuml = require('markdown-it-plantuml')
     // Ditaa support
-    this.md.use(require('markdown-it-plantuml'), {
+    this.md.use(plantuml, {
       openMarker: '@startditaa',
       closeMarker: '@endditaa',
       generateSource: function (umlCode) {
@@ -212,7 +213,7 @@ class Markdown {
     })
 
     // Mindmap support
-    this.md.use(require('markdown-it-plantuml'), {
+    this.md.use(plantuml, {
       openMarker: '@startmindmap',
       closeMarker: '@endmindmap',
       generateSource: function (umlCode) {
@@ -228,7 +229,7 @@ class Markdown {
     })
 
     // WBS support
-    this.md.use(require('markdown-it-plantuml'), {
+    this.md.use(plantuml, {
       openMarker: '@startwbs',
       closeMarker: '@endwbs',
       generateSource: function (umlCode) {
@@ -244,7 +245,7 @@ class Markdown {
     })
 
     // Gantt support
-    this.md.use(require('markdown-it-plantuml'), {
+    this.md.use(plantuml, {
       openMarker: '@startgantt',
       closeMarker: '@endgantt',
       generateSource: function (umlCode) {
