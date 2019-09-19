@@ -186,7 +186,7 @@ class Markdown {
     const plantuml = require('markdown-it-plantuml')
     const plantUmlStripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
     const plantUmlServerAddress = plantUmlStripTrailingSlash(config.preview.plantUMLServerAddress)
-    const parsePlantUml = function (umlCode, openMarker, closeMarker, type){
+    const parsePlantUml = function (umlCode, openMarker, closeMarker, type) {
       const s = unescape(encodeURIComponent(umlCode))
       const zippedCode = deflate.encode64(
         deflate.zip_deflate(`${openMarker}\n${s}\n${closeMarker}`, 9)
