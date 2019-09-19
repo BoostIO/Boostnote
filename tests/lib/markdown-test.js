@@ -93,3 +93,8 @@ test('Markdown.render() should render PlantUML Umls correctly', t => {
   const rendered = md.render(markdownFixtures.plantUmlUml)
   t.snapshot(rendered)
 })
+
+test('Markdown.render() should render PlantUML Ditaa correctly', t => {
+  const rendered = md.render(markdownFixtures.plantUmlDitaa)
+  t.snapshot(rendered)
+})

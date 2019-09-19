@@ -165,6 +165,20 @@ rectangle checkout {
 @enduml
 `
 
+const plantUmlDitaa = `
+@startditaa
++--------+   +-------+    +-------+
+|        +---+ ditaa +--> |       |
+|  Text  |   +-------+    |Diagram|
+|Dokument|   |!Magie!|    |       |
+|     {d}|   |       |    |       |
++---+----+   +-------+    +-------+
+  :                         ^
+  |    Ein Haufen Arbeit    |
+  +-------------------------+
+@endditaa
+`
+
 export default {
   basic,
   codeblock,
@@ -181,5 +195,6 @@ export default {
   plantUmlMindMap,
   plantUmlGantt,
   plantUmlWbs,
+  plantUmlDitaa,
   plantUmlUml
 }
