@@ -117,6 +117,7 @@
     "redux": "^3.5.2",
     "sander": "^0.5.1",
     "sanitize-html": "^1.18.2",
+    "simple-git": "^1.126.0",
     "striptags": "^2.2.1",
     "turndown": "^4.0.2",
     "turndown-plugin-gfm": "^1.0.2",

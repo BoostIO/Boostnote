@@ -175,6 +175,7 @@ class StoragesTab extends React.Component {
   handleAddStorageChange (e) {
     const { newStorage } = this.state
     newStorage.name = this.refs.addStorageName.value
+    newStorage.type = this.refs.addStorageType.value
     newStorage.path = this.refs.addStoragePath.value
     this.setState({
       newStorage
@@ -185,6 +186,7 @@ class StoragesTab extends React.Component {
     dataApi
       .addStorage({
         name: this.state.newStorage.name,
+        type: this.state.newStorage.type,
         path: this.state.newStorage.path
       })
       .then((data) => {
@@ -231,10 +233,14 @@ class StoragesTab extends React.Component {
             <div styleName='addStorage-body-section-label'>{i18n.__('Type')}</div>
             <div styleName='addStorage-body-section-type'>
               <select styleName='addStorage-body-section-type-select'
+                ref='addStorageType'
                 value={this.state.newStorage.type}
-                readOnly
+                onChange={(e) => this.handleAddStorageChange(e)}
               >
+
                 <option value='FILESYSTEM'>{i18n.__('File System')}</option>
+                <option value='GITREPO'>{i18n.__('Git Repo')}</option>
+
               </select>
               <div styleName='addStorage-body-section-type-description'>
                 {i18n.__('Setting up 3rd-party cloud storage integration:')}{' '}
@@ -242,6 +248,9 @@ class StoragesTab extends React.Component {
                   onClick={(e) => this.handleLinkClick(e)}
                 >{i18n.__('Cloud-Syncing-and-Backup')}</a>
               </div>
+              {this.state.newStorage.type === 'GITREPO' &&
+                <div>you chose git</div>
+              }
             </div>
           </div>
 
