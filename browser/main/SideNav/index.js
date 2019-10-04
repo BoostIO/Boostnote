@@ -272,6 +272,7 @@ class SideNav extends React.Component {
           <div styleName='tagList'>
             {this.tagListComponent(data)}
           </div>
+          <NavToggleButton isFolded={isFolded} handleToggleButtonClick={this.handleToggleButtonClick.bind(this)} />
         </div>
       )
     }
