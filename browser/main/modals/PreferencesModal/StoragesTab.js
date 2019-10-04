@@ -32,11 +32,17 @@ class StoragesTab extends React.Component {
   constructor (props) {
     super(props)
 
+    this.defaultOptions = {
+      'FILESYSTEM': {},
+      'GITREPO': { autoSync: true }
+    }
+
     this.state = {
       page: 'LIST',
       newStorage: {
         name: 'Unnamed',
         type: 'FILESYSTEM',
+        options: this.defaultOptions['FILESYSTEM'],
         path: ''
       },
       attachments: []
@@ -69,6 +75,7 @@ class StoragesTab extends React.Component {
       newStorage: {
         name: 'Unnamed',
         type: 'FILESYSTEM',
+        options: this.defaultOptions['FILESYSTEM'],
         path: ''
       }
     }, () => {
@@ -172,14 +179,31 @@ class StoragesTab extends React.Component {
       })
   }
 
+  handleOptionsChange (e) {
+    const {name, value} = e.target
+    const { newStorage } = this.state
+
+    newStorage.options[name] = value === 'true' ? true : value === 'false' ? false : value
+    this.setState({newStorage})
+    console.log(newStorage)
+  }
   handleAddStorageChange (e) {
     const { newStorage } = this.state
+
     newStorage.name = this.refs.addStorageName.value
+
+    const oldType = newStorage.type
     newStorage.type = this.refs.addStorageType.value
-    newStorage.path = this.refs.addStoragePath.value
+
+    if (oldType !== newStorage.type) {
+      newStorage.options = this.defaultOptions[newStorage.type]
+    }
+
     this.setState({
       newStorage
     })
+
+    console.log(newStorage)
   }
 
   handleAddStorageCreateButton (e) {
@@ -187,6 +211,7 @@ class StoragesTab extends React.Component {
       .addStorage({
         name: this.state.newStorage.name,
         type: this.state.newStorage.type,
+        options: this.state.newStorage.options,
         path: this.state.newStorage.path
       })
       .then((data) => {
@@ -232,6 +257,7 @@ class StoragesTab extends React.Component {
           <div styleName='addStorage-body-section'>
             <div styleName='addStorage-body-section-label'>{i18n.__('Type')}</div>
             <div styleName='addStorage-body-section-type'>
+
               <select styleName='addStorage-body-section-type-select'
                 ref='addStorageType'
                 value={this.state.newStorage.type}
@@ -242,16 +268,27 @@ class StoragesTab extends React.Component {
                 <option value='GITREPO'>{i18n.__('Git Repo')}</option>
 
               </select>
-              <div styleName='addStorage-body-section-type-description'>
-                {i18n.__('Setting up 3rd-party cloud storage integration:')}{' '}
-                <a href='https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup'
-                  onClick={(e) => this.handleLinkClick(e)}
-                >{i18n.__('Cloud-Syncing-and-Backup')}</a>
-              </div>
+
               {this.state.newStorage.type === 'GITREPO' &&
-                <div>you chose git</div>
+            (
+              <span styleName='addStorage-body-section-type-options'>
+                <span styleName='addStorage-body-section-type-radio'>
+                  <input type='radio'ref='addOptions'
+                    id='true' name='autoSync' value='true' checked={this.state.newStorage.options.autoSync}
+                    onChange={(e) => this.handleOptionsChange(e)} />
+                  <label htmlFor='true'>{i18n.__('Auto Sync')}</label>
+                </span>
+                <span styleName='addStorage-body-section-type-radio'>
+
+                  <input type='radio' ref='addOptions'
+                    id='false' name='autoSync' value='false' checked={!this.state.newStorage.options.autoSync}
+                    onChange={(e) => this.handleOptionsChange(e)} />
+                  <label htmlFor='false'>{i18n.__('Commit Manually')}</label>
+                </span>
+              </span>)
               }
             </div>
+
           </div>
 
           <div styleName='addStorage-body-section'>
@@ -270,6 +307,12 @@ class StoragesTab extends React.Component {
                 ...
               </button>
             </div>
+          </div>
+          <div styleName='addStorage-body-section-description'>
+            {i18n.__('Setting up 3rd-party cloud storage integration:')}{' '}
+            <a href='https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup'
+              onClick={(e) => this.handleLinkClick(e)}
+                >{i18n.__('Cloud-Syncing-and-Backup')}</a>
           </div>
 
           <div styleName='addStorage-body-control'>

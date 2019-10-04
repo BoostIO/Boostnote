@@ -37,6 +37,7 @@ function addStorage (input) {
     key,
     name: input.name,
     type: input.type,
+    options: input.options,
     path: input.path,
     isOpen: false
   }
@@ -49,6 +50,7 @@ function addStorage (input) {
         key: newStorage.key,
         type: newStorage.type,
         name: newStorage.name,
+        options: newStorage.options,
         path: newStorage.path,
         isOpen: false
       })

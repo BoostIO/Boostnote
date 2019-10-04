@@ -6,6 +6,7 @@ import MarkdownEditor from 'browser/components/MarkdownEditor'
 import MarkdownSplitEditor from 'browser/components/MarkdownSplitEditor'
 import TodoListPercentage from 'browser/components/TodoListPercentage'
 import StarButton from './StarButton'
+import SyncButton from './SyncButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
@@ -36,6 +37,9 @@ class MarkdownNoteDetail extends React.Component {
   constructor (props) {
     super(props)
 
+    const storageList = JSON.parse(localStorage.getItem('storages'))
+    const storage = _.find(storageList, {key: this.props.note.storage})
+
     this.state = {
       isMovingNote: false,
       note: Object.assign({
@@ -43,6 +47,10 @@ class MarkdownNoteDetail extends React.Component {
         content: '',
         linesHighlighted: []
       }, props.note),
+      storage,
+      interval: null,
+      isManualGitFile: storage && storage.type === 'GITREPO' && !storage.options.autoSync,
+      isOutOfSync: false,
       isLockButtonShown: props.config.editor.type !== 'SPLIT',
       isLocked: false,
       editorType: props.config.editor.type,
@@ -67,6 +75,27 @@ class MarkdownNoteDetail extends React.Component {
     })
     ee.on('hotkey:deletenote', this.handleDeleteNote.bind(this))
     ee.on('code:generate-toc', this.generateToc)
+
+    const interval = setInterval(() => {
+      const storageList = JSON.parse(localStorage.getItem('storages'))
+      const storage = _.find(storageList, {key: this.state.note.storage})
+      this.setState({
+        storage: storage,
+        isManualGitFile: (storage && storage.type === 'GITREPO' &&
+              storage.options && !storage.options.autoSync)
+      })
+
+      if (this.state.isManualGitFile) {
+        dataApi.gitStorage.isFileSynced(this.state.storage.path, this.state.note.key)
+          .then((isSynced) => this.setState({isOutOfSync: !isSynced}))
+      } else {
+        this.setState({
+          isOutOfSync: false
+        })
+      }
+    }, 3 * 1000)
+
+    this.setState({interval: interval})
   }
 
   componentWillReceiveProps (nextProps) {
@@ -98,6 +127,8 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentWillUnmount () {
+    clearInterval(this.state.interval)
+
     ee.off('topbar:togglelockbutton', this.toggleLockButton)
     ee.off('code:generate-toc', this.generateToc)
     if (this.saveQueue != null) this.saveNow()
@@ -177,8 +208,10 @@ class MarkdownNoteDetail extends React.Component {
               key: newNote.key
             })
           }))
+
           this.setState({
             isMovingNote: false
+
           })
         })
       })
@@ -471,6 +504,12 @@ class MarkdownNoteDetail extends React.Component {
         <TodoListPercentage onClearCheckboxClick={(e) => this.handleClearTodo(e)} percentageOfTodo={getTodoPercentageOfCompleted(note.content)} />
       </div>
       <div styleName='info-right'>
+        {
+          this.state.isManualGitFile && this.state.isOutOfSync &&
+          <SyncButton
+            onClick={(e) => dataApi.gitStorage.syncGitFile(this.state.storage.path, this.state.note.key)}
+          />
+        }
         <ToggleModeButton onClick={(e) => this.handleSwitchMode(e)} editorType={editorType} />
 
         <StarButton

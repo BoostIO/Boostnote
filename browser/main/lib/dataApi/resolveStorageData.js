@@ -9,6 +9,7 @@ function resolveStorageData (storageCache) {
     key: storageCache.key,
     name: storageCache.name,
     type: storageCache.type,
+    options: storageCache.options,
     path: storageCache.path,
     isOpen: storageCache.isOpen
   }
