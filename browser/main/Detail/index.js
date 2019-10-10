@@ -50,16 +50,14 @@ class Detail extends React.Component {
         const searchStr = params.searchword
         displayedNotes = searchStr === undefined || searchStr === '' ? allNotes
           : searchFromNotes(allNotes, searchStr)
-      }
-
-      if (location.pathname.match(/\/tags/)) {
+      } else if (location.pathname.match(/^\/tags/)) {
         const listOfTags = params.tagname.split(' ')
         displayedNotes = data.noteMap.map(note => note).filter(note =>
           listOfTags.every(tag => note.tags.includes(tag))
         )
       }
 
-      if (location.pathname.match(/\/trashed/)) {
+      if (location.pathname.match(/^\/trashed/)) {
         displayedNotes = trashedNotes
       } else {
         displayedNotes = _.differenceWith(displayedNotes, trashedNotes, (note, trashed) => note.key === trashed.key)
