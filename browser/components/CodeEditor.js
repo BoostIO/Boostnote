@@ -241,6 +241,15 @@ export default class CodeEditor extends React.Component {
         const newCursorPos = cm.doc.posFromIndex(formattedCursorPos)
         cm.doc.setCursor(newCursorPos)
       },
+      [translateHotkey(hotkey.sortLines)]: cm => {
+        const selection = cm.doc.getSelection()
+        const appendLineBreak = /\n$/.test(selection)
+
+        const sorted = _.split(selection.trim(), '\n').sort()
+        const sortedString = _.join(sorted, '\n') + (appendLineBreak ? '\n' : '')
+
+        cm.doc.replaceSelection(sortedString)
+      },
       [translateHotkey(hotkey.pasteSmartly)]: cm => {
         this.handlePaste(cm, true)
       }

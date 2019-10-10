@@ -183,32 +183,47 @@ class Markdown {
     })
 
     const deflate = require('markdown-it-plantuml/lib/deflate')
-    this.md.use(require('markdown-it-plantuml'), {
-      generateSource: function (umlCode) {
-        const stripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
-        const serverAddress = stripTrailingSlash(config.preview.plantUMLServerAddress) + '/svg'
-        const s = unescape(encodeURIComponent(umlCode))
-        const zippedCode = deflate.encode64(
-          deflate.zip_deflate(`@startuml\n${s}\n@enduml`, 9)
-        )
-        return `${serverAddress}/${zippedCode}`
-      }
+    const plantuml = require('markdown-it-plantuml')
+    const plantUmlStripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
+    const plantUmlServerAddress = plantUmlStripTrailingSlash(config.preview.plantUMLServerAddress)
+    const parsePlantUml = function (umlCode, openMarker, closeMarker, type) {
+      const s = unescape(encodeURIComponent(umlCode))
+      const zippedCode = deflate.encode64(
+        deflate.zip_deflate(`${openMarker}\n${s}\n${closeMarker}`, 9)
+      )
+      return `${plantUmlServerAddress}/${type}/${zippedCode}`
+    }
+
+    this.md.use(plantuml, {
+      generateSource: (umlCode) => parsePlantUml(umlCode, '@startuml', '@enduml', 'svg')
     })
 
-    // Ditaa support
-    this.md.use(require('markdown-it-plantuml'), {
+    // Ditaa support. PlantUML server doesn't support Ditaa in SVG, so we set the format as PNG at the moment.
+    this.md.use(plantuml, {
       openMarker: '@startditaa',
       closeMarker: '@endditaa',
-      generateSource: function (umlCode) {
-        const stripTrailingSlash = (url) => url.endsWith('/') ? url.slice(0, -1) : url
-        // Currently PlantUML server doesn't support Ditaa in SVG, so we set the format as PNG at the moment.
-        const serverAddress = stripTrailingSlash(config.preview.plantUMLServerAddress) + '/png'
-        const s = unescape(encodeURIComponent(umlCode))
-        const zippedCode = deflate.encode64(
-          deflate.zip_deflate(`@startditaa\n${s}\n@endditaa`, 9)
-        )
-        return `${serverAddress}/${zippedCode}`
-      }
+      generateSource: (umlCode) => parsePlantUml(umlCode, '@startditaa', '@endditaa', 'png')
+    })
+
+    // Mindmap support
+    this.md.use(plantuml, {
+      openMarker: '@startmindmap',
+      closeMarker: '@endmindmap',
+      generateSource: (umlCode) => parsePlantUml(umlCode, '@startmindmap', '@endmindmap', 'svg')
+    })
+
+    // WBS support
+    this.md.use(plantuml, {
+      openMarker: '@startwbs',
+      closeMarker: '@endwbs',
+      generateSource: (umlCode) => parsePlantUml(umlCode, '@startwbs', '@endwbs', 'svg')
+    })
+
+    // Gantt support
+    this.md.use(plantuml, {
+      openMarker: '@startgantt',
+      closeMarker: '@endgantt',
+      generateSource: (umlCode) => parsePlantUml(umlCode, '@startgantt', '@endgantt', 'svg')
     })
 
     // Override task item

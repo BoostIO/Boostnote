@@ -1033,25 +1033,31 @@ export default class MarkdownPreview extends React.Component {
     e.stopPropagation()
 
     const rawHref = e.target.getAttribute('href')
-    const parser = document.createElement('a')
-    parser.href = e.target.getAttribute('href')
-    const { href, hash } = parser
-    const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
-
     if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 
-    const extractId = /(main.html)?#/
-    const regexNoteInternalLink = new RegExp(`${extractId.source}(.+)`)
-    if (regexNoteInternalLink.test(linkHash)) {
-      const targetId = mdurl.encode(linkHash.replace(extractId, ''))
-      const targetElement = this.refs.root.contentWindow.document.getElementById(
-        targetId
-      )
+    const parser = document.createElement('a')
+    parser.href = rawHref
+    const isStartWithHash = rawHref[0] === '#'
+    const { href, hash } = parser
 
-      if (targetElement != null) {
-        this.getWindow().scrollTo(0, targetElement.offsetTop)
+    const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
+
+    const extractIdRegex = /file:\/\/.*main.?\w*.html#/ // file://path/to/main(.development.)html
+    const regexNoteInternalLink = new RegExp(`${extractIdRegex.source}(.+)`)
+    if (isStartWithHash || regexNoteInternalLink.test(rawHref)) {
+      const posOfHash = linkHash.indexOf('#')
+      if (posOfHash > -1) {
+        const extractedId = linkHash.slice(posOfHash + 1)
+        const targetId = mdurl.encode(extractedId)
+        const targetElement = this.refs.root.contentWindow.document.getElementById(
+          targetId
+        )
+
+        if (targetElement != null) {
+          this.getWindow().scrollTo(0, targetElement.offsetTop)
+        }
+        return
       }
-      return
     }
 
     // this will match the new uuid v4 hash and the old hash
