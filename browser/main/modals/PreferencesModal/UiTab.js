@@ -112,7 +112,8 @@ class UiTab extends React.Component {
         enableMarkdownLint: this.refs.enableMarkdownLint.checked,
         customMarkdownLintConfig: this.customMarkdownLintConfigCM.getCodeMirror().getValue(),
         prettierConfig: this.prettierConfigCM.getCodeMirror().getValue(),
-        deleteUnusedAttachments: this.refs.deleteUnusedAttachments.checked
+        deleteUnusedAttachments: this.refs.deleteUnusedAttachments.checked,
+        backgroundPath: this.refs.customBackgroundPathEditor.value
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -949,6 +950,20 @@ class UiTab extends React.Component {
                     theme: codemirrorTheme
                   }} />
               </div>
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Custom Background - Editor')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                ref='customBackgroundPathEditor'
+                value={config.editor.backgroundPath}
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+              <p styleName='note-for-backgroundImage'>{i18n.__('⚠️ Background wont\'t update until editor is refreshed')}</p>
             </div>
           </div>
           <div styleName='group-control'>

@@ -19,6 +19,7 @@ import { isMarkdownTitleURL } from 'browser/lib/utils'
 import styles from '../components/CodeEditor.styl'
 const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
+import normalizeBackgroundImage from 'browser/lib/normalizeBackgroundImage'
 const spellcheck = require('browser/lib/spellcheck')
 const buildEditorContextMenu = require('browser/lib/contextMenuBuilder').buildEditorContextMenu
 import { createTurndownService } from '../lib/turndown'
@@ -274,6 +275,7 @@ export default class CodeEditor extends React.Component {
 
   componentDidMount () {
     const { rulers, enableRulers, enableMarkdownLint } = this.props
+    const backgroundPath = normalizeBackgroundImage(this.props.backgroundPath)
     eventEmitter.on('line:jump', this.scrollToLineHandeler)
 
     snippetManager.init()
@@ -304,10 +306,12 @@ export default class CodeEditor extends React.Component {
         override: true
       },
       extraKeys: this.defaultKeyMap,
-      prettierConfig: this.props.prettierConfig
+      prettierConfig: this.props.prettierConfig,
+      backgroundImage: this.props.backgroundImage
     })
 
     document.querySelector('.CodeMirror-lint-markers').style.display = enableMarkdownLint ? 'inline-block' : 'none'
+    document.querySelector('.CodeMirror.CodeMirror-wrap').style.backgroundImage = backgroundPath
 
     if (!this.props.mode && this.props.value && this.props.autoDetect) {
       this.autoDetectLanguage(this.props.value)
@@ -550,6 +554,9 @@ export default class CodeEditor extends React.Component {
       needRefresh = true
     }
     if (prevProps.fontFamily !== this.props.fontFamily) {
+      needRefresh = true
+    }
+    if (prevProps.backgroundImage !== this.props.backgroundImage) {
       needRefresh = true
     }
     if (prevProps.keyMap !== this.props.keyMap) {
@@ -1219,7 +1226,8 @@ CodeEditor.propTypes = {
   spellCheck: PropTypes.bool,
   enableMarkdownLint: PropTypes.bool,
   customMarkdownLintConfig: PropTypes.string,
-  deleteUnusedAttachments: PropTypes.bool
+  deleteUnusedAttachments: PropTypes.bool,
+  backgroundPath: PropTypes.string
 }
 
 CodeEditor.defaultProps = {
@@ -1235,5 +1243,6 @@ CodeEditor.defaultProps = {
   enableMarkdownLint: DEFAULT_CONFIG.editor.enableMarkdownLint,
   customMarkdownLintConfig: DEFAULT_CONFIG.editor.customMarkdownLintConfig,
   prettierConfig: DEFAULT_CONFIG.editor.prettierConfig,
-  deleteUnusedAttachments: DEFAULT_CONFIG.editor.deleteUnusedAttachments
+  deleteUnusedAttachments: DEFAULT_CONFIG.editor.deleteUnusedAttachments,
+  backgroundPath: DEFAULT_CONFIG.editor.backgroundPath
 }

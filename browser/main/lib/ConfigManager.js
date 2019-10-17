@@ -77,7 +77,8 @@ export const DEFAULT_CONFIG = {
       "semi": false,
       "singleQuote": true
     }`,
-    deleteUnusedAttachments: true
+    deleteUnusedAttachments: true,
+    backgroundPath: ''
   },
   preview: {
     fontSize: '14',
