@@ -55,6 +55,7 @@
   "default": "default",
   "vim": "vim",
   "emacs": "emacs",
+  "Custom CSS": "Custom CSS",
   "⚠️ Please restart boostnote after you change the keymap": "⚠️ Please restart boostnote after you change the keymap",
   "Show line numbers in the editor": "Show line numbers in the editor",
   "Allow editor to scroll past the last line": "Allow editor to scroll past the last line",
