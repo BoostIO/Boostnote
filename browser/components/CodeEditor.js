@@ -673,10 +673,10 @@ export default class CodeEditor extends React.Component {
       return
     }
     const lintOptions = {
-      'strings': {
-        'content': text
+      strings: {
+        content: text
       },
-      'config': lintConfigJson
+      config: lintConfigJson
     }
 
     return markdownlint(lintOptions, (err, result) => {
