@@ -657,8 +657,8 @@ export default class CodeEditor extends React.Component {
     const checkMarkdownNoteIsOpen = mode === 'Boost Flavored Markdown'
 
     return checkMarkdownNoteIsOpen ? {
-      'getAnnotations': this.validatorOfMarkdown,
-      'async': true
+      getAnnotations: this.validatorOfMarkdown,
+      async: true
     } : false
   }
 
