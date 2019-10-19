@@ -55,16 +55,18 @@ class CreateFolderModal extends React.Component {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_FOLDER')
     if (this.state.name.trim().length > 0) {
       const { storage, folder } = this.props
-      let name = this.state.name.trim()
-      if (folder) {
-        name = path.join(folder.name, name)
-      }
       const input = {
-        name,
+        name: this.state.name.trim(),
         color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7) % 7]
       }
 
-      dataApi.createFolder(storage.key, input)
+      let createFolder
+      if (folder) {
+        createFolder = dataApi.createSubFolder(storage.key, folder.key, input)
+      } else {
+        dataApi.createFolder(storage.key, input)
+      }
+      createFolder
         .then((data) => {
           store.dispatch({
             type: 'UPDATE_FOLDER',
