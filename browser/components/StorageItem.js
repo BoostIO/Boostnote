@@ -43,47 +43,54 @@ const StorageItem = ({
   noteCount,
   handleDrop,
   handleDragEnter,
-  handleDragLeave
+  handleDragLeave,
+  subFolder
 }) => {
-  let isSubFolder
-  let name = folderName
-  const paths = folderName.split('/')
-  if (paths.length > 1) {
-    isSubFolder = true
-    name = paths[paths.length - 1]
-  }
-  const folderStyle = `${isSubFolder ? 'sub' : ''}folderList-item`
   return (
-    <button
-      styleName={isActive ? `${folderStyle}--active` : folderStyle}
-      onClick={handleButtonClick}
-      onContextMenu={handleContextMenu}
-      onDrop={handleDrop}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-    >
-      {!isFolded &&
-        <DraggableIcon className={styles['folderList-item-reorder']} />}
-      <span
-        styleName={
-          isFolded ? 'folderList-item-name--folded' : 'folderList-item-name'
-        }
+    <React.Fragment>
+      <button
+        styleName={isActive ? 'folderList-item--active' : 'folderList-item'}
+        onClick={handleButtonClick}
+        onContextMenu={handleContextMenu}
+        onDrop={handleDrop}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
       >
-        <FolderIcon
-          styleName='folderList-item-icon'
-          color={folderColor}
+        {!isFolded &&
+          <DraggableIcon className={styles['folderList-item-reorder']} />}
+        <span
+          styleName={
+            isFolded ? 'folderList-item-name--folded' : 'folderList-item-name'
+          }
+        >
+          <FolderIcon
+            styleName='folderList-item-icon'
+            color={folderColor}
+            isActive={isActive}
+          />
+          {isFolded
+            ? _.truncate(folderName, { length: 1, omission: '' })
+            : folderName}
+        </span>
+        {!isFolded &&
+          _.isNumber(noteCount) &&
+          <span styleName='folderList-item-noteCount'>{noteCount}</span>}
+        {isFolded &&
+          <span styleName='folderList-item-tooltip'>{folderName}</span>}
+      </button>
+      {(subFolder || []).map(f => (
+        <StorageItem
+          key={f.key}
+          folderName={f.name}
+          folderColor={f.color}
+          isFolded={isFolded}
           isActive={isActive}
+          handleDragEnter={handleDragEnter}
+          handleDragLeave={handleDragLeave}
+          styles={styles}
         />
-        {isFolded
-          ? _.truncate(name, { length: 1, omission: '' })
-          : name}
-      </span>
-      {!isFolded &&
-        _.isNumber(noteCount) &&
-        <span styleName='folderList-item-noteCount'>{noteCount}</span>}
-      {isFolded &&
-        <span styleName='folderList-item-tooltip'>{folderName}</span>}
-    </button>
+      ))}
+    </React.Fragment>
   )
 }
 
@@ -96,7 +103,8 @@ StorageItem.propTypes = {
   isFolded: PropTypes.bool.isRequired,
   handleDragEnter: PropTypes.func.isRequired,
   handleDragLeave: PropTypes.func.isRequired,
-  noteCount: PropTypes.number
+  noteCount: PropTypes.number,
+  subFolder: PropTypes.array
 }
 
 export default CSSModules(StorageItem, styles)

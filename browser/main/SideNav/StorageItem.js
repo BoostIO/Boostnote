@@ -345,6 +345,7 @@ class StorageItem extends React.Component {
           handleDragLeave={(e) => {
             this.handleDragLeave(e, folder)
           }}
+          subFolder={folder.folders}
         />
       )
     })
