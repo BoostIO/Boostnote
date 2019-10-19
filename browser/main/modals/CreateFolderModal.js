@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+import path from 'path'
 import styles from './CreateFolderModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import { store } from 'browser/main/store'
@@ -53,9 +54,13 @@ class CreateFolderModal extends React.Component {
   confirm () {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_FOLDER')
     if (this.state.name.trim().length > 0) {
-      const { storage } = this.props
+      const { storage, folder } = this.props
+      let name = this.state.name.trim()
+      if (folder) {
+        name = path.join(folder.name, name)
+      }
       const input = {
-        name: this.state.name.trim(),
+        name,
         color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7) % 7]
       }
 
@@ -107,6 +112,10 @@ class CreateFolderModal extends React.Component {
 CreateFolderModal.propTypes = {
   storage: PropTypes.shape({
     key: PropTypes.string
+  }),
+  folder: PropTypes.shape({
+    key: PropTypes.string,
+    name: PropTypes.string
   })
 }
 

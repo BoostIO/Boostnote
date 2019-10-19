@@ -45,9 +45,17 @@ const StorageItem = ({
   handleDragEnter,
   handleDragLeave
 }) => {
+  let isSubFolder
+  let name = folderName
+  const paths = folderName.split('/')
+  if (paths.length > 1) {
+    isSubFolder = true
+    name = paths[paths.length - 1]
+  }
+  const folderStyle = `${isSubFolder ? 'sub' : ''}folderList-item`
   return (
     <button
-      styleName={isActive ? 'folderList-item--active' : 'folderList-item'}
+      styleName={isActive ? `${folderStyle}--active` : folderStyle}
       onClick={handleButtonClick}
       onContextMenu={handleContextMenu}
       onDrop={handleDrop}
@@ -67,8 +75,8 @@ const StorageItem = ({
           isActive={isActive}
         />
         {isFolded
-          ? _.truncate(folderName, { length: 1, omission: '' })
-          : folderName}
+          ? _.truncate(name, { length: 1, omission: '' })
+          : name}
       </span>
       {!isFolded &&
         _.isNumber(noteCount) &&

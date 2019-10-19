@@ -24,8 +24,20 @@
     color $$ui-button-default-color
     background-color alpha($ui-button-default--active-backgroundColor, 20%)
 
+.subfolderList-item
+  @extend .folderList-item
+  padding-left 14px
+
 .folderList-item--active
   @extend .folderList-item
+  color #1EC38B
+  background-color alpha($ui-button-default--active-backgroundColor, 20%)
+  &:hover
+    color #1EC38B;
+    background-color alpha($ui-button-default--active-backgroundColor, 50%)
+
+.subfolderList-item--active
+  @extend .subfolderList-item
   color #1EC38B
   background-color alpha($ui-button-default--active-backgroundColor, 20%)
   &:hover
