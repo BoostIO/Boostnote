@@ -1054,7 +1054,9 @@ export default class MarkdownPreview extends React.Component {
         )
 
         if (targetElement != null) {
-          this.getWindow().scrollTo(0, targetElement.offsetTop)
+          const currentWindow = this.getWindow()
+          const previewDocumentBody = currentWindow.document.body
+          previewDocumentBody.scrollTo(0, targetElement.offsetTop)
         }
         return
       }
