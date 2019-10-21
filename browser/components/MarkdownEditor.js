@@ -119,7 +119,7 @@ class MarkdownEditor extends React.Component {
         status: 'PREVIEW'
       }, () => {
         this.refs.preview.focus()
-        this.refs.preview.scrollTo(cursorPosition.line)
+        this.refs.preview.scrollToRow(cursorPosition.line)
       })
       eventEmitter.emit('topbar:togglelockbutton', this.state.status)
     }
