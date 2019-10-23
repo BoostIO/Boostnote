@@ -82,13 +82,21 @@ Distribution packages are created by exec `grunt build` on Linux platform (e.g. 
 
 After installing the supported version of `node` and `npm`, install build dependency packages.
 
-Ubuntu/Debian:
+**Ubuntu/Debian:**
+
+```
+$ npm i -g grunt-electron-installer-debian
+```
 
 ```
 $ sudo apt-get install -y rpm fakeroot
 ```
 
-Fedora:
+**Fedora:**
+
+```
+$ npm i -g grunt-electron-installer-redhat
+```
 
 ```
 $ sudo dnf install -y dpkg dpkg-dev rpm-build fakeroot
@@ -100,4 +108,4 @@ Then execute `grunt build`.
 $ grunt build
 ```
 
-You will find `.deb` and `.rpm` in the `dist` directory.
+> You will find `.deb` and `.rpm` in the `dist` directory.
