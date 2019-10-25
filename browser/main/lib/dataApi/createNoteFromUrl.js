@@ -15,8 +15,8 @@ function validateUrl (str) {
 }
 
 const ERROR_MESSAGES = {
-  ENOTFOUND: 'URL not found. Please check the URL, your internet connection and try again.',
-  VALIDATION_ERROR: 'Please check your URL is in correct format. (Example, https://www.google.com)',
+  ENOTFOUND: 'URL not found. Please check the URL, or your internet connection and try again.',
+  VALIDATION_ERROR: 'Please check if the URL follows this format: https://www.google.com',
   UNEXPECTED: 'Unexpected error! Please check console for details!'
 }
 
