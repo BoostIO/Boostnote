@@ -255,6 +255,12 @@ export default class CodeEditor extends React.Component {
       },
       [translateHotkey(hotkey.formatTextBold)]: cm => {
         this.formatText(cm, '**')
+      },
+      [translateHotkey(hotkey.formatTextItalic)]: cm => {
+        this.formatText(cm, '`')
+      },
+      [translateHotkey(hotkey.formatTextInlineCode)]: cm => {
+        this.formatText(cm, '```')
       }
     })
   }

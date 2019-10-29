@@ -36,7 +36,10 @@ export const DEFAULT_CONFIG = {
     insertDate: OSX ? 'Command + /' : 'Ctrl + /',
     insertDateTime: OSX ? 'Command + Alt + /' : 'Ctrl + Shift + /',
     toggleMenuBar: 'Alt',
-    formatTextBold: OSX ? 'Command + B' : 'Ctrl + B'
+    formatTextBold: OSX ? 'Command + B' : 'Ctrl + B',
+    formatTextItalic: OSX ? 'Command + I' : 'Ctrl + I',
+    formatTextInlineCode: OSX ? 'Command + I + C' : 'Ctrl + I + C',
+    formatTextCodeBlock: OSX ? 'Command + C + B' : 'Ctrl + C + B'
   },
   ui: {
     language: 'en',
