@@ -252,6 +252,16 @@ export default class CodeEditor extends React.Component {
       },
       [translateHotkey(hotkey.pasteSmartly)]: cm => {
         this.handlePaste(cm, true)
+      },
+      [translateHotkey(hotkey.formatTextBold)]: cm => {
+        const cursor = this.editor.getCursor()
+        const wordRange = this.editor.findWordAt({
+          line: cursor.line,
+          ch: cursor.ch
+        })
+        const word = this.editor.getRange(wordRange.anchor, wordRange.head)
+
+        cm.doc.replaceRange('**' + word + '**', wordRange.anchor, wordRange.head)
       }
     })
   }
