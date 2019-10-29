@@ -254,16 +254,44 @@ export default class CodeEditor extends React.Component {
         this.handlePaste(cm, true)
       },
       [translateHotkey(hotkey.formatTextBold)]: cm => {
-        const cursor = this.editor.getCursor()
-        const wordRange = this.editor.findWordAt({
-          line: cursor.line,
-          ch: cursor.ch
-        })
-        const word = this.editor.getRange(wordRange.anchor, wordRange.head)
-
-        cm.doc.replaceRange('**' + word + '**', wordRange.anchor, wordRange.head)
+        this.formatText(cm, '**')
       }
     })
+  }
+
+  formatText (cm, format) {
+    const selection = cm.doc.getSelection()
+    // User has highlighted something in the editor
+    if (selection) {
+      // If it's just an empty string then do nothing
+      if (!selection.trim()) {
+        return
+      }
+      /**
+       * Don't wrapp the white spaces, but still preserve them after the replacement
+       */
+      const whitespaces = {
+        leading: selection.search(/\S/),
+        trailing: selection.split('').reverse().join('').search(/\S/)
+      }
+
+      const leadingSpaces = ' '.repeat(whitespaces.leading)
+      const trailingSpaces = ' '.repeat(whitespaces.trailing)
+
+      let replacement = selection.trim()
+      if (selection.trim().startsWith(format) && selection.trim().endsWith(format)) {
+        // Remove formatting
+
+        replacement = replacement.substr(format.length, replacement.length)
+        replacement = replacement.substr(0, replacement.length - format.length)
+      } else {
+        // Add formatting
+
+        replacement = format + replacement + format
+      }
+
+      cm.doc.replaceSelection(leadingSpaces + replacement + trailingSpaces)
+    }
   }
 
   updateTableEditorState () {
