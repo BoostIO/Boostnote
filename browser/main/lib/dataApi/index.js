@@ -20,7 +20,7 @@ const dataApi = {
   deleteSnippet: require('./deleteSnippet'),
   updateSnippet: require('./updateSnippet'),
   fetchSnippet: require('./fetchSnippet'),
-
+  gitStorage: require('./gitStorage'),
   _migrateFromV6Storage: require('./migrateFromV6Storage'),
   _resolveStorageData: require('./resolveStorageData'),
   _resolveStorageNotes: require('./resolveStorageNotes')
