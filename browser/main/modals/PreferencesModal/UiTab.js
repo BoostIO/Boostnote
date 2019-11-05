@@ -963,7 +963,6 @@ class UiTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
                 type='text'
               />
-              <p styleName='note-for-backgroundImage'>{i18n.__('⚠️ Background wont\'t update until editor is refreshed')}</p>
             </div>
           </div>
           <div styleName='group-control'>

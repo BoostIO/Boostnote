@@ -307,7 +307,7 @@ export default class CodeEditor extends React.Component {
       },
       extraKeys: this.defaultKeyMap,
       prettierConfig: this.props.prettierConfig,
-      backgroundImage: this.props.backgroundImage
+      backgroundPath: this.props.backgroundPath
     })
 
     document.querySelector('.CodeMirror-lint-markers').style.display = enableMarkdownLint ? 'inline-block' : 'none'
@@ -556,7 +556,8 @@ export default class CodeEditor extends React.Component {
     if (prevProps.fontFamily !== this.props.fontFamily) {
       needRefresh = true
     }
-    if (prevProps.backgroundImage !== this.props.backgroundImage) {
+    if (prevProps.backgroundPath !== this.props.backgroundPath) {
+      document.querySelector('.CodeMirror.CodeMirror-wrap').style.backgroundImage = normalizeBackgroundImage(this.props.backgroundPath)
       needRefresh = true
     }
     if (prevProps.keyMap !== this.props.keyMap) {
