@@ -12,6 +12,10 @@ const languages = [
     locale: 'zh-TW'
   },
   {
+    name: 'Czech',
+    locale: 'cs'
+  },
+  {
     name: 'Danish',
     locale: 'da'
   },

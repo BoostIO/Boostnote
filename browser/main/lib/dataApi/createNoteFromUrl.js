@@ -14,12 +14,18 @@ function validateUrl (str) {
   }
 }
 
+const ERROR_MESSAGES = {
+  ENOTFOUND: 'URL not found. Please check the URL, or your internet connection and try again.',
+  VALIDATION_ERROR: 'Please check if the URL follows this format: https://www.google.com',
+  UNEXPECTED: 'Unexpected error! Please check console for details!'
+}
+
 function createNoteFromUrl (url, storage, folder, dispatch = null, location = null) {
   return new Promise((resolve, reject) => {
     const td = createTurndownService()
 
     if (!validateUrl(url)) {
-      reject({result: false, error: 'Please check your URL is in correct format. (Example, https://www.google.com)'})
+      reject({result: false, error: ERROR_MESSAGES.VALIDATION_ERROR})
     }
 
     const request = url.startsWith('https') ? https : http
@@ -70,8 +76,9 @@ function createNoteFromUrl (url, storage, folder, dispatch = null, location = nu
 
     req.on('error', (e) => {
       console.error('error in parsing URL', e)
-      reject({result: false, error: e})
+      reject({result: false, error: ERROR_MESSAGES[e.code] || ERROR_MESSAGES.UNEXPECTED})
     })
+
     req.end()
   })
 }

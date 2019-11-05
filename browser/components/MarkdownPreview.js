@@ -102,7 +102,11 @@ ${markdownStyle}
 body {
   font-family: '${fontFamily.join("','")}';
   font-size: ${fontSize}px;
-  ${scrollPastEnd ? 'padding-bottom: 90vh;' : ''}
+  ${scrollPastEnd ? `
+    padding-bottom: 90vh;
+    box-sizing: border-box;
+    `
+    : ''}
   ${optimizeOverflowScroll ? 'height: 100%;' : ''}
 }
 @media print {
@@ -619,7 +623,7 @@ export default class MarkdownPreview extends React.Component {
 
     // Should scroll to top after selecting another note
     if (prevProps.noteKey !== this.props.noteKey) {
-      this.getWindow().scrollTo(0, 0)
+      this.scrollTo(0, 0)
     }
   }
 
@@ -1003,7 +1007,11 @@ export default class MarkdownPreview extends React.Component {
     return this.refs.root.contentWindow
   }
 
-  scrollTo (targetRow) {
+  /**
+   * @public
+   * @param {Number} targetRow
+   */
+  scrollToRow (targetRow) {
     const blocks = this.getWindow().document.querySelectorAll(
       'body>[data-line]'
     )
@@ -1013,10 +1021,19 @@ export default class MarkdownPreview extends React.Component {
       const row = parseInt(block.getAttribute('data-line'))
       if (row > targetRow || index === blocks.length - 1) {
         block = blocks[index - 1]
-        block != null && this.getWindow().scrollTo(0, block.offsetTop)
+        block != null && this.scrollTo(0, block.offsetTop)
         break
       }
     }
+  }
+
+  /**
+   * `document.body.scrollTo`
+   * @param {Number} x
+   * @param {Number} y
+   */
+  scrollTo (x, y) {
+    this.getWindow().document.body.scrollTo(x, y)
   }
 
   preventImageDroppedHandler (e) {
@@ -1061,7 +1078,7 @@ export default class MarkdownPreview extends React.Component {
         )
 
         if (targetElement != null) {
-          this.getWindow().scrollTo(0, targetElement.offsetTop)
+          this.scrollTo(0, targetElement.offsetTop)
         }
         return
       }

@@ -657,8 +657,8 @@ export default class CodeEditor extends React.Component {
     const checkMarkdownNoteIsOpen = mode === 'Boost Flavored Markdown'
 
     return checkMarkdownNoteIsOpen ? {
-      'getAnnotations': this.validatorOfMarkdown,
-      'async': true
+      getAnnotations: this.validatorOfMarkdown,
+      async: true
     } : false
   }
 
@@ -673,10 +673,10 @@ export default class CodeEditor extends React.Component {
       return
     }
     const lintOptions = {
-      'strings': {
-        'content': text
+      strings: {
+        content: text
       },
-      'config': lintConfigJson
+      config: lintConfigJson
     }
 
     return markdownlint(lintOptions, (err, result) => {
