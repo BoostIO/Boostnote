@@ -359,7 +359,7 @@ export default class MarkdownPreview extends React.Component {
 
     let styles = ''
     files.forEach(file => {
-      styles += `<link rel="stylesheet" href="css/${path.basename(file)}">`
+      styles += `<link rel="stylesheet" href="../css/${path.basename(file)}">`
     })
 
     return `<html>
