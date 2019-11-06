@@ -115,6 +115,17 @@ export function escapeHtmlCharacters (
   return html
 }
 
+export function escapeEntityReferences (html) {
+  const escapes = ['quot;', 'amp;', '#39;', 'lt;', 'gt;']
+  const ampEntity = '&amp;'
+
+  escapes.forEach((escape) => {
+    html = html.replace(new RegExp(`&${escape}`, 'g'), `${ampEntity}${escape}`)
+  })
+
+  return html
+}
+
 export function isObjectEqual (a, b) {
   const aProps = Object.getOwnPropertyNames(a)
   const bProps = Object.getOwnPropertyNames(b)
