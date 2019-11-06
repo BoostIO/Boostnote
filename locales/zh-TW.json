@@ -49,6 +49,7 @@
   "default": "預設",
   "vim": "vim",
   "emacs": "emacs",
+  "Custom Background - Editor": "自訂背景 - 文字編輯器",
   "⚠️ Please restart boostnote after you change the keymap": "⚠️ 修改鍵盤配置請重新開啟 Boostnote ",
   "Show line numbers in the editor": "在編輯器中顯示行號",
   "Allow editor to scroll past the last line": "允許編輯器捲軸捲動超過最後一行",
