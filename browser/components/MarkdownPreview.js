@@ -50,7 +50,6 @@ const CSS_FILES = [
  * @param {String} opts.theme
  * @param {Boolean} [opts.lineNumber] Should show line number
  * @param {Boolean} [opts.scrollPastEnd]
- * @param {Boolean} [opts.optimizeOverflowScroll] Should tweak body style to optimize overflow scrollbar display
  * @param {Boolean} [opts.allowCustomCSS] Should add custom css
  * @param {String} [opts.customCSS] Will be added to bottom, only if `opts.allowCustomCSS` is truthy
  * @returns {String}
@@ -62,7 +61,6 @@ function buildStyle (opts) {
     codeBlockFontFamily,
     lineNumber,
     scrollPastEnd,
-    optimizeOverflowScroll,
     theme,
     allowCustomCSS,
     customCSS
@@ -107,7 +105,6 @@ body {
     box-sizing: border-box;
     `
     : ''}
-  ${optimizeOverflowScroll ? 'height: 100%;' : ''}
 }
 @media print {
   body {
@@ -687,7 +684,6 @@ export default class MarkdownPreview extends React.Component {
       codeBlockFontFamily,
       lineNumber,
       scrollPastEnd,
-      optimizeOverflowScroll: true,
       theme,
       allowCustomCSS,
       customCSS
