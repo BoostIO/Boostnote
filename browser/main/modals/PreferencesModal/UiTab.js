@@ -699,6 +699,19 @@ class UiTab extends React.Component {
               </div>
             </div>
           </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Custom Background - Editor')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                ref='customBackgroundPathEditor'
+                value={config.editor.backgroundPath}
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+            </div>
+          </div>
 
           <div styleName='group-header2'>{i18n.__('Preview')}</div>
           <div styleName='group-section'>
@@ -950,19 +963,6 @@ class UiTab extends React.Component {
                     theme: codemirrorTheme
                   }} />
               </div>
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Custom Background - Editor')}
-            </div>
-            <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                ref='customBackgroundPathEditor'
-                value={config.editor.backgroundPath}
-                onChange={(e) => this.handleUIChange(e)}
-                type='text'
-              />
             </div>
           </div>
           <div styleName='group-control'>
