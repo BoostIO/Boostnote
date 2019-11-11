@@ -444,6 +444,38 @@ pre.fence
         color $ui-text-color
         background-color $ui-tag-backgroundColor
 
+.markdownIt-TOC
+  list-style none
+  padding 15px
+  position fixed
+  right 0
+  top 0
+  margin-left 15px
+  z-index 1000
+  transition transform .2s ease-in-out
+  transform translateX(100%)
+
+  &,
+  &:before
+    background-color $ui-dark-backgroundColor
+    color: $ui-dark-text-color
+
+  &:hover
+    transform translateX(-15px)
+
+  &:before
+    content 'TOC'
+    position absolute
+    width 60px
+    height 30px
+    top 60px
+    left -30px
+    display flex
+    align-items center
+    justify-content center
+    transform-origin top left
+    transform rotate(-90deg)
+
 themeDarkBackground = darken(#21252B, 10%)
 themeDarkText = #f9f9f9
 themeDarkBorder = lighten(themeDarkBackground, 20%)
@@ -511,6 +543,14 @@ body[data-theme="dark"]
         color $ui-dark-text-color
         background-color $ui-dark-tag-backgroundColor
 
+  .markdownIt-TOC
+    &,
+    &:before
+      background-color darken(themeDarkBackground, 5%)
+      color themeDarkText
+
+
+themeSolarizedDarkBackground = $ui-solarized-dark-noteDetail-backgroundColor
 themeSolarizedDarkTableOdd = $ui-solarized-dark-noteDetail-backgroundColor
 themeSolarizedDarkTableEven = darken($ui-solarized-dark-noteDetail-backgroundColor, 10%)
 themeSolarizedDarkTableHead = themeSolarizedDarkTableEven
@@ -519,7 +559,7 @@ themeSolarizedDarkTableBorder = themeDarkBorder
 body[data-theme="solarized-dark"]
   color $ui-solarized-dark-text-color
   border-color themeDarkBorder
-  background-color $ui-solarized-dark-noteDetail-backgroundColor
+  background-color themeSolarizedDarkBackground
   table
     thead
       tr
@@ -554,6 +594,13 @@ body[data-theme="solarized-dark"]
         color $ui-solarized-dark-button--active-color
         background-color $ui-solarized-dark-button-backgroundColor
 
+  .markdownIt-TOC
+    &,
+    &:before
+      background-color darken(themeSolarizedDarkBackground, 15%)
+      color themeDarkText
+
+themeMonokaiBackground = $ui-monokai-noteDetail-backgroundColor
 themeMonokaiTableOdd = $ui-monokai-noteDetail-backgroundColor
 themeMonokaiTableEven = darken($ui-monokai-noteDetail-backgroundColor, 10%)
 themeMonokaiTableHead = themeMonokaiTableEven
@@ -562,7 +609,7 @@ themeMonokaiTableBorder = themeDarkBorder
 body[data-theme="monokai"]
   color $ui-monokai-text-color
   border-color themeDarkBorder
-  background-color $ui-monokai-noteDetail-backgroundColor
+  background-color themeMonokaiBackground
   table
     thead
       tr
@@ -600,6 +647,13 @@ body[data-theme="monokai"]
         color $ui-monokai-button--active-color
         background-color $ui-monokai-button-backgroundColor
 
+  .markdownIt-TOC
+    &,
+    &:before
+      background-color darken(themeMonokaiBackground, 15%)
+      color themeDarkText
+
+themeDraculaBackground = $ui-dracula-noteDetail-backgroundColor
 themeDraculaTableOdd = $ui-dracula-noteDetail-backgroundColor
 themeDraculaTableEven = darken($ui-dracula-noteDetail-backgroundColor, 10%)
 themeDraculaTableHead = themeDraculaTableEven
@@ -608,7 +662,7 @@ themeDraculaTableBorder = themeDarkBorder
 body[data-theme="dracula"]
   color $ui-dracula-text-color
   border-color themeDarkBorder
-  background-color $ui-dracula-noteDetail-backgroundColor
+  background-color themeDraculaBackground
   table
     thead
       tr
@@ -645,3 +699,9 @@ body[data-theme="dracula"]
       .prev, .next
         color $ui-dracula-button--active-color
         background-color $ui-dracula-button-backgroundColor
+
+  .markdownIt-TOC
+    &,
+    &:before
+      background-color darken(themeDraculaBackground, 15%)
+      color themeDarkText
