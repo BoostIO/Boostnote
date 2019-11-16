@@ -206,11 +206,11 @@ export default class CodeEditor extends React.Component {
       },
       [translateHotkey(hotkey.insertDate)]: function (cm) {
         const dateNow = new Date()
-        cm.replaceSelection(dateNow.toLocaleDateString())
+        cm.replaceSelection(dateNow.toISOString().slice(0, 10))
       },
       [translateHotkey(hotkey.insertDateTime)]: function (cm) {
         const dateNow = new Date()
-        cm.replaceSelection(dateNow.toLocaleString())
+        cm.replaceSelection(dateNow.toISOString())
       },
       Enter: 'boostNewLineAndIndentContinueMarkdownList',
       'Ctrl-C': cm => {
