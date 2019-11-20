@@ -57,7 +57,7 @@ class SideNav extends React.Component {
 
   deleteTag (tag) {
     const selectedButton = remote.dialog.showMessageBox(remote.getCurrentWindow(), {
-      ype: 'warning',
+      type: 'warning',
       message: i18n.__('Confirm tag deletion'),
       detail: i18n.__('This will permanently remove this tag.'),
       buttons: [i18n.__('Confirm'), i18n.__('Cancel')]
