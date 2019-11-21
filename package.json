@@ -76,7 +76,7 @@
     "iconv-lite": "^0.4.19",
     "immutable": "^3.8.1",
     "invert-color": "^2.0.0",
-    "js-yaml": "^3.12.0",
+    "js-yaml": "^3.13.1",
     "jsonlint-mod": "^1.7.4",
     "katex": "^0.10.1",
     "lodash": "^4.17.13",
