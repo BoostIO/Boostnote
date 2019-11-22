@@ -240,10 +240,8 @@ navWhiteButtonColor()
   &:hover
     background-color alpha($ui-button--active-backgroundColor, 20%)
     transition  0.15s
-    color $ui-text-color
   &:active, &:active:hover
     background-color $ui-button--active-backgroundColor
-    color $ui-text-color
     transition 0.15s
 
 // UI Button
@@ -412,6 +410,15 @@ $ui-dracula-button--active-color = #f8f8f2
 $ui-dracula-button--active-backgroundColor = #bd93f9
 $ui-dracula-button--hover-backgroundColor = lighten($ui-dracula-backgroundColor, 10%)
 $ui-dracula-button--focus-borderColor = lighten(#44475a, 25%)
+colorDraculaDefaultButton()
+  border-color $ui-dracula-borderColor
+  color $ui-dracula-text-color
+  background-color $ui-dracula-button-backgroundColor
+  &:hover
+    background-color $ui-dracula-button--hover-backgroundColor
+  &:active
+  &:active:hover
+    background-color $ui-dracula-button--active-backgroundColor
 
 modalDracula()
   position relative

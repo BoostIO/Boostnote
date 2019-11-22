@@ -1,16 +1,4 @@
-@import('./Tab')
-
-.root
-  padding 15px
-  white-space pre
-  line-height 1.4
-  color alpha($ui-text-color, 90%)
-  width 100%
-  font-size 14px
-
-.top
-  text-align left
-  margin-bottom 20px
+@import('./ConfigTab.styl')
 
 .icon-space
   margin 20px 0
@@ -45,13 +33,21 @@
 .separate-line
   margin 40px 0
 
-.policy
-  width 100%
-  font-size 20px
-  margin-bottom 10px
-
 .policy-submit
   margin-top 10px
+  height 35px
+  border-radius 2px
+  border none
+  background-color alpha(#1EC38B, 90%)
+  padding-left 20px
+  padding-right 20px
+  text-decoration none
+  color white
+  font-weight 600
+  font-size 16px
+  &:hover
+    background-color #1EC38B
+    transition 0.2s
 
 .policy-confirm
   margin-top 10px
@@ -60,10 +56,13 @@
 body[data-theme="dark"]
   .root
     color alpha($tab--dark-text-color, 80%)
-
+  .appId
+    color $ui-dark-text-color
 
 body[data-theme="solarized-dark"]
   .root
+    color $ui-solarized-dark-text-color
+  .appId
     color $ui-solarized-dark-text-color
 .list
   a
@@ -72,12 +71,16 @@ body[data-theme="solarized-dark"]
 body[data-theme="monokai"]
   .root
     color $ui-monokai-text-color
+  .appId
+    color $ui-monokai-text-color
 .list
   a
     color $ui-monokai-active-color
 
 body[data-theme="dracula"]
   .root
+    color $ui-dracula-text-color
+  .appId
     color $ui-dracula-text-color
 .list
   a

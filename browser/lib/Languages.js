@@ -12,6 +12,10 @@ const languages = [
     locale: 'zh-TW'
   },
   {
+    name: 'Czech',
+    locale: 'cs'
+  },
+  {
     name: 'Danish',
     locale: 'da'
   },
@@ -62,10 +66,12 @@ const languages = [
   {
     name: 'Spanish',
     locale: 'es-ES'
-  }, {
+  },
+  {
     name: 'Turkish',
     locale: 'tr'
-  }, {
+  },
+  {
     name: 'Thai',
     locale: 'th'
   }
@@ -82,4 +88,3 @@ module.exports = {
     return languages
   }
 }
-

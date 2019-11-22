@@ -40,6 +40,11 @@
   opacity 0
   transition 0.1s
 
+.tooltip:lang(ja)
+  @extend .tooltip
+  left -8px
+  width 70px
+
 body[data-theme="dark"]
   .control-fullScreenButton
     topBarButtonDark()
@@ -70,3 +75,10 @@ body[data-theme="dracula"]
     .active
       background-color #bd93f9
       box-shadow 2px 0px 7px #222222
+
+.control-toggleModeButton
+  -webkit-user-drag none
+  user-select none
+  > div img
+    -webkit-user-drag none
+    user-select none

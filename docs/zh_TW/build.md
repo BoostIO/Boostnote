@@ -1,10 +1,11 @@
 # 編譯
-此文件還提供下列的語言 [日文](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [韓文](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [俄文](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [簡體中文](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [法文](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md) and [德文](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
+
+此文件還提供下列的語言 [日文](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [韓文](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [俄文](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [簡體中文](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [法文](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md), [葡萄牙](https://github.com/BoostIO/Boostnote/blob/master/docs/pt_BR/build.md) and [德文](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
 
 ## 環境
 
-* npm: 6.x
-* node: 8.x
+- npm: 6.x
+- node: 8.x
 
 ## 開發
 
@@ -25,7 +26,9 @@ $ yarn run dev
 ```
 
 > ### Notice
+>
 > There are some cases where you have to refresh the app manually.
+>
 > 1. When editing a constructor method of a component
 > 2. When adding a new css class (similar to 1: the CSS class is re-written by each component. This process occurs at the Constructor method.)
 
@@ -51,7 +54,6 @@ Distribution packages are created by exec `grunt build` on Linux platform (e.g. 
 > Note: You can create both `.deb` and `.rpm` in a single environment.
 
 After installing the supported version of `node` and `npm`, install build dependency packages.
-
 
 Ubuntu/Debian:
 

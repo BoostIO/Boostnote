@@ -104,6 +104,89 @@ Term 2 with *inline markup*
 `
 const shortcuts = '<kbd>Ctrl</kbd>\n\n[[Ctrl]]'
 
+const footnote = `
+^[hello-world]
+hello-world: https://github.com/BoostIO/Boostnote/
+`
+
+const tocPlaceholder = `
+[TOC]
+# H1
+## H2
+### H3
+###$ H4
+`
+
+const plantUmlMindMap = `
+@startmindmap
+* Debian
+** Ubuntu
+*** Linux Mint
+*** Kubuntu
+*** Lubuntu
+*** KDE Neon
+** LMDE
+** SolydXK
+** SteamOS
+** Raspbian with a very long name
+*** <s>Raspmbc</s> => OSMC
+*** <s>Raspyfi</s> => Volumio
+@endmindmap
+`
+
+const plantUmlGantt = `
+@startgantt
+[Prototype design] lasts 15 days
+[Test prototype] lasts 10 days
+[Test prototype] starts at [Prototype design]'s end
+@endgantt
+`
+
+const plantUmlWbs = `
+@startwbs
+* Business Process Modelling WBS
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+@endwbs
+`
+
+const plantUmlUml = `
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor customer
+actor clerk
+rectangle checkout {
+  customer -- (checkout)
+  (checkout) .> (payment) : include
+  (help) .> (checkout) : extends
+  (checkout) -- clerk
+}
+@enduml
+`
+
+const plantUmlDitaa = `
+@startditaa
++--------+   +-------+    +-------+
+|        +---+ ditaa +--> |       |
+|  Text  |   +-------+    |Diagram|
+|Dokument|   |!Magie!|    |       |
+|     {d}|   |       |    |       |
++---+----+   +-------+    +-------+
+  :                         ^
+  |    Ein Haufen Arbeit    |
+  +-------------------------+
+@endditaa
+`
+
 export default {
   basic,
   codeblock,
@@ -115,5 +198,12 @@ export default {
   subTexts,
   supTexts,
   deflists,
-  shortcuts
+  shortcuts,
+  footnote,
+  tocPlaceholder,
+  plantUmlMindMap,
+  plantUmlGantt,
+  plantUmlWbs,
+  plantUmlDitaa,
+  plantUmlUml
 }

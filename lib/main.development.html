@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="../node_modules/katex/dist/katex.min.css">
   <link rel="stylesheet" href="../node_modules/codemirror/addon/dialog/dialog.css">
+  <link rel="stylesheet" href="../node_modules/codemirror/addon/lint/lint.css">
   <link rel="stylesheet" href="../extra_scripts/codemirror/mode/bfm/bfm.css">
 
   <title>Boostnote</title>
@@ -71,6 +72,15 @@
       border-left-color: rgba(142, 142, 142, 0.5);
       mix-blend-mode: difference;
     }
+    
+    .CodeMirror-scroll {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .CodeMirror-lint-tooltip {
+      z-index: 1003;
+    }
   </style>
 </head>
 
@@ -95,6 +105,7 @@
   <script src="../node_modules/codemirror/keymap/vim.js"></script>
   <script src="../node_modules/codemirror/keymap/emacs.js"></script>
   <script src="../node_modules/codemirror/addon/runmode/runmode.js"></script>
+  <script src="../node_modules/codemirror/addon/display/panel.js"></script>
   <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
   <script src="../node_modules/codemirror/mode/markdown/markdown.js"></script>
   <script src="../node_modules/codemirror/mode/gfm/gfm.js"></script>
@@ -104,7 +115,6 @@
   <script src="../extra_scripts/boost/boostNewLineIndentContinueMarkdownList.js"></script>
   <script src="../extra_scripts/codemirror/mode/bfm/bfm.js"></script>
   <script src="../extra_scripts/codemirror/addon/hyperlink/hyperlink.js"></script>
-  <script src="../extra_scripts/codemirror/mode/bfm/bfm.js"></script>
 
   <script src="../node_modules/codemirror/addon/edit/closebrackets.js"></script>
   <script src="../node_modules/codemirror/addon/edit/matchbrackets.js"></script>
@@ -124,15 +134,19 @@
   <script src="../node_modules/codemirror/addon/dialog/dialog.js"></script>
   <script src="../node_modules/codemirror/addon/display/rulers.js"></script>
 
+  <script src="../node_modules/jsonlint-mod/lib/jsonlint.js"></script>
+  <script src="../node_modules/codemirror/addon/lint/lint.js"></script>
+  <script src="../node_modules/codemirror/addon/lint/json-lint.js"></script>
+
   <script src="../node_modules/raphael/raphael.min.js"></script>
   <script src="../node_modules/flowchart.js/release/flowchart.min.js"></script>
   <script>
     window._ = require('lodash')
   </script>
 
-  <script src="../node_modules/js-sequence-diagrams/fucknpm/sequence-diagram-min.js"></script>
-  <script src="../node_modules/react/dist/react.min.js"></script>
-  <script src="../node_modules/react-dom/dist/react-dom.min.js"></script>
+  <script src="../node_modules/@rokt33r/js-sequence-diagrams/dist/sequence-diagram-min.js"></script>
+  <script src="../node_modules/react/umd/react.development.js"></script>
+  <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
   <script src="../node_modules/redux/dist/redux.min.js"></script>
   <script src="../node_modules/react-redux/dist/react-redux.min.js"></script>
   <script type='text/javascript'>

@@ -74,7 +74,7 @@ SideNavFilter.propTypes = {
   isStarredActive: PropTypes.bool.isRequired,
   isTrashedActive: PropTypes.bool.isRequired,
   handleStarredButtonClick: PropTypes.func.isRequired,
-  handleTrashdButtonClick: PropTypes.func.isRequired
+  handleTrashedButtonClick: PropTypes.func.isRequired
 }
 
 export default CSSModules(SideNavFilter, styles)

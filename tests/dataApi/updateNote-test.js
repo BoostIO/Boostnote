@@ -26,13 +26,17 @@ test.serial('Update a note', (t) => {
   const storageKey = t.context.storage.cache.key
   const folderKey = t.context.storage.json.folders[0].key
 
+  const randLinesHighlightedArray = new Array(10).fill().map(() => Math.round(Math.random() * 10))
+  const randLinesHighlightedArray2 = new Array(15).fill().map(() => Math.round(Math.random() * 15))
+
   const input1 = {
     type: 'SNIPPET_NOTE',
     description: faker.lorem.lines(),
     snippets: [{
       name: faker.system.fileName(),
       mode: 'text',
-      content: faker.lorem.lines()
+      content: faker.lorem.lines(),
+      linesHighlighted: randLinesHighlightedArray
     }],
     tags: faker.lorem.words().split(' '),
     folder: folderKey
@@ -43,7 +47,8 @@ test.serial('Update a note', (t) => {
     type: 'MARKDOWN_NOTE',
     content: faker.lorem.lines(),
     tags: faker.lorem.words().split(' '),
-    folder: folderKey
+    folder: folderKey,
+    linesHighlighted: randLinesHighlightedArray
   }
   input2.title = input2.content.split('\n').shift()
 
@@ -53,7 +58,8 @@ test.serial('Update a note', (t) => {
     snippets: [{
       name: faker.system.fileName(),
       mode: 'text',
-      content: faker.lorem.lines()
+      content: faker.lorem.lines(),
+      linesHighlighted: randLinesHighlightedArray2
     }],
     tags: faker.lorem.words().split(' ')
   }
@@ -62,7 +68,8 @@ test.serial('Update a note', (t) => {
   const input4 = {
     type: 'MARKDOWN_NOTE',
     content: faker.lorem.lines(),
-    tags: faker.lorem.words().split(' ')
+    tags: faker.lorem.words().split(' '),
+    linesHighlighted: randLinesHighlightedArray2
   }
   input4.title = input4.content.split('\n').shift()
 
@@ -99,6 +106,8 @@ test.serial('Update a note', (t) => {
       t.is(input3.snippets[0].content, jsonData1.snippets[0].content)
       t.is(input3.snippets[0].name, data1.snippets[0].name)
       t.is(input3.snippets[0].name, jsonData1.snippets[0].name)
+      t.deepEqual(input3.snippets[0].linesHighlighted, data1.snippets[0].linesHighlighted)
+      t.deepEqual(input3.snippets[0].linesHighlighted, jsonData1.snippets[0].linesHighlighted)
 
       const jsonData2 = CSON.readFileSync(path.join(storagePath, 'notes', data2.key + '.cson'))
       t.is(input4.title, data2.title)
@@ -107,6 +116,8 @@ test.serial('Update a note', (t) => {
       t.is(input4.content, jsonData2.content)
       t.is(input4.tags.length, data2.tags.length)
       t.is(input4.tags.length, jsonData2.tags.length)
+      t.deepEqual(input4.linesHighlighted, data2.linesHighlighted)
+      t.deepEqual(input4.linesHighlighted, jsonData2.linesHighlighted)
     })
 })
 

@@ -3,8 +3,11 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StoragesTab.styl'
 import dataApi from 'browser/main/lib/dataApi'
+import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import StorageItem from './StorageItem'
 import i18n from 'browser/lib/i18n'
+import { humanFileSize } from 'browser/lib/utils'
+import fs from 'fs'
 
 const electron = require('electron')
 const { shell, remote } = electron
@@ -35,8 +38,29 @@ class StoragesTab extends React.Component {
         name: 'Unnamed',
         type: 'FILESYSTEM',
         path: ''
-      }
+      },
+      attachments: []
     }
+    this.loadAttachmentStorage()
+  }
+
+  loadAttachmentStorage () {
+    const promises = []
+    this.props.data.noteMap.map(note => {
+      const promise = attachmentManagement.getAttachmentsPathAndStatus(
+        note.content,
+        note.storage,
+        note.key
+      )
+      if (promise) promises.push(promise)
+    })
+
+    Promise.all(promises)
+      .then(data => {
+        const result = data.reduce((acc, curr) => acc.concat(curr), [])
+        this.setState({attachments: result})
+      })
+      .catch(console.error)
   }
 
   handleAddStorageButton (e) {
@@ -57,8 +81,39 @@ class StoragesTab extends React.Component {
     e.preventDefault()
   }
 
+  handleRemoveUnusedAttachments (attachments) {
+    attachmentManagement.removeAttachmentsByPaths(attachments)
+      .then(() => this.loadAttachmentStorage())
+      .catch(console.error)
+  }
+
   renderList () {
     const { data, boundingBox } = this.props
+    const { attachments } = this.state
+
+    const unusedAttachments = attachments.filter(attachment => !attachment.isInUse)
+    const inUseAttachments = attachments.filter(attachment => attachment.isInUse)
+
+    const totalUnusedAttachments = unusedAttachments.length
+    const totalInuseAttachments = inUseAttachments.length
+    const totalAttachments = totalUnusedAttachments + totalInuseAttachments
+
+    const totalUnusedAttachmentsSize = unusedAttachments
+      .reduce((acc, curr) => {
+        const stats = fs.statSync(curr.path)
+        const fileSizeInBytes = stats.size
+        return acc + fileSizeInBytes
+      }, 0)
+    const totalInuseAttachmentsSize = inUseAttachments
+      .reduce((acc, curr) => {
+        const stats = fs.statSync(curr.path)
+        const fileSizeInBytes = stats.size
+        return acc + fileSizeInBytes
+      }, 0)
+    const totalAttachmentsSize = totalUnusedAttachmentsSize + totalInuseAttachmentsSize
+
+    const unusedAttachmentPaths = unusedAttachments
+      .reduce((acc, curr) => acc.concat(curr.path), [])
 
     if (!boundingBox) { return null }
     const storageList = data.storageMap.map((storage) => {
@@ -82,6 +137,20 @@ class StoragesTab extends React.Component {
             <i className='fa fa-plus' /> {i18n.__('Add Storage Location')}
           </button>
         </div>
+        <div styleName='header'>{i18n.__('Attachment storage')}</div>
+        <p styleName='list-attachment-label'>
+          Unused attachments size: {humanFileSize(totalUnusedAttachmentsSize)} ({totalUnusedAttachments} items)
+        </p>
+        <p styleName='list-attachment-label'>
+          In use attachments size: {humanFileSize(totalInuseAttachmentsSize)} ({totalInuseAttachments} items)
+        </p>
+        <p styleName='list-attachment-label'>
+          Total attachments size: {humanFileSize(totalAttachmentsSize)} ({totalAttachments} items)
+        </p>
+        <button styleName='list-attachement-clear-button'
+          onClick={() => this.handleRemoveUnusedAttachments(unusedAttachmentPaths)}>
+          {i18n.__('Clear unused attachments')}
+        </button>
       </div>
     )
   }

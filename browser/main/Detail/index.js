@@ -10,6 +10,7 @@ import StatusBar from '../StatusBar'
 import i18n from 'browser/lib/i18n'
 import debounceRender from 'react-debounce-render'
 import searchFromNotes from 'browser/lib/search'
+import queryString from 'query-string'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -36,11 +37,11 @@ class Detail extends React.Component {
   }
 
   render () {
-    const { location, data, params, config } = this.props
+    const { location, data, match: { params }, config } = this.props
+    const noteKey = location.search !== '' && queryString.parse(location.search).key
     let note = null
 
-    if (location.query.key != null) {
-      const noteKey = location.query.key
+    if (location.search !== '') {
       const allNotes = data.noteMap.map(note => note)
       const trashedNotes = data.trashedSet.toJS().map(uniqueKey => data.noteMap.get(uniqueKey))
       let displayedNotes = allNotes
@@ -49,16 +50,14 @@ class Detail extends React.Component {
         const searchStr = params.searchword
         displayedNotes = searchStr === undefined || searchStr === '' ? allNotes
           : searchFromNotes(allNotes, searchStr)
-      }
-
-      if (location.pathname.match(/\/tags/)) {
+      } else if (location.pathname.match(/^\/tags/)) {
         const listOfTags = params.tagname.split(' ')
         displayedNotes = data.noteMap.map(note => note).filter(note =>
           listOfTags.every(tag => note.tags.includes(tag))
         )
       }
 
-      if (location.pathname.match(/\/trashed/)) {
+      if (location.pathname.match(/^\/trashed/)) {
         displayedNotes = trashedNotes
       } else {
         displayedNotes = _.differenceWith(displayedNotes, trashedNotes, (note, trashed) => note.key === trashed.key)

@@ -9,7 +9,8 @@ function createSnippet (snippetFile) {
       id: crypto.randomBytes(16).toString('hex'),
       name: 'Unnamed snippet',
       prefix: [],
-      content: ''
+      content: '',
+      linesHighlighted: []
     }
     fetchSnippet(null, snippetFile).then((snippets) => {
       snippets.push(newSnippet)

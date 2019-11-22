@@ -2,48 +2,33 @@
  * @fileoverview Markdown table of contents generator
  */
 
+import { EOL } from 'os'
 import toc from 'markdown-toc'
-import diacritics from 'diacritics-map'
-import stripColor from 'strip-color'
+import mdlink from 'markdown-link'
+import slugify from './slugify'
 
-const EOL = require('os').EOL
+const hasProp = Object.prototype.hasOwnProperty
 
 /**
- * @caseSensitiveSlugify Custom slugify function
- * Same implementation that the original used by markdown-toc (node_modules/markdown-toc/lib/utils.js),
- * but keeps original case to properly handle https://github.com/BoostIO/Boostnote/issues/2067
+ * From @enyaxu/markdown-it-anchor
  */
-function caseSensitiveSlugify (str) {
-  function replaceDiacritics (str) {
-    return str.replace(/[À-ž]/g, function (ch) {
-      return diacritics[ch] || ch
-    })
-  }
+function uniqueSlug (slug, slugs, opts) {
+  let uniq = slug
+  let i = opts.uniqueSlugStartIndex
+  while (hasProp.call(slugs, uniq)) uniq = `${slug}-${i++}`
+  slugs[uniq] = true
+  return uniq
+}
 
-  function getTitle (str) {
-    if (/^\[[^\]]+\]\(/.test(str)) {
-      var m = /^\[([^\]]+)\]/.exec(str)
-      if (m) return m[1]
-    }
-    return str
-  }
-
-  str = getTitle(str)
-  str = stripColor(str)
-  // str = str.toLowerCase() //let's be case sensitive
-
-  // `.split()` is often (but not always) faster than `.replace()`
-  str = str.split(' ').join('-')
-  str = str.split(/\t/).join('--')
-  str = str.split(/<\/?[^>]+>/).join('')
-  str = str.split(/[|$&`~=\\\/@+*!?({[\]})<>=.,;:'"^]/).join('')
-  str = str.split(/[。？！，、；：“”【】（）〔〕［］﹃﹄“ ”‘’﹁﹂—…－～《》〈〉「」]/).join('')
-  str = replaceDiacritics(str)
-  return str
+function linkify (token) {
+  token.content = mdlink(token.content, `#${decodeURI(token.slug)}`)
+  return token
 }
 
 const TOC_MARKER_START = '<!-- toc -->'
 const TOC_MARKER_END = '<!-- tocstop -->'
+
+const tocRegex = new RegExp(`${TOC_MARKER_START}[\\s\\S]*?${TOC_MARKER_END}`)
 
 /**
  * Takes care of proper updating given editor with TOC.
@@ -52,12 +37,6 @@ const TOC_MARKER_END = '<!-- tocstop -->'
  * @param editor CodeMirror editor to be updated with TOC
  */
 export function generateInEditor (editor) {
-  const tocRegex = new RegExp(`${TOC_MARKER_START}[\\s\\S]*?${TOC_MARKER_END}`)
-
-  function tocExistsInEditor () {
-    return tocRegex.test(editor.getValue())
-  }
-
   function updateExistingToc () {
     const toc = generate(editor.getValue())
     const search = editor.getSearchCursor(tocRegex)
@@ -71,11 +50,15 @@ export function generateInEditor (editor) {
     editor.replaceRange(wrapTocWithEol(toc, editor), editor.getCursor())
   }
 
-  if (tocExistsInEditor()) {
+  if (tocExistsInEditor(editor)) {
     updateExistingToc()
   } else {
     addTocAtCursorPosition()
   }
+}
+
+export function tocExistsInEditor (editor) {
+  return tocRegex.test(editor.getValue())
 }
 
 /**
@@ -84,8 +67,23 @@ export function generateInEditor (editor) {
  * @returns generatedTOC String containing generated TOC
  */
 export function generate (markdownText) {
-  const generatedToc = toc(markdownText, {slugify: caseSensitiveSlugify})
-  return TOC_MARKER_START + EOL + EOL + generatedToc.content + EOL + EOL + TOC_MARKER_END
+  const slugs = {}
+  const opts = {
+    uniqueSlugStartIndex: 1
+  }
+
+  const result = toc(markdownText, {
+    slugify: title => {
+      return uniqueSlug(slugify(title), slugs, opts)
+    },
+    linkify: false
+  })
+
+  const md = toc.bullets(result.json.map(linkify), {
+    highest: result.highest
+  })
+
+  return TOC_MARKER_START + EOL + EOL + md + EOL + EOL + TOC_MARKER_END
 }
 
 function wrapTocWithEol (toc, editor) {
@@ -96,5 +94,6 @@ function wrapTocWithEol (toc, editor) {
 
 export default {
   generate,
-  generateInEditor
+  generateInEditor,
+  tocExistsInEditor
 }

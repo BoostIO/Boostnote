@@ -10,8 +10,8 @@ const TrashButton = ({
   <button styleName='control-trashButton'
     onClick={(e) => onClick(e)}
   >
-    <img styleName='iconInfo' src='../resources/icon/icon-trash.svg' />
-    <span styleName='tooltip'>{i18n.__('Trash')}</span>
+    <img src='../resources/icon/icon-trash.svg' />
+    <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Trash')}</span>
   </button>
 )
 

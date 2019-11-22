@@ -13,6 +13,14 @@ exports[`TagListItem renders correctly 1`] = `
     onClick={[Function]}
   >
     <span
+      className="tagList-item-color"
+      style={
+        Object {
+          "backgroundColor": "#000",
+        }
+      }
+    />
+    <span
       className="tagList-item-name"
     >
       # Test

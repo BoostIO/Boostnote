@@ -14,7 +14,7 @@ class InfoPanel extends React.Component {
 
   render () {
     const {
-      storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, wordCount, letterCount, type, print
+      storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt, exportAsHtml, exportAsPdf, wordCount, letterCount, type, print
     } = this.props
     return (
       <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
@@ -60,7 +60,7 @@ class InfoPanel extends React.Component {
         </div>
 
         <div>
-          <input styleName='infoPanel-noteLink' ref='noteLink' value={noteLink} onClick={(e) => { e.target.select() }} />
+          <input styleName='infoPanel-noteLink' ref='noteLink' defaultValue={noteLink} onClick={(e) => { e.target.select() }} />
           <button onClick={() => this.copyNoteLink()} styleName='infoPanel-copyButton'>
             <i className='fa fa-clipboard' />
           </button>
@@ -70,22 +70,27 @@ class InfoPanel extends React.Component {
         <hr />
 
         <div id='export-wrap'>
-          <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsMd(e, 'export-md')}>
             <i className='fa fa-file-code-o' />
             <p>{i18n.__('.md')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => exportAsTxt(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsTxt(e, 'export-txt')}>
             <i className='fa fa-file-text-o' />
             <p>{i18n.__('.txt')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => exportAsHtml(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsHtml(e, 'export-html')}>
             <i className='fa fa-html5' />
             <p>{i18n.__('.html')}</p>
           </button>
 
-          <button styleName='export--enable' onClick={(e) => print(e)}>
+          <button styleName='export--enable' onClick={(e) => exportAsPdf(e, 'export-pdf')}>
+            <i className='fa fa-file-pdf-o' />
+            <p>{i18n.__('.pdf')}</p>
+          </button>
+
+          <button styleName='export--enable' onClick={(e) => print(e, 'print')}>
             <i className='fa fa-print' />
             <p>{i18n.__('Print')}</p>
           </button>
@@ -104,6 +109,7 @@ InfoPanel.propTypes = {
   exportAsMd: PropTypes.func.isRequired,
   exportAsTxt: PropTypes.func.isRequired,
   exportAsHtml: PropTypes.func.isRequired,
+  exportAsPdf: PropTypes.func.isRequired,
   wordCount: PropTypes.number,
   letterCount: PropTypes.number,
   type: PropTypes.string.isRequired,

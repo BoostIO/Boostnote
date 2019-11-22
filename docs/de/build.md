@@ -1,10 +1,11 @@
 # Build
-Diese Seite ist auch verfügbar in [Japanisch](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Koreanisch](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russisch](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Vereinfachtem Chinesisch](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [Französisch](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md) und [Deutsch](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
+
+Diese Seite ist auch verfügbar in [Japanisch](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Koreanisch](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russisch](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Vereinfachtem Chinesisch](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [Französisch](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md), [Portugiesisch](https://github.com/BoostIO/Boostnote/blob/master/docs/pt_BR/build.md) und [Deutsch](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
 
 ## Umgebungen
 
-* npm: 6.x
-* node: 8.x
+- npm: 6.x
+- node: 8.x
 
 ## Entwicklung
 
@@ -24,7 +25,9 @@ $ yarn run dev
 ```
 
 > ### Notiz
+>
 > Es gibt einige Fälle bei denen die App manuell zu refreshen ist.
+>
 > 1. Wenn eine "constructor method" einer Komponente manuell editiert wird.
 > 2. Wenn eine neue CSS Klasse ergänzt wird (ähnlich wie 1: die CSS Klasse wird von jeder Komponenete neu geschrieben. Dieser Prozess passiert in der "Constructor method".)
 
@@ -50,7 +53,6 @@ Distributions Pakete können mittels `grunt build` auf Linux Plattformen (e.g. U
 > Beachte: Du kannst bei `.deb` and `.rpm` in der selben Umgebung erstellen.
 
 Nach der Installation der supporteten Version von `node` and `npm`, installiere auch build dependency packages.
-
 
 Ubuntu/Debian:
 

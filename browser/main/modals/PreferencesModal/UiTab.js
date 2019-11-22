@@ -3,7 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import consts from 'browser/lib/consts'
 import ReactCodeMirror from 'react-codemirror'
 import CodeMirror from 'codemirror'
@@ -30,7 +30,13 @@ class UiTab extends React.Component {
   componentDidMount () {
     CodeMirror.autoLoadMode(this.codeMirrorInstance.getCodeMirror(), 'javascript')
     CodeMirror.autoLoadMode(this.customCSSCM.getCodeMirror(), 'css')
+    CodeMirror.autoLoadMode(this.customMarkdownLintConfigCM.getCodeMirror(), 'javascript')
+    CodeMirror.autoLoadMode(this.prettierConfigCM.getCodeMirror(), 'javascript')
+    // Set CM editor Sizes
     this.customCSSCM.getCodeMirror().setSize('400px', '400px')
+    this.prettierConfigCM.getCodeMirror().setSize('400px', '400px')
+    this.customMarkdownLintConfigCM.getCodeMirror().setSize('400px', '200px')
+
     this.handleSettingDone = () => {
       this.setState({UiAlert: {
         type: 'success',
@@ -68,6 +74,7 @@ class UiTab extends React.Component {
         theme: this.refs.uiTheme.value,
         language: this.refs.uiLanguage.value,
         defaultNote: this.refs.defaultNote.value,
+        tagNewNoteWithFilteringTags: this.refs.tagNewNoteWithFilteringTags.checked,
         showCopyNotification: this.refs.showCopyNotification.checked,
         confirmDeletion: this.refs.confirmDeletion.checked,
         showOnlyRelatedTags: this.refs.showOnlyRelatedTags.checked,
@@ -75,6 +82,7 @@ class UiTab extends React.Component {
         saveTagsAlphabetically: this.refs.saveTagsAlphabetically.checked,
         enableLiveNoteCounts: this.refs.enableLiveNoteCounts.checked,
         scrollBar: this.refs.scrollBar.checked,
+        showMenuBar: this.refs.showMenuBar.checked,
         disableDirectWrite: this.refs.uiD2w != null
           ? this.refs.uiD2w.checked
           : false
@@ -88,6 +96,7 @@ class UiTab extends React.Component {
         enableRulers: this.refs.enableEditorRulers.value === 'true',
         rulers: this.refs.editorRulers.value.replace(/[^0-9,]/g, '').split(','),
         displayLineNumbers: this.refs.editorDisplayLineNumbers.checked,
+        lineWrapping: this.refs.editorLineWrapping.checked,
         switchPreview: this.refs.editorSwitchPreview.value,
         keyMap: this.refs.editorKeyMap.value,
         snippetDefaultLanguage: this.refs.editorSnippetDefaultLanguage.value,
@@ -95,7 +104,16 @@ class UiTab extends React.Component {
         fetchUrlTitle: this.refs.editorFetchUrlTitle.checked,
         enableTableEditor: this.refs.enableTableEditor.checked,
         enableFrontMatterTitle: this.refs.enableFrontMatterTitle.checked,
-        frontMatterTitleField: this.refs.frontMatterTitleField.value
+        frontMatterTitleField: this.refs.frontMatterTitleField.value,
+        matchingPairs: this.refs.matchingPairs.value,
+        matchingTriples: this.refs.matchingTriples.value,
+        explodingPairs: this.refs.explodingPairs.value,
+        spellcheck: this.refs.spellcheck.checked,
+        enableSmartPaste: this.refs.enableSmartPaste.checked,
+        enableMarkdownLint: this.refs.enableMarkdownLint.checked,
+        customMarkdownLintConfig: this.customMarkdownLintConfigCM.getCodeMirror().getValue(),
+        prettierConfig: this.prettierConfigCM.getCodeMirror().getValue(),
+        deleteUnusedAttachments: this.refs.deleteUnusedAttachments.checked
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -113,6 +131,7 @@ class UiTab extends React.Component {
         breaks: this.refs.previewBreaks.checked,
         smartArrows: this.refs.previewSmartArrows.checked,
         sanitize: this.refs.previewSanitize.value,
+        mermaidHTMLLabel: this.refs.previewMermaidHTMLLabel.checked,
         allowCustomCSS: this.refs.previewAllowCustomCSS.checked,
         lineThroughCheckbox: this.refs.lineThroughCheckbox.checked,
         customCSS: this.customCSSCM.getCodeMirror().getValue()
@@ -122,8 +141,13 @@ class UiTab extends React.Component {
     const newCodemirrorTheme = this.refs.editorTheme.value
 
     if (newCodemirrorTheme !== codemirrorTheme) {
-      checkHighLight.setAttribute('href', `../node_modules/codemirror/theme/${newCodemirrorTheme.split(' ')[0]}.css`)
+      const theme = consts.THEMES.find(theme => theme.name === newCodemirrorTheme)
+
+      if (theme) {
+        checkHighLight.setAttribute('href', theme.path)
+      }
     }
+
     this.setState({ config: newConfig, codemirrorTheme: newCodemirrorTheme }, () => {
       const {ui, editor, preview} = this.props.config
       this.currentConfig = {ui, editor, preview}
@@ -236,6 +260,16 @@ class UiTab extends React.Component {
           <div styleName='group-checkBoxSection'>
             <label>
               <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.showMenuBar}
+                ref='showMenuBar'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Show menu bar')}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
                 checked={this.state.config.ui.showCopyNotification}
                 ref='showCopyNotification'
                 type='checkbox'
@@ -324,6 +358,17 @@ class UiTab extends React.Component {
             </label>
           </div>
 
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.ui.tagNewNoteWithFilteringTags}
+                ref='tagNewNoteWithFilteringTags'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('New notes are tagged with the filtering tags')}
+            </label>
+          </div>
+
           <div styleName='group-header2'>Editor</div>
 
           <div styleName='group-section'>
@@ -337,7 +382,7 @@ class UiTab extends React.Component {
               >
                 {
                   themes.map((theme) => {
-                    return (<option value={theme} key={theme}>{theme}</option>)
+                    return (<option value={theme.name} key={theme.name}>{theme.name}</option>)
                   })
                 }
               </select>
@@ -474,6 +519,7 @@ class UiTab extends React.Component {
                 ref='editorSnippetDefaultLanguage'
                 onChange={(e) => this.handleUIChange(e)}
               >
+                <option key='Auto Detect' value='Auto Detect'>{i18n.__('Auto Detect')}</option>
                 {
                   _.sortBy(CodeMirror.modeInfo.map(mode => mode.name)).map(name => (<option key={name} value={name}>{name}</option>))
                 }
@@ -520,6 +566,17 @@ class UiTab extends React.Component {
           <div styleName='group-checkBoxSection'>
             <label>
               <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.lineWrapping}
+                ref='editorLineWrapping'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Wrap line in Snippet Note')}
+            </label>
+          </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
                 checked={this.state.config.editor.scrollPastEnd}
                 ref='scrollPastEnd'
                 type='checkbox'
@@ -550,6 +607,108 @@ class UiTab extends React.Component {
             </label>
           </div>
 
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.enableSmartPaste}
+                ref='enableSmartPaste'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable HTML paste')}
+            </label>
+          </div>
+
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.spellcheck}
+                ref='spellcheck'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable spellcheck - Experimental feature!! :)')}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.deleteUnusedAttachments}
+                ref='deleteUnusedAttachments'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Delete attachments, that are not referenced in the text anymore')}
+            </label>
+          </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Matching character pairs')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={this.state.config.editor.matchingPairs}
+                ref='matchingPairs'
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+            </div>
+          </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Matching character triples')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={this.state.config.editor.matchingTriples}
+                ref='matchingTriples'
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+            </div>
+          </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Exploding character pairs')}
+            </div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                value={this.state.config.editor.explodingPairs}
+                ref='explodingPairs'
+                onChange={(e) => this.handleUIChange(e)}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Custom MarkdownLint Rules')}
+            </div>
+            <div styleName='group-section-control'>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.editor.enableMarkdownLint}
+                ref='enableMarkdownLint'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable MarkdownLint')}
+              <div style={{fontFamily, display: this.state.config.editor.enableMarkdownLint ? 'block' : 'none'}}>
+                <ReactCodeMirror
+                  width='400px'
+                  height='200px'
+                  onChange={e => this.handleUIChange(e)}
+                  ref={e => (this.customMarkdownLintConfigCM = e)}
+                  value={config.editor.customMarkdownLintConfig}
+                  options={{
+                    lineNumbers: true,
+                    mode: 'application/json',
+                    theme: codemirrorTheme,
+                    lint: true,
+                    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers']
+                  }} />
+              </div>
+            </div>
+          </div>
+
           <div styleName='group-header2'>{i18n.__('Preview')}</div>
           <div styleName='group-section'>
             <div styleName='group-section-label'>
@@ -577,6 +736,7 @@ class UiTab extends React.Component {
               />
             </div>
           </div>
+
           <div styleName='group-section'>
             <div styleName='group-section-label'>{i18n.__('Code Block Theme')}</div>
             <div styleName='group-section-control'>
@@ -586,7 +746,7 @@ class UiTab extends React.Component {
               >
                 {
                   themes.map((theme) => {
-                    return (<option value={theme} key={theme}>{theme}</option>)
+                    return (<option value={theme.name} key={theme.name}>{theme.name}</option>)
                   })
                 }
               </select>
@@ -679,6 +839,16 @@ class UiTab extends React.Component {
               </select>
             </div>
           </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input onChange={(e) => this.handleUIChange(e)}
+                checked={this.state.config.preview.mermaidHTMLLabel}
+                ref='previewMermaidHTMLLabel'
+                type='checkbox'
+              />&nbsp;
+              {i18n.__('Enable HTML label in mermaid flowcharts')}
+            </label>
+          </div>
           <div styleName='group-section'>
             <div styleName='group-section-label'>
               {i18n.__('LaTeX Inline Open Delimiter')}
@@ -770,7 +940,27 @@ class UiTab extends React.Component {
               </div>
             </div>
           </div>
-
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              {i18n.__('Prettier Config')}
+            </div>
+            <div styleName='group-section-control'>
+              <div style={{fontFamily}}>
+                <ReactCodeMirror
+                  width='400px'
+                  height='400px'
+                  onChange={e => this.handleUIChange(e)}
+                  ref={e => (this.prettierConfigCM = e)}
+                  value={config.editor.prettierConfig}
+                  options={{
+                    lineNumbers: true,
+                    mode: 'application/json',
+                    lint: true,
+                    theme: codemirrorTheme
+                  }} />
+              </div>
+            </div>
+          </div>
           <div styleName='group-control'>
             <button styleName='group-control-rightButton'
               onClick={(e) => this.handleSaveUIClick(e)}>{i18n.__('Save')}

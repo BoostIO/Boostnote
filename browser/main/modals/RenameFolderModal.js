@@ -3,7 +3,7 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './RenameFolderModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
 

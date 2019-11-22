@@ -18,6 +18,14 @@
   margin-bottom 15px
   margin-top 30px
 
+.group-header--sub
+  @extend .group-header
+  margin-bottom 10px
+
+.group-header2--sub
+  @extend .group-header2
+  margin-bottom 10px
+
 .group-section
   margin-bottom 20px
   display flex
@@ -148,10 +156,12 @@ body[data-theme="dark"]
     color $ui-dark-text-color
 
   .group-header
+  .group-header--sub
     color $ui-dark-text-color
     border-color $ui-dark-borderColor
 
   .group-header2
+  .group-header2--sub
     color $ui-dark-text-color
 
   .group-section-control-input
@@ -176,10 +186,12 @@ body[data-theme="solarized-dark"]
     color $ui-solarized-dark-text-color
 
   .group-header
+  .group-header--sub
     color $ui-solarized-dark-text-color
     border-color $ui-solarized-dark-borderColor
 
   .group-header2
+  .group-header2--sub
     color $ui-solarized-dark-text-color
 
   .group-section-control-input
@@ -203,10 +215,12 @@ body[data-theme="monokai"]
     color $ui-monokai-text-color
 
   .group-header
+  .group-header--sub
     color $ui-monokai-text-color
     border-color $ui-monokai-borderColor
 
   .group-header2
+  .group-header2--sub
     color $ui-monokai-text-color
 
   .group-section-control-input
@@ -230,10 +244,12 @@ body[data-theme="dracula"]
     color $ui-dracula-text-color
 
   .group-header
+  .group-header--sub
     color $ui-dracula-text-color
     border-color $ui-dracula-borderColor
 
   .group-header2
+  .group-header2--sub
     color $ui-dracula-text-color
 
   .group-section-control-input

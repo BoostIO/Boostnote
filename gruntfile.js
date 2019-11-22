@@ -39,7 +39,7 @@ module.exports = function (grunt) {
           name: 'boostnote',
           productName: 'Boostnote',
           genericName: 'Boostnote',
-          productDescription: 'The opensource note app for developer.',
+          productDescription: 'The opensource note app for developers.',
           arch: 'amd64',
           categories: [
             'Development',
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
           name: 'boostnote',
           productName: 'Boostnote',
           genericName: 'Boostnote',
-          productDescription: 'The opensource note app for developer.',
+          productDescription: 'The opensource note app for developers.',
           arch: 'x86_64',
           categories: [
             'Development',
@@ -149,6 +149,7 @@ module.exports = function (grunt) {
       case 'osx':
         Object.assign(opts, {
           platform: 'darwin',
+          darwinDarkModeSupport: true,
           icon: path.join(__dirname, 'resources/app.icns'),
           'app-category-type': 'public.app-category.developer-tools'
         })

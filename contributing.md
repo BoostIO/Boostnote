@@ -1,11 +1,23 @@
 # Contributing to Boostnote (English)
 
 ### When you open an issue or a bug report
-There is no issue template, but there is a request.
-
-**Please paste screenshots of Boostnote with the developer tool open**
+There is an issue template for you to follow. Please provide as much information as you can according to the template.
 
 Thank you in advance for your help.
+
+### When you open a pull request
+There is a pull request template for your to follow. Please fill in the template before submitting your code. Your pull request will be reviewed faster if we know exactly what it does.
+
+Make sure that you have:
+- Checked [`code_style.md`](docs/code_style.md) for information on code style
+- Write tests for your code and run test with the following command
+```
+npm run test
+```
+- Lint your code using the following command
+```
+npm run lint
+```
 
 ### Concerning Copyright
 

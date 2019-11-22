@@ -4,7 +4,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
 import consts from 'browser/lib/consts'
 import dataApi from 'browser/main/lib/dataApi'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import FolderList from './FolderList'
 import i18n from 'browser/lib/i18n'
 

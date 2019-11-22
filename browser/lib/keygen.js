@@ -1,5 +1,4 @@
 const crypto = require('crypto')
-const _ = require('lodash')
 const uuidv4 = require('uuid/v4')
 
 module.exports = function (uuid) {

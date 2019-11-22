@@ -8,7 +8,6 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
-import {hashHistory} from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import CodeMirror from 'codemirror'
 import 'codemirror-mode-elixir'
@@ -18,8 +17,8 @@ import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
 import {findNoteTitle} from 'browser/lib/findNoteTitle'
-import convertModeName from 'browser/lib/convertModeName'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
+import FullscreenButton from './FullscreenButton'
 import TrashButton from './TrashButton'
 import RestoreButton from './RestoreButton'
 import PermanentDeleteButton from './PermanentDeleteButton'
@@ -30,6 +29,8 @@ import { formatDate } from 'browser/lib/date-formatter'
 import i18n from 'browser/lib/i18n'
 import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
+import queryString from 'query-string'
+import { replace } from 'connected-react-router'
 
 const electron = require('electron')
 const { remote } = electron
@@ -48,7 +49,7 @@ class SnippetNoteDetail extends React.Component {
       note: Object.assign({
         description: ''
       }, props.note, {
-        snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
+        snippets: props.note.snippets.map((snippet) => Object.assign({linesHighlighted: []}, snippet))
       })
     }
 
@@ -76,8 +77,9 @@ class SnippetNoteDetail extends React.Component {
       const nextNote = Object.assign({
         description: ''
       }, nextProps.note, {
-        snippets: nextProps.note.snippets.map((snippet) => Object.assign({}, snippet))
+        snippets: nextProps.note.snippets.map((snippet) => Object.assign({linesHighlighted: []}, snippet))
       })
+
       this.setState({
         snippetIndex: 0,
         note: nextNote
@@ -164,12 +166,12 @@ class SnippetNoteDetail extends React.Component {
             originNote: note,
             note: newNote
           })
-          hashHistory.replace({
+          dispatch(replace({
             pathname: location.pathname,
-            query: {
+            search: queryString.stringify({
               key: newNote.key
-            }
-          })
+            })
+          }))
           this.setState({
             isMovingNote: false
           })
@@ -410,6 +412,8 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       const snippets = this.state.note.snippets.slice()
       snippets[index].content = this.refs['code-' + index].value
+      snippets[index].linesHighlighted = e.options.linesHighlighted
+
       this.setState(state => ({note: Object.assign(state.note, {snippets: snippets})}))
       this.setState(state => ({
         note: state.note
@@ -432,6 +436,18 @@ class SnippetNoteDetail extends React.Component {
         } else if (!e.ctrlKey && !e.shiftKey && e.target === this.refs.description) {
           e.preventDefault()
           this.focusEditor()
+        }
+        break
+      // I key
+      case 73:
+        {
+          const isSuper = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (isSuper) {
+            e.preventDefault()
+            this.handleInfoButtonClick(e)
+          }
         }
         break
       // L key
@@ -502,6 +518,19 @@ class SnippetNoteDetail extends React.Component {
     ])
   }
 
+  handleWrapLineButtonClick (e) {
+    context.popup([
+      {
+        label: 'on',
+        click: (e) => this.handleWrapLineItemClick(e, true)
+      },
+      {
+        label: 'off',
+        click: (e) => this.handleWrapLineItemClick(e, false)
+      }
+    ])
+  }
+
   handleIndentSizeItemClick (e, indentSize) {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
@@ -522,6 +551,22 @@ class SnippetNoteDetail extends React.Component {
     const { config, dispatch } = this.props
     const editor = Object.assign({}, config.editor, {
       indentType
+    })
+    ConfigManager.set({
+      editor
+    })
+    dispatch({
+      type: 'SET_CONFIG',
+      config: {
+        editor
+      }
+    })
+  }
+
+  handleWrapLineItemClick (e, lineWrapping) {
+    const { config, dispatch } = this.props
+    const editor = Object.assign({}, config.editor, {
+      lineWrapping
     })
     ConfigManager.set({
       editor
@@ -584,13 +629,16 @@ class SnippetNoteDetail extends React.Component {
   }
 
   addSnippet () {
-    const { config } = this.props
+    const { config: { editor: { snippetDefaultLanguage } } } = this.props
     const { note } = this.state
+
+    const defaultLanguage = snippetDefaultLanguage === 'Auto Detect' ? null : snippetDefaultLanguage
 
     note.snippets = note.snippets.concat([{
       name: '',
-      mode: config.editor.snippetDefaultLanguage || 'text',
-      content: ''
+      mode: defaultLanguage,
+      content: '',
+      linesHighlighted: []
     }])
     const snippetIndex = note.snippets.length - 1
 
@@ -633,21 +681,31 @@ class SnippetNoteDetail extends React.Component {
     if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
-  showWarning () {
+  showWarning (e, msg) {
+    const warningMessage = (msg) => ({
+      'export-txt': 'Text export',
+      'export-md': 'Markdown export',
+      'export-html': 'HTML export',
+      'export-pdf': 'PDF export',
+      'print': 'Print'
+    })[msg]
+
     dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Sorry!'),
-      detail: i18n.__('md/text import is available only a markdown note.'),
+      detail: i18n.__(warningMessage(msg) + ' is available only in markdown notes.'),
       buttons: [i18n.__('OK')]
     })
   }
 
   render () {
-    const { data, config, location } = this.props
+    const { data, dispatch, config, location } = this.props
     const { note } = this.state
 
     const storageKey = note.storage
     const folderKey = note.folder
+
+    const autoDetect = config.editor.snippetDefaultLanguage === 'Auto Detect'
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -673,10 +731,6 @@ class SnippetNoteDetail extends React.Component {
 
     const viewList = note.snippets.map((snippet, index) => {
       const isActive = this.state.snippetIndex === index
-
-      let syntax = CodeMirror.findModeByName(convertModeName(snippet.mode))
-      if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
-
       return <div styleName='tabView'
         key={index}
         style={{zIndex: isActive ? 5 : 4}}
@@ -685,26 +739,35 @@ class SnippetNoteDetail extends React.Component {
           ? <MarkdownEditor styleName='tabView-content'
             value={snippet.content}
             config={config}
+            linesHighlighted={snippet.linesHighlighted}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
             storageKey={storageKey}
           />
           : <CodeEditor styleName='tabView-content'
-            mode={snippet.mode}
+            mode={snippet.mode || (autoDetect ? null : config.editor.snippetDefaultLanguage)}
             value={snippet.content}
+            linesHighlighted={snippet.linesHighlighted}
+            lineWrapping={config.editor.lineWrapping}
             theme={config.editor.theme}
             fontFamily={config.editor.fontFamily}
             fontSize={editorFontSize}
             indentType={config.editor.indentType}
             indentSize={editorIndentSize}
             displayLineNumbers={config.editor.displayLineNumbers}
+            matchingPairs={config.editor.matchingPairs}
+            matchingTriples={config.editor.matchingTriples}
+            explodingPairs={config.editor.explodingPairs}
             keyMap={config.editor.keyMap}
             scrollPastEnd={config.editor.scrollPastEnd}
             fetchUrlTitle={config.editor.fetchUrlTitle}
             enableTableEditor={config.editor.enableTableEditor}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
+            enableSmartPaste={config.editor.enableSmartPaste}
+            hotkey={config.hotkey}
+            autoDetect={autoDetect}
           />
         }
       </div>
@@ -738,13 +801,14 @@ class SnippetNoteDetail extends React.Component {
           exportAsMd={this.showWarning}
           exportAsTxt={this.showWarning}
           exportAsHtml={this.showWarning}
+          exportAsPdf={this.showWarning}
         />
       </div>
     </div>
 
     const detailTopBar = <div styleName='info'>
       <div styleName='info-left'>
-        <div styleName='info-left-top'>
+        <div>
           <FolderSelect styleName='info-left-top-folderSelect'
             value={this.state.note.storage + '-' + this.state.note.folder}
             ref='folder'
@@ -759,7 +823,9 @@ class SnippetNoteDetail extends React.Component {
           saveTagsAlphabetically={config.ui.saveTagsAlphabetically}
           showTagsAlphabetically={config.ui.showTagsAlphabetically}
           data={data}
+          dispatch={dispatch}
           onChange={(e) => this.handleChange(e)}
+          coloredTags={config.coloredTags}
         />
       </div>
       <div styleName='info-right'>
@@ -768,11 +834,7 @@ class SnippetNoteDetail extends React.Component {
           isActive={note.isStarred}
         />
 
-        <button styleName='control-fullScreenButton' title={i18n.__('Fullscreen')}
-          onMouseDown={(e) => this.handleFullScreenButton(e)}>
-          <img styleName='iconInfo' src='../resources/icon/icon-full.svg' />
-          <span styleName='tooltip'>{i18n.__('Fullscreen')}</span>
-        </button>
+        <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} />
 
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
 
@@ -783,12 +845,15 @@ class SnippetNoteDetail extends React.Component {
         <InfoPanel
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[${note.title}](:note:${location.query.key})`}
+          noteLink={`[${note.title}](:note:${queryString.parse(location.search).key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.showWarning}
           exportAsTxt={this.showWarning}
+          exportAsHtml={this.showWarning}
+          exportAsPdf={this.showWarning}
           type={note.type}
+          print={this.showWarning}
         />
       </div>
     </div>
@@ -863,6 +928,12 @@ class SnippetNoteDetail extends React.Component {
             onClick={(e) => this.handleIndentSizeButtonClick(e)}
           >
             size: {config.editor.indentSize}&nbsp;
+            <i className='fa fa-caret-down' />
+          </button>
+          <button
+            onClick={(e) => this.handleWrapLineButtonClick(e)}
+          >
+            Wrap Line: {config.editor.lineWrapping ? 'on' : 'off'}&nbsp;
             <i className='fa fa-caret-down' />
           </button>
         </div>

@@ -1,8 +1,4 @@
-@import('./Tab')
-
-.root
-  padding 15px
-  color $ui-text-color
+@import('./ConfigTab')
 
 .list
   margin-bottom 15px
@@ -37,6 +33,17 @@
   colorDefaultButton()
   font-size $tab--button-font-size
   border-radius 2px
+.list-attachment-label
+  margin-bottom 10px
+  color $ui-text-color
+.list-attachement-clear-button
+  height 30px
+  border none
+  border-top-right-radius 2px
+  border-bottom-right-radius 2px
+  colorPrimaryButton()
+  vertical-align middle
+  padding 0 20px
 
 .addStorage
   margin-bottom 15px
@@ -158,8 +165,8 @@ body[data-theme="dark"]
   .addStorage-body-control-cancelButton
     colorDarkDefaultButton()
     border-color $ui-dark-borderColor
-
-
+  .list-attachement-clear-button
+    colorDarkPrimaryButton()
 
 body[data-theme="solarized-dark"]
   .root
@@ -198,6 +205,8 @@ body[data-theme="solarized-dark"]
   .addStorage-body-control-cancelButton
     colorDarkDefaultButton()
     border-color $ui-solarized-dark-borderColor
+  .list-attachement-clear-button
+    colorSolarizedDarkPrimaryButton()
 
 body[data-theme="monokai"]
   .root
@@ -236,6 +245,8 @@ body[data-theme="monokai"]
   .addStorage-body-control-cancelButton
     colorDarkDefaultButton()
     border-color $ui-monokai-borderColor
+  .list-attachement-clear-button
+    colorMonokaiPrimaryButton()
 
 body[data-theme="dracula"]
   .root
@@ -274,3 +285,5 @@ body[data-theme="dracula"]
   .addStorage-body-control-cancelButton
     colorDarkDefaultButton()
     border-color $ui-dracula-borderColor
+  .list-attachement-clear-button
+    colorDraculaPrimaryButton()

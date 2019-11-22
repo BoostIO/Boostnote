@@ -39,6 +39,9 @@ function validateInput (input) {
       if (input.content != null) {
         if (!_.isString(input.content)) validatedInput.content = ''
         else validatedInput.content = input.content
+
+        if (!_.isArray(input.linesHighlighted)) validatedInput.linesHighlighted = []
+        else validatedInput.linesHighlighted = input.linesHighlighted
       }
       return validatedInput
     case 'SNIPPET_NOTE':
@@ -51,7 +54,8 @@ function validateInput (input) {
           validatedInput.snippets = [{
             name: '',
             mode: 'text',
-            content: ''
+            content: '',
+            linesHighlighted: []
           }]
         } else {
           validatedInput.snippets = input.snippets
@@ -96,12 +100,14 @@ function updateNote (storageKey, noteKey, input) {
             snippets: [{
               name: '',
               mode: 'text',
-              content: ''
+              content: '',
+              linesHighlighted: []
             }]
           }
           : {
             type: 'MARKDOWN_NOTE',
-            content: ''
+            content: '',
+            linesHighlighted: []
           }
         noteData.title = ''
         if (storage.folders.length === 0) throw new Error('Failed to restore note: No folder exists.')

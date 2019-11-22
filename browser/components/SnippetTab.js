@@ -114,7 +114,7 @@ class SnippetTab extends React.Component {
           >
             {snippet.name.trim().length > 0
               ? snippet.name
-              : <span styleName='button-unnamed'>
+              : <span>
                 {i18n.__('Unnamed')}
               </span>
             }
