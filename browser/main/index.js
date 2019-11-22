@@ -5,7 +5,6 @@ import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 require('!!style!css!stylus?sourceMap!./global.styl')
 import config from 'browser/main/lib/ConfigManager'
-import { Route } from 'react-router'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import DevTools from './DevTools'
