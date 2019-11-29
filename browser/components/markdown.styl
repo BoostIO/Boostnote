@@ -444,9 +444,8 @@ pre.fence
         color $ui-text-color
         background-color $ui-tag-backgroundColor
 
-.markdownIt-TOC
+.markdownIt-TOC-wrapper
   list-style none
-  padding 15px
   position fixed
   right 0
   top 0
@@ -454,6 +453,13 @@ pre.fence
   z-index 1000
   transition transform .2s ease-in-out
   transform translateX(100%)
+
+  .markdownIt-TOC
+    display block
+    max-height 90vh
+    overflow-y auto
+    padding 25px
+    padding-left 38px
 
   &,
   &:before
@@ -469,7 +475,7 @@ pre.fence
     width 60px
     height 30px
     top 60px
-    left -30px
+    left -29px
     display flex
     align-items center
     justify-content center
@@ -543,7 +549,7 @@ body[data-theme="dark"]
         color $ui-dark-text-color
         background-color $ui-dark-tag-backgroundColor
 
-  .markdownIt-TOC
+  .markdownIt-TOC-wrapper
     &,
     &:before
       background-color darken(themeDarkBackground, 5%)
@@ -594,7 +600,7 @@ body[data-theme="solarized-dark"]
         color $ui-solarized-dark-button--active-color
         background-color $ui-solarized-dark-button-backgroundColor
 
-  .markdownIt-TOC
+  .markdownIt-TOC-wrapper
     &,
     &:before
       background-color darken(themeSolarizedDarkBackground, 15%)
@@ -647,7 +653,7 @@ body[data-theme="monokai"]
         color $ui-monokai-button--active-color
         background-color $ui-monokai-button-backgroundColor
 
-  .markdownIt-TOC
+  .markdownIt-TOC-wrapper
     &,
     &:before
       background-color darken(themeMonokaiBackground, 15%)
@@ -700,7 +706,7 @@ body[data-theme="dracula"]
         color $ui-dracula-button--active-color
         background-color $ui-dracula-button-backgroundColor
 
-  .markdownIt-TOC
+  .markdownIt-TOC-wrapper
     &,
     &:before
       background-color darken(themeDraculaBackground, 15%)
