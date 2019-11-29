@@ -128,12 +128,19 @@ class Markdown {
     this.md.use(require('markdown-it-abbr'))
     this.md.use(require('markdown-it-sub'))
     this.md.use(require('markdown-it-sup'))
-    this.md.use(markdownItTocAndAnchor, {
-      toc: true,
-      tocPattern: /\[TOC\]/i,
-      anchorLink: false,
-      appendIdToHeading: false
+
+    this.md.use(md => {
+      markdownItTocAndAnchor(md, {
+        toc: true,
+        tocPattern: /\[TOC\]/i,
+        anchorLink: false,
+        appendIdToHeading: false
+      })
+
+      md.renderer.rules.toc_open = () => '<div class="markdownIt-TOC-wrapper">'
+      md.renderer.rules.toc_close = () => '</div>'
     })
+
     this.md.use(require('./markdown-it-deflist'))
     this.md.use(require('./markdown-it-frontmatter'))
 
