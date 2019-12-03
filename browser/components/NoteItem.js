@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { isArray, sortBy } from 'lodash'
 import invertColor from 'invert-color'
+import Emoji from 'react-emoji-render'
 import CSSModules from 'browser/lib/CSSModules'
 import { getTodoStatus } from 'browser/lib/getTodoStatus'
 import styles from './NoteItem.styl'
@@ -87,7 +88,7 @@ const NoteItem = ({
         : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />}
       <div styleName='item-title'>
         {note.title.trim().length > 0
-          ? note.title
+          ? <Emoji text={note.title} />
           : <span styleName='item-title-empty'>{i18n.__('Empty note')}</span>}
       </div>
       <div styleName='item-middle'>
