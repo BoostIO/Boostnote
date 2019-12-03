@@ -21,6 +21,7 @@ import yaml from 'js-yaml'
 import { render } from 'react-dom'
 import Carousel from 'react-image-carousel'
 import ConfigManager from '../main/lib/ConfigManager'
+import i18n from 'browser/lib/i18n'
 
 const { remote, shell } = require('electron')
 const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
@@ -423,7 +424,8 @@ export default class MarkdownPreview extends React.Component {
           .then(res => {
             dialog.showMessageBox(remote.getCurrentWindow(), {
               type: 'info',
-              message: `Exported to ${filename}`
+              message: `Exported to ${filename}`,
+              buttons: [i18n.__('Ok')]
             })
           })
           .catch(err => {
