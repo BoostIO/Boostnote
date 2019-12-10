@@ -560,7 +560,8 @@ function replaceNoteKeyWithNewNoteKey (noteContent, oldNoteKey, newNoteKey) {
  * @returns {String} Input without the references
  */
 function removeStorageAndNoteReferences (input, noteKey) {
-  return input.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?("|])', 'g'), function (match) {
+  const possibleSeparators = new RegExp('(' + escapeStringRegexp(path.posix.sep) + '|' + escapeStringRegexp(path.win32.sep) + '|' + mdurl.encode(path.win32.sep) + '|' + mdurl.encode(path.posix.sep) + ')')
+  return input.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + '(' + possibleSeparators.source + noteKey + possibleSeparators.source + ')?', 'g'), function (match) {
     const temp = match
       .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), path.sep)
       .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), path.sep)
