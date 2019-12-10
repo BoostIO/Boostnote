@@ -470,13 +470,13 @@ it('should make sure that "removeStorageAndNoteReferences" works with markdown c
   const noteKey = 'noteKey'
   const testInput =
     'Test input' +
-    '![' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + noteKey + path.win32.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + noteKey + path.posix.sep + 'pdf.pdf](pdf})'
+    '![imageName](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.win32.sep + noteKey + path.win32.sep + 'image.jpg) \n' +
+    '[pdf](' + systemUnderTest.STORAGE_FOLDER_PLACEHOLDER + path.posix.sep + noteKey + path.posix.sep + 'pdf.pdf)'
 
   const expectedOutput =
     'Test input' +
-    '![' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'image.jpg](imageName}) \n' +
-    '[' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'pdf.pdf](pdf})'
+    '![imageName](' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'image.jpg) \n' +
+    '[pdf](' + systemUnderTest.DESTINATION_FOLDER + path.sep + 'pdf.pdf)'
   const actual = systemUnderTest.removeStorageAndNoteReferences(testInput, noteKey)
   expect(actual).toEqual(expectedOutput)
 })
