@@ -1109,8 +1109,17 @@ export default class MarkdownPreview extends React.Component {
     }
 
     // other case
-    const success = shell.openExternal(href) || shell.openExternal(decodeURI(href))
-    if (!success) console.error('failed to open url ' + href)
+    this.openExternal(href)
+  }
+
+  openExternal (href) {
+    try {
+      const success = shell.openExternal(href) || shell.openExternal(decodeURI(href))
+      if (!success) console.error('failed to open url ' + href)
+    } catch (e) {
+      // URI Error threw from decodeURI
+      console.error(e)
+    }
   }
 
   render () {
