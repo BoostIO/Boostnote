@@ -42,6 +42,75 @@ const CSS_FILES = [
   `${appPath}/node_modules/codemirror/lib/codemirror.css`,
   `${appPath}/node_modules/react-image-carousel/lib/css/main.min.css`
 ]
+const FONT_FILES = [
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_AMS-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Math-Italic.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Italic.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size3-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Script-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size3-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size3-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size4-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Bold.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size1-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size2-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff2`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.ttf`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff`,
+  `${appPath}/node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff2`,
+  `${appPath}/node_modules/font-awesome/fonts/fontawesome-webfont.woff`,
+  `${appPath}/node_modules/font-awesome/fonts/fontawesome-webfont.eot`,
+  `${appPath}/node_modules/font-awesome/fonts/fontawesome-webfont.ttf`,
+  `${appPath}/node_modules/font-awesome/fonts/fontawesome-webfont.woff2`,
+  `${appPath}/resources/fonts/MaterialIcons-Regular.woff2`,
+  `${appPath}/resources/fonts/MaterialIcons-Regular.woff`,
+  `${appPath}/resources/fonts/MaterialIcons-Regular.ttf`
+]
 
 /**
  * @param {Object} opts
@@ -53,6 +122,7 @@ const CSS_FILES = [
  * @param {Boolean} [opts.scrollPastEnd]
  * @param {Boolean} [opts.allowCustomCSS] Should add custom css
  * @param {String} [opts.customCSS] Will be added to bottom, only if `opts.allowCustomCSS` is truthy
+ * @param {Boolean} [opts.isExport] True will ref a relative path, where False would reference the app's path
  * @returns {String}
  */
 function buildStyle (opts) {
@@ -64,23 +134,25 @@ function buildStyle (opts) {
     scrollPastEnd,
     theme,
     allowCustomCSS,
-    customCSS
+    customCSS,
+    isExport
   } = opts
+  const fontDir = opts.isExport ? `css/fonts` : `${appPath}/resources/fonts`
   return `
 @font-face {
   font-family: 'Lato';
-  src: url('${appPath}/resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
-       url('${appPath}/resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
-       url('${appPath}/resources/fonts/Lato-Regular.ttf') format('truetype');
+  src: url('${fontDir}/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+       url('${fontDir}/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+       url('${fontDir}/Lato-Regular.ttf') format('truetype');
   font-style: normal;
   font-weight: normal;
   text-rendering: optimizeLegibility;
 }
 @font-face {
   font-family: 'Lato';
-  src: url('${appPath}/resources/fonts/Lato-Black.woff2') format('woff2'), /* Modern Browsers */
-       url('${appPath}/resources/fonts/Lato-Black.woff') format('woff'), /* Modern Browsers */
-       url('${appPath}/resources/fonts/Lato-Black.ttf') format('truetype');
+  src: url('${fontDir}/Lato-Black.woff2') format('woff2'), /* Modern Browsers */
+       url('${fontDir}/Lato-Black.woff') format('woff'), /* Modern Browsers */
+       url('${fontDir}/Lato-Black.ttf') format('truetype');
   font-style: normal;
   font-weight: 700;
   text-rendering: optimizeLegibility;
@@ -91,9 +163,9 @@ function buildStyle (opts) {
   font-weight: 400;
   src: local('Material Icons'),
        local('MaterialIcons-Regular'),
-       url('${appPath}/resources/fonts/MaterialIcons-Regular.woff2') format('woff2'),
-       url('${appPath}/resources/fonts/MaterialIcons-Regular.woff') format('woff'),
-       url('${appPath}/resources/fonts/MaterialIcons-Regular.ttf') format('truetype');
+       url('${fontDir}/MaterialIcons-Regular.woff2') format('woff2'),
+       url('${fontDir}/MaterialIcons-Regular.woff') format('woff'),
+       url('${fontDir}/MaterialIcons-Regular.ttf') format('truetype');
 }
 
 ${markdownStyle}
@@ -340,6 +412,7 @@ export default class MarkdownPreview extends React.Component {
       customCSS
     } = this.getStyleParams()
 
+    let isExport = true
     const inlineStyles = buildStyle({
       fontFamily,
       fontSize,
@@ -348,15 +421,17 @@ export default class MarkdownPreview extends React.Component {
       scrollPastEnd,
       theme,
       allowCustomCSS,
-      customCSS
+      customCSS,
+      isExport
     })
     let body = this.refs.root.contentWindow.document.body.innerHTML
     body = attachmentManagement.fixLocalURLS(
       body,
       this.props.storagePath
     )
-    const files = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
-    files.forEach(file => {
+    const cssFiles = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
+    const cssDir = 'css'
+    cssFiles.forEach(file => {
       if (global.process.platform === 'win32') {
         file = file.replace('file:///', '')
       } else {
@@ -364,18 +439,30 @@ export default class MarkdownPreview extends React.Component {
       }
       exportTasks.push({
         src: file,
-        dst: 'css'
+        dst: cssDir
+      })
+    })
+    const fontFiles = FONT_FILES
+    const fontDir = `${cssDir}/fonts`
+    fontFiles.forEach(file => {
+      if (global.process.platform === 'win32') {
+        file = file.replace('file:///', '')
+      } else {
+        file = file.replace('file://', '')
+      }
+      exportTasks.push({
+        src: file,
+        dst: fontDir
       })
     })
 
     let styles = ''
-    files.forEach(file => {
+    cssFiles.forEach(file => {
       styles += `<link rel="stylesheet" href="../css/${path.basename(file)}">`
     })
 
     return `<html>
                <head>
-                 <base href="file://${targetDir}/">
                  <meta charset="UTF-8">
                  <meta name = "viewport" content = "width = device-width, initial-scale = 1, maximum-scale = 1">
                  <style id="style">${inlineStyles}</style>
@@ -685,6 +772,7 @@ export default class MarkdownPreview extends React.Component {
       allowCustomCSS,
       customCSS
     } = this.getStyleParams()
+    let isExport = false
 
     this.getWindow().document.getElementById(
       'codeTheme'
@@ -697,7 +785,8 @@ export default class MarkdownPreview extends React.Component {
       scrollPastEnd,
       theme,
       allowCustomCSS,
-      customCSS
+      customCSS,
+      isExport
     })
   }
 
