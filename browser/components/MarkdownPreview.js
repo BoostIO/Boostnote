@@ -137,7 +137,7 @@ function buildStyle (opts) {
     customCSS,
     isExport
   } = opts
-  const fontDir = opts.isExport ? `css/fonts` : `${appPath}/resources/fonts`
+  const fontDir = isExport ? `../css/fonts` : `${appPath}/resources/fonts`
   return `
 @font-face {
   font-family: 'Lato';
@@ -430,7 +430,7 @@ export default class MarkdownPreview extends React.Component {
       this.props.storagePath
     )
     const cssFiles = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
-    const cssDir = 'css'
+    const cssDir = '../css'
     cssFiles.forEach(file => {
       if (global.process.platform === 'win32') {
         file = file.replace('file:///', '')
@@ -458,7 +458,7 @@ export default class MarkdownPreview extends React.Component {
 
     let styles = ''
     cssFiles.forEach(file => {
-      styles += `<link rel="stylesheet" href="../css/${path.basename(file)}">`
+      styles += `<link rel="stylesheet" href="${cssDir}/${path.basename(file)}">`
     })
 
     return `<html>
