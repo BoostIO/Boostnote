@@ -137,7 +137,7 @@ function buildStyle (opts) {
     customCSS,
     isExport
   } = opts
-  const fontDir = isExport ? `../css/fonts` : `${appPath}/resources/fonts`
+  const fontDir = isExport ? `css/fonts` : `${appPath}/resources/fonts`
   return `
 @font-face {
   font-family: 'Lato';
@@ -399,7 +399,8 @@ export default class MarkdownPreview extends React.Component {
     this.exportAsDocument('md')
   }
 
-  htmlContentFormatter (noteContent, exportTasks, targetDir) {
+  htmlContentFormatter (noteContent, exportTasks, targetDir, setBaseHref) {
+    const isExport = true
     const {
       fontFamily,
       fontSize,
@@ -412,7 +413,6 @@ export default class MarkdownPreview extends React.Component {
       customCSS
     } = this.getStyleParams()
 
-    let isExport = true
     const inlineStyles = buildStyle({
       fontFamily,
       fontSize,
@@ -429,14 +429,11 @@ export default class MarkdownPreview extends React.Component {
       body,
       this.props.storagePath
     )
+    const filePathProtocol = global.process.platform === 'win32' ? 'file:///' : 'file://';
     const cssFiles = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
-    const cssDir = '../css'
+    const cssDir = 'css'
     cssFiles.forEach(file => {
-      if (global.process.platform === 'win32') {
-        file = file.replace('file:///', '')
-      } else {
-        file = file.replace('file://', '')
-      }
+      file = file.replace(filePathProtocol, '')
       exportTasks.push({
         src: file,
         dst: cssDir
@@ -445,11 +442,7 @@ export default class MarkdownPreview extends React.Component {
     const fontFiles = FONT_FILES
     const fontDir = `${cssDir}/fonts`
     fontFiles.forEach(file => {
-      if (global.process.platform === 'win32') {
-        file = file.replace('file:///', '')
-      } else {
-        file = file.replace('file://', '')
-      }
+      file = file.replace(filePathProtocol, '')
       exportTasks.push({
         src: file,
         dst: fontDir
@@ -461,8 +454,11 @@ export default class MarkdownPreview extends React.Component {
       styles += `<link rel="stylesheet" href="${cssDir}/${path.basename(file)}">`
     })
 
+    const baseHref = setBaseHref ? `<base href="${filePathProtocol}${targetDir}">` : ''
+
     return `<html>
                <head>
+                 ${baseHref}
                  <meta charset="UTF-8">
                  <meta name = "viewport" content = "width = device-width, initial-scale = 1, maximum-scale = 1">
                  <style id="style">${inlineStyles}</style>
@@ -473,13 +469,13 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handleSaveAsHtml () {
-    this.exportAsDocument('html', (noteContent, exportTasks, targetDir) => Promise.resolve(this.htmlContentFormatter(noteContent, exportTasks, targetDir)))
+    this.exportAsDocument('html', (noteContent, exportTasks, targetDir) => Promise.resolve(this.htmlContentFormatter(noteContent, exportTasks, targetDir, false)))
   }
 
   handleSaveAsPdf () {
     this.exportAsDocument('pdf', (noteContent, exportTasks, targetDir) => {
       const printout = new remote.BrowserWindow({show: false, webPreferences: {webSecurity: false, javascript: false}})
-      printout.loadURL('data:text/html;charset=UTF-8,' + this.htmlContentFormatter(noteContent, exportTasks, targetDir))
+      printout.loadURL('data:text/html;charset=UTF-8,' + this.htmlContentFormatter(noteContent, exportTasks, targetDir, true))
       return new Promise((resolve, reject) => {
         printout.webContents.on('did-finish-load', () => {
           printout.webContents.printToPDF({}, (err, data) => {
