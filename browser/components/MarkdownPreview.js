@@ -429,7 +429,7 @@ export default class MarkdownPreview extends React.Component {
       body,
       this.props.storagePath
     )
-    const filePathProtocol = global.process.platform === 'win32' ? 'file:///' : 'file://';
+    const filePathProtocol = global.process.platform === 'win32' ? 'file:///' : 'file://'
     const cssFiles = [this.getCodeThemeLink(codeBlockTheme), ...CSS_FILES]
     const cssDir = 'css'
     cssFiles.forEach(file => {
@@ -768,7 +768,7 @@ export default class MarkdownPreview extends React.Component {
       allowCustomCSS,
       customCSS
     } = this.getStyleParams()
-    let isExport = false
+    const isExport = false
 
     this.getWindow().document.getElementById(
       'codeTheme'
