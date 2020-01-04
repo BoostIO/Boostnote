@@ -75,7 +75,7 @@ export const DEFAULT_CONFIG = {
     customMarkdownLintConfig: DEFAULT_MARKDOWN_LINT_CONFIG,
     prettierConfig: ` {
       "trailingComma": "es5",
-      "tabWidth": 4,
+      "tabWidth": 2,
       "semi": false,
       "singleQuote": true
     }`,
