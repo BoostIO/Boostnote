@@ -472,6 +472,10 @@ export default class CodeEditor extends React.Component {
       clientWidth: this.refs.root.clientWidth
     })
 
+    // Scroll to initial document line.
+    var topOffset = this.editor.charCoords({line: this.props.topLine.number - 1, ch: 0}, 'local').top
+    this.editor.scrollTo(null, topOffset)
+    //
     this.initialHighlighting()
   }
 
@@ -529,6 +533,10 @@ export default class CodeEditor extends React.Component {
 
     spellcheck.setLanguage(null, spellcheck.SPELLCHECK_DISABLED)
     eventEmitter.off('code:format-table', this.formatTable)
+
+    // "Remember" top line number (property of grand-parent component).
+    const currentLineAtTop = this.editor.lineAtHeight(this.editor.getScrollInfo().top, 'local') + 1
+    this.props.topLine.number = currentLineAtTop
   }
 
   componentDidUpdate (prevProps, prevState) {

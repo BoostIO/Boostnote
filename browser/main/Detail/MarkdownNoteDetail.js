@@ -51,6 +51,8 @@ class MarkdownNoteDetail extends React.Component {
 
     this.dispatchTimer = null
 
+    this.topLine = { number: 1 } // Using an Object so this variable can be mutated on child components
+
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
     this.generateToc = () => this.handleGenerateToc()
   }
@@ -389,6 +391,7 @@ class MarkdownNoteDetail extends React.Component {
         value={note.content}
         storageKey={note.storage}
         noteKey={note.key}
+        topLine={this.topLine}
         linesHighlighted={note.linesHighlighted}
         onChange={this.handleUpdateContent.bind(this)}
         isLocked={this.state.isLocked}
@@ -401,6 +404,7 @@ class MarkdownNoteDetail extends React.Component {
         value={note.content}
         storageKey={note.storage}
         noteKey={note.key}
+        topLine={this.topLine}
         linesHighlighted={note.linesHighlighted}
         onChange={this.handleUpdateContent.bind(this)}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}

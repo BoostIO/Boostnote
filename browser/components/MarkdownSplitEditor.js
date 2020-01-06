@@ -173,6 +173,7 @@ class MarkdownSplitEditor extends React.Component {
           enableTableEditor={config.editor.enableTableEditor}
           storageKey={storageKey}
           noteKey={noteKey}
+          topLine={this.props.topLine}
           linesHighlighted={linesHighlighted}
           onChange={(e) => this.handleOnChange(e)}
           onScroll={this.handleScroll.bind(this)}

@@ -314,6 +314,7 @@ class MarkdownEditor extends React.Component {
           noteKey={noteKey}
           fetchUrlTitle={config.editor.fetchUrlTitle}
           enableTableEditor={config.editor.enableTableEditor}
+          topLine={this.props.topLine}
           linesHighlighted={linesHighlighted}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
