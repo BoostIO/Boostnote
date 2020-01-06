@@ -38,7 +38,7 @@ $ yarn run dev
 https://github.com/BoostIO/Boostnote/pull/2794
 </pre>
 接著，於底下步驟中把 \<PR> 換成這個號碼 (沒有括號)。
-請將上面的 URL 中的 \<PR> 換置成 2794。
+請將下方 URL 中的 \<PR> 換置成 2794。
 
 _如果您還未取得一份 master branch 的本地備份_
 ```
