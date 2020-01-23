@@ -19,7 +19,7 @@ function deleteNote (storageKey, noteKey) {
       try {
         sander.unlinkSync(notePath)
       } catch (err) {
-        console.warn(`Failed to delete note markdown`, err)
+        console.warn('Failed to delete note markdown', err)
       }
       return {
         noteKey,

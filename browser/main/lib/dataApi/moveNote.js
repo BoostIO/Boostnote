@@ -25,7 +25,7 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
       try {
         noteData = readNote(notePath)
       } catch (err) {
-        console.warn(`Failed to find note markdown`, err)
+        console.warn('Failed to find note markdown', err)
         throw err
       }
       let newNoteKey
