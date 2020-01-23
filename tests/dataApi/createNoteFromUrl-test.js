@@ -11,7 +11,7 @@ const path = require('path')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
-const CSON = require('@rokt33r/season')
+const { readNote } = require('../../browser/main/lib/dataApi/noteIO')
 
 const storagePath = path.join(os.tmpdir(), 'test/create-note-from-url')
 
@@ -29,7 +29,7 @@ test.serial('Create a note from URL', (t) => {
   return createNoteFromUrl(url, storageKey, folderKey)
     .then(function assert ({ note }) {
       t.is(storageKey, note.storage)
-      const jsonData = CSON.readFileSync(path.join(storagePath, 'notes', note.key + '.cson'))
+      const jsonData = readNote(path.join(storagePath, 'notes', note.key + '.md'))
 
       // Test if saved content is matching the created in memory note
       t.is(note.content, jsonData.content)
