@@ -2,7 +2,7 @@ const path = require('path')
 const sander = require('sander')
 const keygen = require('browser/lib/keygen')
 const _ = require('lodash')
-const CSON = require('@rokt33r/season')
+const { writeNote } = require('./noteIO')
 
 function migrateFromV5Storage (storagePath) {
   var boostnoteJSONPath = path.join(storagePath, 'boostnote.json')
@@ -66,7 +66,7 @@ function migrateFromV5Storage (storagePath) {
           const noteDirPath = path.join(storagePath, 'notes')
           notes
             .map(function saveNote (note) {
-              CSON.writeFileSync(path.join(noteDirPath, note.key) + '.cson', note)
+              writeNote(path.join(noteDirPath, note.key) + '.md', note)
             })
           return true
         })

@@ -1,7 +1,7 @@
 const resolveStorageData = require('./resolveStorageData')
+const { writeNote, readNote } = require('./noteIO')
 const _ = require('lodash')
 const path = require('path')
-const CSON = require('@rokt33r/season')
 const { findStorage } = require('browser/lib/findStorage')
 
 function validateInput (input) {
@@ -88,9 +88,9 @@ function updateNote (storageKey, noteKey, input) {
   return resolveStorageData(targetStorage)
     .then(function saveNote (storage) {
       let noteData
-      const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
+      const notePath = path.join(storage.path, 'notes', noteKey + '.md')
       try {
-        noteData = CSON.readFileSync(notePath)
+        noteData = readNote(notePath)
       } catch (err) {
         console.warn('Failed to find note cson', err)
         noteData = input.type === 'SNIPPET_NOTE'
@@ -130,7 +130,7 @@ function updateNote (storageKey, noteKey, input) {
         storage: storageKey
       })
 
-      CSON.writeFileSync(path.join(storage.path, 'notes', noteKey + '.cson'), _.omit(noteData, ['key', 'storage']))
+      writeNote(path.join(storage.path, 'notes', noteKey + '.md'), _.omit(noteData, ['key', 'storage']))
 
       return noteData
     })

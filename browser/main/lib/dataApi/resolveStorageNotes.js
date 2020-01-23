@@ -1,6 +1,6 @@
 const sander = require('sander')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const { readNote } = require('./noteIO')
 
 function resolveStorageNotes (storage) {
   const notesDirPath = path.join(storage.path, 'notes')
@@ -17,13 +17,13 @@ function resolveStorageNotes (storage) {
     notePathList = []
   }
   const notes = notePathList
-    .filter(function filterOnlyCSONFile (notePath) {
-      return /\.cson$/.test(notePath)
+    .filter(function filterOnlyMDFile (notePath) {
+      return /\.md$/.test(notePath)
     })
-    .map(function parseCSONFile (notePath) {
+    .map(function parseMDFile (notePath) {
       try {
-        const data = CSON.readFileSync(path.join(notesDirPath, notePath))
-        data.key = path.basename(notePath, '.cson')
+        const data = readNote(path.join(notesDirPath, notePath))
+        data.key = path.basename(notePath, '.md')
         data.storage = storage.key
         return data
       } catch (err) {

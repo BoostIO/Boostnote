@@ -14,12 +14,12 @@ function deleteNote (storageKey, noteKey) {
 
   return resolveStorageData(targetStorage)
     .then(function deleteNoteFile (storage) {
-      const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
+      const notePath = path.join(storage.path, 'notes', noteKey + '.md')
 
       try {
         sander.unlinkSync(notePath)
       } catch (err) {
-        console.warn('Failed to delete note cson', err)
+        console.warn(`Failed to delete note markdown`, err)
       }
       return {
         noteKey,
