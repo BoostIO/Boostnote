@@ -10,7 +10,7 @@ const localStorage = window.localStorage = global.localStorage = new Storage(nul
 const path = require('path')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
-const CSON = require('@rokt33r/season')
+const { readNote } = require('../../browser/main/lib/dataApi/noteIO')
 const _ = require('lodash')
 const os = require('os')
 
@@ -38,11 +38,11 @@ test.serial('Migrate legacy storage into v1 storage', (t) => {
       t.is(dummyData.notes.length, fileList.length)
       const noteMap = fileList
         .map((filePath) => {
-          return CSON.readFileSync(path.join(noteDirPath, filePath))
+          return readNote(path.join(noteDirPath, filePath))
         })
       dummyData.notes
         .forEach(function (targetNote) {
-          t.true(_.find(noteMap, {title: targetNote.title, folder: targetNote.folder}) != null)
+          t.true(_.find(noteMap, { title: targetNote.title, folder: targetNote.folder }) != null)
         })
 
       // Check legacy folder directory is removed

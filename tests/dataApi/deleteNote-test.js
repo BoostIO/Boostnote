@@ -56,7 +56,7 @@ test.serial('Delete a note', (t) => {
     .then(function assert (data) {
       try {
         readNote(path.join(storagePath, 'notes', data.noteKey + '.md'))
-        t.fail('note cson must be deleted.')
+        t.fail('note markdown must be deleted.')
       } catch (err) {
         t.is(err.code, 'ENOENT')
         return data

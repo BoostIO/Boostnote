@@ -92,7 +92,7 @@ function updateNote (storageKey, noteKey, input) {
       try {
         noteData = readNote(notePath)
       } catch (err) {
-        console.warn('Failed to find note cson', err)
+        console.warn('Failed to find note markdown', err)
         noteData = input.type === 'SNIPPET_NOTE'
           ? {
             type: 'SNIPPET_NOTE',

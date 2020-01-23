@@ -76,7 +76,7 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
           return noteData
         })
         .then(function writeAndReturn (noteData) {
-          writeNote(path.join(newStorage.path, 'notes', noteData.key + 'md'), _.omit(noteData, ['key', 'storage', 'oldContent']))
+          writeNote(path.join(newStorage.path, 'notes', noteData.key + '.md'), _.omit(noteData, ['key', 'storage', 'oldContent']))
           return noteData
         })
         .then(function deleteOldNote (data) {
