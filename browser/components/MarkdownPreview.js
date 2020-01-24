@@ -126,6 +126,8 @@ code {
   background-color: rgba(0,0,0,0.04);
   text-align: left;
   direction: ltr;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 .lineNumber {
   ${lineNumber && 'display: block !important;'}
