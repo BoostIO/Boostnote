@@ -267,6 +267,8 @@ function fixLocalURLS (renderedHTML, storagePath) {
  * @returns {String} Generated markdown code
  */
 function generateAttachmentMarkdown (fileName, path, showPreview) {
+  // Fix file path if windows changing backslashes for forward slashes
+  if (global.process.platform === 'win32') path = path.replace(/\\/g, '/')
   return `${showPreview ? '!' : ''}[${fileName}](${path})`
 }
 
