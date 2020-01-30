@@ -50,14 +50,26 @@ GPL v3 is too strict to be compatible with another license, so we thought it mig
 
 # Contributing to Boostnote (Korean)
 
-### 버그 리포트를 보고할 때
-이슈의 양식은 없습니다. 하지만 부탁이 있습니다.
-
-**개발자 도구를 연 상태의 Boostnote 스크린샷을 첨부해주세요**
+### 이슈 또는 버그 리포트를 제출하는 절차
+이슈를 제기할 때에 사용하는 양식(issue template)이 준비되어 있으니, 해당 양식에 맞추어 최대한 구체적인 정보를 첨부하여 주시기 바랍니다.
 
 도움을 주셔서 감사합니다.
 
-### Pull Request의 저작권에 관하여
+### Pull Request를 제출하는 절차
+Pull Request에 사용하는 양식(pull request template)이 준비되어 있으니, 코드를 접수하기 전에 미리 해당 양식을 작성해 주시기 바랍니다. 코드가 해결하고자 하는 문제가 무엇인지 정확히 알면 저희가 훨씬 신속하게 해당 pull request를 검토할 수 있습니다.
+
+다음 사항을 준수하여 주십시오:
+- [`code_style.md`](docs/code_style.md) 에 정리된 코드 스타일 정보를 확인할 것
+- 테스트 코드를 작성하고, 아래와 같은 테스트 커맨드를 실행할 것
+```
+npm run test
+```
+- 아래와 같은 린팅 커맨드로 코드를 확인할 것
+```
+npm run lint
+```
+
+### 저작권에 관한 기준
 
 당신이 pull request를 요청하면, 코드 변경에 대한 저작권을 BoostIO에 양도한다는 것에 동의한다는 의미입니다.
 
