@@ -31,6 +31,7 @@ import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
 import queryString from 'query-string'
 import { replace } from 'connected-react-router'
+import ToggleDirectionButton from 'browser/main/Detail/ToggleDirectionButton'
 
 class MarkdownNoteDetail extends React.Component {
   constructor (props) {
@@ -46,7 +47,8 @@ class MarkdownNoteDetail extends React.Component {
       isLockButtonShown: props.config.editor.type !== 'SPLIT',
       isLocked: false,
       editorType: props.config.editor.type,
-      switchPreview: props.config.editor.switchPreview
+      switchPreview: props.config.editor.switchPreview,
+      RTL: false
     }
 
     this.dispatchTimer = null
@@ -61,6 +63,7 @@ class MarkdownNoteDetail extends React.Component {
 
   componentDidMount () {
     ee.on('topbar:togglelockbutton', this.toggleLockButton)
+    ee.on('topbar:toggledirectionbutton', () => this.handleSwitchDirection())
     ee.on('topbar:togglemodebutton', () => {
       const reversedType = this.state.editorType === 'SPLIT' ? 'EDITOR_PREVIEW' : 'SPLIT'
       this.handleSwitchMode(reversedType)
@@ -99,6 +102,7 @@ class MarkdownNoteDetail extends React.Component {
 
   componentWillUnmount () {
     ee.off('topbar:togglelockbutton', this.toggleLockButton)
+    ee.on('topbar:toggledirectionbutton', this.handleSwitchDirection)
     ee.off('code:generate-toc', this.generateToc)
     if (this.saveQueue != null) this.saveNow()
   }
@@ -354,6 +358,12 @@ class MarkdownNoteDetail extends React.Component {
     })
   }
 
+  handleSwitchDirection () {
+    // If in split mode, hide the lock button
+    const direction = this.state.RTL
+    this.setState({ RTL: !direction })
+  }
+
   handleDeleteNote () {
     this.handleTrashButtonClick()
   }
@@ -393,6 +403,7 @@ class MarkdownNoteDetail extends React.Component {
         onChange={this.handleUpdateContent.bind(this)}
         isLocked={this.state.isLocked}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
+        RTL={this.state.RTL}
       />
     } else {
       return <MarkdownSplitEditor
@@ -404,6 +415,7 @@ class MarkdownNoteDetail extends React.Component {
         linesHighlighted={note.linesHighlighted}
         onChange={this.handleUpdateContent.bind(this)}
         ignorePreviewPointerEvents={ignorePreviewPointerEvents}
+        RTL={this.state.RTL}
       />
     }
   }
@@ -472,7 +484,7 @@ class MarkdownNoteDetail extends React.Component {
       </div>
       <div styleName='info-right'>
         <ToggleModeButton onClick={(e) => this.handleSwitchMode(e)} editorType={editorType} />
-
+        <ToggleDirectionButton onClick={(e) => this.handleSwitchDirection(e)} isRTL={this.state.RTL} />
         <StarButton
           onClick={(e) => this.handleStarButtonClick(e)}
           isActive={note.isStarred}
@@ -518,6 +530,7 @@ class MarkdownNoteDetail extends React.Component {
           print={this.print}
         />
       </div>
+
     </div>
 
     return (

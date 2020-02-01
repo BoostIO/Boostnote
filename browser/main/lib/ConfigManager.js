@@ -31,6 +31,7 @@ export const DEFAULT_CONFIG = {
   hotkey: {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
+    toggleDirection: OSX ? 'Command + Alt + Right' : 'Ctrl + Right',
     deleteNote: OSX ? 'Command + Shift + Backspace' : 'Ctrl + Shift + Backspace',
     pasteSmartly: OSX ? 'Command + Shift + V' : 'Ctrl + Shift + V',
     prettifyMarkdown: OSX ? 'Command + Shift + F' : 'Ctrl + Shift + F',
@@ -75,7 +76,7 @@ export const DEFAULT_CONFIG = {
     customMarkdownLintConfig: DEFAULT_MARKDOWN_LINT_CONFIG,
     prettierConfig: ` {
       "trailingComma": "es5",
-      "tabWidth": 4,
+      "tabWidth": 2,
       "semi": false,
       "singleQuote": true
     }`,

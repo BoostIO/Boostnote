@@ -273,7 +273,7 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidMount () {
-    const { rulers, enableRulers, enableMarkdownLint } = this.props
+    const { rulers, enableRulers, enableMarkdownLint, RTL } = this.props
     eventEmitter.on('line:jump', this.scrollToLineHandeler)
 
     snippetManager.init()
@@ -294,6 +294,8 @@ export default class CodeEditor extends React.Component {
       scrollPastEnd: this.props.scrollPastEnd,
       inputStyle: 'textarea',
       dragDrop: false,
+      direction: RTL ? 'rtl' : 'ltr',
+      rtlMoveVisually: RTL,
       foldGutter: true,
       lint: enableMarkdownLint ? this.getCodeEditorLintConfig() : false,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
@@ -554,6 +556,10 @@ export default class CodeEditor extends React.Component {
     }
     if (prevProps.keyMap !== this.props.keyMap) {
       needRefresh = true
+    }
+    if (prevProps.RTL !== this.props.RTL) {
+      this.editor.setOption('direction', this.props.RTL ? 'rtl' : 'ltr')
+      this.editor.setOption('rtlMoveVisually', this.props.RTL)
     }
     if (prevProps.enableMarkdownLint !== enableMarkdownLint || prevProps.customMarkdownLintConfig !== customMarkdownLintConfig) {
       if (!enableMarkdownLint) {
@@ -1219,7 +1225,8 @@ CodeEditor.propTypes = {
   spellCheck: PropTypes.bool,
   enableMarkdownLint: PropTypes.bool,
   customMarkdownLintConfig: PropTypes.string,
-  deleteUnusedAttachments: PropTypes.bool
+  deleteUnusedAttachments: PropTypes.bool,
+  RTL: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {
@@ -1235,5 +1242,6 @@ CodeEditor.defaultProps = {
   enableMarkdownLint: DEFAULT_CONFIG.editor.enableMarkdownLint,
   customMarkdownLintConfig: DEFAULT_CONFIG.editor.customMarkdownLintConfig,
   prettierConfig: DEFAULT_CONFIG.editor.prettierConfig,
-  deleteUnusedAttachments: DEFAULT_CONFIG.editor.deleteUnusedAttachments
+  deleteUnusedAttachments: DEFAULT_CONFIG.editor.deleteUnusedAttachments,
+  RTL: false
 }

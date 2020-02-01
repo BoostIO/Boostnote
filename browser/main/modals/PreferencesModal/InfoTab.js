@@ -142,7 +142,7 @@ class InfoTab extends React.Component {
             >{i18n.__('Development')}</a>{i18n.__(' : Development configurations for Boostnote.')}
           </li>
           <li styleName='cc'>
-            {i18n.__('Copyright (C) 2017 - 2019 BoostIO')}
+            {i18n.__('Copyright (C) 2017 - 2020 BoostIO')}
           </li>
           <li styleName='cc'>
             {i18n.__('License: GPL v3')}

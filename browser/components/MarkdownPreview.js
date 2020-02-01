@@ -135,7 +135,8 @@ function buildStyle (opts) {
     theme,
     allowCustomCSS,
     customCSS,
-    isExport
+    isExport,
+    RTL
   } = opts
   const fontDir = isExport ? `css/fonts` : `${appPath}/resources/fonts`
   return `
@@ -173,11 +174,14 @@ ${markdownStyle}
 body {
   font-family: '${fontFamily.join("','")}';
   font-size: ${fontSize}px;
+
   ${scrollPastEnd ? `
     padding-bottom: 90vh;
     box-sizing: border-box;
     `
     : ''}
+  ${RTL ? 'direction: rtl;' : ''}
+  ${RTL ? 'text-align: right;' : ''}
 }
 @media print {
   body {
@@ -187,6 +191,8 @@ body {
 code {
   font-family: '${codeBlockFontFamily.join("','")}';
   background-color: rgba(0,0,0,0.04);
+  text-align: left;
+  direction: ltr;
 }
 .lineNumber {
   ${lineNumber && 'display: block !important;'}
@@ -410,7 +416,8 @@ export default class MarkdownPreview extends React.Component {
       scrollPastEnd,
       theme,
       allowCustomCSS,
-      customCSS
+      customCSS,
+      RTL
     } = this.getStyleParams()
 
     const inlineStyles = buildStyle({
@@ -422,7 +429,8 @@ export default class MarkdownPreview extends React.Component {
       theme,
       allowCustomCSS,
       customCSS,
-      isExport
+      isExport,
+      RTL
     })
     let body = this.refs.root.contentWindow.document.body.innerHTML
     body = attachmentManagement.fixLocalURLS(
@@ -702,7 +710,8 @@ export default class MarkdownPreview extends React.Component {
       prevProps.theme !== this.props.theme ||
       prevProps.scrollPastEnd !== this.props.scrollPastEnd ||
       prevProps.allowCustomCSS !== this.props.allowCustomCSS ||
-      prevProps.customCSS !== this.props.customCSS
+      prevProps.customCSS !== this.props.customCSS ||
+      prevProps.RTL !== this.props.RTL
     ) {
       this.applyStyle()
       needsRewriteIframe = true
@@ -726,7 +735,8 @@ export default class MarkdownPreview extends React.Component {
       scrollPastEnd,
       theme,
       allowCustomCSS,
-      customCSS
+      customCSS,
+      RTL
     } = this.props
     let { fontFamily, codeBlockFontFamily } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
@@ -752,7 +762,8 @@ export default class MarkdownPreview extends React.Component {
       scrollPastEnd,
       theme,
       allowCustomCSS,
-      customCSS
+      customCSS,
+      RTL
     }
   }
 
@@ -766,7 +777,8 @@ export default class MarkdownPreview extends React.Component {
       scrollPastEnd,
       theme,
       allowCustomCSS,
-      customCSS
+      customCSS,
+      RTL
     } = this.getStyleParams()
     const isExport = false
 
@@ -782,7 +794,8 @@ export default class MarkdownPreview extends React.Component {
       theme,
       allowCustomCSS,
       customCSS,
-      isExport
+      isExport,
+      RTL
     })
   }
 

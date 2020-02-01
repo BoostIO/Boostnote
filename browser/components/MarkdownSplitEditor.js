@@ -137,7 +137,7 @@ class MarkdownSplitEditor extends React.Component {
   }
 
   render () {
-    const {config, value, storageKey, noteKey, linesHighlighted} = this.props
+    const {config, value, storageKey, noteKey, linesHighlighted, RTL} = this.props
     const storage = findStorage(storageKey)
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -183,6 +183,7 @@ class MarkdownSplitEditor extends React.Component {
           enableMarkdownLint={config.editor.enableMarkdownLint}
           customMarkdownLintConfig={config.editor.customMarkdownLintConfig}
           deleteUnusedAttachments={config.editor.deleteUnusedAttachments}
+          RTL={RTL}
        />
         <div styleName='slider' style={{left: this.state.codeEditorWidthInPercent + '%'}} onMouseDown={e => this.handleMouseDown(e)} >
           <div styleName='slider-hitbox' />
@@ -213,6 +214,7 @@ class MarkdownSplitEditor extends React.Component {
           customCSS={config.preview.customCSS}
           allowCustomCSS={config.preview.allowCustomCSS}
           lineThroughCheckbox={config.preview.lineThroughCheckbox}
+          RTL={RTL}
        />
       </div>
     )

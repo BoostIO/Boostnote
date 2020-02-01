@@ -1,6 +1,6 @@
 # Build
 
-This page is also available in [Japanese](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Korean](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russain](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Simplified Chinese](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [French](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md), [Portuguese](https://github.com/BoostIO/Boostnote/blob/master/docs/pt_BR/build.md) and [German](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
+This page is also available in [Japanese](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Korean](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russain](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Traditional Chinese](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_TW/build.md), [Simplified Chinese](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [French](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md), [Portuguese](https://github.com/BoostIO/Boostnote/blob/master/docs/pt_BR/build.md) and [German](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
 
 ## Environments
 

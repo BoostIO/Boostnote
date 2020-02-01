@@ -11,10 +11,14 @@
   </a>
  </p>
 
+## Download
+
+[Find the latest release of Boostnote here!](https://github.com/BoostIO/boost-releases/releases/)
+
 ## Authors & Maintainers
 
 - [Rokt33r](https://github.com/rokt33r)
-- [Kazz](https://github.com/kazup01)
+- [KZ](https://github.com/kazup01)
 - [ZeroX-DG](https://github.com/ZeroX-DG)
 
 ## Contributors
@@ -39,9 +43,8 @@ Issues on Boostnote can be funded by anyone and the money will be distributed to
 
 #### More Information
 * Website: https://boostnote.io
-* Newsletters: https://boostnote.io/#subscribe
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md): Development configurations for Boostnote.
-* Copyright (C) 2016 - 2019 BoostIO, Inc.
+* Copyright (C) 2016 - 2020 BoostIO, Inc.
 
 
 #### License

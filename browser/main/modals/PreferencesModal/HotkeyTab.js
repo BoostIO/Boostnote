@@ -30,7 +30,8 @@ class HotkeyTab extends React.Component {
     this.handleSettingError = (err) => {
       if (
         this.state.config.hotkey.toggleMain === '' ||
-        this.state.config.hotkey.toggleMode === ''
+        this.state.config.hotkey.toggleMode === '' ||
+        this.state.config.hotkey.toggleDirection === ''
       ) {
         this.setState({keymapAlert: {
           type: 'success',
@@ -79,6 +80,7 @@ class HotkeyTab extends React.Component {
     config.hotkey = Object.assign({}, config.hotkey, {
       toggleMain: this.refs.toggleMain.value,
       toggleMode: this.refs.toggleMode.value,
+      toggleDirection: this.refs.toggleDirection.value,
       deleteNote: this.refs.deleteNote.value,
       pasteSmartly: this.refs.pasteSmartly.value,
       prettifyMarkdown: this.refs.prettifyMarkdown.value,
@@ -150,6 +152,17 @@ class HotkeyTab extends React.Component {
                 onChange={(e) => this.handleHotkeyChange(e)}
                 ref='toggleMode'
                 value={config.hotkey.toggleMode}
+                type='text'
+              />
+            </div>
+          </div>
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>{i18n.__('Toggle Direction')}</div>
+            <div styleName='group-section-control'>
+              <input styleName='group-section-control-input'
+                onChange={(e) => this.handleHotkeyChange(e)}
+                ref='toggleDirection'
+                value={config.hotkey.toggleDirection}
                 type='text'
               />
             </div>

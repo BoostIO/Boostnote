@@ -4,6 +4,9 @@ module.exports = {
   'toggleMode': () => {
     ee.emit('topbar:togglemodebutton')
   },
+  'toggleDirection': () => {
+    ee.emit('topbar:toggledirectionbutton')
+  },
   'deleteNote': () => {
     ee.emit('hotkey:deletenote')
   },

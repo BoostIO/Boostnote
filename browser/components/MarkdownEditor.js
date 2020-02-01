@@ -267,7 +267,7 @@ class MarkdownEditor extends React.Component {
   }
 
   render () {
-    const {className, value, config, storageKey, noteKey, linesHighlighted} = this.props
+    const {className, value, config, storageKey, noteKey, linesHighlighted, RTL} = this.props
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -325,6 +325,7 @@ class MarkdownEditor extends React.Component {
           customMarkdownLintConfig={config.editor.customMarkdownLintConfig}
           prettierConfig={config.editor.prettierConfig}
           deleteUnusedAttachments={config.editor.deleteUnusedAttachments}
+          RTL={RTL}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
@@ -360,6 +361,7 @@ class MarkdownEditor extends React.Component {
           allowCustomCSS={config.preview.allowCustomCSS}
           lineThroughCheckbox={config.preview.lineThroughCheckbox}
           onDrop={(e) => this.handleDropImage(e)}
+          RTL={RTL}
         />
       </div>
     )
