@@ -133,6 +133,15 @@ class StorageItem extends React.Component {
     })
   }
 
+  handleAddSubFolderButtonClick (e, folder) {
+    const { storage } = this.props
+
+    modal.open(CreateFolderModal, {
+      storage,
+      folder
+    })
+  }
+
   handleHeaderInfoClick (e) {
     const { storage, dispatch } = this.props
     dispatch(push('/storages/' + storage.key))
@@ -147,6 +156,10 @@ class StorageItem extends React.Component {
 
   handleFolderButtonContextMenu (e, folder) {
     context.popup([
+      {
+        label: i18n.__('New Folder'),
+        click: (e) => this.handleAddSubFolderButtonClick(e, folder)
+      },
       {
         label: i18n.__('Rename Folder'),
         click: (e) => this.handleRenameFolderClick(e, folder)
@@ -332,6 +345,7 @@ class StorageItem extends React.Component {
           handleDragLeave={(e) => {
             this.handleDragLeave(e, folder)
           }}
+          subFolder={folder.folders}
         />
       )
     })
