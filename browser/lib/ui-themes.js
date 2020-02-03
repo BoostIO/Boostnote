@@ -32,6 +32,11 @@ export default [
     isDark: true
   },
   {
+    name: 'vulcan',
+    label: i18n.__('Vulcan'),
+    isDark: true
+  },
+  {
     name: 'white',
     label: i18n.__('White'),
     isDark: false

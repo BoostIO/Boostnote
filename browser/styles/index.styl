@@ -428,6 +428,33 @@ $ui-nord-table-even-backgroundColor = darken($ui-nord-noteDetail-backgroundColor
 $ui-nord-table-head-backgroundColor = $ui-nord-table-even-backgroundColor
 $ui-nord-table-borderColor = lighten(darken(#21252B, 10%), 20%)
 
+/******* Vulcan theme ********/
+$ui-vulcan-backgroundColor = #161719
+$ui-vulcan-noteList-backgroundColor = #161719
+$ui-vulcan-noteDetail-backgroundColor = #161719
+$ui-vulcan-tagList-backgroundColor = #FFFFFF
+
+$ui-vulcan-text-color = #999999
+$ui-vulcan-inactive-text-color = #999999
+$ui-vulcan-active-color = #ffffff
+
+$ui-vulcan-borderColor = #282a2e
+
+$ui-vulcan-tag-backgroundColor = #282a2e
+
+$ui-vulcan-button-backgroundColor = #282a2e
+$ui-vulcan-button--active-color = #a3a8ae
+$ui-vulcan-button--active-backgroundColor = #282a2e
+$ui-vulcan-button--hover-backgroundColor = #282a2e
+
+$ui-vulcan-kbd-backgroundColor = lighten($ui-vulcan-text-color, 50%)
+$ui-vulcan-kbd-color = $ui-vulcan-backgroundColor
+
+$ui-vulcan-table-odd-backgroundColor = $ui-vulcan-noteDetail-backgroundColor
+$ui-vulcan-table-even-backgroundColor = darken($ui-vulcan-noteDetail-backgroundColor, 10%)
+$ui-vulcan-table-head-backgroundColor = $ui-vulcan-table-even-backgroundColor
+$ui-vulcan-table-borderColor = lighten(darken(#21252B, 10%), 20%)
+
 
 
 debug-theme-var(theme, suffix)
@@ -436,4 +463,4 @@ debug-theme-var(theme, suffix)
 get-theme-var(theme, suffix)
   lookup('$ui-' + theme + '-' + suffix)
 
-$themes = 'monokai' 'nord'
+$themes = 'monokai' 'nord' 'vulcan'
