@@ -44,6 +44,7 @@ class Main extends React.Component {
     }
 
     this.toggleFullScreen = () => this.handleFullScreenButton()
+    this.probeTrayClose = () => this.handleTrayCloseProbe()
   }
 
   getChildContext () {
@@ -173,11 +174,13 @@ class Main extends React.Component {
     delete CodeMirror.keyMap.emacs['Ctrl-V']
 
     eventEmitter.on('editor:fullscreen', this.toggleFullScreen)
+    eventEmitter.on('tray:probe-close', this.probeTrayClose)
     eventEmitter.on('menubar:togglemenubar', this.toggleMenuBarVisible.bind(this))
   }
 
   componentWillUnmount () {
     eventEmitter.off('editor:fullscreen', this.toggleFullScreen)
+    eventEmitter.off('tray:probe-close', this.probeTrayClose)
     eventEmitter.off('menubar:togglemenubar', this.toggleMenuBarVisible.bind(this))
   }
 
@@ -282,6 +285,14 @@ class Main extends React.Component {
         this.showLeftLists(noteDetail, noteList, mainBody)
       }
     })
+  }
+
+  handleTrayCloseProbe (e) {
+    const { config } = this.props
+    if (!config.ui.closeToTray) {
+      // console.log('handleTrayClose')
+      eventEmitter.emitIpc('tray:quit')
+    }
   }
 
   hideLeftLists (noteDetail, noteList, mainBody) {
