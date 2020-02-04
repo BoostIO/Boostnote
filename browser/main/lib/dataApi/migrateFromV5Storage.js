@@ -3,6 +3,7 @@ const keygen = require('browser/lib/keygen')
 const resolveStorageData = require('./resolveStorageData')
 const consts = require('browser/lib/consts')
 const CSON = require('@rokt33r/season')
+const { writeNote } = require('./noteIO')
 const path = require('path')
 const sander = require('sander')
 
@@ -12,7 +13,7 @@ function migrateFromV5Storage (storageKey, data) {
     const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
     if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
 
-    targetStorage = _.find(cachedStorageList, {key: storageKey})
+    targetStorage = _.find(cachedStorageList, { key: storageKey })
     if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
   } catch (e) {
     return Promise.reject(e)
@@ -46,7 +47,7 @@ function importAll (storage, data) {
         let isUnique = false
         while (!isUnique) {
           try {
-            sander.statSync(path.join(storage.path, 'notes', noteKey + '.cson'))
+            sander.statSync(path.join(storage.path, 'notes', noteKey + '.md'))
             noteKey = keygen()
           } catch (err) {
             if (err.code === 'ENOENT') {
@@ -98,7 +99,7 @@ function importAll (storage, data) {
     })
 
   notes.forEach(function (note) {
-    CSON.writeFileSync(path.join(storage.path, 'notes', note.key + '.cson'), _.omit(note, ['storage', 'key']))
+    writeNote(path.join(storage.path, 'notes', note.key + '.md'), _.omit(note, ['storage', 'key']))
   })
 
   CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['version', 'folders']))

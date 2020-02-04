@@ -11,7 +11,7 @@ const path = require('path')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
-const CSON = require('@rokt33r/season')
+const { readNote } = require('../../browser/main/lib/dataApi/noteIO')
 
 const storagePath = path.join(os.tmpdir(), 'test/move-note')
 const storagePath2 = path.join(os.tmpdir(), 'test/move-note2')
@@ -41,16 +41,16 @@ test.serial('Move a note', (t) => {
       const data1 = data[0]
       const data2 = data[1]
 
-      const jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.key + '.cson'))
+      const jsonData1 = readNote(path.join(storagePath, 'notes', data1.key + '.md'))
 
       t.is(jsonData1.folder, folderKey1)
       t.is(jsonData1.title, note1.title)
 
-      const jsonData2 = CSON.readFileSync(path.join(storagePath2, 'notes', data2.key + '.cson'))
+      const jsonData2 = readNote(path.join(storagePath2, 'notes', data2.key + '.md'))
       t.is(jsonData2.folder, folderKey2)
       t.is(jsonData2.title, note2.title)
       try {
-        CSON.readFileSync(path.join(storagePath, 'notes', note2.key + '.cson'))
+        readNote(path.join(storagePath, 'notes', note2.key + '.md'))
         t.fail('The old note should be deleted.')
       } catch (err) {
         t.is(err.code, 'ENOENT')

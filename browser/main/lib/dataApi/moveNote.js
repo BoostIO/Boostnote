@@ -1,7 +1,7 @@
 const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const { readNote, writeNote } = require('./noteIO')
 const keygen = require('browser/lib/keygen')
 const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
@@ -21,11 +21,11 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
     .then(function saveNote (_oldStorage) {
       oldStorage = _oldStorage
       let noteData
-      const notePath = path.join(oldStorage.path, 'notes', noteKey + '.cson')
+      const notePath = path.join(oldStorage.path, 'notes', noteKey + '.md')
       try {
-        noteData = CSON.readFileSync(notePath)
+        noteData = readNote(notePath)
       } catch (err) {
-        console.warn('Failed to find note cson', err)
+        console.warn('Failed to find note markdown', err)
         throw err
       }
       let newNoteKey
@@ -42,7 +42,7 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
               let isUnique = false
               while (!isUnique) {
                 try {
-                  sander.statSync(path.join(newStorage.path, 'notes', newNoteKey + '.cson'))
+                  sander.statSync(path.join(newStorage.path, 'notes', newNoteKey + '.md'))
                   newNoteKey = keygen(true)
                 } catch (err) {
                   if (err.code === 'ENOENT') {
@@ -57,7 +57,7 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
             })
         })
         .then(function checkFolderExistsAndPrepareNoteData (newStorage) {
-          if (_.find(newStorage.folders, {key: newFolderKey}) == null) throw new Error('Target folder doesn\'t exist.')
+          if (_.find(newStorage.folders, { key: newFolderKey }) == null) throw new Error('Target folder doesn\'t exist.')
 
           noteData.folder = newFolderKey
           noteData.key = newNoteKey
@@ -76,13 +76,13 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
           return noteData
         })
         .then(function writeAndReturn (noteData) {
-          CSON.writeFileSync(path.join(newStorage.path, 'notes', noteData.key + '.cson'), _.omit(noteData, ['key', 'storage', 'oldContent']))
+          writeNote(path.join(newStorage.path, 'notes', noteData.key + '.md'), _.omit(noteData, ['key', 'storage', 'oldContent']))
           return noteData
         })
         .then(function deleteOldNote (data) {
           if (storageKey !== newStorageKey) {
             try {
-              sander.unlinkSync(path.join(oldStorage.path, 'notes', noteKey + '.cson'))
+              sander.unlinkSync(path.join(oldStorage.path, 'notes', noteKey + '.md'))
             } catch (err) {
               console.warn(err)
             }

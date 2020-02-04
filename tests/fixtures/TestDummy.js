@@ -3,6 +3,7 @@ const keygen = require('browser/lib/keygen')
 const _ = require('lodash')
 const sander = require('sander')
 const CSON = require('@rokt33r/season')
+const { writeNote } = require('../../browser/main/lib/dataApi/noteIO')
 const path = require('path')
 
 function dummyFolder (override = {}) {
@@ -119,8 +120,8 @@ function dummyStorage (storagePath, override = {}) {
 
     notesData.push(noteData)
   }
-  notesData.forEach(function saveNoteCSON (note) {
-    CSON.writeFileSync(path.join(storagePath, 'notes', note.key + '.cson'), _.omit(note, ['key']))
+  notesData.forEach(function saveNoteMD (note) {
+    writeNote(path.join(storagePath, 'notes', note.key + '.md'), _.omit(note, ['key']))
   })
 
   return {
@@ -161,7 +162,7 @@ function dummyLegacyStorage (storagePath, override = {}) {
       folderNotes.push(noteData)
     }
     notesData = notesData.concat(folderNotes)
-    CSON.writeFileSync(path.join(storagePath, jsonData.folders[j].key, 'data.json'), {notes: folderNotes.map((note) => _.omit(note, ['folder']))})
+    CSON.writeFileSync(path.join(storagePath, jsonData.folders[j].key, 'data.json'), { notes: folderNotes.map((note) => _.omit(note, ['folder'])) })
   }
 
   return {

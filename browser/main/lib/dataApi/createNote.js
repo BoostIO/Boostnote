@@ -3,7 +3,7 @@ const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const path = require('path')
-const CSON = require('@rokt33r/season')
+const { writeNote } = require('./noteIO')
 const { findStorage } = require('browser/lib/findStorage')
 
 function validateInput (input) {
@@ -48,7 +48,7 @@ function createNote (storageKey, input) {
 
   return resolveStorageData(targetStorage)
     .then(function checkFolderExists (storage) {
-      if (_.find(storage.folders, {key: input.folder}) == null) {
+      if (_.find(storage.folders, { key: input.folder }) == null) {
         throw new Error('Target folder doesn\'t exist.')
       }
       return storage
@@ -58,7 +58,7 @@ function createNote (storageKey, input) {
       let isUnique = false
       while (!isUnique) {
         try {
-          sander.statSync(path.join(storage.path, 'notes', key + '.cson'))
+          sander.statSync(path.join(storage.path, 'notes', key + '.md'))
           key = keygen(true)
         } catch (err) {
           if (err.code === 'ENOENT') {
@@ -68,6 +68,7 @@ function createNote (storageKey, input) {
           }
         }
       }
+
       const noteData = Object.assign({},
         {
           createdAt: new Date(),
@@ -79,7 +80,7 @@ function createNote (storageKey, input) {
           storage: storageKey
         })
 
-      CSON.writeFileSync(path.join(storage.path, 'notes', key + '.cson'), _.omit(noteData, ['key', 'storage']))
+      writeNote(path.join(storage.path, 'notes', key + '.md'), _.omit(noteData, ['key', 'storage']))
 
       return noteData
     })

@@ -12,7 +12,7 @@ const path = require('path')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
-const CSON = require('@rokt33r/season')
+const { readNote } = require('../../browser/main/lib/dataApi/noteIO')
 const faker = require('faker')
 const fs = require('fs')
 const attachmentManagement = require('browser/main/lib/dataApi/attachmentManagement')
@@ -55,8 +55,8 @@ test.serial('Delete a note', (t) => {
     })
     .then(function assert (data) {
       try {
-        CSON.readFileSync(path.join(storagePath, 'notes', data.noteKey + '.cson'))
-        t.fail('note cson must be deleted.')
+        readNote(path.join(storagePath, 'notes', data.noteKey + '.md'))
+        t.fail('note markdown must be deleted.')
       } catch (err) {
         t.is(err.code, 'ENOENT')
         return data

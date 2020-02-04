@@ -12,7 +12,7 @@ const path = require('path')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
-const CSON = require('@rokt33r/season')
+const { readNote } = require('../../browser/main/lib/dataApi/noteIO')
 const faker = require('faker')
 
 const storagePath = path.join(os.tmpdir(), 'test/update-note')
@@ -93,7 +93,7 @@ test.serial('Update a note', (t) => {
       const data1 = data[0]
       const data2 = data[1]
 
-      const jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.key + '.cson'))
+      const jsonData1 = readNote(path.join(storagePath, 'notes', data1.key + '.md'))
       t.is(input3.title, data1.title)
       t.is(input3.title, jsonData1.title)
       t.is(input3.description, data1.description)
@@ -109,7 +109,7 @@ test.serial('Update a note', (t) => {
       t.deepEqual(input3.snippets[0].linesHighlighted, data1.snippets[0].linesHighlighted)
       t.deepEqual(input3.snippets[0].linesHighlighted, jsonData1.snippets[0].linesHighlighted)
 
-      const jsonData2 = CSON.readFileSync(path.join(storagePath, 'notes', data2.key + '.cson'))
+      const jsonData2 = readNote(path.join(storagePath, 'notes', data2.key + '.md'))
       t.is(input4.title, data2.title)
       t.is(input4.title, jsonData2.title)
       t.is(input4.content, data2.content)
