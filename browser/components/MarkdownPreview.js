@@ -128,11 +128,11 @@ h1, h2 {
 }
 
 h3 {
-  margin: 1em 0 0.4em;
+  margin: 1em 0 0.8em;
 }
 
 h4, h5, h6 {
-  margin: 1em 0 0.5em;
+  margin: 1.1em 0 0.5em;
 }
 
 h1 {
@@ -142,7 +142,7 @@ h1 {
 
 h2 {
   padding: 0.2em 0 0.2em;
-  margin: 1em 0 0.37em;
+  margin: 1em 0 0.7em;
 }
 
 body p {
