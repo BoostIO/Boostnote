@@ -118,7 +118,7 @@ export const DEFAULT_CONFIG = {
   coloredTags: {}
 }
 
-function validate(config) {
+function validate (config) {
   if (!_.isObject(config)) return false
   if (!_.isNumber(config.zoom) || config.zoom < 0) return false
   if (!_.isBoolean(config.isSideNavFolded)) return false
@@ -127,11 +127,11 @@ function validate(config) {
   return true
 }
 
-function _save(config) {
+function _save (config) {
   window.localStorage.setItem('config', JSON.stringify(config))
 }
 
-function get() {
+function get () {
   const rawStoredConfig = window.localStorage.getItem('config')
   const storedConfig = Object.assign(
     {},
@@ -180,7 +180,7 @@ function get() {
   return config
 }
 
-function set(updates) {
+function set (updates) {
   const currentConfig = get()
 
   const arrangedUpdates = updates
@@ -229,7 +229,7 @@ function set(updates) {
   ee.emit('config-renew')
 }
 
-function assignConfigValues(originalConfig, rcConfig) {
+function assignConfigValues (originalConfig, rcConfig) {
   const config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
   config.hotkey = Object.assign(
     {},
@@ -267,7 +267,7 @@ function assignConfigValues(originalConfig, rcConfig) {
   return config
 }
 
-function rewriteHotkey(config) {
+function rewriteHotkey (config) {
   const keys = [...Object.keys(config.hotkey)]
   keys.forEach(key => {
     config.hotkey[key] = config.hotkey[key].replace(/Cmd\s/g, 'Command ')

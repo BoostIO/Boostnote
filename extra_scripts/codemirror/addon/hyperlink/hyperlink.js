@@ -1,9 +1,12 @@
-(function (mod) {
-  if (typeof exports === 'object' && typeof module === 'object') { // Common JS
+;(function (mod) {
+  if (typeof exports === 'object' && typeof module === 'object') {
+    // Common JS
     mod(require('../codemirror/lib/codemirror'))
-  } else if (typeof define === 'function' && define.amd) { // AMD
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
     define(['../codemirror/lib/codemirror'], mod)
-  } else { // Plain browser env
+  } else {
+    // Plain browser env
     mod(CodeMirror)
   }
 })(function (CodeMirror) {
@@ -28,11 +31,16 @@
       this.tooltip = document.createElement('div')
       this.tooltipContent = document.createElement('div')
       this.tooltipIndicator = document.createElement('div')
-      this.tooltip.setAttribute('class', 'CodeMirror-hover CodeMirror-matchingbracket CodeMirror-selected')
+      this.tooltip.setAttribute(
+        'class',
+        'CodeMirror-hover CodeMirror-matchingbracket CodeMirror-selected'
+      )
       this.tooltip.setAttribute('cm-ignore-events', 'true')
       this.tooltip.appendChild(this.tooltipContent)
       this.tooltip.appendChild(this.tooltipIndicator)
-      this.tooltipContent.textContent = `${macOS ? 'Cmd(⌘)' : 'Ctrl(^)'} + click to follow link`
+      this.tooltipContent.textContent = `${
+        macOS ? 'Cmd(⌘)' : 'Ctrl(^)'
+      } + click to follow link`
 
       this.lineDiv.addEventListener('mousedown', this.onMouseDown)
       this.lineDiv.addEventListener('mouseenter', this.onMouseEnter, {
@@ -79,7 +87,10 @@
       const url = this.getUrl(target)
       if (url) {
         if (e[modifier]) {
-          target.classList.add('CodeMirror-activeline-background', 'CodeMirror-hyperlink')
+          target.classList.add(
+            'CodeMirror-activeline-background',
+            'CodeMirror-hyperlink'
+          )
         } else {
           target.classList.add('CodeMirror-activeline-background')
         }
@@ -89,7 +100,10 @@
     }
     onMouseLeave (e) {
       if (this.tooltip.parentElement === this.lineDiv) {
-        e.target.classList.remove('CodeMirror-activeline-background', 'CodeMirror-hyperlink')
+        e.target.classList.remove(
+          'CodeMirror-activeline-background',
+          'CodeMirror-hyperlink'
+        )
 
         this.lineDiv.removeChild(this.tooltip)
       }
@@ -108,20 +122,20 @@
       const b2 = this.lineDiv.getBoundingClientRect()
       const tdiv = this.tooltip
 
-      tdiv.style.left = (b1.left - b2.left) + 'px'
+      tdiv.style.left = b1.left - b2.left + 'px'
       this.lineDiv.appendChild(tdiv)
 
       const b3 = tdiv.getBoundingClientRect()
       const top = b1.top - b2.top - b3.height - yOffset
       if (top < 0) {
-        tdiv.style.top = (b1.top - b2.top + b1.height + yOffset) + 'px'
+        tdiv.style.top = b1.top - b2.top + b1.height + yOffset + 'px'
       } else {
         tdiv.style.top = top + 'px'
       }
     }
   }
 
-  CodeMirror.defineOption('hyperlink', true, (cm) => {
+  CodeMirror.defineOption('hyperlink', true, cm => {
     const addon = new HyperLink(cm)
   })
 })

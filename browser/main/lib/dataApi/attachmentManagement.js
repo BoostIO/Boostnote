@@ -20,7 +20,7 @@ const PATH_SEPARATORS =
  * @param {File} file the File object dropped.
  * @returns {Promise<Image>} Image element created
  */
-function getImage(file) {
+function getImage (file) {
   if (isString(file)) {
     return new Promise(resolve => {
       const img = new Image()
@@ -56,7 +56,7 @@ function getImage(file) {
  * @param {File} file the File object dropped.
  * @returns {Promise<Number>} Orientation info
  */
-function getOrientation(file) {
+function getOrientation (file) {
   const getData = arrayBuffer => {
     const view = new DataView(arrayBuffer)
 
@@ -109,7 +109,7 @@ function getOrientation(file) {
  * @param {*} file the File object dropped.
  * @return {String} Base64 encoded image.
  */
-function fixRotate(file) {
+function fixRotate (file) {
   return Promise.all([getImage(file), getOrientation(file)]).then(
     ([img, orientation]) => {
       const canvas = document.createElement('canvas')
@@ -163,7 +163,7 @@ function fixRotate(file) {
  * @param {boolean} useRandomName determines whether a random filename for the new file is used. If false the source file name is used
  * @return {Promise<String>} name (inclusive extension) of the generated file
  */
-function copyAttachment(
+function copyAttachment (
   sourceFilePath,
   storageKey,
   noteKey,
@@ -235,7 +235,7 @@ function copyAttachment(
   })
 }
 
-function createAttachmentDestinationFolder(destinationStoragePath, noteKey) {
+function createAttachmentDestinationFolder (destinationStoragePath, noteKey) {
   let destinationDir = path.join(destinationStoragePath, DESTINATION_FOLDER)
   if (!fs.existsSync(destinationDir)) {
     fs.mkdirSync(destinationDir)
@@ -256,7 +256,7 @@ function createAttachmentDestinationFolder(destinationStoragePath, noteKey) {
  * @param storagePath Storage path of the current note
  * @param noteKey Key of the current note
  */
-function migrateAttachments(markdownContent, storagePath, noteKey) {
+function migrateAttachments (markdownContent, storagePath, noteKey) {
   if (
     noteKey !== undefined &&
     sander.existsSync(path.join(storagePath, 'images'))
@@ -292,7 +292,7 @@ function migrateAttachments(markdownContent, storagePath, noteKey) {
  * @param {String} storagePath Path of the current storage
  * @returns {String} postprocessed HTML in which all :storage references are mapped to the actual paths.
  */
-function fixLocalURLS(renderedHTML, storagePath) {
+function fixLocalURLS (renderedHTML, storagePath) {
   const encodedWin32SeparatorRegex = /%5C/g
   const storageRegex = new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER, 'g')
   const storageUrl =
@@ -311,7 +311,7 @@ function fixLocalURLS(renderedHTML, storagePath) {
       '/?' + STORAGE_FOLDER_PLACEHOLDER + '(?:(?:\\/|%5C)[-.\\w]+)+',
       'g'
     ),
-    function(match) {
+    function (match) {
       return match
         .replace(encodedWin32SeparatorRegex, '/')
         .replace(storageRegex, storageUrl)
@@ -326,7 +326,7 @@ function fixLocalURLS(renderedHTML, storagePath) {
  * @param {Boolean} showPreview Indicator whether the generated markdown should show a preview of the image. Note that at the moment only previews for images are supported
  * @returns {String} Generated markdown code
  */
-function generateAttachmentMarkdown(fileName, path, showPreview) {
+function generateAttachmentMarkdown (fileName, path, showPreview) {
   return `${showPreview ? '!' : ''}[${fileName}](${path})`
 }
 
@@ -338,7 +338,7 @@ function generateAttachmentMarkdown(fileName, path, showPreview) {
  * @param {String} noteKey Key of the current note
  * @param {Event} dropEvent DropEvent
  */
-function handleAttachmentDrop(codeEditor, storageKey, noteKey, dropEvent) {
+function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
   let promise
   if (dropEvent.dataTransfer.files.length > 0) {
     promise = Promise.all(
@@ -456,7 +456,7 @@ function handleAttachmentDrop(codeEditor, storageKey, noteKey, dropEvent) {
  * @param {String} noteKey Key of the current note
  * @param {DataTransferItem} dataTransferItem Part of the past-event
  */
-function handlePasteImageEvent(
+function handlePasteImageEvent (
   codeEditor,
   storageKey,
   noteKey,
@@ -490,7 +490,7 @@ function handlePasteImageEvent(
   const imageName = `${uniqueSlug()}.png`
   const imagePath = path.join(destinationDir, imageName)
 
-  reader.onloadend = function() {
+  reader.onloadend = function () {
     base64data = reader.result.replace(/^data:image\/png;base64,/, '')
     base64data += base64data.replace('+', ' ')
     const binaryData = new Buffer(base64data, 'base64').toString('binary')
@@ -517,7 +517,7 @@ function handlePasteImageEvent(
  * @param {String} noteKey Key of the current note
  * @param {NativeImage} image The native image
  */
-function handlePasteNativeImage(codeEditor, storageKey, noteKey, image) {
+function handlePasteNativeImage (codeEditor, storageKey, noteKey, image) {
   if (!codeEditor) {
     throw new Error('codeEditor has to be given')
   }
@@ -565,7 +565,7 @@ function handlePasteNativeImage(codeEditor, storageKey, noteKey, image) {
  * @param {String} markdownContent content in which the attachment paths should be found
  * @returns {String[]} Array of the relative paths (starting with :storage) of the attachments of the given markdown
  */
-function getAttachmentsInMarkdownContent(markdownContent) {
+function getAttachmentsInMarkdownContent (markdownContent) {
   const preparedInput = markdownContent.replace(
     new RegExp('[' + PATH_SEPARATORS + ']', 'g'),
     path.sep
@@ -592,7 +592,7 @@ function getAttachmentsInMarkdownContent(markdownContent) {
  * @param {String} storagePath path of the current storage
  * @returns {String[]} Absolute paths of the referenced attachments
  */
-function getAbsolutePathsOfAttachmentsInContent(markdownContent, storagePath) {
+function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
   const temp = getAttachmentsInMarkdownContent(markdownContent) || []
   const result = []
   for (const relativePath of temp) {
@@ -613,7 +613,7 @@ function getAbsolutePathsOfAttachmentsInContent(markdownContent, storagePath) {
  * @param {String} storageKey Storage key of the destination storage
  * @param {String} noteKey Key of the current note. Will be used as subfolder in :storage
  */
-function importAttachments(markDownContent, filepath, storageKey, noteKey) {
+function importAttachments (markDownContent, filepath, storageKey, noteKey) {
   return new Promise((resolve, reject) => {
     const nameRegex = /(!\[.*?]\()(.+?\..+?)(\))/g
     let attachPath = nameRegex.exec(markDownContent)
@@ -672,7 +672,7 @@ function importAttachments(markDownContent, filepath, storageKey, noteKey) {
  * @param {String} noteContent Content of the note to be moved
  * @returns {String} Modified version of noteContent in which the paths of the attachments are fixed
  */
-function moveAttachments(oldPath, newPath, noteKey, newNoteKey, noteContent) {
+function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
   const src = path.join(oldPath, DESTINATION_FOLDER, noteKey)
   const dest = path.join(newPath, DESTINATION_FOLDER, newNoteKey)
   if (fse.existsSync(src)) {
@@ -688,7 +688,7 @@ function moveAttachments(oldPath, newPath, noteKey, newNoteKey, noteContent) {
  * @param newNoteKey note key serving as a replacement
  * @returns {String} modified note content
  */
-function replaceNoteKeyWithNewNoteKey(noteContent, oldNoteKey, newNoteKey) {
+function replaceNoteKeyWithNewNoteKey (noteContent, oldNoteKey, newNoteKey) {
   if (noteContent) {
     const preparedInput = noteContent.replace(
       new RegExp('[' + PATH_SEPARATORS + ']', 'g'),
@@ -711,10 +711,10 @@ function replaceNoteKeyWithNewNoteKey(noteContent, oldNoteKey, newNoteKey) {
  * @param noteKey Key of the current note
  * @returns {String} Input without the references
  */
-function removeStorageAndNoteReferences(input, noteKey) {
+function removeStorageAndNoteReferences (input, noteKey) {
   return input.replace(
     new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?("|])', 'g'),
-    function(match) {
+    function (match) {
       const temp = match
         .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), path.sep)
         .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), path.sep)
@@ -740,7 +740,7 @@ function removeStorageAndNoteReferences(input, noteKey) {
  * @param storageKey Key of the storage of the note to be deleted
  * @param noteKey Key of the note to be deleted
  */
-function deleteAttachmentFolder(storageKey, noteKey) {
+function deleteAttachmentFolder (storageKey, noteKey) {
   const storagePath = findStorage.findStorage(storageKey)
   const noteAttachmentPath = path.join(
     storagePath.path,
@@ -756,7 +756,7 @@ function deleteAttachmentFolder(storageKey, noteKey) {
  * @param storageKey StorageKey of the current note. Is used to determine the belonging attachment folder.
  * @param noteKey NoteKey of the current note. Is used to determine the belonging attachment folder.
  */
-function deleteAttachmentsNotPresentInNote(
+function deleteAttachmentsNotPresentInNote (
   markdownContent,
   storageKey,
   noteKey
@@ -831,7 +831,7 @@ function deleteAttachmentsNotPresentInNote(
  * @param noteKey NoteKey of the currentNote
  * @return {Promise<Array<{path: String, isInUse: bool}>>} Promise returning the
  list of attachments with their properties */
-function getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey) {
+function getAttachmentsPathAndStatus (markdownContent, storageKey, noteKey) {
   if (storageKey == null || noteKey == null || markdownContent == null) {
     return null
   }
@@ -896,7 +896,7 @@ function getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey) {
  * @description Remove all specified attachment paths
  * @param attachments attachment paths
  * @return {Promise} Promise after all attachments are removed */
-function removeAttachmentsByPaths(attachments) {
+function removeAttachmentsByPaths (attachments) {
   const promises = []
   for (const attachment of attachments) {
     const promise = new Promise((resolve, reject) => {
@@ -921,7 +921,7 @@ function removeAttachmentsByPaths(attachments) {
  * @param oldNote Note that is being cloned
  * @param newNote Clone of the note
  */
-function cloneAttachments(oldNote, newNote) {
+function cloneAttachments (oldNote, newNote) {
   if (newNote.type === 'MARKDOWN_NOTE') {
     const oldStorage = findStorage.findStorage(oldNote.storage)
     const newStorage = findStorage.findStorage(newNote.storage)
@@ -961,7 +961,7 @@ function cloneAttachments(oldNote, newNote) {
   }
 }
 
-function generateFileNotFoundMarkdown() {
+function generateFileNotFoundMarkdown () {
   return (
     '**' +
     i18n.__(
@@ -976,7 +976,7 @@ function generateFileNotFoundMarkdown() {
  * @param text Text that might contain a attachment link
  * @return {Boolean} Result of the test
  */
-function isAttachmentLink(text) {
+function isAttachmentLink (text) {
   if (text) {
     return (
       text.match(
@@ -1003,7 +1003,7 @@ function isAttachmentLink(text) {
  * @param linkText Text that was pasted
  * @return {Promise<String>} Promise returning the modified text
  */
-function handleAttachmentLinkPaste(storageKey, noteKey, linkText) {
+function handleAttachmentLinkPaste (storageKey, noteKey, linkText) {
   if (storageKey != null && noteKey != null && linkText != null) {
     const storagePath = findStorage.findStorage(storageKey).path
     const attachments = getAttachmentsInMarkdownContent(linkText) || []

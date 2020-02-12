@@ -26,16 +26,16 @@ test.beforeEach(t => {
 test.serial('Toggle a storage location', t => {
   const storageKey = t.context.storage.cache.key
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return toggleStorage(storageKey, true)
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
       t.true(_.find(cachedStorageList, { key: storageKey }).isOpen === true)
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

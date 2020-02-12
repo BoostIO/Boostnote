@@ -34,7 +34,7 @@ import { replace } from 'connected-react-router'
 import ToggleDirectionButton from 'browser/main/Detail/ToggleDirectionButton'
 
 class MarkdownNoteDetail extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -60,11 +60,11 @@ class MarkdownNoteDetail extends React.Component {
     this.generateToc = () => this.handleGenerateToc()
   }
 
-  focus() {
+  focus () {
     this.refs.content.focus()
   }
 
-  componentDidMount() {
+  componentDidMount () {
     ee.on('topbar:togglelockbutton', this.toggleLockButton)
     ee.on('topbar:toggledirectionbutton', () => this.handleSwitchDirection())
     ee.on('topbar:togglemodebutton', () => {
@@ -76,7 +76,7 @@ class MarkdownNoteDetail extends React.Component {
     ee.on('code:generate-toc', this.generateToc)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const isNewNote = nextProps.note.key !== this.props.note.key
     const hasDeletedTags =
       nextProps.note.tags.length < this.props.note.tags.length
@@ -108,20 +108,20 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ee.off('topbar:togglelockbutton', this.toggleLockButton)
     ee.on('topbar:toggledirectionbutton', this.handleSwitchDirection)
     ee.off('code:generate-toc', this.generateToc)
     if (this.saveQueue != null) this.saveNow()
   }
 
-  handleUpdateTag() {
+  handleUpdateTag () {
     const { note } = this.state
     if (this.refs.tags) note.tags = this.refs.tags.value
     this.updateNote(note)
   }
 
-  handleUpdateContent() {
+  handleUpdateContent () {
     const { note } = this.state
     note.content = this.refs.content.value
 
@@ -137,21 +137,21 @@ class MarkdownNoteDetail extends React.Component {
     this.updateNote(note)
   }
 
-  updateNote(note) {
+  updateNote (note) {
     note.updatedAt = new Date()
     this.setState({ note }, () => {
       this.save()
     })
   }
 
-  save() {
+  save () {
     clearTimeout(this.saveQueue)
     this.saveQueue = setTimeout(() => {
       this.saveNow()
     }, 1000)
   }
 
-  saveNow() {
+  saveNow () {
     const { note, dispatch } = this.props
     clearTimeout(this.saveQueue)
     this.saveQueue = null
@@ -165,7 +165,7 @@ class MarkdownNoteDetail extends React.Component {
     })
   }
 
-  handleFolderChange(e) {
+  handleFolderChange (e) {
     const { note } = this.state
     const value = this.refs.folder.value
     const splitted = value.split('-')
@@ -203,7 +203,7 @@ class MarkdownNoteDetail extends React.Component {
       })
   }
 
-  handleStarButtonClick(e) {
+  handleStarButtonClick (e) {
     const { note } = this.state
     if (!note.isStarred)
       AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_STAR')
@@ -220,25 +220,25 @@ class MarkdownNoteDetail extends React.Component {
     )
   }
 
-  exportAsFile() {}
+  exportAsFile () {}
 
-  exportAsMd() {
+  exportAsMd () {
     ee.emit('export:save-md')
   }
 
-  exportAsTxt() {
+  exportAsTxt () {
     ee.emit('export:save-text')
   }
 
-  exportAsHtml() {
+  exportAsHtml () {
     ee.emit('export:save-html')
   }
 
-  exportAsPdf() {
+  exportAsPdf () {
     ee.emit('export:save-pdf')
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     switch (e.keyCode) {
       // tab key
       case 9:
@@ -271,7 +271,7 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
-  handleTrashButtonClick(e) {
+  handleTrashButtonClick (e) {
     const { note } = this.state
     const { isTrashed } = note
     const { confirmDeletion } = this.props.config.ui
@@ -311,7 +311,7 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
-  handleUndoButtonClick(e) {
+  handleUndoButtonClick (e) {
     const { note } = this.state
 
     note.isTrashed = false
@@ -328,28 +328,28 @@ class MarkdownNoteDetail extends React.Component {
     )
   }
 
-  handleFullScreenButton(e) {
+  handleFullScreenButton (e) {
     ee.emit('editor:fullscreen')
   }
 
-  handleLockButtonMouseDown(e) {
+  handleLockButtonMouseDown (e) {
     e.preventDefault()
     ee.emit('editor:lock')
     this.setState({ isLocked: !this.state.isLocked })
     if (this.state.isLocked) this.focus()
   }
 
-  getToggleLockButton() {
+  getToggleLockButton () {
     return this.state.isLocked
       ? '../resources/icon/icon-lock.svg'
       : '../resources/icon/icon-unlock.svg'
   }
 
-  handleDeleteKeyDown(e) {
+  handleDeleteKeyDown (e) {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
 
-  handleToggleLockButton(event, noteStatus) {
+  handleToggleLockButton (event, noteStatus) {
     // first argument event is not used
     if (noteStatus === 'CODE') {
       this.setState({ isLockButtonShown: true })
@@ -358,27 +358,27 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
-  handleGenerateToc() {
+  handleGenerateToc () {
     const editor = this.refs.content.refs.code.editor
     markdownToc.generateInEditor(editor)
   }
 
-  handleFocus(e) {
+  handleFocus (e) {
     this.focus()
   }
 
-  handleInfoButtonClick(e) {
+  handleInfoButtonClick (e) {
     const infoPanel = document.querySelector('.infoPanel')
     if (infoPanel.style)
       infoPanel.style.display =
         infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
-  print(e) {
+  print (e) {
     ee.emit('print')
   }
 
-  handleSwitchMode(type) {
+  handleSwitchMode (type) {
     // If in split mode, hide the lock button
     this.setState(
       { editorType: type, isLockButtonShown: !(type === 'SPLIT') },
@@ -391,17 +391,17 @@ class MarkdownNoteDetail extends React.Component {
     )
   }
 
-  handleSwitchDirection() {
+  handleSwitchDirection () {
     // If in split mode, hide the lock button
     const direction = this.state.RTL
     this.setState({ RTL: !direction })
   }
 
-  handleDeleteNote() {
+  handleDeleteNote () {
     this.handleTrashButtonClick()
   }
 
-  handleClearTodo() {
+  handleClearTodo () {
     const { note } = this.state
     const splitted = note.content.split('\n')
 
@@ -422,7 +422,7 @@ class MarkdownNoteDetail extends React.Component {
     this.updateNote(note)
   }
 
-  renderEditor() {
+  renderEditor () {
     const { config, ignorePreviewPointerEvents } = this.props
     const { note } = this.state
 
@@ -459,7 +459,7 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { data, dispatch, location, config } = this.props
     const { note, editorType } = this.state
     const storageKey = note.storage

@@ -19,7 +19,7 @@ const attachmentManagement = require('./attachmentManagement')
  * @param {function} outputFormatter
  * @return {Promise.<*[]>}
  */
-function exportNote(
+function exportNote (
   nodeKey,
   storageKey,
   noteContent,
@@ -69,7 +69,7 @@ function exportNote(
     })
 }
 
-function prepareTasks(tasks, storagePath, targetPath) {
+function prepareTasks (tasks, storagePath, targetPath) {
   return tasks.map(task => {
     if (!path.isAbsolute(task.src)) {
       task.src = path.join(storagePath, task.src)
@@ -83,7 +83,7 @@ function prepareTasks(tasks, storagePath, targetPath) {
   })
 }
 
-function saveToFile(data, filename) {
+function saveToFile (data, filename) {
   return new Promise((resolve, reject) => {
     fs.writeFile(filename, data, err => {
       if (err) return reject(err)
@@ -97,7 +97,7 @@ function saveToFile(data, filename) {
  * Remove exported files
  * @param tasks Array of copy task objects. Object consists of two mandatory fields – `src` and `dst`
  */
-function rollbackExport(tasks) {
+function rollbackExport (tasks) {
   const folders = new Set()
   tasks.forEach(task => {
     let fullpath = task.dst

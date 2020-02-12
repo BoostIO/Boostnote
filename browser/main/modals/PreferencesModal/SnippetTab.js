@@ -11,7 +11,7 @@ import copy from 'copy-to-clipboard'
 const path = require('path')
 
 class SnippetTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       currentSnippet: null
@@ -19,7 +19,7 @@ class SnippetTab extends React.Component {
     this.changeDelay = null
   }
 
-  notify(title, options) {
+  notify (title, options) {
     if (global.process.platform === 'win32') {
       options.icon = path.join(
         'file://',
@@ -30,7 +30,7 @@ class SnippetTab extends React.Component {
     return new window.Notification(title, options)
   }
 
-  handleSnippetNameOrPrefixChange() {
+  handleSnippetNameOrPrefixChange () {
     clearTimeout(this.changeDelay)
     this.changeDelay = setTimeout(() => {
       // notify the snippet editor that the name or prefix of snippet has been changed
@@ -39,7 +39,7 @@ class SnippetTab extends React.Component {
     }, 500)
   }
 
-  handleSnippetSelect(snippet) {
+  handleSnippetSelect (snippet) {
     const { currentSnippet } = this.state
     if (snippet !== null) {
       if (currentSnippet === null || currentSnippet.id !== snippet.id) {
@@ -52,7 +52,7 @@ class SnippetTab extends React.Component {
     }
   }
 
-  onSnippetNameOrPrefixChanged(e, type) {
+  onSnippetNameOrPrefixChanged (e, type) {
     const newSnippet = Object.assign({}, this.state.currentSnippet)
     if (type === 'name') {
       newSnippet.name = e.target.value
@@ -63,14 +63,14 @@ class SnippetTab extends React.Component {
     this.handleSnippetNameOrPrefixChange()
   }
 
-  handleDeleteSnippet(snippet) {
+  handleDeleteSnippet (snippet) {
     // prevent old snippet still display when deleted
     if (snippet.id === this.state.currentSnippet.id) {
       this.setState({ currentSnippet: null })
     }
   }
 
-  handleCopySnippet(e) {
+  handleCopySnippet (e) {
     const showCopyNotification = this.props.config.ui.showCopyNotification
     copy(this.state.currentSnippet.content)
     if (showCopyNotification) {
@@ -81,7 +81,7 @@ class SnippetTab extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { config, storageKey } = this.props
     const { currentSnippet } = this.state
 

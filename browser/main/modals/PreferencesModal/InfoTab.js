@@ -12,7 +12,7 @@ const { shell, remote } = electron
 const appVersion = remote.app.getVersion()
 
 class InfoTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -20,18 +20,18 @@ class InfoTab extends React.Component {
     }
   }
 
-  handleLinkClick(e) {
+  handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  handleConfigChange(e) {
+  handleConfigChange (e) {
     const newConfig = { amaEnabled: this.refs.amaEnabled.checked }
 
     this.setState({ config: newConfig })
   }
 
-  handleSaveButtonClick(e) {
+  handleSaveButtonClick (e) {
     const newConfig = {
       amaEnabled: this.state.config.amaEnabled
     }
@@ -61,7 +61,7 @@ class InfoTab extends React.Component {
     })
   }
 
-  toggleAutoUpdate() {
+  toggleAutoUpdate () {
     const newConfig = {
       autoUpdateEnabled: !this.state.config.autoUpdateEnabled
     }
@@ -70,12 +70,12 @@ class InfoTab extends React.Component {
     ConfigManager.set(newConfig)
   }
 
-  infoMessage() {
+  infoMessage () {
     const { amaMessage } = this.state
     return amaMessage ? <p styleName='policy-confirm'>{amaMessage}</p> : null
   }
 
-  render() {
+  render () {
     return (
       <div styleName='root'>
         <div styleName='group-header'>{i18n.__('Community')}</div>

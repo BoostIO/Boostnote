@@ -24,7 +24,7 @@ const electron = require('electron')
 const { remote } = electron
 
 class Main extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     if (process.env.NODE_ENV === 'production') {
@@ -46,7 +46,7 @@ class Main extends React.Component {
     this.toggleFullScreen = () => this.handleFullScreenButton()
   }
 
-  getChildContext() {
+  getChildContext () {
     const { status, config } = this.props
 
     return {
@@ -55,7 +55,7 @@ class Main extends React.Component {
     }
   }
 
-  init() {
+  init () {
     dataApi
       .addStorage({
         name: 'My Storage Location',
@@ -145,7 +145,7 @@ class Main extends React.Component {
       })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { dispatch, config } = this.props
 
     if (uiThemes.some(theme => theme.name === config.ui.theme)) {
@@ -183,7 +183,7 @@ class Main extends React.Component {
     )
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     eventEmitter.off('editor:fullscreen', this.toggleFullScreen)
     eventEmitter.off(
       'menubar:togglemenubar',
@@ -191,7 +191,7 @@ class Main extends React.Component {
     )
   }
 
-  toggleMenuBarVisible() {
+  toggleMenuBarVisible () {
     const { config } = this.props
     const { ui } = config
 
@@ -200,21 +200,21 @@ class Main extends React.Component {
     ConfigManager.set(newConfig)
   }
 
-  handleLeftSlideMouseDown(e) {
+  handleLeftSlideMouseDown (e) {
     e.preventDefault()
     this.setState({
       isLeftSliderFocused: true
     })
   }
 
-  handleRightSlideMouseDown(e) {
+  handleRightSlideMouseDown (e) {
     e.preventDefault()
     this.setState({
       isRightSliderFocused: true
     })
   }
 
-  handleMouseUp(e) {
+  handleMouseUp (e) {
     // Change width of NoteList component.
     if (this.state.isRightSliderFocused) {
       this.setState(
@@ -254,7 +254,7 @@ class Main extends React.Component {
     }
   }
 
-  handleMouseMove(e) {
+  handleMouseMove (e) {
     if (this.state.isRightSliderFocused) {
       const offset = this.refs.body.getBoundingClientRect().left
       let newListWidth = e.pageX - offset
@@ -280,7 +280,7 @@ class Main extends React.Component {
     }
   }
 
-  handleFullScreenButton(e) {
+  handleFullScreenButton (e) {
     this.setState({ fullScreen: !this.state.fullScreen }, () => {
       const noteDetail = document.querySelector('.NoteDetail')
       const noteList = document.querySelector('.NoteList')
@@ -294,7 +294,7 @@ class Main extends React.Component {
     })
   }
 
-  hideLeftLists(noteDetail, noteList, mainBody) {
+  hideLeftLists (noteDetail, noteList, mainBody) {
     this.setState({ noteDetailWidth: noteDetail.style.left })
     this.setState({ mainBodyWidth: mainBody.style.left })
     noteDetail.style.left = '0px'
@@ -302,13 +302,13 @@ class Main extends React.Component {
     noteList.style.display = 'none'
   }
 
-  showLeftLists(noteDetail, noteList, mainBody) {
+  showLeftLists (noteDetail, noteList, mainBody) {
     noteDetail.style.left = this.state.noteDetailWidth
     mainBody.style.left = this.state.mainBodyWidth
     noteList.style.display = 'inline'
   }
 
-  render() {
+  render () {
     const { config } = this.props
 
     // the width of the navigation bar when it is folded/collapsed

@@ -9,7 +9,7 @@ import { SortableContainer } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 
 class FolderList extends React.Component {
-  render() {
+  render () {
     const { storage, hostBoundingBox } = this.props
 
     const folderList = storage.folders.map((folder, index) => {
@@ -56,7 +56,7 @@ FolderList.propTypes = {
 }
 
 class SortableFolderListComponent extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.onSortEnd = ({ oldIndex, newIndex }) => {
       const { storage } = this.props
@@ -70,7 +70,7 @@ class SortableFolderListComponent extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const StyledFolderList = CSSModules(FolderList, this.props.styles)
     const SortableFolderList = SortableContainer(StyledFolderList)
 

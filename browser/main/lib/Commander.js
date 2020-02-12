@@ -1,17 +1,17 @@
 let callees = []
 
-function bind(name, el) {
+function bind (name, el) {
   callees.push({
     name: name,
     element: el
   })
 }
 
-function release(el) {
+function release (el) {
   callees = callees.filter(callee => callee.element !== el)
 }
 
-function fire(command) {
+function fire (command) {
   console.info('COMMAND >>', command)
   const splitted = command.split(':')
   const target = splitted[0]

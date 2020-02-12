@@ -9,7 +9,7 @@ beforeEach(() => {
   Typo.mockClear()
 })
 
-it('should test that checkWord does not marks words that do not contain a typo', function() {
+it('should test that checkWord does not marks words that do not contain a typo', function () {
   const testWord = 'testWord'
   const editor = jest.fn()
   editor.getRange = jest.fn(() => testWord)
@@ -26,7 +26,7 @@ it('should test that checkWord does not marks words that do not contain a typo',
   expect(editor.markText).not.toHaveBeenCalled()
 })
 
-it('should test that checkWord should marks words that contain a typo', function() {
+it('should test that checkWord should marks words that contain a typo', function () {
   const testWord = 'testWord'
   const editor = jest.fn()
   editor.getRange = jest.fn(() => testWord)
@@ -45,7 +45,7 @@ it('should test that checkWord should marks words that contain a typo', function
   })
 })
 
-it('should test that setLanguage clears all marks', function() {
+it('should test that setLanguage clears all marks', function () {
   const dummyMarks = [
     { clear: jest.fn() },
     { clear: jest.fn() },
@@ -62,7 +62,7 @@ it('should test that setLanguage clears all marks', function() {
   }
 })
 
-it('should test that setLanguage with DISABLED as a lang argument should not load any dictionary and not check the whole document', function() {
+it('should test that setLanguage with DISABLED as a lang argument should not load any dictionary and not check the whole document', function () {
   const editor = jest.fn()
   editor.getAllMarks = jest.fn(() => [])
   const checkWholeDocumentSpy = jest
@@ -76,7 +76,7 @@ it('should test that setLanguage with DISABLED as a lang argument should not loa
   checkWholeDocumentSpy.mockRestore()
 })
 
-it('should test that setLanguage loads the correct dictionary', function() {
+it('should test that setLanguage loads the correct dictionary', function () {
   const editor = jest.fn()
   editor.getAllMarks = jest.fn(() => [])
   const lang = 'de_DE'
@@ -95,7 +95,7 @@ it('should test that setLanguage loads the correct dictionary', function() {
   checkWholeDocumentSpy.mockRestore()
 })
 
-it('should test that checkMultiLineRange performs checks for each word in the stated range', function() {
+it('should test that checkMultiLineRange performs checks for each word in the stated range', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)
@@ -132,7 +132,7 @@ it('should test that checkMultiLineRange performs checks for each word in the st
   expect(dic.check.mock.calls[10][0]).toEqual('tristique')
 })
 
-it('should test that checkMultiLineRange works correct even when the range is inverted (from is the later position and to the lower)', function() {
+it('should test that checkMultiLineRange works correct even when the range is inverted (from is the later position and to the lower)', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)
@@ -169,7 +169,7 @@ it('should test that checkMultiLineRange works correct even when the range is in
   expect(dic.check.mock.calls[10][0]).toEqual('tristique')
 })
 
-it('should test that checkMultiLineRange works for single line', function() {
+it('should test that checkMultiLineRange works for single line', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)
@@ -198,7 +198,7 @@ it('should test that checkMultiLineRange works for single line', function() {
   expect(dic.check.mock.calls[2][0]).toEqual('ullamcorper')
 })
 
-it('should test that checkMultiLineRange works for single word', function() {
+it('should test that checkMultiLineRange works for single word', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)
@@ -225,7 +225,7 @@ it('should test that checkMultiLineRange works for single word', function() {
   expect(dic.check.mock.calls[0][0]).toEqual('molestie')
 })
 
-it("should make sure that liveSpellcheck don't work if the spellcheck is not enabled", function() {
+it("should make sure that liveSpellcheck don't work if the spellcheck is not enabled", function () {
   const checkMultiLineRangeSpy = jest
     .spyOn(systemUnderTest, 'checkMultiLineRange')
     .mockImplementation()
@@ -241,7 +241,7 @@ it("should make sure that liveSpellcheck don't work if the spellcheck is not ena
   checkMultiLineRangeSpy.mockRestore()
 })
 
-it('should make sure that liveSpellcheck works for a range of changes', function() {
+it('should make sure that liveSpellcheck works for a range of changes', function () {
   const editor = jest.fn()
   const marks = [{ clear: jest.fn() }, { clear: jest.fn() }]
   editor.findMarks = jest.fn(() => marks)
@@ -272,7 +272,7 @@ it('should make sure that liveSpellcheck works for a range of changes', function
   checkMultiLineRangeSpy.mockRestore()
 })
 
-it('should make sure that liveSpellcheck works if ranges are inverted', function() {
+it('should make sure that liveSpellcheck works if ranges are inverted', function () {
   const editor = jest.fn()
   const marks = [{ clear: jest.fn() }, { clear: jest.fn() }]
   editor.findMarks = jest.fn(() => marks)
@@ -303,7 +303,7 @@ it('should make sure that liveSpellcheck works if ranges are inverted', function
   checkMultiLineRangeSpy.mockRestore()
 })
 
-it('should make sure that liveSpellcheck works for a single word with change at the beginning', function() {
+it('should make sure that liveSpellcheck works for a single word with change at the beginning', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)
@@ -330,7 +330,7 @@ it('should make sure that liveSpellcheck works for a single word with change at 
   expect(dic.check.mock.calls[0][0]).toEqual('molestie')
 })
 
-it('should make sure that liveSpellcheck works for a single word with change in the middle', function() {
+it('should make sure that liveSpellcheck works for a single word with change in the middle', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)
@@ -357,7 +357,7 @@ it('should make sure that liveSpellcheck works for a single word with change in 
   expect(dic.check.mock.calls[0][0]).toEqual('molestie')
 })
 
-it('should make sure that liveSpellcheck works for a single word with change at the end', function() {
+it('should make sure that liveSpellcheck works for a single word with change at the end', function () {
   const dic = jest.fn()
   dic.check = jest.fn()
   systemUnderTest.setDictionaryForTestsOnly(dic)

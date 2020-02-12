@@ -6,7 +6,7 @@ import { Map, Set } from 'browser/lib/Mutable'
 import _ from 'lodash'
 import DevTools from './DevTools'
 
-function defaultDataMap() {
+function defaultDataMap () {
   return {
     storageMap: new Map(),
     noteMap: new Map(),
@@ -18,7 +18,7 @@ function defaultDataMap() {
   }
 }
 
-function data(state = defaultDataMap(), action) {
+function data (state = defaultDataMap(), action) {
   switch (action.type) {
     case 'INIT_ALL':
       state = defaultDataMap()
@@ -247,7 +247,7 @@ function data(state = defaultDataMap(), action) {
         state.storageNoteMap.set(action.storage.key, storageNoteSet)
 
         if (noteSet != null) {
-          noteSet.forEach(function handleNoteKey(noteKey) {
+          noteSet.forEach(function handleNoteKey (noteKey) {
             // Get note from noteMap
             const note = state.noteMap.get(noteKey)
             if (note != null) {
@@ -364,7 +364,7 @@ function data(state = defaultDataMap(), action) {
 
 const defaultConfig = ConfigManager.get()
 
-function config(state = defaultConfig, action) {
+function config (state = defaultConfig, action) {
   switch (action.type) {
     case 'SET_IS_SIDENAV_FOLDED':
       state.isSideNavFolded = action.isFolded
@@ -390,7 +390,7 @@ const defaultStatus = {
   updateReady: false
 }
 
-function status(state = defaultStatus, action) {
+function status (state = defaultStatus, action) {
   switch (action.type) {
     case 'UPDATE_AVAILABLE':
       return Object.assign({}, defaultStatus, {
@@ -400,7 +400,7 @@ function status(state = defaultStatus, action) {
   return state
 }
 
-function updateStarredChange(oldNote, note, state, uniqueKey) {
+function updateStarredChange (oldNote, note, state, uniqueKey) {
   if (oldNote == null || oldNote.isStarred !== note.isStarred) {
     state.starredSet = new Set(state.starredSet)
     if (note.isStarred) {
@@ -411,7 +411,7 @@ function updateStarredChange(oldNote, note, state, uniqueKey) {
   }
 }
 
-function updateFolderChange(oldNote, note, state, folderKey, uniqueKey) {
+function updateFolderChange (oldNote, note, state, folderKey, uniqueKey) {
   if (oldNote == null || oldNote.folder !== note.folder) {
     state.folderNoteMap = new Map(state.folderNoteMap)
     let folderNoteList = state.folderNoteMap.get(folderKey)
@@ -429,7 +429,7 @@ function updateFolderChange(oldNote, note, state, folderKey, uniqueKey) {
   }
 }
 
-function updateTagChanges(oldNote, note, state, uniqueKey) {
+function updateTagChanges (oldNote, note, state, uniqueKey) {
   const discardedTags = _.difference(oldNote.tags, note.tags)
   const addedTags = _.difference(note.tags, oldNote.tags)
   if (discardedTags.length + addedTags.length > 0) {
@@ -438,7 +438,7 @@ function updateTagChanges(oldNote, note, state, uniqueKey) {
   }
 }
 
-function assignToTags(tags, state, uniqueKey) {
+function assignToTags (tags, state, uniqueKey) {
   state.tagNoteMap = new Map(state.tagNoteMap)
   tags.forEach(tag => {
     const tagNoteList = getOrInitItem(state.tagNoteMap, tag)
@@ -446,7 +446,7 @@ function assignToTags(tags, state, uniqueKey) {
   })
 }
 
-function removeFromTags(tags, state, uniqueKey) {
+function removeFromTags (tags, state, uniqueKey) {
   state.tagNoteMap = new Map(state.tagNoteMap)
   tags.forEach(tag => {
     let tagNoteList = state.tagNoteMap.get(tag)
@@ -458,7 +458,7 @@ function removeFromTags(tags, state, uniqueKey) {
   })
 }
 
-function getOrInitItem(target, key) {
+function getOrInitItem (target, key) {
   let results = target.get(key)
   if (results == null) {
     results = new Set()
@@ -480,10 +480,7 @@ const store = createStore(
   reducer,
   undefined,
   process.env.NODE_ENV === 'development'
-    ? compose(
-        applyMiddleware(routerMiddleware(history)),
-        DevTools.instrument()
-      )
+    ? compose(applyMiddleware(routerMiddleware(history)), DevTools.instrument())
     : applyMiddleware(routerMiddleware(history))
 )
 

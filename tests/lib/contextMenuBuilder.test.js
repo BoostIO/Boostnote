@@ -26,7 +26,7 @@ beforeEach(() => {
 })
 
 // Editor Context Menu
-it('should make sure that no context menu is build if the passed editor instance was null', function() {
+it('should make sure that no context menu is build if the passed editor instance was null', function () {
   const event = {
     pageX: 12,
     pageY: 12
@@ -35,7 +35,7 @@ it('should make sure that no context menu is build if the passed editor instance
   expect(menuBuilderParameter).toEqual(null)
 })
 
-it('should make sure that word suggestions are only requested if the word contained a typo', function() {
+it('should make sure that word suggestions are only requested if the word contained a typo', function () {
   spellcheck.getSpellingSuggestion = jest.fn()
   const editor = jest.fn()
   editor.coordsChar = jest.fn()
@@ -59,7 +59,7 @@ it('should make sure that word suggestions are only requested if the word contai
   expect(spellcheck.getSpellingSuggestion).not.toHaveBeenCalled()
 })
 
-it('should make sure that word suggestions are only requested if the word contained a typo and no other mark', function() {
+it('should make sure that word suggestions are only requested if the word contained a typo and no other mark', function () {
   spellcheck.getSpellingSuggestion = jest.fn()
   spellcheck.getCSSClassName = jest.fn(() => 'dummyErrorClassName')
   const editor = jest.fn()
@@ -85,7 +85,7 @@ it('should make sure that word suggestions are only requested if the word contai
   expect(spellcheck.getSpellingSuggestion).not.toHaveBeenCalled()
 })
 
-it('should make sure that word suggestions calls the right editor functions', function() {
+it('should make sure that word suggestions calls the right editor functions', function () {
   spellcheck.getSpellingSuggestion = jest.fn()
   spellcheck.getCSSClassName = jest.fn(() => 'dummyErrorClassName')
   const dummyCursor = { dummy: 'dummy' }
@@ -113,7 +113,7 @@ it('should make sure that word suggestions calls the right editor functions', fu
   )
 })
 
-it('should make sure that word suggestions creates a correct menu if there was an error', function() {
+it('should make sure that word suggestions creates a correct menu if there was an error', function () {
   const suggestions = ['test1', 'test2', 'Pustekuchen']
   const errorClassName = 'errorCSS'
   const wordToCorrect = 'pustekuchen'
@@ -149,7 +149,7 @@ it('should make sure that word suggestions creates a correct menu if there was a
 })
 
 // Markdown Preview Context Menu
-it('should make sure that no context menu is built if the Markdown Preview instance was null', function() {
+it('should make sure that no context menu is built if the Markdown Preview instance was null', function () {
   const event = {
     pageX: 12,
     pageY: 12

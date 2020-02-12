@@ -7,7 +7,7 @@
  * @return {string}
  */
 
-export function decodeEntities(text) {
+export function decodeEntities (text) {
   var entities = [
     ['apos', "'"],
     ['amp', '&'],
@@ -24,7 +24,7 @@ export function decodeEntities(text) {
   return text
 }
 
-export function encodeEntities(text) {
+export function encodeEntities (text) {
   const entities = [
     ["'", 'apos'],
     ['<', 'lt'],

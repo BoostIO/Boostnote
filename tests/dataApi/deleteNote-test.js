@@ -47,9 +47,9 @@ test.serial('Delete a note', t => {
   input1.title = input1.description.split('\n').shift()
 
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return createNote(storageKey, input1)
-        .then(function createAttachmentFolder(data) {
+        .then(function createAttachmentFolder (data) {
           fs.mkdirSync(
             path.join(storagePath, attachmentManagement.DESTINATION_FOLDER)
           )
@@ -62,11 +62,11 @@ test.serial('Delete a note', t => {
           )
           return data
         })
-        .then(function(data) {
+        .then(function (data) {
           return deleteNote(storageKey, data.key)
         })
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       try {
         CSON.readFileSync(
           path.join(storagePath, 'notes', data.noteKey + '.cson')
@@ -77,7 +77,7 @@ test.serial('Delete a note', t => {
         return data
       }
     })
-    .then(function assertAttachmentFolderDeleted(data) {
+    .then(function assertAttachmentFolderDeleted (data) {
       const attachmentFolderPath = path.join(
         storagePath,
         attachmentManagement.DESTINATION_FOLDER,
@@ -87,7 +87,7 @@ test.serial('Delete a note', t => {
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

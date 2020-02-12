@@ -12,7 +12,7 @@ const { shell, remote } = require('electron')
 const { dialog } = remote
 
 class StorageItem extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -20,7 +20,7 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleNewFolderButtonClick(e) {
+  handleNewFolderButtonClick (e) {
     const { storage } = this.props
     const input = {
       name: i18n.__('New Folder'),
@@ -40,12 +40,12 @@ class StorageItem extends React.Component {
       })
   }
 
-  handleExternalButtonClick() {
+  handleExternalButtonClick () {
     const { storage } = this.props
     shell.showItemInFolder(storage.path)
   }
 
-  handleUnlinkButtonClick(e) {
+  handleUnlinkButtonClick (e) {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Unlink Storage'),
@@ -71,7 +71,7 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleLabelClick(e) {
+  handleLabelClick (e) {
     const { storage } = this.props
     this.setState(
       {
@@ -83,13 +83,13 @@ class StorageItem extends React.Component {
       }
     )
   }
-  handleLabelChange(e) {
+  handleLabelChange (e) {
     this.setState({
       name: this.refs.label.value
     })
   }
 
-  handleLabelBlur(e) {
+  handleLabelBlur (e) {
     const { storage } = this.props
     dataApi.renameStorage(storage.key, this.state.name).then(_storage => {
       store.dispatch({
@@ -102,7 +102,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  render() {
+  render () {
     const { storage, hostBoundingBox } = this.props
 
     return (

@@ -2,7 +2,7 @@ import fs from 'fs'
 import consts from 'browser/lib/consts'
 import fetchSnippet from 'browser/main/lib/dataApi/fetchSnippet'
 
-function deleteSnippet(snippet, snippetFile) {
+function deleteSnippet (snippet, snippetFile) {
   return new Promise((resolve, reject) => {
     fetchSnippet(null, snippetFile).then(snippets => {
       snippets = snippets.filter(

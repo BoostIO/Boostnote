@@ -6,7 +6,7 @@ const resolveStorageData = require('./resolveStorageData')
  * @param {String} name
  * @return {Object} Storage meta data
  */
-function renameStorage(key, name) {
+function renameStorage (key, name) {
   if (!_.isString(name))
     return Promise.reject(new Error('Name must be a string.'))
 

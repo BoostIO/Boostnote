@@ -11,7 +11,7 @@ import CInput from 'react-composition-input'
 import { push } from 'connected-react-router'
 
 class TopBar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -48,7 +48,7 @@ class TopBar extends React.Component {
     )
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const {
       match: { params }
     } = this.props
@@ -63,12 +63,12 @@ class TopBar extends React.Component {
     ee.on('code:init', this.codeInitHandler)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ee.off('top:focus-search', this.focusSearchHandler)
     ee.off('code:init', this.codeInitHandler)
   }
 
-  handleSearchClearButton(e) {
+  handleSearchClearButton (e) {
     const { dispatch } = this.props
     this.setState({
       search: '',
@@ -80,7 +80,7 @@ class TopBar extends React.Component {
     this.debouncedUpdateKeyword('')
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     // Re-apply search field on ENTER key
     if (e.keyCode === 13) {
       this.debouncedUpdateKeyword(e.target.value)
@@ -104,18 +104,18 @@ class TopBar extends React.Component {
     }
   }
 
-  handleSearchChange(e) {
+  handleSearchChange (e) {
     const keyword = e.target.value
     this.debouncedUpdateKeyword(keyword)
   }
 
-  handleSearchFocus(e) {
+  handleSearchFocus (e) {
     this.setState({
       isSearching: true
     })
   }
 
-  handleSearchBlur(e) {
+  handleSearchBlur (e) {
     e.stopPropagation()
 
     let el = e.relatedTarget
@@ -134,7 +134,7 @@ class TopBar extends React.Component {
     }
   }
 
-  handleOnSearchFocus() {
+  handleOnSearchFocus () {
     const el = this.refs.search.childNodes[0]
     if (this.state.isSearching) {
       el.blur()
@@ -143,11 +143,11 @@ class TopBar extends React.Component {
     }
   }
 
-  handleCodeInit() {
+  handleCodeInit () {
     ee.emit('top:search', this.refs.searchInput.value || '')
   }
 
-  render() {
+  render () {
     const { config, style, location } = this.props
     return (
       <div

@@ -53,13 +53,13 @@ test.serial('Export a folder', t => {
   input2.title = 'input2'
 
   return createNote(storageKey, input1)
-    .then(function() {
+    .then(function () {
       return createNote(storageKey, input2)
     })
-    .then(function() {
+    .then(function () {
       return exportFolder(storageKey, folderKey, 'md', storagePath)
     })
-    .then(function assert() {
+    .then(function assert () {
       let filePath = path.join(storagePath, 'input1.md')
       t.true(fs.existsSync(filePath))
       filePath = path.join(storagePath, 'input2.md')
@@ -67,7 +67,7 @@ test.serial('Export a folder', t => {
     })
 })
 
-test.after.always(function after() {
+test.after.always(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

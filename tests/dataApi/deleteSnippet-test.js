@@ -20,10 +20,10 @@ test.beforeEach(t => {
 
 test.serial('Delete a snippet', t => {
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return Promise.all([deleteSnippet(newSnippet, snippetFile)])
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       data = data[0]
       const snippets = JSON.parse(sander.readFileSync(snippetFile))
       t.is(snippets.length, 0)

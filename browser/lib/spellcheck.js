@@ -12,7 +12,7 @@ const MILLISECONDS_TILL_LIVECHECK = 500
 let dictionary = null
 let self
 
-function getAvailableDictionaries() {
+function getAvailableDictionaries () {
   return [
     { label: i18n.__('Spellcheck disabled'), value: SPELLCHECK_DISABLED },
     { label: i18n.__('English'), value: 'en_GB' },
@@ -24,7 +24,7 @@ function getAvailableDictionaries() {
 /**
  * Only to be used in the tests :)
  */
-function setDictionaryForTestsOnly(newDictionary) {
+function setDictionaryForTestsOnly (newDictionary) {
   dictionary = newDictionary
 }
 
@@ -34,7 +34,7 @@ function setDictionaryForTestsOnly(newDictionary) {
  * @param {Codemirror} editor CodeMirror-Editor
  * @param {String} lang on of the values from getAvailableDictionaries()-Method
  */
-function setLanguage(editor, lang) {
+function setLanguage (editor, lang) {
   self = this
   dictionary = null
 
@@ -59,7 +59,7 @@ function setLanguage(editor, lang) {
  * Checks the whole content of the editor for typos
  * @param {Codemirror} editor CodeMirror-Editor
  */
-function checkWholeDocument(editor) {
+function checkWholeDocument (editor) {
   const lastLine = editor.lineCount() - 1
   const textOfLastLine = editor.getLine(lastLine) || ''
   const lastChar = textOfLastLine.length
@@ -74,8 +74,8 @@ function checkWholeDocument(editor) {
  * @param {line, ch} from starting position of the spellcheck
  * @param {line, ch} to end position of the spellcheck
  */
-function checkMultiLineRange(editor, from, to) {
-  function sortRange(pos1, pos2) {
+function checkMultiLineRange (editor, from, to) {
+  function sortRange (pos1, pos2) {
     if (
       pos1.line > pos2.line ||
       (pos1.line === pos2.line && pos1.ch > pos2.ch)
@@ -112,7 +112,7 @@ function checkMultiLineRange(editor, from, to) {
  * @param wordRange Object specifying the range that should be checked.
  * Having the following structure: <code>{anchor: {line: integer, ch: integer}, head: {line: integer, ch: integer}}</code>
  */
-function checkWord(editor, wordRange) {
+function checkWord (editor, wordRange) {
   const word = editor.getRange(wordRange.anchor, wordRange.head)
   if (word == null || word.length <= 3) {
     return
@@ -130,14 +130,14 @@ function checkWord(editor, wordRange) {
  * @param fromChangeObject codeMirror changeObject describing the start of the editing
  * @param toChangeObject codeMirror changeObject describing the end of the editing
  */
-function checkChangeRange(editor, fromChangeObject, toChangeObject) {
+function checkChangeRange (editor, fromChangeObject, toChangeObject) {
   /**
    * Calculate the smallest respectively largest position as a start, resp. end, position and return it
    * @param start CodeMirror change object
    * @param end CodeMirror change object
    * @returns {{start: {line: *, ch: *}, end: {line: *, ch: *}}}
    */
-  function getStartAndEnd(start, end) {
+  function getStartAndEnd (start, end) {
     const possiblePositions = [start.from, start.to, end.from, end.to]
     let smallest = start.from
     let biggest = end.to
@@ -184,7 +184,7 @@ function checkChangeRange(editor, fromChangeObject, toChangeObject) {
   }
 }
 
-function saveLiveSpellCheckFrom(changeObject) {
+function saveLiveSpellCheckFrom (changeObject) {
   liveSpellCheckFrom = changeObject
 }
 let liveSpellCheckFrom
@@ -210,7 +210,7 @@ const debouncedSpellCheck = _.debounce(
  * @param {Codemirror} editor CodeMirror-Editor
  * @param changeObject codeMirror changeObject
  */
-function handleChange(editor, changeObject) {
+function handleChange (editor, changeObject) {
   if (dictionary === null) {
     return
   }
@@ -224,7 +224,7 @@ function handleChange(editor, changeObject) {
  * @param word word to be checked
  * @returns {String[]} Array of suggestions
  */
-function getSpellingSuggestion(word) {
+function getSpellingSuggestion (word) {
   if (dictionary == null || word == null) {
     return []
   }
@@ -234,7 +234,7 @@ function getSpellingSuggestion(word) {
 /**
  * Returns the name of the CSS class used for errors
  */
-function getCSSClassName() {
+function getCSSClassName () {
   return styles[CSS_ERROR_CLASS]
 }
 

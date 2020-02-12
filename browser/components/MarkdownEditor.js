@@ -10,7 +10,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 
 class MarkdownEditor extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     // char codes for ctrl + w
@@ -32,29 +32,29 @@ class MarkdownEditor extends React.Component {
     this.lockEditorCode = () => this.handleLockEditor()
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.value = this.refs.code.value
     eventEmitter.on('editor:lock', this.lockEditorCode)
     eventEmitter.on('editor:focus', this.focusEditor.bind(this))
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.value = this.refs.code.value
   }
 
-  componentWillReceiveProps(props) {
+  componentWillReceiveProps (props) {
     if (props.value !== this.props.value) {
       this.queueRendering(props.value)
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.cancelQueue()
     eventEmitter.off('editor:lock', this.lockEditorCode)
     eventEmitter.off('editor:focus', this.focusEditor.bind(this))
   }
 
-  focusEditor() {
+  focusEditor () {
     this.setState(
       {
         status: 'CODE'
@@ -65,33 +65,33 @@ class MarkdownEditor extends React.Component {
     )
   }
 
-  queueRendering(value) {
+  queueRendering (value) {
     clearTimeout(this.renderTimer)
     this.renderTimer = setTimeout(() => {
       this.renderPreview(value)
     }, 500)
   }
 
-  cancelQueue() {
+  cancelQueue () {
     clearTimeout(this.renderTimer)
   }
 
-  renderPreview(value) {
+  renderPreview (value) {
     this.setState({
       renderValue: value
     })
   }
 
-  setValue(value) {
+  setValue (value) {
     this.refs.code.setValue(value)
   }
 
-  handleChange(e) {
+  handleChange (e) {
     this.value = this.refs.code.value
     this.props.onChange(e)
   }
 
-  handleContextMenu(e) {
+  handleContextMenu (e) {
     if (this.state.isLocked) return
     const { config } = this.props
     if (config.editor.switchPreview === 'RIGHTCLICK') {
@@ -116,7 +116,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  handleBlur(e) {
+  handleBlur (e) {
     if (this.state.isLocked) return
     this.setState({ keyPressed: new Set() })
     const { config } = this.props
@@ -139,7 +139,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  handleDoubleClick(e) {
+  handleDoubleClick (e) {
     if (this.state.isLocked) return
     this.setState({ keyPressed: new Set() })
     const { config } = this.props
@@ -156,11 +156,11 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  handlePreviewMouseDown(e) {
+  handlePreviewMouseDown (e) {
     this.previewMouseDownedAt = new Date()
   }
 
-  handlePreviewMouseUp(e) {
+  handlePreviewMouseUp (e) {
     const { config } = this.props
     if (
       config.editor.switchPreview === 'BLUR' &&
@@ -178,7 +178,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  handleCheckboxClick(e) {
+  handleCheckboxClick (e) {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
@@ -204,7 +204,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  focus() {
+  focus () {
     if (this.state.status === 'PREVIEW') {
       this.setState(
         {
@@ -220,13 +220,13 @@ class MarkdownEditor extends React.Component {
     eventEmitter.emit('topbar:togglelockbutton', this.state.status)
   }
 
-  reload() {
+  reload () {
     this.refs.code.reload()
     this.cancelQueue()
     this.renderPreview(this.props.value)
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     const { config } = this.props
     if (this.state.status !== 'CODE') return false
     const keyPressed = this.state.keyPressed
@@ -253,7 +253,7 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  addMdAroundWord(mdElement) {
+  addMdAroundWord (mdElement) {
     if (this.refs.code.editor.getSelection()) {
       return this.addMdAroundSelection(mdElement)
     }
@@ -267,13 +267,13 @@ class MarkdownEditor extends React.Component {
     })
   }
 
-  addMdAroundSelection(mdElement) {
+  addMdAroundSelection (mdElement) {
     this.refs.code.editor.replaceSelection(
       `${mdElement}${this.refs.code.editor.getSelection()}${mdElement}`
     )
   }
 
-  handleDropImage(dropEvent) {
+  handleDropImage (dropEvent) {
     dropEvent.preventDefault()
     const { storageKey, noteKey } = this.props
 
@@ -298,17 +298,17 @@ class MarkdownEditor extends React.Component {
     )
   }
 
-  handleKeyUp(e) {
+  handleKeyUp (e) {
     const keyPressed = this.state.keyPressed
     keyPressed.delete(e.keyCode)
     this.setState({ keyPressed })
   }
 
-  handleLockEditor() {
+  handleLockEditor () {
     this.setState({ isLocked: !this.state.isLocked })
   }
 
-  render() {
+  render () {
     const {
       className,
       value,

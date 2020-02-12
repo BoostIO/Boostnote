@@ -18,7 +18,7 @@ const buildCMRulers = (rulers, enableRulers) =>
   enableRulers ? rulers.map(ruler => ({ column: ruler })) : []
 
 class SnippetEditor extends React.Component {
-  componentDidMount() {
+  componentDidMount () {
     this.props.onRef(this)
     const { rulers, enableRulers } = this.props
     this.cm = CodeMirror(this.refs.root, {
@@ -55,16 +55,16 @@ class SnippetEditor extends React.Component {
     })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.onRef(undefined)
   }
 
-  onSnippetChanged(newSnippet) {
+  onSnippetChanged (newSnippet) {
     this.snippet = newSnippet
     this.cm.setValue(this.snippet.content)
   }
 
-  onSnippetNameOrPrefixChanged(newSnippet) {
+  onSnippetNameOrPrefixChanged (newSnippet) {
     this.snippet.name = newSnippet.name
     this.snippet.prefix = newSnippet.prefix
       .toString()
@@ -73,7 +73,7 @@ class SnippetEditor extends React.Component {
     this.saveSnippet()
   }
 
-  saveSnippet() {
+  saveSnippet () {
     dataApi
       .updateSnippet(this.snippet)
       .then(snippets => snippetManager.assignSnippets(snippets))
@@ -82,7 +82,7 @@ class SnippetEditor extends React.Component {
       })
   }
 
-  render() {
+  render () {
     const { fontSize } = this.props
     let fontFamily = this.props.fontFamily
     fontFamily =

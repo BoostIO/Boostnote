@@ -22,7 +22,7 @@ import * as path from 'path'
  * ```
  */
 
-function exportFolder(storageKey, folderKey, fileType, exportDir) {
+function exportFolder (storageKey, folderKey, fileType, exportDir) {
   let targetStorage
   try {
     targetStorage = findStorage(storageKey)
@@ -31,7 +31,7 @@ function exportFolder(storageKey, folderKey, fileType, exportDir) {
   }
 
   return resolveStorageData(targetStorage)
-    .then(function assignNotes(storage) {
+    .then(function assignNotes (storage) {
       return resolveStorageNotes(storage).then(notes => {
         return {
           storage,
@@ -39,7 +39,7 @@ function exportFolder(storageKey, folderKey, fileType, exportDir) {
         }
       })
     })
-    .then(function exportNotes(data) {
+    .then(function exportNotes (data) {
       const { storage, notes } = data
 
       return Promise.all(

@@ -35,10 +35,10 @@ test.serial('Add Storage', t => {
     path: v1StoragePath
   }
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return addStorage(input)
     })
-    .then(function validateResult(data) {
+    .then(function validateResult (data) {
       const { storage, notes } = data
 
       // Check data.storage
@@ -51,7 +51,7 @@ test.serial('Add Storage', t => {
 
       // Check data.notes
       t.is(notes.length, t.context.v1StorageData.notes.length)
-      notes.forEach(function validateNote(note) {
+      notes.forEach(function validateNote (note) {
         t.is(note.storage, storage.key)
       })
 

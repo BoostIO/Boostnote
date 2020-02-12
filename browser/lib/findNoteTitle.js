@@ -1,4 +1,4 @@
-export function findNoteTitle(
+export function findNoteTitle (
   value,
   enableFrontMatterTitle,
   frontMatterTitleField = 'title'

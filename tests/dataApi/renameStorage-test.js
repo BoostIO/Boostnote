@@ -26,16 +26,16 @@ test.beforeEach(t => {
 test.serial('Rename a storage', t => {
   const storageKey = t.context.storage.cache.key
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return renameStorage(storageKey, 'changed')
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
       t.true(_.find(cachedStorageList, { key: storageKey }).name === 'changed')
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

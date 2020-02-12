@@ -29,7 +29,7 @@ test.serial('Create a note from URL', t => {
 
   const url = 'https://shapeshed.com/writing-cross-platform-node/'
 
-  return createNoteFromUrl(url, storageKey, folderKey).then(function assert({
+  return createNoteFromUrl(url, storageKey, folderKey).then(function assert ({
     note
   }) {
     t.is(storageKey, note.storage)
@@ -43,7 +43,7 @@ test.serial('Create a note from URL', t => {
   })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

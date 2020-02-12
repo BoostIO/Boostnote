@@ -20,7 +20,7 @@ import * as fs from 'fs'
  * ```
  */
 
-function exportStorage(storageKey, fileType, exportDir) {
+function exportStorage (storageKey, fileType, exportDir) {
   let targetStorage
   try {
     targetStorage = findStorage(storageKey)
@@ -32,7 +32,7 @@ function exportStorage(storageKey, fileType, exportDir) {
     .then(storage =>
       resolveStorageNotes(storage).then(notes => ({ storage, notes }))
     )
-    .then(function exportNotes(data) {
+    .then(function exportNotes (data) {
       const { storage, notes } = data
       const folderNamesMapping = {}
       storage.folders.forEach(folder => {

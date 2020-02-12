@@ -21,8 +21,8 @@ const CSON = require('@rokt33r/season')
  * 3. empty directory
  */
 
-function init() {
-  const fetchStorages = function() {
+function init () {
+  const fetchStorages = function () {
     let rawStorages
     try {
       rawStorages = JSON.parse(window.localStorage.getItem('storages'))
@@ -37,7 +37,7 @@ function init() {
     return Promise.all(rawStorages.map(resolveStorageData))
   }
 
-  const fetchNotes = function(storages) {
+  const fetchNotes = function (storages) {
     const findNotesFromEachStorage = storages
       .filter(storage => fs.existsSync(storage.path))
       .map(storage => {
@@ -72,12 +72,12 @@ function init() {
         })
       })
     return Promise.all(findNotesFromEachStorage)
-      .then(function concatNoteGroup(noteGroups) {
-        return noteGroups.reduce(function(sum, group) {
+      .then(function concatNoteGroup (noteGroups) {
+        return noteGroups.reduce(function (sum, group) {
           return sum.concat(group)
         }, [])
       })
-      .then(function returnData(notes) {
+      .then(function returnData (notes) {
         return {
           storages,
           notes

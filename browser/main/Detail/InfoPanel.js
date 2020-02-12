@@ -6,13 +6,13 @@ import copy from 'copy-to-clipboard'
 import i18n from 'browser/lib/i18n'
 
 class InfoPanel extends React.Component {
-  copyNoteLink() {
+  copyNoteLink () {
     const { noteLink } = this.props
     this.refs.noteLink.select()
     copy(noteLink)
   }
 
-  render() {
+  render () {
     const {
       storageName,
       folderName,

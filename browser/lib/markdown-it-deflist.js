@@ -1,11 +1,11 @@
 'use strict'
 
-module.exports = function definitionListPlugin(md) {
+module.exports = function definitionListPlugin (md) {
   var isSpace = md.utils.isSpace
 
   // Search `[:~][\n ]`, returns next pos after marker on success
   // or -1 on fail.
-  function skipMarker(state, line) {
+  function skipMarker (state, line) {
     let start = state.bMarks[line] + state.tShift[line]
     const max = state.eMarks[line]
 
@@ -29,7 +29,7 @@ module.exports = function definitionListPlugin(md) {
     return start
   }
 
-  function markTightParagraphs(state, idx) {
+  function markTightParagraphs (state, idx) {
     const level = state.level + 2
 
     let i
@@ -46,7 +46,7 @@ module.exports = function definitionListPlugin(md) {
     }
   }
 
-  function deflist(state, startLine, endLine, silent) {
+  function deflist (state, startLine, endLine, silent) {
     var ch,
       contentStart,
       ddLine,

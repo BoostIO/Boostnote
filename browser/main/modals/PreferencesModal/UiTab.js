@@ -20,7 +20,7 @@ const electron = require('electron')
 const ipc = electron.ipcRenderer
 
 class UiTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       config: props.config,
@@ -28,7 +28,7 @@ class UiTab extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     CodeMirror.autoLoadMode(
       this.codeMirrorInstance.getCodeMirror(),
       'javascript'
@@ -65,12 +65,12 @@ class UiTab extends React.Component {
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ipc.removeListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.removeListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  handleUIChange(e) {
+  handleUIChange (e) {
     const { codemirrorTheme } = this.state
     let checkHighLight = document.getElementById('checkHighLight')
 
@@ -181,7 +181,7 @@ class UiTab extends React.Component {
     )
   }
 
-  handleSaveUIClick(e) {
+  handleSaveUIClick (e) {
     const newConfig = {
       ui: this.state.config.ui,
       editor: this.state.config.editor,
@@ -198,7 +198,7 @@ class UiTab extends React.Component {
     this.props.haveToSave()
   }
 
-  clearMessage() {
+  clearMessage () {
     _.debounce(() => {
       this.setState({
         UiAlert: null
@@ -206,7 +206,7 @@ class UiTab extends React.Component {
     }, 2000)()
   }
 
-  render() {
+  render () {
     const UiAlert = this.state.UiAlert
     const UiAlertElement =
       UiAlert != null ? (

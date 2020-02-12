@@ -15,7 +15,7 @@ const { dialog } = remote
 const OSX = window.process.platform === 'darwin'
 
 class NewNoteButton extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {}
@@ -23,15 +23,15 @@ class NewNoteButton extends React.Component {
     this.handleNewNoteButtonClick = this.handleNewNoteButtonClick.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     eventEmitter.on('top:new-note', this.handleNewNoteButtonClick)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     eventEmitter.off('top:new-note', this.handleNewNoteButtonClick)
   }
 
-  handleNewNoteButtonClick(e) {
+  handleNewNoteButtonClick (e) {
     const {
       location,
       dispatch,
@@ -69,7 +69,7 @@ class NewNoteButton extends React.Component {
     }
   }
 
-  resolveTargetFolder() {
+  resolveTargetFolder () {
     const {
       data,
       match: { params }
@@ -96,7 +96,7 @@ class NewNoteButton extends React.Component {
     }
   }
 
-  showMessageBox(message) {
+  showMessageBox (message) {
     dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: message,
@@ -104,7 +104,7 @@ class NewNoteButton extends React.Component {
     })
   }
 
-  render() {
+  render () {
     const { config, style } = this.props
     return (
       <div

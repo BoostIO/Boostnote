@@ -11,7 +11,7 @@ import Autosuggest from 'react-autosuggest'
 import { push } from 'connected-react-router'
 
 class TagSelect extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -32,7 +32,7 @@ class TagSelect extends React.Component {
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this)
   }
 
-  addNewTag(newTag) {
+  addNewTag (newTag) {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_TAG')
 
     newTag = newTag.trim().replace(/ +/g, '_')
@@ -69,7 +69,7 @@ class TagSelect extends React.Component {
     )
   }
 
-  buildSuggestions() {
+  buildSuggestions () {
     this.suggestions = _.sortBy(
       this.props.data.tagNoteMap
         .map((tag, name) => ({
@@ -82,7 +82,7 @@ class TagSelect extends React.Component {
     )
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.value = this.props.value
 
     this.buildSuggestions()
@@ -90,19 +90,19 @@ class TagSelect extends React.Component {
     ee.on('editor:add-tag', this.handleAddTag)
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.value = this.props.value
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ee.off('editor:add-tag', this.handleAddTag)
   }
 
-  handleAddTag() {
+  handleAddTag () {
     this.refs.newTag.input.focus()
   }
 
-  handleTagLabelClick(tag) {
+  handleTagLabelClick (tag) {
     const { dispatch } = this.props
 
     // Note: `tag` requires encoding later.
@@ -110,23 +110,23 @@ class TagSelect extends React.Component {
     dispatch(push(`/tags/${tag}`))
   }
 
-  handleTagRemoveButtonClick(tag) {
+  handleTagRemoveButtonClick (tag) {
     this.removeTagByCallback((value, tag) => {
       value.splice(value.indexOf(tag), 1)
     }, tag)
   }
 
-  onInputBlur(e) {
+  onInputBlur (e) {
     this.submitNewTag()
   }
 
-  onInputChange(e, { newValue, method }) {
+  onInputChange (e, { newValue, method }) {
     this.setState({
       newTag: newValue
     })
   }
 
-  onInputKeyDown(e) {
+  onInputKeyDown (e) {
     switch (e.keyCode) {
       case 9:
         e.preventDefault()
@@ -142,13 +142,13 @@ class TagSelect extends React.Component {
     }
   }
 
-  onSuggestionsClearRequested() {
+  onSuggestionsClearRequested () {
     this.setState({
       suggestions: []
     })
   }
 
-  onSuggestionsFetchRequested({ value }) {
+  onSuggestionsFetchRequested ({ value }) {
     const valueLC = value.toLowerCase()
     const suggestions = _.filter(
       this.suggestions,
@@ -161,17 +161,17 @@ class TagSelect extends React.Component {
     })
   }
 
-  onSuggestionSelected(event, { suggestion, suggestionValue }) {
+  onSuggestionSelected (event, { suggestion, suggestionValue }) {
     this.addNewTag(suggestionValue)
   }
 
-  removeLastTag() {
+  removeLastTag () {
     this.removeTagByCallback(value => {
       value.pop()
     })
   }
 
-  removeTagByCallback(callback, tag = null) {
+  removeTagByCallback (callback, tag = null) {
     let { value } = this.props
 
     value = _.isArray(value) ? value.slice() : []
@@ -182,7 +182,7 @@ class TagSelect extends React.Component {
     this.props.onChange()
   }
 
-  reset() {
+  reset () {
     this.buildSuggestions()
 
     this.setState({
@@ -190,11 +190,11 @@ class TagSelect extends React.Component {
     })
   }
 
-  submitNewTag() {
+  submitNewTag () {
     this.addNewTag(this.refs.newTag.input.value)
   }
 
-  render() {
+  render () {
     const { value, className, showTagsAlphabetically, coloredTags } = this.props
 
     const tagList = _.isArray(value)

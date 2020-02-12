@@ -37,13 +37,13 @@ test.serial('Move a note', t => {
   const folderKey2 = t.context.storage2.json.folders[0].key
 
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return Promise.all([
         moveNote(storageKey1, note1.key, storageKey1, folderKey1),
         moveNote(storageKey1, note2.key, storageKey2, folderKey2)
       ])
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       const data1 = data[0]
       const data2 = data[1]
 
@@ -68,7 +68,7 @@ test.serial('Move a note', t => {
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
   sander.rimrafSync(storagePath2)

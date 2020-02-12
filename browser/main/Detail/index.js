@@ -15,7 +15,7 @@ import queryString from 'query-string'
 const OSX = global.process.platform === 'darwin'
 
 class Detail extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.focusHandler = () => {
@@ -26,17 +26,17 @@ class Detail extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     ee.on('detail:focus', this.focusHandler)
     ee.on('detail:delete', this.deleteHandler)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ee.off('detail:focus', this.focusHandler)
     ee.off('detail:delete', this.deleteHandler)
   }
 
-  render() {
+  render () {
     const {
       location,
       data,

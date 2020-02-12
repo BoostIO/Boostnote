@@ -22,7 +22,7 @@ const { findStorage } = require('browser/lib/findStorage')
  * }
  * ```
  */
-function createFolder(storageKey, input) {
+function createFolder (storageKey, input) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
@@ -34,7 +34,9 @@ function createFolder(storageKey, input) {
     return Promise.reject(e)
   }
 
-  return resolveStorageData(targetStorage).then(function createFolder(storage) {
+  return resolveStorageData(targetStorage).then(function createFolder (
+    storage
+  ) {
     let key = keygen()
     while (storage.folders.some(folder => folder.key === key)) {
       key = keygen()

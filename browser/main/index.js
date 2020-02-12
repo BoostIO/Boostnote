@@ -17,11 +17,11 @@ const electron = require('electron')
 const { remote, ipcRenderer } = electron
 const { dialog } = remote
 
-document.addEventListener('drop', function(e) {
+document.addEventListener('drop', function (e) {
   e.preventDefault()
   e.stopPropagation()
 })
-document.addEventListener('dragover', function(e) {
+document.addEventListener('dragover', function (e) {
   e.preventDefault()
   e.stopPropagation()
 })
@@ -33,7 +33,7 @@ let isAltWithMouse = false
 let isAltWithOtherKey = false
 let isOtherKey = false
 
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
   if (e.key === 'Alt') {
     isAltPressing = true
     if (isOtherKey) {
@@ -47,13 +47,13 @@ document.addEventListener('keydown', function(e) {
   }
 })
 
-document.addEventListener('mousedown', function(e) {
+document.addEventListener('mousedown', function (e) {
   if (isAltPressing) {
     isAltWithMouse = true
   }
 })
 
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keyup', function (e) {
   if (e.key === 'Alt') {
     if (isAltWithMouse || isAltWithOtherKey) {
       e.preventDefault()
@@ -65,7 +65,7 @@ document.addEventListener('keyup', function(e) {
   }
 })
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
   const className = e.target.className
   if (!className && typeof className !== 'string') return
   const isInfoButton = className.includes('infoButton')
@@ -79,11 +79,11 @@ document.addEventListener('click', function(e) {
 
 const el = document.getElementById('content')
 
-function notify(...args) {
+function notify (...args) {
   return new window.Notification(...args)
 }
 
-function updateApp() {
+function updateApp () {
   const index = dialog.showMessageBox(remote.getCurrentWindow(), {
     type: 'warning',
     message: i18n.__('Update Boostnote'),
@@ -121,11 +121,11 @@ ReactDOM.render(
     </ConnectedRouter>
   </Provider>,
   el,
-  function() {
+  function () {
     const loadingCover = document.getElementById('loadingCover')
     loadingCover.parentNode.removeChild(loadingCover)
 
-    ipcRenderer.on('update-ready', function() {
+    ipcRenderer.on('update-ready', function () {
       store.dispatch({
         type: 'UPDATE_AVAILABLE'
       })
@@ -135,14 +135,14 @@ ReactDOM.render(
       updateApp()
     })
 
-    ipcRenderer.on('update-found', function() {
+    ipcRenderer.on('update-found', function () {
       notify('Update found!', {
         body: 'Preparing to update...'
       })
     })
 
     ipcRenderer.send('update-check', 'check-update')
-    window.addEventListener('online', function() {
+    window.addEventListener('online', function () {
       if (!store.getState().status.updateReady) {
         ipcRenderer.send('update-check', 'check-update')
       }

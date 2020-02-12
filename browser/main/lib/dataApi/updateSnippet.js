@@ -1,7 +1,7 @@
 import fs from 'fs'
 import consts from 'browser/lib/consts'
 
-function updateSnippet(snippet, snippetFile) {
+function updateSnippet (snippet, snippetFile) {
   return new Promise((resolve, reject) => {
     const snippets = JSON.parse(
       fs.readFileSync(snippetFile || consts.SNIPPET_FILE, 'utf-8')

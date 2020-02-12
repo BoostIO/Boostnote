@@ -16,7 +16,7 @@ const uri2path = require('file-uri-to-path')
  * @param {MouseEvent} event that has triggered the creation of the context menu
  * @returns {Electron.Menu} The created electron context menu
  */
-const buildEditorContextMenu = function(editor, event) {
+const buildEditorContextMenu = function (editor, event) {
   if (
     editor == null ||
     event == null ||
@@ -65,10 +65,10 @@ const buildEditorContextMenu = function(editor, event) {
     template.unshift.apply(
       template,
       suggestions
-        .map(function(suggestion) {
+        .map(function (suggestion) {
           return {
             label: suggestion,
-            click: function(suggestion) {
+            click: function (suggestion) {
               if (editor != null) {
                 editor.replaceRange(
                   suggestion.label,
@@ -93,7 +93,7 @@ const buildEditorContextMenu = function(editor, event) {
  * @param {MouseEvent} event that has triggered the creation of the context menu
  * @returns {Electron.Menu} The created electron context menu
  */
-const buildMarkdownPreviewContextMenu = function(markdownPreview, event) {
+const buildMarkdownPreviewContextMenu = function (markdownPreview, event) {
   if (
     markdownPreview == null ||
     event == null ||

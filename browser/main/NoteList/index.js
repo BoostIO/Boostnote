@@ -29,11 +29,11 @@ const WP_POST_PATH = '/wp/v2/posts'
 
 const regexMatchStartingTitleNumber = new RegExp('^([0-9]*.?[0-9]+).*$')
 
-function sortByCreatedAt(a, b) {
+function sortByCreatedAt (a, b) {
   return new Date(b.createdAt) - new Date(a.createdAt)
 }
 
-function sortByAlphabetical(a, b) {
+function sortByAlphabetical (a, b) {
   const matchA = regexMatchStartingTitleNumber.exec(a.title)
   const matchB = regexMatchStartingTitleNumber.exec(b.title)
 
@@ -53,24 +53,24 @@ function sortByAlphabetical(a, b) {
   return a.title.localeCompare(b.title)
 }
 
-function sortByUpdatedAt(a, b) {
+function sortByUpdatedAt (a, b) {
   return new Date(b.updatedAt) - new Date(a.updatedAt)
 }
 
-function findNoteByKey(notes, noteKey) {
+function findNoteByKey (notes, noteKey) {
   return notes.find(note => note.key === noteKey)
 }
 
-function findNotesByKeys(notes, noteKeys) {
+function findNotesByKeys (notes, noteKeys) {
   return notes.filter(note => noteKeys.includes(getNoteKey(note)))
 }
 
-function getNoteKey(note) {
+function getNoteKey (note) {
   return note.key
 }
 
 class NoteList extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.selectNextNoteHandler = () => {
@@ -112,7 +112,7 @@ class NoteList extends React.Component {
     this.contextNotes = []
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
@@ -124,17 +124,17 @@ class NoteList extends React.Component {
     ee.on('list:navigate', this.navigate)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.resetScroll()
     }
   }
 
-  resetScroll() {
+  resetScroll () {
     this.refs.list.scrollTop = 0
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearInterval(this.refreshTimer)
 
     ee.off('list:next', this.selectNextNoteHandler)
@@ -146,7 +146,7 @@ class NoteList extends React.Component {
     ee.off('list:jump', this.jumpNoteByHash)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     const { dispatch, location } = this.props
     const { selectedNoteKeys } = this.state
     const visibleNoteKeys = this.notes && this.notes.map(note => note.key)
@@ -209,7 +209,7 @@ class NoteList extends React.Component {
     }
   }
 
-  focusNote(selectedNoteKeys, noteKey, pathname) {
+  focusNote (selectedNoteKeys, noteKey, pathname) {
     const { dispatch } = this.props
 
     this.setState({
@@ -226,13 +226,13 @@ class NoteList extends React.Component {
     )
   }
 
-  getNoteKeyFromTargetIndex(targetIndex) {
+  getNoteKeyFromTargetIndex (targetIndex) {
     const note = Object.assign({}, this.notes[targetIndex])
     const noteKey = getNoteKey(note)
     return noteKey
   }
 
-  selectPriorNote() {
+  selectPriorNote () {
     if (this.notes == null || this.notes.length === 0) {
       return
     }
@@ -262,7 +262,7 @@ class NoteList extends React.Component {
     ee.emit('list:moved')
   }
 
-  selectNextNote() {
+  selectNextNote () {
     if (this.notes == null || this.notes.length === 0) {
       return
     }
@@ -299,7 +299,7 @@ class NoteList extends React.Component {
     ee.emit('list:moved')
   }
 
-  jumpNoteByHashHandler(event, noteHash) {
+  jumpNoteByHashHandler (event, noteHash) {
     const { data } = this.props
 
     // first argument event isn't used.
@@ -323,7 +323,7 @@ class NoteList extends React.Component {
     ee.emit('list:moved')
   }
 
-  handleNoteListKeyDown(e) {
+  handleNoteListKeyDown (e) {
     if (e.metaKey) return true
 
     // A key
@@ -363,7 +363,7 @@ class NoteList extends React.Component {
     }
   }
 
-  handleNoteListKeyUp(e) {
+  handleNoteListKeyUp (e) {
     if (!e.shiftKey) {
       this.setState({ shiftKeyDown: false })
     }
@@ -373,14 +373,14 @@ class NoteList extends React.Component {
     }
   }
 
-  handleNoteListBlur() {
+  handleNoteListBlur () {
     this.setState({
       shiftKeyDown: false,
       ctrlKeyDown: false
     })
   }
 
-  getNotes() {
+  getNotes () {
     const {
       data,
       match: { params },
@@ -434,7 +434,7 @@ class NoteList extends React.Component {
   }
 
   // get notes in the current folder
-  getContextNotes() {
+  getContextNotes () {
     const {
       data,
       match: { params }
@@ -455,7 +455,7 @@ class NoteList extends React.Component {
     return folderNoteKeyList.map(uniqueKey => data.noteMap.get(uniqueKey))
   }
 
-  sortByPin(unorderedNotes) {
+  sortByPin (unorderedNotes) {
     const pinnedNotes = []
     const unpinnedNotes = []
 
@@ -470,7 +470,7 @@ class NoteList extends React.Component {
     return pinnedNotes.concat(unpinnedNotes)
   }
 
-  getNoteIndexByKey(noteKey) {
+  getNoteIndexByKey (noteKey) {
     return this.notes.findIndex(note => {
       if (!note) return -1
 
@@ -478,7 +478,7 @@ class NoteList extends React.Component {
     })
   }
 
-  handleNoteClick(e, uniqueKey) {
+  handleNoteClick (e, uniqueKey) {
     const { dispatch, location } = this.props
     let { selectedNoteKeys, prevShiftNoteIndex } = this.state
     const { ctrlKeyDown, shiftKeyDown } = this.state
@@ -548,7 +548,7 @@ class NoteList extends React.Component {
     )
   }
 
-  handleSortByChange(e) {
+  handleSortByChange (e) {
     const {
       dispatch,
       match: {
@@ -567,7 +567,7 @@ class NoteList extends React.Component {
     })
   }
 
-  handleListStyleButtonClick(e, style) {
+  handleListStyleButtonClick (e, style) {
     const { dispatch } = this.props
 
     const config = {
@@ -581,7 +581,7 @@ class NoteList extends React.Component {
     })
   }
 
-  alertIfSnippet(msg) {
+  alertIfSnippet (msg) {
     const warningMessage = msg =>
       ({
         'export-txt': 'Text export',
@@ -604,7 +604,7 @@ class NoteList extends React.Component {
     }
   }
 
-  handleDragStart(e, note) {
+  handleDragStart (e, note) {
     let { selectedNoteKeys } = this.state
     const noteKey = getNoteKey(note)
 
@@ -620,7 +620,7 @@ class NoteList extends React.Component {
     this.selectNextNote()
   }
 
-  handleNoteContextMenu(e, uniqueKey) {
+  handleNoteContextMenu (e, uniqueKey) {
     const { location } = this.props
     const { selectedNoteKeys } = this.state
     const note = findNoteByKey(this.notes, uniqueKey)
@@ -698,7 +698,7 @@ class NoteList extends React.Component {
     context.popup(templates)
   }
 
-  updateSelectedNotes(updateFunc, cleanSelection = true) {
+  updateSelectedNotes (updateFunc, cleanSelection = true) {
     const { selectedNoteKeys } = this.state
     const { dispatch } = this.props
     const notes = this.notes.map(note => Object.assign({}, note))
@@ -730,21 +730,21 @@ class NoteList extends React.Component {
     }
   }
 
-  pinToTop() {
+  pinToTop () {
     this.updateSelectedNotes(note => {
       note.isPinned = !note.isPinned
       return note
     })
   }
 
-  restoreNote() {
+  restoreNote () {
     this.updateSelectedNotes(note => {
       note.isTrashed = false
       return note
     })
   }
 
-  deleteNote() {
+  deleteNote () {
     const { dispatch } = this.props
     const { selectedNoteKeys } = this.state
     const notes = this.notes.map(note => Object.assign({}, note))
@@ -803,7 +803,7 @@ class NoteList extends React.Component {
     this.setState({ selectedNoteKeys: [] })
   }
 
-  cloneNote() {
+  cloneNote () {
     const { selectedNoteKeys } = this.state
     const { dispatch, location } = this.props
     const { storage, folder } = this.resolveTargetFolder()
@@ -850,12 +850,12 @@ class NoteList extends React.Component {
       })
   }
 
-  copyNoteLink(note) {
+  copyNoteLink (note) {
     const noteLink = `[${note.title}](:note:${note.key})`
     return copy(noteLink)
   }
 
-  navigate(sender, pathname) {
+  navigate (sender, pathname) {
     const { dispatch } = this.props
     dispatch(
       push({
@@ -867,7 +867,7 @@ class NoteList extends React.Component {
     )
   }
 
-  save(note) {
+  save (note) {
     const { dispatch } = this.props
     dataApi.updateNote(note.storage, note.key, note).then(note => {
       dispatch({
@@ -877,7 +877,7 @@ class NoteList extends React.Component {
     })
   }
 
-  publishMarkdown() {
+  publishMarkdown () {
     if (this.pendingPublish) {
       clearTimeout(this.pendingPublish)
     }
@@ -886,7 +886,7 @@ class NoteList extends React.Component {
     }, 1000)
   }
 
-  publishMarkdownNow() {
+  publishMarkdownNow () {
     const { selectedNoteKeys } = this.state
     const notes = this.notes.map(note => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
@@ -946,7 +946,7 @@ class NoteList extends React.Component {
       })
   }
 
-  confirmPublishError() {
+  confirmPublishError () {
     const { remote } = electron
     const { dialog } = remote
     const alertError = {
@@ -958,7 +958,7 @@ class NoteList extends React.Component {
     dialog.showMessageBox(remote.getCurrentWindow(), alertError)
   }
 
-  confirmPublish(note) {
+  confirmPublish (note) {
     const buttonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Publish Succeeded'),
@@ -971,12 +971,12 @@ class NoteList extends React.Component {
     }
   }
 
-  openBlog(note) {
+  openBlog (note) {
     const { shell } = electron
     shell.openExternal(note.blog.blogLink)
   }
 
-  importFromFile() {
+  importFromFile () {
     const options = {
       filters: [{ name: 'Documents', extensions: ['md', 'txt'] }],
       properties: ['openFile', 'multiSelections']
@@ -987,7 +987,7 @@ class NoteList extends React.Component {
     })
   }
 
-  handleDrop(e) {
+  handleDrop (e) {
     e.preventDefault()
     const { location } = this.props
     const filepaths = Array.from(e.dataTransfer.files).map(file => {
@@ -997,7 +997,7 @@ class NoteList extends React.Component {
   }
 
   // Add notes to the current folder
-  addNotesFromFiles(filepaths) {
+  addNotesFromFiles (filepaths) {
     const { dispatch, location } = this.props
     const { storage, folder } = this.resolveTargetFolder()
 
@@ -1043,7 +1043,7 @@ class NoteList extends React.Component {
     })
   }
 
-  getTargetIndex() {
+  getTargetIndex () {
     const { location } = this.props
     const key = queryString.parse(location.search).key
     const targetIndex = _.findIndex(this.notes, note => {
@@ -1052,7 +1052,7 @@ class NoteList extends React.Component {
     return targetIndex
   }
 
-  resolveTargetFolder() {
+  resolveTargetFolder () {
     const {
       data,
       match: { params }
@@ -1078,7 +1078,7 @@ class NoteList extends React.Component {
     }
   }
 
-  showMessageBox(message) {
+  showMessageBox (message) {
     dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: message,
@@ -1086,12 +1086,12 @@ class NoteList extends React.Component {
     })
   }
 
-  getNoteStorage(note) {
+  getNoteStorage (note) {
     // note.storage = storage key
     return this.props.data.storageMap.toJS()[note.storage]
   }
 
-  getNoteFolder(note) {
+  getNoteFolder (note) {
     // note.folder = folder key
     return _.find(
       this.getNoteStorage(note).folders,
@@ -1099,7 +1099,7 @@ class NoteList extends React.Component {
     )
   }
 
-  getViewType() {
+  getViewType () {
     const { pathname } = this.props.location
     const folder = /\/folders\/[a-zA-Z0-9]+/.test(pathname)
     const storage = /\/storages\/[a-zA-Z0-9]+/.test(pathname) && !folder
@@ -1109,7 +1109,7 @@ class NoteList extends React.Component {
     if (storage) return 'STORAGE'
   }
 
-  render() {
+  render () {
     const {
       location,
       config,

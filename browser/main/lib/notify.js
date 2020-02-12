@@ -1,6 +1,6 @@
 const path = require('path')
 
-function notify(title, options) {
+function notify (title, options) {
   if (process.platform === 'win32') {
     options.icon = path.join(
       'file://',

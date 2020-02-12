@@ -1,4 +1,4 @@
-module.exports = function slugify(title) {
+module.exports = function slugify (title) {
   const slug = encodeURI(
     title
       .trim()

@@ -7,11 +7,11 @@ const darkThemeStyling = `
   fill: white;
 }`
 
-function getRandomInt(min, max) {
+function getRandomInt (min, max) {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-function getId() {
+function getId () {
   const pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let id = 'm-'
   for (let i = 0; i < 7; i++) {
@@ -20,7 +20,7 @@ function getId() {
   return id
 }
 
-function render(element, content, theme, enableHTMLLabel) {
+function render (element, content, theme, enableHTMLLabel) {
   try {
     const height = element.attributes.getNamedItem('data-height')
     const isPredefined = height && height.value !== 'undefined'

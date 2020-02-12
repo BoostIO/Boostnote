@@ -30,10 +30,10 @@ test.serial('Reorder a folder', t => {
   const secondFolderKey = t.context.storage.json.folders[1].key
 
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return reorderFolder(storageKey, 0, 1)
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       t.true(_.nth(data.storage.folders, 0).key === secondFolderKey)
       t.true(_.nth(data.storage.folders, 1).key === firstFolderKey)
 
@@ -46,7 +46,7 @@ test.serial('Reorder a folder', t => {
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

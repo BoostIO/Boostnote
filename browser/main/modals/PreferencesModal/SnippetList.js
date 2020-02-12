@@ -7,26 +7,26 @@ import eventEmitter from 'browser/main/lib/eventEmitter'
 import context from 'browser/lib/context'
 
 class SnippetList extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       snippets: []
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.reloadSnippetList()
     eventEmitter.on('snippetList:reload', this.reloadSnippetList.bind(this))
   }
 
-  reloadSnippetList() {
+  reloadSnippetList () {
     dataApi.fetchSnippet().then(snippets => {
       this.setState({ snippets })
       this.props.onSnippetSelect(this.props.currentSnippet)
     })
   }
 
-  handleSnippetContextMenu(snippet) {
+  handleSnippetContextMenu (snippet) {
     context.popup([
       {
         label: i18n.__('Delete snippet'),
@@ -35,7 +35,7 @@ class SnippetList extends React.Component {
     ])
   }
 
-  deleteSnippet(snippet) {
+  deleteSnippet (snippet) {
     dataApi
       .deleteSnippet(snippet)
       .then(() => {
@@ -47,11 +47,11 @@ class SnippetList extends React.Component {
       })
   }
 
-  handleSnippetClick(snippet) {
+  handleSnippetClick (snippet) {
     this.props.onSnippetSelect(snippet)
   }
 
-  createSnippet() {
+  createSnippet () {
     dataApi
       .createSnippet()
       .then(() => {
@@ -65,7 +65,7 @@ class SnippetList extends React.Component {
       })
   }
 
-  defineSnippetStyleName(snippet) {
+  defineSnippetStyleName (snippet) {
     const { currentSnippet } = this.props
 
     if (currentSnippet == null) {
@@ -79,7 +79,7 @@ class SnippetList extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { snippets } = this.state
     return (
       <div styleName='snippet-list'>

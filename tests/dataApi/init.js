@@ -53,24 +53,24 @@ test.beforeEach(t => {
 test.serial('Initialize All Storages', t => {
   const { v1StorageData, legacyStorageData } = t.context
   return Promise.resolve()
-    .then(function test() {
+    .then(function test () {
       return init()
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       t.true(Array.isArray(data.storages))
       t.is(
         data.notes.length,
         v1StorageData.notes.length + legacyStorageData.notes.length
       )
       t.is(data.storages.length, 3)
-      data.storages.forEach(function assertStorage(storage) {
+      data.storages.forEach(function assertStorage (storage) {
         t.true(_.isString(storage.key))
         t.true(_.isString(storage.name))
         t.true(storage.type === 'FILESYSTEM')
         t.true(_.isString(storage.path))
       })
     })
-    .then(function after() {
+    .then(function after () {
       localStorage.clear()
     })
 })

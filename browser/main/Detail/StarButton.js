@@ -6,7 +6,7 @@ import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
 class StarButton extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -14,25 +14,25 @@ class StarButton extends React.Component {
     }
   }
 
-  handleMouseDown(e) {
+  handleMouseDown (e) {
     this.setState({
       isActive: true
     })
   }
 
-  handleMouseUp(e) {
+  handleMouseUp (e) {
     this.setState({
       isActive: false
     })
   }
 
-  handleMouseLeave(e) {
+  handleMouseLeave (e) {
     this.setState({
       isActive: false
     })
   }
 
-  render() {
+  render () {
     const { className } = this.props
 
     return (

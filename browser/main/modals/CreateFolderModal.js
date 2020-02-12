@@ -10,7 +10,7 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import i18n from 'browser/lib/i18n'
 
 class CreateFolderModal extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -18,39 +18,39 @@ class CreateFolderModal extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.refs.name.focus()
     this.refs.name.select()
   }
 
-  handleCloseButtonClick(e) {
+  handleCloseButtonClick (e) {
     this.props.close()
   }
 
-  handleChange(e) {
+  handleChange (e) {
     this.setState({
       name: this.refs.name.value
     })
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  handleInputKeyDown(e) {
+  handleInputKeyDown (e) {
     switch (e.keyCode) {
       case 13:
         this.confirm()
     }
   }
 
-  handleConfirmButtonClick(e) {
+  handleConfirmButtonClick (e) {
     this.confirm()
   }
 
-  confirm() {
+  confirm () {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_FOLDER')
     if (this.state.name.trim().length > 0) {
       const { storage } = this.props
@@ -74,7 +74,7 @@ class CreateFolderModal extends React.Component {
     }
   }
 
-  render() {
+  render () {
     return (
       <div
         styleName='root'

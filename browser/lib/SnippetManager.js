@@ -3,7 +3,7 @@ import fs from 'fs'
 import consts from './consts'
 
 class SnippetManager {
-  constructor() {
+  constructor () {
     this.defaultSnippet = [
       {
         id: crypto.randomBytes(16).toString('hex'),
@@ -19,7 +19,7 @@ class SnippetManager {
     this.assignSnippets = this.assignSnippets.bind(this)
   }
 
-  init() {
+  init () {
     if (fs.existsSync(consts.SNIPPET_FILE)) {
       try {
         this.snippets = JSON.parse(
@@ -38,11 +38,11 @@ class SnippetManager {
     this.snippets = this.defaultSnippet
   }
 
-  assignSnippets(snippets) {
+  assignSnippets (snippets) {
     this.snippets = snippets
   }
 
-  expandSnippet(wordBeforeCursor, cursor, cm) {
+  expandSnippet (wordBeforeCursor, cursor, cm) {
     const templateCursorString = ':{}'
     for (let i = 0; i < this.snippets.length; i++) {
       if (this.snippets[i].prefix.indexOf(wordBeforeCursor.text) === -1) {

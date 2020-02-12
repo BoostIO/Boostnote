@@ -27,10 +27,10 @@ test.beforeEach(t => {
 
 test.serial('Update a snippet', t => {
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return Promise.all([updateSnippet(newSnippet, snippetFile)])
     })
-    .then(function assert() {
+    .then(function assert () {
       const snippets = JSON.parse(sander.readFileSync(snippetFile))
       const snippet = snippets.find(
         currentSnippet => currentSnippet.id === newSnippet.id

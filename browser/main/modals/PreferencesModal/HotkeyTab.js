@@ -11,7 +11,7 @@ const electron = require('electron')
 const ipc = electron.ipcRenderer
 
 class HotkeyTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -20,7 +20,7 @@ class HotkeyTab extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.handleSettingDone = () => {
       this.setState({
         keymapAlert: {
@@ -56,12 +56,12 @@ class HotkeyTab extends React.Component {
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     ipc.removeListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.removeListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  handleSaveButtonClick(e) {
+  handleSaveButtonClick (e) {
     const newConfig = {
       hotkey: this.state.config.hotkey
     }
@@ -76,13 +76,13 @@ class HotkeyTab extends React.Component {
     this.props.haveToSave()
   }
 
-  handleHintToggleButtonClick(e) {
+  handleHintToggleButtonClick (e) {
     this.setState({
       isHotkeyHintOpen: !this.state.isHotkeyHintOpen
     })
   }
 
-  handleHotkeyChange(e) {
+  handleHotkeyChange (e) {
     const { config } = this.state
     config.hotkey = Object.assign({}, config.hotkey, {
       toggleMain: this.refs.toggleMain.value,
@@ -109,7 +109,7 @@ class HotkeyTab extends React.Component {
     }
   }
 
-  clearMessage() {
+  clearMessage () {
     _.debounce(() => {
       this.setState({
         keymapAlert: null
@@ -117,7 +117,7 @@ class HotkeyTab extends React.Component {
     }, 2000)()
   }
 
-  render() {
+  render () {
     const keymapAlert = this.state.keymapAlert
     const keymapAlertElement =
       keymapAlert != null ? (

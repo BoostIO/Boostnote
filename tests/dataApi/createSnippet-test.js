@@ -13,10 +13,10 @@ test.beforeEach(t => {
 
 test.serial('Create a snippet', t => {
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return Promise.all([createSnippet(snippetFile)])
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       data = data[0]
       const snippets = JSON.parse(sander.readFileSync(snippetFile))
       const snippet = snippets.find(

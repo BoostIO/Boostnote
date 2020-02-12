@@ -11,7 +11,7 @@ const electron = require('electron')
 const { shell } = electron
 const ipc = electron.ipcRenderer
 class Blog extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -20,12 +20,12 @@ class Blog extends React.Component {
     }
   }
 
-  handleLinkClick(e) {
+  handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  clearMessage() {
+  clearMessage () {
     _.debounce(() => {
       this.setState({
         BlogAlert: null
@@ -33,7 +33,7 @@ class Blog extends React.Component {
     }, 2000)()
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.handleSettingDone = () => {
       this.setState({
         BlogAlert: {
@@ -56,7 +56,7 @@ class Blog extends React.Component {
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  handleBlogChange(e) {
+  handleBlogChange (e) {
     const { config } = this.state
     config.blog = {
       password: !_.isNil(this.refs.passwordInput)
@@ -86,7 +86,7 @@ class Blog extends React.Component {
     }
   }
 
-  handleSaveButtonClick(e) {
+  handleSaveButtonClick (e) {
     const newConfig = {
       blog: this.state.config.blog
     }
@@ -101,7 +101,7 @@ class Blog extends React.Component {
     this.props.haveToSave()
   }
 
-  render() {
+  render () {
     const { config, BlogAlert } = this.state
     const blogAlertElement =
       BlogAlert != null ? (

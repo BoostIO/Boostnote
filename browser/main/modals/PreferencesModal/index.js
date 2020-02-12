@@ -16,7 +16,7 @@ import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
 class Preferences extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -27,27 +27,27 @@ class Preferences extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.refs.root.focus()
     const boundingBox = this.getContentBoundingBox()
     this.setState({ boundingBox })
   }
 
-  switchTeam(teamId) {
+  switchTeam (teamId) {
     this.setState({ currentTeamId: teamId })
   }
 
-  handleNavButtonClick(tab) {
+  handleNavButtonClick (tab) {
     return e => {
       this.setState({ currentTab: tab })
     }
   }
 
-  handleEscButtonClick() {
+  handleEscButtonClick () {
     this.props.close()
   }
 
-  renderContent() {
+  renderContent () {
     const { boundingBox } = this.state
     const { dispatch, config, data } = this.props
 
@@ -94,21 +94,21 @@ class Preferences extends React.Component {
     }
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  getContentBoundingBox() {
+  getContentBoundingBox () {
     return this.refs.content.getBoundingClientRect()
   }
 
-  haveToSaveNotif(type, message) {
+  haveToSaveNotif (type, message) {
     return <p styleName={`saving--${type}`}>{message}</p>
   }
 
-  render() {
+  render () {
     const content = this.renderContent()
 
     const tabs = [

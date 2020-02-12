@@ -12,10 +12,10 @@ apps:
   asmstnote:
     command: desktop-launch $SNAP/etc/boostnote/Boostnote
     plugs:
-     - browser-support
-     - network
-     - unity7
-     - gsettings
+      - browser-support
+      - network
+      - unity7
+      - gsettings
 
 parts:
   src:

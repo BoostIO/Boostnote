@@ -59,7 +59,7 @@ const CSS_FILES = [
  * @param {String} [opts.customCSS] Will be added to bottom, only if `opts.allowCustomCSS` is truthy
  * @returns {String}
  */
-function buildStyle(opts) {
+function buildStyle (opts) {
   const {
     fontFamily,
     fontSize,
@@ -231,7 +231,7 @@ const defaultCodeBlockFontFamily = [
 
 // return the line number of the line that used to generate the specified element
 // return -1 if the line is not found
-function getSourceLineNumberByElement(element) {
+function getSourceLineNumberByElement (element) {
   let isHasLineNumber = element.dataset.line !== undefined
   let parent = element
   while (!isHasLineNumber && parent.parentElement !== null) {
@@ -266,7 +266,7 @@ class MarkdownPreview extends React.Component {
     this.initMarkdown()
   }
 
-  initMarkdown() {
+  initMarkdown () {
     const { smartQuotes, sanitize, breaks } = this.props
     this.markdown = new Markdown({
       typographer: smartQuotes,
@@ -275,17 +275,17 @@ class MarkdownPreview extends React.Component {
     })
   }
 
-  handleCheckboxClick(e) {
+  handleCheckboxClick (e) {
     this.props.onCheckboxClick(e)
   }
 
-  handleScroll(e) {
+  handleScroll (e) {
     if (this.props.onScroll) {
       this.props.onScroll(e)
     }
   }
 
-  handleContextMenu(event) {
+  handleContextMenu (event) {
     const menu = buildMarkdownPreviewContextMenu(this, event)
     const switchPreview = ConfigManager.get().editor.switchPreview
     if (menu != null && switchPreview !== 'RIGHTCLICK') {
@@ -295,11 +295,11 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  handleDoubleClick(e) {
+  handleDoubleClick (e) {
     if (this.props.onDoubleClick != null) this.props.onDoubleClick(e)
   }
 
-  handleMouseDown(e) {
+  handleMouseDown (e) {
     const config = ConfigManager.get()
     const clickElement = e.target
     const targetTag = clickElement.tagName // The direct parent HTML of where was clicked ie "BODY" or "DIV"
@@ -329,7 +329,7 @@ class MarkdownPreview extends React.Component {
       this.props.onMouseDown(e)
   }
 
-  handleMouseUp(e) {
+  handleMouseUp (e) {
     if (!this.props.onMouseUp) return
     if (e.target != null && e.target.tagName === 'A') {
       return null
@@ -337,15 +337,15 @@ class MarkdownPreview extends React.Component {
     if (this.props.onMouseUp != null) this.props.onMouseUp(e)
   }
 
-  handleSaveAsText() {
+  handleSaveAsText () {
     this.exportAsDocument('txt')
   }
 
-  handleSaveAsMd() {
+  handleSaveAsMd () {
     this.exportAsDocument('md')
   }
 
-  htmlContentFormatter(noteContent, exportTasks, targetDir) {
+  htmlContentFormatter (noteContent, exportTasks, targetDir) {
     const {
       fontFamily,
       fontSize,
@@ -402,7 +402,7 @@ class MarkdownPreview extends React.Component {
             </html>`
   }
 
-  handleSaveAsHtml() {
+  handleSaveAsHtml () {
     this.exportAsDocument('html', (noteContent, exportTasks, targetDir) =>
       Promise.resolve(
         this.htmlContentFormatter(noteContent, exportTasks, targetDir)
@@ -410,7 +410,7 @@ class MarkdownPreview extends React.Component {
     )
   }
 
-  handleSaveAsPdf() {
+  handleSaveAsPdf () {
     this.exportAsDocument('pdf', (noteContent, exportTasks, targetDir) => {
       const printout = new remote.BrowserWindow({
         show: false,
@@ -432,11 +432,11 @@ class MarkdownPreview extends React.Component {
     })
   }
 
-  handlePrint() {
+  handlePrint () {
     this.refs.root.contentWindow.print()
   }
 
-  exportAsDocument(fileType, contentFormatter) {
+  exportAsDocument (fileType, contentFormatter) {
     const options = {
       filters: [{ name: 'Documents', extensions: [fileType] }],
       properties: ['openFile', 'createDirectory']
@@ -467,7 +467,7 @@ class MarkdownPreview extends React.Component {
     })
   }
 
-  fixDecodedURI(node) {
+  fixDecodedURI (node) {
     if (
       node &&
       node.children.length === 1 &&
@@ -484,7 +484,7 @@ class MarkdownPreview extends React.Component {
    * @param {string[]} splitWithCodeTag Array of HTML strings separated by three ```
    * @returns {string} HTML in which special characters between three ``` have been converted
    */
-  escapeHtmlCharactersInCodeTag(splitWithCodeTag) {
+  escapeHtmlCharactersInCodeTag (splitWithCodeTag) {
     for (let index = 0; index < splitWithCodeTag.length; index++) {
       const codeTagRequired =
         splitWithCodeTag[index] !== '```' && index < splitWithCodeTag.length - 1
@@ -505,7 +505,7 @@ class MarkdownPreview extends React.Component {
     return result
   }
 
-  getScrollBarStyle() {
+  getScrollBarStyle () {
     const { theme } = this.props
 
     return uiThemes.some(item => item.name === theme && item.isDark)
@@ -513,7 +513,7 @@ class MarkdownPreview extends React.Component {
       : scrollBarStyle
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { onDrop } = this.props
 
     this.refs.root.setAttribute('sandbox', 'allow-scripts')
@@ -571,7 +571,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.on('print', this.printHandler)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     const { onDrop } = this.props
 
     this.refs.root.contentWindow.document.body.removeEventListener(
@@ -613,7 +613,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.off('print', this.printHandler)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     // actual rewriteIframe function should be called only once
     let needsRewriteIframe = false
     if (prevProps.value !== this.props.value) needsRewriteIframe = true
@@ -655,7 +655,7 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  getStyleParams() {
+  getStyleParams () {
     const {
       fontSize,
       lineNumber,
@@ -696,7 +696,7 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  applyStyle() {
+  applyStyle () {
     const {
       fontFamily,
       fontSize,
@@ -726,7 +726,7 @@ class MarkdownPreview extends React.Component {
     })
   }
 
-  getCodeThemeLink(name) {
+  getCodeThemeLink (name) {
     const theme = consts.THEMES.find(theme => theme.name === name)
 
     return theme != null
@@ -734,7 +734,7 @@ class MarkdownPreview extends React.Component {
       : `${appPath}/node_modules/codemirror/theme/elegant.css`
   }
 
-  rewriteIframe() {
+  rewriteIframe () {
     _.forEach(
       this.refs.root.contentWindow.document.querySelectorAll(
         'input[type="checkbox"]'
@@ -967,7 +967,7 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  setImgOnClickEventHelper(img, rect) {
+  setImgOnClickEventHelper (img, rect) {
     img.onclick = () => {
       const widthMagnification = document.body.clientWidth / img.width
       const heightMagnification = document.body.clientHeight / img.height
@@ -1038,7 +1038,7 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  handleResize() {
+  handleResize () {
     _.forEach(
       this.refs.root.contentWindow.document.querySelectorAll('svg[ratio]'),
       el => {
@@ -1047,11 +1047,11 @@ class MarkdownPreview extends React.Component {
     )
   }
 
-  focus() {
+  focus () {
     this.refs.root.focus()
   }
 
-  getWindow() {
+  getWindow () {
     return this.refs.root.contentWindow
   }
 
@@ -1059,7 +1059,7 @@ class MarkdownPreview extends React.Component {
    * @public
    * @param {Number} targetRow
    */
-  scrollToRow(targetRow) {
+  scrollToRow (targetRow) {
     const blocks = this.getWindow().document.querySelectorAll(
       'body>[data-line]'
     )
@@ -1080,16 +1080,16 @@ class MarkdownPreview extends React.Component {
    * @param {Number} x
    * @param {Number} y
    */
-  scrollTo(x, y) {
+  scrollTo (x, y) {
     this.getWindow().document.body.scrollTo(x, y)
   }
 
-  preventImageDroppedHandler(e) {
+  preventImageDroppedHandler (e) {
     e.preventDefault()
     e.stopPropagation()
   }
 
-  notify(title, options) {
+  notify (title, options) {
     if (global.process.platform === 'win32') {
       options.icon = path.join(
         'file://',
@@ -1100,7 +1100,7 @@ class MarkdownPreview extends React.Component {
     return new window.Notification(title, options)
   }
 
-  handleLinkClick(e) {
+  handleLinkClick (e) {
     e.preventDefault()
     e.stopPropagation()
 
@@ -1172,7 +1172,7 @@ class MarkdownPreview extends React.Component {
     this.openExternal(href)
   }
 
-  openExternal(href) {
+  openExternal (href) {
     try {
       const success =
         shell.openExternal(href) || shell.openExternal(decodeURI(href))
@@ -1183,7 +1183,7 @@ class MarkdownPreview extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { className, style, tabIndex } = this.props
     return (
       <iframe

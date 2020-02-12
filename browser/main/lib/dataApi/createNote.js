@@ -6,7 +6,7 @@ const path = require('path')
 const CSON = require('@rokt33r/season')
 const { findStorage } = require('browser/lib/findStorage')
 
-function validateInput(input) {
+function validateInput (input) {
   if (!_.isArray(input.tags)) input.tags = []
   input.tags = input.tags.filter(
     tag => _.isString(tag) && tag.trim().length > 0
@@ -40,7 +40,7 @@ function validateInput(input) {
   }
 }
 
-function createNote(storageKey, input) {
+function createNote (storageKey, input) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
@@ -53,13 +53,13 @@ function createNote(storageKey, input) {
   }
 
   return resolveStorageData(targetStorage)
-    .then(function checkFolderExists(storage) {
+    .then(function checkFolderExists (storage) {
       if (_.find(storage.folders, { key: input.folder }) == null) {
         throw new Error("Target folder doesn't exist.")
       }
       return storage
     })
-    .then(function saveNote(storage) {
+    .then(function saveNote (storage) {
       let key = keygen(true)
       let isUnique = false
       while (!isUnique) {

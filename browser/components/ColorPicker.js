@@ -7,7 +7,7 @@ import styles from './ColorPicker.styl'
 const componentHeight = 330
 
 class ColorPicker extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -18,21 +18,21 @@ class ColorPicker extends React.Component {
     this.handleConfirm = this.handleConfirm.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     this.onColorChange(nextProps.color)
   }
 
-  onColorChange(color) {
+  onColorChange (color) {
     this.setState({
       color
     })
   }
 
-  handleConfirm() {
+  handleConfirm () {
     this.props.onConfirm(this.state.color)
   }
 
-  render() {
+  render () {
     const { onReset, onCancel, targetRect } = this.props
     const { color } = this.state
 

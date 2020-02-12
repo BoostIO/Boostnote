@@ -10,7 +10,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import katex from 'katex'
 import { lastFindInArray } from './utils'
 
-function createGutter(str, firstLineNumber) {
+function createGutter (str, firstLineNumber) {
   if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
   const lastLineNumber = (str.match(/\n/g) || []).length + firstLineNumber - 1
   const lines = []
@@ -23,7 +23,7 @@ function createGutter(str, firstLineNumber) {
 }
 
 class Markdown {
-  constructor(options = {}) {
+  constructor (options = {}) {
     const config = ConfigManager.get()
     const defaultOptions = {
       typographer: config.preview.smartQuotes,
@@ -200,7 +200,7 @@ class Markdown {
       inlineClose: config.preview.latexInlineClose,
       blockOpen: config.preview.latexBlockOpen,
       blockClose: config.preview.latexBlockClose,
-      inlineRenderer: function(str) {
+      inlineRenderer: function (str) {
         let output = ''
         try {
           output = katex.renderToString(str.trim())
@@ -209,7 +209,7 @@ class Markdown {
         }
         return output
       },
-      blockRenderer: function(str) {
+      blockRenderer: function (str) {
         let output = ''
         try {
           output = katex.renderToString(str.trim(), { displayMode: true })
@@ -278,9 +278,7 @@ class Markdown {
         flowchart: token => {
           return `<pre class="fence" data-line="${token.map[0]}">
           <span class="filename">${token.fileName}</span>
-          <div class="flowchart" data-height="${token.parameters.height}">${
-            token.content
-          }</div>
+          <div class="flowchart" data-height="${token.parameters.height}">${token.content}</div>
         </pre>`
         },
         gallery: token => {
@@ -299,25 +297,19 @@ class Markdown {
 
           return `<pre class="fence" data-line="${token.map[0]}">
           <span class="filename">${token.fileName}</span>
-          <div class="gallery" data-autoplay="${
-            token.parameters.autoplay
-          }" data-height="${token.parameters.height}">${content}</div>
+          <div class="gallery" data-autoplay="${token.parameters.autoplay}" data-height="${token.parameters.height}">${content}</div>
         </pre>`
         },
         mermaid: token => {
           return `<pre class="fence" data-line="${token.map[0]}">
           <span class="filename">${token.fileName}</span>
-          <div class="mermaid" data-height="${token.parameters.height}">${
-            token.content
-          }</div>
+          <div class="mermaid" data-height="${token.parameters.height}">${token.content}</div>
         </pre>`
         },
         sequence: token => {
           return `<pre class="fence" data-line="${token.map[0]}">
           <span class="filename">${token.fileName}</span>
-          <div class="sequence" data-height="${token.parameters.height}">${
-            token.content
-          }</div>
+          <div class="sequence" data-height="${token.parameters.height}">${token.content}</div>
         </pre>`
         }
       },
@@ -337,7 +329,7 @@ class Markdown {
     const plantUmlServerAddress = plantUmlStripTrailingSlash(
       config.preview.plantUMLServerAddress
     )
-    const parsePlantUml = function(umlCode, openMarker, closeMarker, type) {
+    const parsePlantUml = function (umlCode, openMarker, closeMarker, type) {
       const s = unescape(encodeURIComponent(umlCode))
       const zippedCode = deflate.encode64(
         deflate.zip_deflate(`${openMarker}\n${s}\n${closeMarker}`, 9)
@@ -383,7 +375,7 @@ class Markdown {
     })
 
     // Override task item
-    this.md.block.ruler.at('paragraph', function(
+    this.md.block.ruler.at('paragraph', function (
       state,
       startLine /*, endLine */
     ) {
@@ -496,7 +488,7 @@ class Markdown {
     window.md = this.md
   }
 
-  render(content) {
+  render (content) {
     if (!_.isString(content)) content = ''
     return this.md.render(content)
   }

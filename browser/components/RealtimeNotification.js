@@ -6,7 +6,7 @@ const electron = require('electron')
 const { shell } = electron
 
 class RealtimeNotification extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -14,11 +14,11 @@ class RealtimeNotification extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.fetchNotifications()
   }
 
-  fetchNotifications() {
+  fetchNotifications () {
     const notificationsUrl =
       'https://raw.githubusercontent.com/BoostIO/notification/master/notification.json'
     fetch(notificationsUrl)
@@ -30,12 +30,12 @@ class RealtimeNotification extends React.Component {
       })
   }
 
-  handleLinkClick(e) {
+  handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  render() {
+  render () {
     const { notifications } = this.state
     const link =
       notifications.length > 0 ? (

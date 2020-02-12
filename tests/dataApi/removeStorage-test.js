@@ -25,15 +25,15 @@ test.beforeEach(t => {
 test('Remove a storage', t => {
   const storageKey = t.context.storage.cache.key
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return removeStorage(storageKey)
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       t.is(JSON.parse(localStorage.getItem('storages')).length, 0)
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

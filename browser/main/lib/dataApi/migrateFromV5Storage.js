@@ -6,7 +6,7 @@ const CSON = require('@rokt33r/season')
 const path = require('path')
 const sander = require('sander')
 
-function migrateFromV5Storage(storageKey, data) {
+function migrateFromV5Storage (storageKey, data) {
   let targetStorage
   try {
     const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
@@ -18,15 +18,15 @@ function migrateFromV5Storage(storageKey, data) {
   } catch (e) {
     return Promise.reject(e)
   }
-  return resolveStorageData(targetStorage).then(function(storage) {
+  return resolveStorageData(targetStorage).then(function (storage) {
     return importAll(storage, data)
   })
 }
 
-function importAll(storage, data) {
+function importAll (storage, data) {
   const oldArticles = data.articles
   const notes = []
-  data.folders.forEach(function(oldFolder) {
+  data.folders.forEach(function (oldFolder) {
     let folderKey = keygen()
     while (storage.folders.some(folder => folder.key === folderKey)) {
       folderKey = keygen()
@@ -100,7 +100,7 @@ function importAll(storage, data) {
     })
   })
 
-  notes.forEach(function(note) {
+  notes.forEach(function (note) {
     CSON.writeFileSync(
       path.join(storage.path, 'notes', note.key + '.cson'),
       _.omit(note, ['storage', 'key'])

@@ -5,7 +5,7 @@ import context from 'browser/lib/context'
 import i18n from 'browser/lib/i18n'
 
 class SnippetTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -14,7 +14,7 @@ class SnippetTab extends React.Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate (nextProps) {
     if (nextProps.snippet.name !== this.props.snippet.name) {
       this.setState({
         name: nextProps.snippet.name
@@ -22,11 +22,11 @@ class SnippetTab extends React.Component {
     }
   }
 
-  handleClick(e) {
+  handleClick (e) {
     this.props.onClick(e)
   }
 
-  handleContextMenu(e) {
+  handleContextMenu (e) {
     context.popup([
       {
         label: i18n.__('Rename'),
@@ -35,21 +35,21 @@ class SnippetTab extends React.Component {
     ])
   }
 
-  handleRenameClick(e) {
+  handleRenameClick (e) {
     this.startRenaming()
   }
 
-  handleNameInputBlur(e) {
+  handleNameInputBlur (e) {
     this.handleRename()
   }
 
-  handleNameInputChange(e) {
+  handleNameInputChange (e) {
     this.setState({
       name: e.target.value
     })
   }
 
-  handleNameInputKeyDown(e) {
+  handleNameInputKeyDown (e) {
     switch (e.keyCode) {
       case 13:
         this.handleRename()
@@ -63,7 +63,7 @@ class SnippetTab extends React.Component {
     }
   }
 
-  handleRename() {
+  handleRename () {
     this.setState(
       {
         isRenaming: false
@@ -76,11 +76,11 @@ class SnippetTab extends React.Component {
     )
   }
 
-  handleDeleteButtonClick(e) {
+  handleDeleteButtonClick (e) {
     this.props.onDelete(e)
   }
 
-  startRenaming() {
+  startRenaming () {
     this.setState(
       {
         isRenaming: true
@@ -92,16 +92,16 @@ class SnippetTab extends React.Component {
     )
   }
 
-  handleDragStart(e) {
+  handleDragStart (e) {
     e.dataTransfer.dropEffect = 'move'
     this.props.onDragStart(e)
   }
 
-  handleDrop(e) {
+  handleDrop (e) {
     this.props.onDrop(e)
   }
 
-  render() {
+  render () {
     const { isActive, snippet, isDeletable } = this.props
     return (
       <div styleName={isActive ? 'root--active' : 'root'}>

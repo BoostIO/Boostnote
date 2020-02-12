@@ -39,7 +39,7 @@ const buildCMRulers = (rulers, enableRulers) =>
       }))
     : []
 
-function translateHotkey(hotkey) {
+function translateHotkey (hotkey) {
   return hotkey
     .replace(/\s*\+\s*/g, '-')
     .replace(/Command/g, 'Cmd')
@@ -47,7 +47,7 @@ function translateHotkey(hotkey) {
 }
 
 export default class CodeEditor extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.scrollHandler = _.debounce(this.handleScroll.bind(this), 100, {
@@ -102,7 +102,7 @@ export default class CodeEditor extends React.Component {
     this.formatTable = () => this.handleFormatTable()
 
     if (props.switchPreview !== 'RIGHTCLICK') {
-      this.contextMenuHandler = function(editor, event) {
+      this.contextMenuHandler = function (editor, event) {
         const menu = buildEditorContextMenu(editor, event)
         if (menu != null) {
           setTimeout(() => menu.popup(remote.getCurrentWindow()), 30)
@@ -115,24 +115,24 @@ export default class CodeEditor extends React.Component {
     this.turndownService = createTurndownService()
   }
 
-  handleSearch(msg) {
+  handleSearch (msg) {
     const cm = this.editor
     const component = this
 
     if (component.searchState) cm.removeOverlay(component.searchState)
     if (msg.length < 1) return
 
-    cm.operation(function() {
+    cm.operation(function () {
       component.searchState = makeOverlay(msg, 'searching')
       cm.addOverlay(component.searchState)
 
-      function makeOverlay(query, style) {
+      function makeOverlay (query, style) {
         query = new RegExp(
           query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'),
           'gi'
         )
         return {
-          token: function(stream) {
+          token: function (stream) {
             query.lastIndex = stream.pos
             var match = query.exec(stream.string)
             if (match && match.index === stream.pos) {
@@ -149,7 +149,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  handleFormatTable() {
+  handleFormatTable () {
     this.tableEditor.formatAll(
       options({
         textWidthOptions: {}
@@ -157,19 +157,19 @@ export default class CodeEditor extends React.Component {
     )
   }
 
-  handleEditorActivity() {
+  handleEditorActivity () {
     if (!this.textEditorInterface.transaction) {
       this.updateTableEditorState()
     }
   }
 
-  updateDefaultKeyMap() {
+  updateDefaultKeyMap () {
     const { hotkey } = this.props
     const self = this
     const expandSnippet = snippetManager.expandSnippet
 
     this.defaultKeyMap = CodeMirror.normalizeKeyMap({
-      Tab: function(cm) {
+      Tab: function (cm) {
         const cursor = cm.getCursor()
         const line = cm.getLine(cursor.line)
         const cursorPosition = cursor.ch
@@ -211,17 +211,17 @@ export default class CodeEditor extends React.Component {
           }
         }
       },
-      'Cmd-Left': function(cm) {
+      'Cmd-Left': function (cm) {
         cm.execCommand('goLineLeft')
       },
-      'Cmd-T': function(cm) {
+      'Cmd-T': function (cm) {
         // Do nothing
       },
-      [translateHotkey(hotkey.insertDate)]: function(cm) {
+      [translateHotkey(hotkey.insertDate)]: function (cm) {
         const dateNow = new Date()
         cm.replaceSelection(dateNow.toLocaleDateString())
       },
-      [translateHotkey(hotkey.insertDateTime)]: function(cm) {
+      [translateHotkey(hotkey.insertDateTime)]: function (cm) {
         const dateNow = new Date()
         cm.replaceSelection(dateNow.toLocaleString())
       },
@@ -273,7 +273,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  updateTableEditorState() {
+  updateTableEditorState () {
     const active = this.tableEditor.cursorIsInTable(this.tableEditorOptions)
     if (active) {
       if (this.extraKeysMode !== 'editor') {
@@ -289,7 +289,7 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { rulers, enableRulers, enableMarkdownLint, RTL } = this.props
     eventEmitter.on('line:jump', this.scrollToLineHandeler)
 
@@ -500,7 +500,7 @@ export default class CodeEditor extends React.Component {
     this.initialHighlighting()
   }
 
-  getWordBeforeCursor(line, lineNumber, cursorPosition) {
+  getWordBeforeCursor (line, lineNumber, cursorPosition) {
     let wordBeforeCursor = ''
     const originCursorPosition = cursorPosition
     const emptyChars = /\t|\s|\r|\n|\$/
@@ -537,11 +537,11 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  quitEditor() {
+  quitEditor () {
     document.querySelector('textarea').blur()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.editor.off('focus', this.focusHandler)
     this.editor.off('blur', this.blurHandler)
     this.editor.off('change', this.changeHandler)
@@ -556,7 +556,7 @@ export default class CodeEditor extends React.Component {
     eventEmitter.off('code:format-table', this.formatTable)
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState) {
     let needRefresh = false
     const {
       rulers,
@@ -695,7 +695,7 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  getCodeEditorLintConfig() {
+  getCodeEditorLintConfig () {
     const { mode } = this.props
     const checkMarkdownNoteIsOpen = mode === 'Boost Flavored Markdown'
 
@@ -707,7 +707,7 @@ export default class CodeEditor extends React.Component {
       : false
   }
 
-  validatorOfMarkdown(text, updateLinting) {
+  validatorOfMarkdown (text, updateLinting) {
     const { customMarkdownLintConfig } = this.props
     let lintConfigJson
     try {
@@ -747,7 +747,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  setMode(mode) {
+  setMode (mode) {
     let syntax = CodeMirror.findModeByName(convertModeName(mode || 'text'))
     if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
 
@@ -755,7 +755,7 @@ export default class CodeEditor extends React.Component {
     CodeMirror.autoLoadMode(this.editor, syntax.mode)
   }
 
-  handleChange(editor, changeObject) {
+  handleChange (editor, changeObject) {
     spellcheck.handleChange(editor, changeObject)
 
     // The current note contains an toc. We'll check for changes on headlines.
@@ -798,13 +798,13 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  linePossibleContainsHeadline(currentLine) {
+  linePossibleContainsHeadline (currentLine) {
     // We can't check if the line start with # because when some write text before
     // the # we also need to update the toc
     return currentLine.includes('# ')
   }
 
-  incrementLines(start, linesAdded, linesRemoved, editor) {
+  incrementLines (start, linesAdded, linesRemoved, editor) {
     const highlightedLines = editor.options.linesHighlighted
 
     const totalHighlightedLines = highlightedLines.length
@@ -839,7 +839,7 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handleHighlight(editor, changeObject) {
+  handleHighlight (editor, changeObject) {
     const lines = editor.options.linesHighlighted
 
     if (!lines.includes(changeObject)) {
@@ -862,7 +862,7 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  updateHighlight(editor, changeObject) {
+  updateHighlight (editor, changeObject) {
     const linesAdded = changeObject.text.length - 1
     const linesRemoved = changeObject.removed.length - 1
 
@@ -893,9 +893,9 @@ export default class CodeEditor extends React.Component {
     this.incrementLines(start, linesAdded, linesRemoved, editor)
   }
 
-  moveCursorTo(row, col) {}
+  moveCursorTo (row, col) {}
 
-  scrollToLine(event, num) {
+  scrollToLine (event, num) {
     const cursor = {
       line: num,
       ch: 1
@@ -906,15 +906,15 @@ export default class CodeEditor extends React.Component {
     this.editor.scrollTo(null, top - middleHeight - 5)
   }
 
-  focus() {
+  focus () {
     this.editor.focus()
   }
 
-  blur() {
+  blur () {
     this.editor.blur()
   }
 
-  reload() {
+  reload () {
     // Change event shouldn't be fired when switch note
     this.editor.off('change', this.changeHandler)
     this.value = this.props.value
@@ -925,7 +925,7 @@ export default class CodeEditor extends React.Component {
     this.editor.refresh()
   }
 
-  setValue(value) {
+  setValue (value) {
     const cursor = this.editor.getCursor()
     this.editor.setValue(value)
     this.editor.setCursor(cursor)
@@ -936,7 +936,7 @@ export default class CodeEditor extends React.Component {
    * @param {Number} lineNumber
    * @param {String} content
    */
-  setLineContent(lineNumber, content) {
+  setLineContent (lineNumber, content) {
     const prevContent = this.editor.getLine(lineNumber)
     const prevContentLength = prevContent ? prevContent.length : 0
     this.editor.replaceRange(
@@ -946,7 +946,7 @@ export default class CodeEditor extends React.Component {
     )
   }
 
-  handleDropImage(dropEvent) {
+  handleDropImage (dropEvent) {
     dropEvent.preventDefault()
     const { storageKey, noteKey } = this.props
     attachmentManagement.handleAttachmentDrop(
@@ -957,16 +957,16 @@ export default class CodeEditor extends React.Component {
     )
   }
 
-  insertAttachmentMd(imageMd) {
+  insertAttachmentMd (imageMd) {
     this.editor.replaceSelection(imageMd)
   }
 
-  autoDetectLanguage(content) {
+  autoDetectLanguage (content) {
     const res = hljs.highlightAuto(content, Object.keys(languageMaps))
     this.setMode(languageMaps[res.language])
   }
 
-  handlePaste(editor, forceSmartPaste) {
+  handlePaste (editor, forceSmartPaste) {
     const { storageKey, noteKey, fetchUrlTitle, enableSmartPaste } = this.props
 
     const isURL = str =>
@@ -1078,13 +1078,13 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handleScroll(e) {
+  handleScroll (e) {
     if (this.props.onScroll) {
       this.props.onScroll(e)
     }
   }
 
-  handlePasteUrl(editor, pastedTxt) {
+  handlePasteUrl (editor, pastedTxt) {
     let taggedUrl = `<${pastedTxt}>`
     let urlToFetch = pastedTxt
     let titleMark = ''
@@ -1134,16 +1134,16 @@ export default class CodeEditor extends React.Component {
       })
   }
 
-  handlePasteHtml(editor, pastedHtml) {
+  handlePasteHtml (editor, pastedHtml) {
     const markdown = this.turndownService.turndown(pastedHtml)
     editor.replaceSelection(markdown)
   }
 
-  handlePasteText(editor, pastedTxt) {
+  handlePasteText (editor, pastedTxt) {
     editor.replaceSelection(pastedTxt)
   }
 
-  mapNormalResponse(response, pastedTxt) {
+  mapNormalResponse (response, pastedTxt) {
     return this.decodeResponse(response).then(body => {
       return new Promise((resolve, reject) => {
         try {
@@ -1165,7 +1165,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  initialHighlighting() {
+  initialHighlighting () {
     if (this.editor.options.linesHighlighted == null) {
       return
     }
@@ -1187,12 +1187,12 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  restartHighlighting() {
+  restartHighlighting () {
     this.editor.options.linesHighlighted = this.props.linesHighlighted
     this.initialHighlighting()
   }
 
-  mapImageResponse(response, pastedTxt) {
+  mapImageResponse (response, pastedTxt) {
     return new Promise((resolve, reject) => {
       try {
         const url = response.url
@@ -1205,7 +1205,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  decodeResponse(response) {
+  decodeResponse (response) {
     const headers = response.headers
     const _charset = headers.has('content-type')
       ? this.extractContentTypeCharset(headers.get('content-type'))
@@ -1225,7 +1225,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  extractContentTypeCharset(contentType) {
+  extractContentTypeCharset (contentType) {
     return contentType
       .split(';')
       .filter(str => {
@@ -1239,7 +1239,7 @@ export default class CodeEditor extends React.Component {
       })[0]
   }
 
-  render() {
+  render () {
     const { className, fontSize } = this.props
     const fontFamily = normalizeEditorFontFamily(this.props.fontFamily)
     const width = this.props.width
@@ -1258,7 +1258,7 @@ export default class CodeEditor extends React.Component {
     )
   }
 
-  createSpellCheckPanel() {
+  createSpellCheckPanel () {
     const panel = document.createElement('div')
     panel.className = 'panel bottom'
     panel.id = 'editor-bottom-panel'

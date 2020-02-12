@@ -10,10 +10,10 @@
       "script": "watch",
       "isBackground": true,
       "presentation": {
-        "reveal": "always",
+        "reveal": "always"
       },
       "problemMatcher": {
-        "pattern":[
+        "pattern": [
           {
             "regexp": "^([^\\\\s].*)\\\\((\\\\d+,\\\\d+)\\\\):\\\\s*(.*)$",
             "file": 1,

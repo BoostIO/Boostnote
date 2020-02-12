@@ -8,7 +8,7 @@ import styles from './MarkdownSplitEditor.styl'
 import CSSModules from 'browser/lib/CSSModules'
 
 class MarkdownSplitEditor extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.value = props.value
     this.focus = () => this.refs.code.focus()
@@ -20,16 +20,16 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  setValue(value) {
+  setValue (value) {
     this.refs.code.setValue(value)
   }
 
-  handleOnChange(e) {
+  handleOnChange (e) {
     this.value = this.refs.code.value
     this.props.onChange(e)
   }
 
-  handleScroll(e) {
+  handleScroll (e) {
     if (!this.props.config.preview.scrollSync) return
 
     const previewDoc = _.get(
@@ -85,7 +85,7 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  handleCheckboxClick(e) {
+  handleCheckboxClick (e) {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
@@ -111,7 +111,7 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  handleMouseMove(e) {
+  handleMouseMove (e) {
     if (this.state.isSliderFocused) {
       const rootRect = this.refs.root.getBoundingClientRect()
       const rootWidth = rootRect.width
@@ -133,21 +133,21 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  handleMouseUp(e) {
+  handleMouseUp (e) {
     e.preventDefault()
     this.setState({
       isSliderFocused: false
     })
   }
 
-  handleMouseDown(e) {
+  handleMouseDown (e) {
     e.preventDefault()
     this.setState({
       isSliderFocused: true
     })
   }
 
-  render() {
+  render () {
     const {
       config,
       value,

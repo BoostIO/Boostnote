@@ -28,26 +28,26 @@ const zoomOptions = [
 ]
 
 class StatusBar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleZoomInMenuItem = this.handleZoomInMenuItem.bind(this)
     this.handleZoomOutMenuItem = this.handleZoomOutMenuItem.bind(this)
     this.handleZoomResetMenuItem = this.handleZoomResetMenuItem.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     EventEmitter.on('status:zoomin', this.handleZoomInMenuItem)
     EventEmitter.on('status:zoomout', this.handleZoomOutMenuItem)
     EventEmitter.on('status:zoomreset', this.handleZoomResetMenuItem)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     EventEmitter.off('status:zoomin', this.handleZoomInMenuItem)
     EventEmitter.off('status:zoomout', this.handleZoomOutMenuItem)
     EventEmitter.off('status:zoomreset', this.handleZoomResetMenuItem)
   }
 
-  updateApp() {
+  updateApp () {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Update Boostnote'),
@@ -60,7 +60,7 @@ class StatusBar extends React.Component {
     }
   }
 
-  handleZoomButtonClick(e) {
+  handleZoomButtonClick (e) {
     const templates = []
 
     zoomOptions.forEach(zoom => {
@@ -73,7 +73,7 @@ class StatusBar extends React.Component {
     context.popup(templates)
   }
 
-  handleZoomMenuItemClick(zoomFactor) {
+  handleZoomMenuItemClick (zoomFactor) {
     const { dispatch } = this.props
     ZoomManager.setZoom(zoomFactor)
     dispatch({
@@ -82,21 +82,21 @@ class StatusBar extends React.Component {
     })
   }
 
-  handleZoomInMenuItem() {
+  handleZoomInMenuItem () {
     const zoomFactor = ZoomManager.getZoom() + 0.1
     this.handleZoomMenuItemClick(zoomFactor)
   }
 
-  handleZoomOutMenuItem() {
+  handleZoomOutMenuItem () {
     const zoomFactor = ZoomManager.getZoom() - 0.1
     this.handleZoomMenuItemClick(zoomFactor)
   }
 
-  handleZoomResetMenuItem() {
+  handleZoomResetMenuItem () {
     this.handleZoomMenuItemClick(1.0)
   }
 
-  render() {
+  render () {
     const { config, status } = this.context
 
     return (

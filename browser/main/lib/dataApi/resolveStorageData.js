@@ -3,7 +3,7 @@ const path = require('path')
 const CSON = require('@rokt33r/season')
 const migrateFromV6Storage = require('./migrateFromV6Storage')
 
-function resolveStorageData(storageCache) {
+function resolveStorageData (storageCache) {
   const storage = {
     key: storageCache.key,
     name: storageCache.name,

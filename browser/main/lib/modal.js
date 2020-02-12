@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { store } from '../store'
 
 class ModalBase extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       component: null,
@@ -13,7 +13,7 @@ class ModalBase extends React.Component {
     }
   }
 
-  close() {
+  close () {
     if (modalBase != null)
       modalBase.setState({
         component: null,
@@ -27,7 +27,7 @@ class ModalBase extends React.Component {
     list.style.overflow = 'auto'
   }
 
-  render() {
+  render () {
     return (
       <div className={'ModalBase' + (this.state.isHidden ? ' hide' : '')}>
         <div onClick={e => this.close(e)} className='modalBack' />
@@ -48,7 +48,7 @@ const el = document.createElement('div')
 document.body.appendChild(el)
 const modalBase = ReactDOM.render(<ModalBase />, el)
 
-export function openModal(component, props) {
+export function openModal (component, props) {
   if (modalBase == null) {
     return
   }
@@ -65,14 +65,14 @@ export function openModal(component, props) {
   })
 }
 
-export function closeModal() {
+export function closeModal () {
   if (modalBase == null) {
     return
   }
   modalBase.close()
 }
 
-export function isModalOpen() {
+export function isModalOpen () {
   return !modalBase.state.isHidden
 }
 

@@ -7,7 +7,7 @@ const sander = require('sander')
 const { findStorage } = require('browser/lib/findStorage')
 const attachmentManagement = require('./attachmentManagement')
 
-function moveNote(storageKey, noteKey, newStorageKey, newFolderKey) {
+function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
   let oldStorage, newStorage
   try {
     oldStorage = findStorage(storageKey)
@@ -17,7 +17,7 @@ function moveNote(storageKey, noteKey, newStorageKey, newFolderKey) {
     return Promise.reject(e)
   }
 
-  return resolveStorageData(oldStorage).then(function saveNote(_oldStorage) {
+  return resolveStorageData(oldStorage).then(function saveNote (_oldStorage) {
     oldStorage = _oldStorage
     let noteData
     const notePath = path.join(oldStorage.path, 'notes', noteKey + '.cson')
@@ -29,12 +29,12 @@ function moveNote(storageKey, noteKey, newStorageKey, newFolderKey) {
     }
     let newNoteKey
     return Promise.resolve()
-      .then(function resolveNewStorage() {
+      .then(function resolveNewStorage () {
         if (storageKey === newStorageKey) {
           newNoteKey = noteKey
           return oldStorage
         }
-        return resolveStorageData(newStorage).then(function findNewNoteKey(
+        return resolveStorageData(newStorage).then(function findNewNoteKey (
           _newStorage
         ) {
           newStorage = _newStorage
@@ -58,7 +58,7 @@ function moveNote(storageKey, noteKey, newStorageKey, newFolderKey) {
           return newStorage
         })
       })
-      .then(function checkFolderExistsAndPrepareNoteData(newStorage) {
+      .then(function checkFolderExistsAndPrepareNoteData (newStorage) {
         if (_.find(newStorage.folders, { key: newFolderKey }) == null)
           throw new Error("Target folder doesn't exist.")
 
@@ -70,7 +70,7 @@ function moveNote(storageKey, noteKey, newStorageKey, newFolderKey) {
 
         return noteData
       })
-      .then(function moveAttachments(noteData) {
+      .then(function moveAttachments (noteData) {
         if (oldStorage.path === newStorage.path) {
           return noteData
         }
@@ -84,14 +84,14 @@ function moveNote(storageKey, noteKey, newStorageKey, newFolderKey) {
         )
         return noteData
       })
-      .then(function writeAndReturn(noteData) {
+      .then(function writeAndReturn (noteData) {
         CSON.writeFileSync(
           path.join(newStorage.path, 'notes', noteData.key + '.cson'),
           _.omit(noteData, ['key', 'storage', 'oldContent'])
         )
         return noteData
       })
-      .then(function deleteOldNote(data) {
+      .then(function deleteOldNote (data) {
         if (storageKey !== newStorageKey) {
           try {
             sander.unlinkSync(

@@ -58,13 +58,13 @@ test.serial('Create a note', t => {
   input2.title = input2.content.split('\n').shift()
 
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return Promise.all([
         createNote(storageKey, input1),
         createNote(storageKey, input2)
       ])
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       const data1 = data[0]
       const data2 = data[1]
 
@@ -109,7 +109,7 @@ test.serial('Create a note', t => {
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

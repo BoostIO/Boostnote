@@ -19,7 +19,7 @@ const escapeStringRegexp = require('escape-string-regexp')
 const path = require('path')
 
 class StorageItem extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     const { storage } = this.props
@@ -30,7 +30,7 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleHeaderContextMenu(e) {
+  handleHeaderContextMenu (e) {
     context.popup([
       {
         label: i18n.__('Add Folder'),
@@ -62,7 +62,7 @@ class StorageItem extends React.Component {
     ])
   }
 
-  handleUnlinkStorageClick(e) {
+  handleUnlinkStorageClick (e) {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Unlink Storage'),
@@ -88,7 +88,7 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleExportStorageClick(e, fileType) {
+  handleExportStorageClick (e, fileType) {
     const options = {
       properties: ['openDirectory', 'createDirectory'],
       buttonLabel: i18n.__('Select directory'),
@@ -109,7 +109,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  handleToggleButtonClick(e) {
+  handleToggleButtonClick (e) {
     const { storage, dispatch } = this.props
     const isOpen = !this.state.isOpen
     dataApi.toggleStorage(storage.key, isOpen).then(storage => {
@@ -124,7 +124,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  handleAddFolderButtonClick(e) {
+  handleAddFolderButtonClick (e) {
     const { storage } = this.props
 
     modal.open(CreateFolderModal, {
@@ -132,19 +132,19 @@ class StorageItem extends React.Component {
     })
   }
 
-  handleHeaderInfoClick(e) {
+  handleHeaderInfoClick (e) {
     const { storage, dispatch } = this.props
     dispatch(push('/storages/' + storage.key))
   }
 
-  handleFolderButtonClick(folderKey) {
+  handleFolderButtonClick (folderKey) {
     return e => {
       const { storage, dispatch } = this.props
       dispatch(push('/storages/' + storage.key + '/folders/' + folderKey))
     }
   }
 
-  handleFolderButtonContextMenu(e, folder) {
+  handleFolderButtonContextMenu (e, folder) {
     context.popup([
       {
         label: i18n.__('Rename Folder'),
@@ -176,7 +176,7 @@ class StorageItem extends React.Component {
     ])
   }
 
-  handleRenameFolderClick(e, folder) {
+  handleRenameFolderClick (e, folder) {
     const { storage } = this.props
     modal.open(RenameFolderModal, {
       storage,
@@ -184,7 +184,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  handleExportFolderClick(e, folder, fileType) {
+  handleExportFolderClick (e, folder, fileType) {
     const options = {
       properties: ['openDirectory', 'createDirectory'],
       buttonLabel: i18n.__('Select directory'),
@@ -222,7 +222,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  handleFolderDeleteClick(e, folder) {
+  handleFolderDeleteClick (e, folder) {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Delete Folder'),
@@ -244,7 +244,7 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleDragEnter(e, key) {
+  handleDragEnter (e, key) {
     e.preventDefault()
     if (this.state.draggedOver === key) {
       return
@@ -254,7 +254,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  handleDragLeave(e) {
+  handleDragLeave (e) {
     e.preventDefault()
     if (this.state.draggedOver === null) {
       return
@@ -264,7 +264,7 @@ class StorageItem extends React.Component {
     })
   }
 
-  dropNote(storage, folder, dispatch, location, noteData) {
+  dropNote (storage, folder, dispatch, location, noteData) {
     noteData = noteData.filter(note => folder.key !== note.folder)
     if (noteData.length === 0) return
 
@@ -289,7 +289,7 @@ class StorageItem extends React.Component {
       })
   }
 
-  handleDrop(e, storage, folder, dispatch, location) {
+  handleDrop (e, storage, folder, dispatch, location) {
     e.preventDefault()
     if (this.state.draggedOver !== null) {
       this.setState({
@@ -300,7 +300,7 @@ class StorageItem extends React.Component {
     this.dropNote(storage, folder, dispatch, location, noteData)
   }
 
-  render() {
+  render () {
     const { storage, location, isFolded, data, dispatch } = this.props
     const { folderNoteMap, trashedSet } = data
     const SortableStorageItemChild = SortableElement(StorageItemChild)
@@ -329,8 +329,9 @@ class StorageItem extends React.Component {
             noteKeys.some(noteKey => {
               return noteKey === trashedKey
             })
-          )
+          ) {
             trashedNoteCount++
+          }
         })
         noteCount = noteSet.size - trashedNoteCount
       }

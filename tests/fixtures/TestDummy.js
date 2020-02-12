@@ -5,7 +5,7 @@ const sander = require('sander')
 const CSON = require('@rokt33r/season')
 const path = require('path')
 
-function dummyFolder(override = {}) {
+function dummyFolder (override = {}) {
   var data = {
     name: faker.lorem.word(),
     color: faker.internet.color()
@@ -17,7 +17,7 @@ function dummyFolder(override = {}) {
   return data
 }
 
-function dummyBoostnoteJSONData(override = {}, isLegacy = false) {
+function dummyBoostnoteJSONData (override = {}, isLegacy = false) {
   var data = {}
   if (override.folders == null) {
     data.folders = []
@@ -43,7 +43,7 @@ function dummyBoostnoteJSONData(override = {}, isLegacy = false) {
   return data
 }
 
-function dummyNote(override = {}) {
+function dummyNote (override = {}) {
   var data =
     Math.random() > 0.5
       ? {
@@ -97,7 +97,7 @@ function dummyNote(override = {}) {
  * ```
  * @return {[type]}
  */
-function dummyStorage(storagePath, override = {}) {
+function dummyStorage (storagePath, override = {}) {
   var jsonData =
     override.json != null ? override.json : dummyBoostnoteJSONData()
   var cacheData = override.cache != null ? override.cache : {}
@@ -127,7 +127,7 @@ function dummyStorage(storagePath, override = {}) {
 
     notesData.push(noteData)
   }
-  notesData.forEach(function saveNoteCSON(note) {
+  notesData.forEach(function saveNoteCSON (note) {
     CSON.writeFileSync(
       path.join(storagePath, 'notes', note.key + '.cson'),
       _.omit(note, ['key'])
@@ -141,7 +141,7 @@ function dummyStorage(storagePath, override = {}) {
   }
 }
 
-function dummyLegacyStorage(storagePath, override = {}) {
+function dummyLegacyStorage (storagePath, override = {}) {
   var jsonData =
     override.json != null ? override.json : dummyBoostnoteJSONData({}, true)
   var cacheData = override.cache != null ? override.cache : {}

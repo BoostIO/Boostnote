@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import consts from 'browser/lib/consts'
 import fetchSnippet from 'browser/main/lib/dataApi/fetchSnippet'
 
-function createSnippet(snippetFile) {
+function createSnippet (snippetFile) {
   return new Promise((resolve, reject) => {
     const newSnippet = {
       id: crypto.randomBytes(16).toString('hex'),

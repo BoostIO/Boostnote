@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default function searchFromNotes(notes, search) {
+export default function searchFromNotes (notes, search) {
   if (search.trim().length === 0) return []
   const searchBlocks = search.split(' ').filter(block => {
     return block !== ''
@@ -13,7 +13,7 @@ export default function searchFromNotes(notes, search) {
   return foundNotes
 }
 
-function findByWordOrTag(notes, block) {
+function findByWordOrTag (notes, block) {
   let tag = block
   if (tag.match(/^#.+/)) {
     tag = tag.match(/#(.+)/)[1]

@@ -7,18 +7,18 @@ const electron = require('electron')
 const { shell } = electron
 
 class Crowdfunding extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {}
   }
 
-  handleLinkClick(e) {
+  handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  render() {
+  render () {
     return (
       <div styleName='root'>
         <div styleName='group-header'>{i18n.__('Crowdfunding')}</div>

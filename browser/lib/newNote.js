@@ -4,7 +4,7 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import queryString from 'query-string'
 import { push } from 'connected-react-router'
 
-export function createMarkdownNote(
+export function createMarkdownNote (
   storage,
   folder,
   dispatch,
@@ -50,7 +50,7 @@ export function createMarkdownNote(
     })
 }
 
-export function createSnippetNote(
+export function createSnippetNote (
   storage,
   folder,
   dispatch,

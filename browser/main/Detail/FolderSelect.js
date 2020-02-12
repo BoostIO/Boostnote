@@ -6,7 +6,7 @@ import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
 class FolderSelect extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -16,15 +16,15 @@ class FolderSelect extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.value = this.props.value
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.value = this.props.value
   }
 
-  handleClick(e) {
+  handleClick (e) {
     this.setState(
       {
         status: 'SEARCH',
@@ -36,7 +36,7 @@ class FolderSelect extends React.Component {
     )
   }
 
-  handleFocus(e) {
+  handleFocus (e) {
     if (this.state.status === 'IDLE') {
       this.setState({
         status: 'FOCUS'
@@ -44,7 +44,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleBlur(e) {
+  handleBlur (e) {
     if (this.state.status === 'FOCUS') {
       this.setState({
         status: 'IDLE'
@@ -52,7 +52,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     switch (e.keyCode) {
       case 13:
         if (this.state.status === 'FOCUS') {
@@ -94,7 +94,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleSearchInputBlur(e) {
+  handleSearchInputBlur (e) {
     if (e.relatedTarget !== this.refs.root) {
       this.setState({
         status: 'IDLE'
@@ -102,7 +102,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleSearchInputChange(e) {
+  handleSearchInputChange (e) {
     const { folders } = this.props
     const search = this.refs.search.value
     const optionIndex =
@@ -120,7 +120,7 @@ class FolderSelect extends React.Component {
     })
   }
 
-  handleSearchInputKeyDown(e) {
+  handleSearchInputKeyDown (e) {
     switch (e.keyCode) {
       case 40:
         e.stopPropagation()
@@ -147,7 +147,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  nextOption() {
+  nextOption () {
     let { optionIndex } = this.state
     const { folders } = this.props
 
@@ -159,7 +159,7 @@ class FolderSelect extends React.Component {
     })
   }
 
-  previousOption() {
+  previousOption () {
     const { folders } = this.props
     let { optionIndex } = this.state
 
@@ -171,7 +171,7 @@ class FolderSelect extends React.Component {
     })
   }
 
-  selectOption() {
+  selectOption () {
     const { folders } = this.props
     const optionIndex = this.state.optionIndex
 
@@ -189,7 +189,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleOptionClick(storageKey, folderKey) {
+  handleOptionClick (storageKey, folderKey) {
     return e => {
       e.stopPropagation()
       this.setState(
@@ -204,12 +204,12 @@ class FolderSelect extends React.Component {
     }
   }
 
-  setValue(value) {
+  setValue (value) {
     this.value = value
     this.props.onChange()
   }
 
-  render() {
+  render () {
     const { className, data, value } = this.props
     const splitted = value.split('-')
     const storageKey = splitted.shift()

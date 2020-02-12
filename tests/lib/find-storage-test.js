@@ -29,7 +29,7 @@ test('findStorage() should return a correct storage path(string)', t => {
   t.is(findStorage(storageKey).path, storagePath)
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

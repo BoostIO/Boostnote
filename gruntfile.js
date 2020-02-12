@@ -5,7 +5,7 @@ const packager = require('electron-packager')
 
 const WIN = process.platform === 'win32'
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   var authCode
   try {
     authCode = grunt.file.readJSON('secret/auth_code.json')
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-electron-installer-redhat')
   }
 
-  grunt.registerTask('compile', function() {
+  grunt.registerTask('compile', function () {
     var done = this.async()
     var execPath =
       path.join('node_modules', '.bin', 'webpack') +
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
           NODE_ENV: 'production'
         })
       },
-      function(err, stdout, stderr) {
+      function (err, stdout, stderr) {
         grunt.log.writeln(stdout)
 
         if (err) {
@@ -104,7 +104,7 @@ module.exports = function(grunt) {
     )
   })
 
-  grunt.registerTask('pack', function(platform) {
+  grunt.registerTask('pack', function (platform) {
     grunt.log.writeln(path.join(__dirname, 'dist'))
     var done = this.async()
     var opts = {
@@ -136,7 +136,7 @@ module.exports = function(grunt) {
             InternalName: 'Boostnote'
           }
         })
-        packager(opts, function(err, appPath) {
+        packager(opts, function (err, appPath) {
           if (err) {
             grunt.log.writeln(err)
             done(err)
@@ -152,7 +152,7 @@ module.exports = function(grunt) {
           icon: path.join(__dirname, 'resources/app.icns'),
           'app-category-type': 'public.app-category.developer-tools'
         })
-        packager(opts, function(err, appPath) {
+        packager(opts, function (err, appPath) {
           if (err) {
             grunt.log.writeln(err)
             done(err)
@@ -167,7 +167,7 @@ module.exports = function(grunt) {
           icon: path.join(__dirname, 'resources/app.icns'),
           'app-category-type': 'public.app-category.developer-tools'
         })
-        packager(opts, function(err, appPath) {
+        packager(opts, function (err, appPath) {
           if (err) {
             grunt.log.writeln(err)
             done(err)
@@ -179,7 +179,7 @@ module.exports = function(grunt) {
     }
   })
 
-  grunt.registerTask('codesign', function(platform) {
+  grunt.registerTask('codesign', function (platform) {
     var done = this.async()
     if (process.platform !== 'darwin') {
       done(false)
@@ -188,7 +188,7 @@ module.exports = function(grunt) {
 
     ChildProcess.exec(
       `codesign --verbose --deep --force --sign \"${OSX_COMMON_NAME}\" dist/Boostnote-darwin-x64/Boostnote.app`,
-      function(err, stdout, stderr) {
+      function (err, stdout, stderr) {
         grunt.log.writeln(stdout)
         if (err) {
           grunt.log.writeln(err)
@@ -201,11 +201,11 @@ module.exports = function(grunt) {
     )
   })
 
-  grunt.registerTask('create-osx-installer', function() {
+  grunt.registerTask('create-osx-installer', function () {
     var done = this.async()
     var execPath = 'appdmg appdmg.json dist/Boostnote-mac.dmg'
     grunt.log.writeln(execPath)
-    ChildProcess.exec(execPath, function(err, stdout, stderr) {
+    ChildProcess.exec(execPath, function (err, stdout, stderr) {
       grunt.log.writeln(stdout)
       if (err) {
         grunt.log.writeln(err)
@@ -217,14 +217,14 @@ module.exports = function(grunt) {
     })
   })
 
-  grunt.registerTask('zip', function(platform) {
+  grunt.registerTask('zip', function (platform) {
     var done = this.async()
     switch (platform) {
       case 'osx':
         var execPath =
           'cd dist/Boostnote-darwin-x64 && zip -r -y -q ../Boostnote-mac.zip Boostnote.app'
         grunt.log.writeln(execPath)
-        ChildProcess.exec(execPath, function(err, stdout, stderr) {
+        ChildProcess.exec(execPath, function (err, stdout, stderr) {
           grunt.log.writeln(stdout)
           if (err) {
             grunt.log.writeln(err)
@@ -241,7 +241,7 @@ module.exports = function(grunt) {
     }
   })
 
-  function getTarget() {
+  function getTarget () {
     switch (process.platform) {
       case 'darwin':
         return 'osx'
@@ -254,7 +254,7 @@ module.exports = function(grunt) {
     }
   }
 
-  grunt.registerTask('build', function(platform) {
+  grunt.registerTask('build', function (platform) {
     if (platform == null) platform = getTarget()
 
     switch (platform) {
@@ -281,7 +281,7 @@ module.exports = function(grunt) {
     }
   })
 
-  grunt.registerTask('pre-build', function(platform) {
+  grunt.registerTask('pre-build', function (platform) {
     if (platform == null) platform = getTarget()
 
     switch (platform) {
@@ -296,11 +296,11 @@ module.exports = function(grunt) {
     }
   })
 
-  grunt.registerTask('bfm', function() {
+  grunt.registerTask('bfm', function () {
     const Color = require('color')
     const parseCSS = require('css').parse
 
-    function generateRule(selector, bgColor, fgColor) {
+    function generateRule (selector, bgColor, fgColor) {
       if (bgColor.isLight()) {
         bgColor = bgColor.mix(fgColor, 0.05)
       } else {

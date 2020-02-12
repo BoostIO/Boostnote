@@ -31,10 +31,10 @@ test.serial('Create a folder', t => {
     color: '#ff5555'
   }
   return Promise.resolve()
-    .then(function doTest() {
+    .then(function doTest () {
       return createFolder(storageKey, input)
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       t.true(_.find(data.storage.folders, input) != null)
       const jsonData = CSON.readFileSync(
         path.join(data.storage.path, 'boostnote.json')
@@ -44,7 +44,7 @@ test.serial('Create a folder', t => {
     })
 })
 
-test.after(function after() {
+test.after(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

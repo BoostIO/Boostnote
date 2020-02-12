@@ -16,7 +16,7 @@ const CSON = require('@rokt33r/season')
  * 3. fetch notes & folders
  * 4. return `{storage: {...} folders: [folder]}`
  */
-function addStorage(input) {
+function addStorage (input) {
   if (!_.isString(input.path)) {
     return Promise.reject(new Error('Path must be a string.'))
   }
@@ -43,7 +43,7 @@ function addStorage(input) {
 
   return Promise.resolve(newStorage)
     .then(resolveStorageData)
-    .then(function saveMetadataToLocalStorage(resolvedStorage) {
+    .then(function saveMetadataToLocalStorage (resolvedStorage) {
       newStorage = resolvedStorage
       rawStorages.push({
         key: newStorage.key,
@@ -56,7 +56,7 @@ function addStorage(input) {
       localStorage.setItem('storages', JSON.stringify(rawStorages))
       return newStorage
     })
-    .then(function(storage) {
+    .then(function (storage) {
       return resolveStorageNotes(storage).then(notes => {
         let unknownCount = 0
         notes.forEach(note => {
@@ -78,7 +78,7 @@ function addStorage(input) {
         return notes
       })
     })
-    .then(function returnValue(notes) {
+    .then(function returnValue (notes) {
       return {
         storage: newStorage,
         notes

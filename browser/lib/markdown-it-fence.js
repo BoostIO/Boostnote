@@ -1,9 +1,9 @@
 'use strict'
 
-module.exports = function(md, renderers, defaultRenderer) {
+module.exports = function (md, renderers, defaultRenderer) {
   const paramsRE = /^[ \t]*([\w+#-]+)?(?:\(((?:\s*\w[-\w]*(?:=(?:'(?:.*?[^\\])?'|"(?:.*?[^\\])?"|(?:[^'"][^\s]*)))?)*)\))?(?::([^:]*)(?::(\d+))?)?\s*$/
 
-  function fence(state, startLine, endLine, silent) {
+  function fence (state, startLine, endLine, silent) {
     let pos = state.bMarks[startLine] + state.tShift[startLine]
     let max = state.eMarks[startLine]
 

@@ -49,9 +49,9 @@ test.serial('Delete a folder', t => {
   input1.title = input1.description.split('\n').shift()
 
   return Promise.resolve()
-    .then(function prepare() {
+    .then(function prepare () {
       return createNote(storageKey, input1).then(
-        function createAttachmentFolder(data) {
+        function createAttachmentFolder (data) {
           fs.mkdirSync(
             path.join(storagePath, attachmentManagement.DESTINATION_FOLDER)
           )
@@ -68,10 +68,10 @@ test.serial('Delete a folder', t => {
         }
       )
     })
-    .then(function doTest() {
+    .then(function doTest () {
       return deleteFolder(storageKey, folderKey)
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       t.true(_.find(data.storage.folders, { key: folderKey }) == null)
       const jsonData = CSON.readFileSync(
         path.join(data.storage.path, 'boostnote.json')
@@ -93,7 +93,7 @@ test.serial('Delete a folder', t => {
     })
 })
 
-test.after.always(function after() {
+test.after.always(function after () {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

@@ -12,7 +12,7 @@ import fs from 'fs'
 const electron = require('electron')
 const { shell, remote } = electron
 
-function browseFolder() {
+function browseFolder () {
   const dialog = remote.dialog
 
   const defaultPath = remote.app.getPath('home')
@@ -23,7 +23,7 @@ function browseFolder() {
         defaultPath,
         properties: ['openDirectory', 'createDirectory']
       },
-      function(targetPaths) {
+      function (targetPaths) {
         if (targetPaths == null) return resolve('')
         resolve(targetPaths[0])
       }
@@ -32,7 +32,7 @@ function browseFolder() {
 }
 
 class StoragesTab extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -47,7 +47,7 @@ class StoragesTab extends React.Component {
     this.loadAttachmentStorage()
   }
 
-  loadAttachmentStorage() {
+  loadAttachmentStorage () {
     const promises = []
     this.props.data.noteMap.map(note => {
       const promise = attachmentManagement.getAttachmentsPathAndStatus(
@@ -66,7 +66,7 @@ class StoragesTab extends React.Component {
       .catch(console.error)
   }
 
-  handleAddStorageButton(e) {
+  handleAddStorageButton (e) {
     this.setState(
       {
         page: 'ADD_STORAGE',
@@ -82,19 +82,19 @@ class StoragesTab extends React.Component {
     )
   }
 
-  handleLinkClick(e) {
+  handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  handleRemoveUnusedAttachments(attachments) {
+  handleRemoveUnusedAttachments (attachments) {
     attachmentManagement
       .removeAttachmentsByPaths(attachments)
       .then(() => this.loadAttachmentStorage())
       .catch(console.error)
   }
 
-  renderList() {
+  renderList () {
     const { data, boundingBox } = this.props
     const { attachments } = this.state
 
@@ -180,7 +180,7 @@ class StoragesTab extends React.Component {
     )
   }
 
-  handleAddStorageBrowseButtonClick(e) {
+  handleAddStorageBrowseButtonClick (e) {
     browseFolder()
       .then(targetPath => {
         if (targetPath.length > 0) {
@@ -197,7 +197,7 @@ class StoragesTab extends React.Component {
       })
   }
 
-  handleAddStorageChange(e) {
+  handleAddStorageChange (e) {
     const { newStorage } = this.state
     newStorage.name = this.refs.addStorageName.value
     newStorage.path = this.refs.addStoragePath.value
@@ -206,7 +206,7 @@ class StoragesTab extends React.Component {
     })
   }
 
-  handleAddStorageCreateButton(e) {
+  handleAddStorageCreateButton (e) {
     dataApi
       .addStorage({
         name: this.state.newStorage.name,
@@ -225,13 +225,13 @@ class StoragesTab extends React.Component {
       })
   }
 
-  handleAddStorageCancelButton(e) {
+  handleAddStorageCancelButton (e) {
     this.setState({
       page: 'LIST'
     })
   }
 
-  renderAddStorage() {
+  renderAddStorage () {
     return (
       <div styleName='addStorage'>
         <div styleName='addStorage-header'>{i18n.__('Add Storage')}</div>
@@ -315,7 +315,7 @@ class StoragesTab extends React.Component {
     )
   }
 
-  renderContent() {
+  renderContent () {
     switch (this.state.page) {
       case 'ADD_STORAGE':
       case 'ADD_FOLDER':
@@ -326,7 +326,7 @@ class StoragesTab extends React.Component {
     }
   }
 
-  render() {
+  render () {
     return <div styleName='root'>{this.renderContent()}</div>
   }
 }

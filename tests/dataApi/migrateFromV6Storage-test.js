@@ -29,10 +29,10 @@ test.beforeEach(t => {
 
 test.serial('Migrate legacy storage into v1 storage', t => {
   return Promise.resolve()
-    .then(function test() {
+    .then(function test () {
       return migrateFromV6Storage(dummyStoragePath)
     })
-    .then(function assert(data) {
+    .then(function assert (data) {
       // Check the result. It must be true if succeed.
       t.true(data)
 
@@ -44,7 +44,7 @@ test.serial('Migrate legacy storage into v1 storage', t => {
       const noteMap = fileList.map(filePath => {
         return CSON.readFileSync(path.join(noteDirPath, filePath))
       })
-      dummyData.notes.forEach(function(targetNote) {
+      dummyData.notes.forEach(function (targetNote) {
         t.true(
           _.find(noteMap, {
             title: targetNote.title,
@@ -54,7 +54,7 @@ test.serial('Migrate legacy storage into v1 storage', t => {
       })
 
       // Check legacy folder directory is removed
-      dummyData.json.folders.forEach(function(folder) {
+      dummyData.json.folders.forEach(function (folder) {
         try {
           sander.statSync(dummyStoragePath, folder.key)
           t.fail('Folder still remains. ENOENT error must be occured.')
@@ -65,7 +65,7 @@ test.serial('Migrate legacy storage into v1 storage', t => {
     })
 })
 
-test.after.always(function() {
+test.after.always(function () {
   localStorage.clear()
   sander.rimrafSync(dummyStoragePath)
 })

@@ -4,7 +4,7 @@ const path = require('path')
 const CSON = require('@rokt33r/season')
 const { findStorage } = require('browser/lib/findStorage')
 
-function validateInput(input) {
+function validateInput (input) {
   const validatedInput = {}
 
   if (input.tags != null) {
@@ -79,7 +79,7 @@ function validateInput(input) {
   }
 }
 
-function updateNote(storageKey, noteKey, input) {
+function updateNote (storageKey, noteKey, input) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
@@ -90,7 +90,7 @@ function updateNote(storageKey, noteKey, input) {
     return Promise.reject(e)
   }
 
-  return resolveStorageData(targetStorage).then(function saveNote(storage) {
+  return resolveStorageData(targetStorage).then(function saveNote (storage) {
     let noteData
     const notePath = path.join(storage.path, 'notes', noteKey + '.cson')
     try {
