@@ -1,4 +1,4 @@
-export default function convertModeName (name) {
+export default function convertModeName(name) {
   switch (name) {
     case 'ejs':
       return 'Embedded Javascript'

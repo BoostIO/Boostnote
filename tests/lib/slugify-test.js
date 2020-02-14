@@ -13,7 +13,7 @@ test('alphabet and digit', t => {
 
 test('should delete unavailable symbols', t => {
   const availableSymbols = '_-'
-  const testCase = availableSymbols + '][!\'#$%&()*+,./:;<=>?@\\^{|}~`'
+  const testCase = availableSymbols + "][!'#$%&()*+,./:;<=>?@\\^{|}~`"
   const decodeSlug = decodeURI(slugify(testCase))
 
   t.true(decodeSlug === availableSymbols)

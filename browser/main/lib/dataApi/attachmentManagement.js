@@ -12,14 +12,15 @@ import { isString } from 'lodash'
 
 const STORAGE_FOLDER_PLACEHOLDER = ':storage'
 const DESTINATION_FOLDER = 'attachments'
-const PATH_SEPARATORS = escapeStringRegexp(path.posix.sep) + escapeStringRegexp(path.win32.sep)
+const PATH_SEPARATORS =
+  escapeStringRegexp(path.posix.sep) + escapeStringRegexp(path.win32.sep)
 /**
  * @description
  * Create a Image element to get the real size of image.
  * @param {File} file the File object dropped.
  * @returns {Promise<Image>} Image element created
  */
-function getImage (file) {
+function getImage(file) {
   if (isString(file)) {
     return new Promise(resolve => {
       const img = new Image()
@@ -55,38 +56,39 @@ function getImage (file) {
  * @param {File} file the File object dropped.
  * @returns {Promise<Number>} Orientation info
  */
-function getOrientation (file) {
+function getOrientation(file) {
   const getData = arrayBuffer => {
     const view = new DataView(arrayBuffer)
 
     // Not start with SOI(Start of image) Marker return fail value
-    if (view.getUint16(0, false) !== 0xFFD8) return -2
+    if (view.getUint16(0, false) !== 0xffd8) return -2
     const length = view.byteLength
     let offset = 2
     while (offset < length) {
       const marker = view.getUint16(offset, false)
       offset += 2
       // Loop and seed for APP1 Marker
-      if (marker === 0xFFE1) {
+      if (marker === 0xffe1) {
         // return fail value if it isn't EXIF data
-        if (view.getUint32(offset += 2, false) !== 0x45786966) {
+        if (view.getUint32((offset += 2), false) !== 0x45786966) {
           return -1
         }
         // Read TIFF header,
         // First 2bytes defines byte align of TIFF data.
         // If it is 0x4949="II", it means "Intel" type byte align.
         // If it is 0x4d4d="MM", it means "Motorola" type byte align
-        const little = view.getUint16(offset += 6, false) === 0x4949
+        const little = view.getUint16((offset += 6), false) === 0x4949
         offset += view.getUint32(offset + 4, little)
         const tags = view.getUint16(offset, little) // Get TAG number
         offset += 2
         for (let i = 0; i < tags; i++) {
           // Loop to find Orientation TAG and return the value
-          if (view.getUint16(offset + (i * 12), little) === 0x0112) {
-            return view.getUint16(offset + (i * 12) + 8, little)
+          if (view.getUint16(offset + i * 12, little) === 0x0112) {
+            return view.getUint16(offset + i * 12 + 8, little)
           }
         }
-      } else if ((marker & 0xFF00) !== 0xFF00) { // If not start with 0xFF, not a Marker.
+      } else if ((marker & 0xff00) !== 0xff00) {
+        // If not start with 0xFF, not a Marker.
         break
       } else {
         offset += view.getUint16(offset, false)
@@ -94,7 +96,7 @@ function getOrientation (file) {
     }
     return -1
   }
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const reader = new FileReader()
     reader.onload = event => resolve(getData(event.target.result))
     reader.readAsArrayBuffer(file.slice(0, 64 * 1024))
@@ -107,31 +109,47 @@ function getOrientation (file) {
  * @param {*} file the File object dropped.
  * @return {String} Base64 encoded image.
  */
-function fixRotate (file) {
-  return Promise.all([getImage(file), getOrientation(file)])
-  .then(([img, orientation]) => {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    if (orientation > 4 && orientation < 9) {
-      canvas.width = img.height
-      canvas.height = img.width
-    } else {
-      canvas.width = img.width
-      canvas.height = img.height
+function fixRotate(file) {
+  return Promise.all([getImage(file), getOrientation(file)]).then(
+    ([img, orientation]) => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      if (orientation > 4 && orientation < 9) {
+        canvas.width = img.height
+        canvas.height = img.width
+      } else {
+        canvas.width = img.width
+        canvas.height = img.height
+      }
+      switch (orientation) {
+        case 2:
+          ctx.transform(-1, 0, 0, 1, img.width, 0)
+          break
+        case 3:
+          ctx.transform(-1, 0, 0, -1, img.width, img.height)
+          break
+        case 4:
+          ctx.transform(1, 0, 0, -1, 0, img.height)
+          break
+        case 5:
+          ctx.transform(0, 1, 1, 0, 0, 0)
+          break
+        case 6:
+          ctx.transform(0, 1, -1, 0, img.height, 0)
+          break
+        case 7:
+          ctx.transform(0, -1, -1, 0, img.height, img.width)
+          break
+        case 8:
+          ctx.transform(0, -1, 1, 0, 0, img.width)
+          break
+        default:
+          break
+      }
+      ctx.drawImage(img, 0, 0)
+      return canvas.toDataURL()
     }
-    switch (orientation) {
-      case 2: ctx.transform(-1, 0, 0, 1, img.width, 0); break
-      case 3: ctx.transform(-1, 0, 0, -1, img.width, img.height); break
-      case 4: ctx.transform(1, 0, 0, -1, 0, img.height); break
-      case 5: ctx.transform(0, 1, 1, 0, 0, 0); break
-      case 6: ctx.transform(0, 1, -1, 0, img.height, 0); break
-      case 7: ctx.transform(0, -1, -1, 0, img.height, img.width); break
-      case 8: ctx.transform(0, -1, 1, 0, 0, img.width); break
-      default: break
-    }
-    ctx.drawImage(img, 0, 0)
-    return canvas.toDataURL()
-  })
+  )
 }
 
 /**
@@ -145,7 +163,12 @@ function fixRotate (file) {
  * @param {boolean} useRandomName determines whether a random filename for the new file is used. If false the source file name is used
  * @return {Promise<String>} name (inclusive extension) of the generated file
  */
-function copyAttachment (sourceFilePath, storageKey, noteKey, useRandomName = true) {
+function copyAttachment(
+  sourceFilePath,
+  storageKey,
+  noteKey,
+  useRandomName = true
+) {
   return new Promise((resolve, reject) => {
     if (!sourceFilePath) {
       reject('sourceFilePath has to be given')
@@ -160,28 +183,41 @@ function copyAttachment (sourceFilePath, storageKey, noteKey, useRandomName = tr
     }
 
     try {
-      const isBase64 = typeof sourceFilePath === 'object' && sourceFilePath.type === 'base64'
+      const isBase64 =
+        typeof sourceFilePath === 'object' && sourceFilePath.type === 'base64'
       if (!isBase64 && !fs.existsSync(sourceFilePath)) {
         return reject('source file does not exist')
       }
 
       const sourcePath = sourceFilePath.sourceFilePath || sourceFilePath
-      const sourceURL = url.parse(/^\w+:\/\//.test(sourcePath) ? sourcePath : 'file:///' + sourcePath)
+      const sourceURL = url.parse(
+        /^\w+:\/\//.test(sourcePath) ? sourcePath : 'file:///' + sourcePath
+      )
 
       let destinationName
       if (useRandomName) {
-        destinationName = `${uniqueSlug()}${path.extname(sourceURL.pathname) || '.png'}`
+        destinationName = `${uniqueSlug()}${path.extname(sourceURL.pathname) ||
+          '.png'}`
       } else {
         destinationName = path.basename(sourceURL.pathname)
       }
 
       const targetStorage = findStorage.findStorage(storageKey)
-      const destinationDir = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+      const destinationDir = path.join(
+        targetStorage.path,
+        DESTINATION_FOLDER,
+        noteKey
+      )
       createAttachmentDestinationFolder(targetStorage.path, noteKey)
-      const outputFile = fs.createWriteStream(path.join(destinationDir, destinationName))
+      const outputFile = fs.createWriteStream(
+        path.join(destinationDir, destinationName)
+      )
 
       if (isBase64) {
-        const base64Data = sourceFilePath.data.replace(/^data:image\/\w+;base64,/, '')
+        const base64Data = sourceFilePath.data.replace(
+          /^data:image\/\w+;base64,/,
+          ''
+        )
         const dataBuffer = Buffer.from(base64Data, 'base64')
         outputFile.write(dataBuffer, () => {
           resolve(destinationName)
@@ -199,12 +235,16 @@ function copyAttachment (sourceFilePath, storageKey, noteKey, useRandomName = tr
   })
 }
 
-function createAttachmentDestinationFolder (destinationStoragePath, noteKey) {
+function createAttachmentDestinationFolder(destinationStoragePath, noteKey) {
   let destinationDir = path.join(destinationStoragePath, DESTINATION_FOLDER)
   if (!fs.existsSync(destinationDir)) {
     fs.mkdirSync(destinationDir)
   }
-  destinationDir = path.join(destinationStoragePath, DESTINATION_FOLDER, noteKey)
+  destinationDir = path.join(
+    destinationStoragePath,
+    DESTINATION_FOLDER,
+    noteKey
+  )
   if (!fs.existsSync(destinationDir)) {
     fs.mkdirSync(destinationDir)
   }
@@ -216,17 +256,28 @@ function createAttachmentDestinationFolder (destinationStoragePath, noteKey) {
  * @param storagePath Storage path of the current note
  * @param noteKey Key of the current note
  */
-function migrateAttachments (markdownContent, storagePath, noteKey) {
-  if (noteKey !== undefined && sander.existsSync(path.join(storagePath, 'images'))) {
+function migrateAttachments(markdownContent, storagePath, noteKey) {
+  if (
+    noteKey !== undefined &&
+    sander.existsSync(path.join(storagePath, 'images'))
+  ) {
     const attachments = getAttachmentsInMarkdownContent(markdownContent) || []
     if (attachments.length) {
       createAttachmentDestinationFolder(storagePath, noteKey)
     }
     for (const attachment of attachments) {
       const attachmentBaseName = path.basename(attachment)
-      const possibleLegacyPath = path.join(storagePath, 'images', attachmentBaseName)
+      const possibleLegacyPath = path.join(
+        storagePath,
+        'images',
+        attachmentBaseName
+      )
       if (sander.existsSync(possibleLegacyPath)) {
-        const destinationPath = path.join(storagePath, DESTINATION_FOLDER, attachmentBaseName)
+        const destinationPath = path.join(
+          storagePath,
+          DESTINATION_FOLDER,
+          attachmentBaseName
+        )
         if (!sander.existsSync(destinationPath)) {
           sander.copyFileSync(possibleLegacyPath).to(destinationPath)
         }
@@ -241,10 +292,11 @@ function migrateAttachments (markdownContent, storagePath, noteKey) {
  * @param {String} storagePath Path of the current storage
  * @returns {String} postprocessed HTML in which all :storage references are mapped to the actual paths.
  */
-function fixLocalURLS (renderedHTML, storagePath) {
+function fixLocalURLS(renderedHTML, storagePath) {
   const encodedWin32SeparatorRegex = /%5C/g
   const storageRegex = new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER, 'g')
-  const storageUrl = 'file:///' + path.join(storagePath, DESTINATION_FOLDER).replace(/\\/g, '/')
+  const storageUrl =
+    'file:///' + path.join(storagePath, DESTINATION_FOLDER).replace(/\\/g, '/')
 
   /*
     A :storage reference is like `:storage/3b6f8bd6-4edd-4b15-96e0-eadc4475b564/f939b2c3.jpg`.
@@ -254,9 +306,17 @@ function fixLocalURLS (renderedHTML, storagePath) {
     - `(?:\\\/|%5C)[-.\\w]+` will either match `/3b6f8bd6-4edd-4b15-96e0-eadc4475b564` or `/f939b2c3.jpg`
     - `(?:\\\/|%5C)` match the path seperator. `\\\/` for posix systems and `%5C` for windows.
   */
-  return renderedHTML.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '(?:(?:\\\/|%5C)[-.\\w]+)+', 'g'), function (match) {
-    return match.replace(encodedWin32SeparatorRegex, '/').replace(storageRegex, storageUrl)
-  })
+  return renderedHTML.replace(
+    new RegExp(
+      '/?' + STORAGE_FOLDER_PLACEHOLDER + '(?:(?:\\/|%5C)[-.\\w]+)+',
+      'g'
+    ),
+    function(match) {
+      return match
+        .replace(encodedWin32SeparatorRegex, '/')
+        .replace(storageRegex, storageUrl)
+    }
+  )
 }
 
 /**
@@ -266,7 +326,7 @@ function fixLocalURLS (renderedHTML, storagePath) {
  * @param {Boolean} showPreview Indicator whether the generated markdown should show a preview of the image. Note that at the moment only previews for images are supported
  * @returns {String} Generated markdown code
  */
-function generateAttachmentMarkdown (fileName, path, showPreview) {
+function generateAttachmentMarkdown(fileName, path, showPreview) {
   return `${showPreview ? '!' : ''}[${fileName}](${path})`
 }
 
@@ -278,53 +338,66 @@ function generateAttachmentMarkdown (fileName, path, showPreview) {
  * @param {String} noteKey Key of the current note
  * @param {Event} dropEvent DropEvent
  */
-function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
+function handleAttachmentDrop(codeEditor, storageKey, noteKey, dropEvent) {
   let promise
   if (dropEvent.dataTransfer.files.length > 0) {
-    promise = Promise.all(Array.from(dropEvent.dataTransfer.files).map(file => {
-      const filePath = file.path
-      const fileType = file.type // EX) 'image/gif' or 'text/html'
-      if (fileType.startsWith('image')) {
-        if (fileType === 'image/gif' || fileType === 'image/svg+xml') {
-          return copyAttachment(filePath, storageKey, noteKey).then(fileName => ({
-            fileName,
-            title: path.basename(filePath),
-            isImage: true
-          }))
-        } else {
-          return getOrientation(file)
-            .then((orientation) => {
-              if (orientation === -1) { // The image rotation is correct and does not need adjustment
-                return copyAttachment(filePath, storageKey, noteKey)
-              } else {
-                return fixRotate(file).then(data => copyAttachment({
-                  type: 'base64',
-                  data: data,
-                  sourceFilePath: filePath
-                }, storageKey, noteKey))
-              }
-            })
-            .then(fileName =>
-              ({
+    promise = Promise.all(
+      Array.from(dropEvent.dataTransfer.files).map(file => {
+        const filePath = file.path
+        const fileType = file.type // EX) 'image/gif' or 'text/html'
+        if (fileType.startsWith('image')) {
+          if (fileType === 'image/gif' || fileType === 'image/svg+xml') {
+            return copyAttachment(filePath, storageKey, noteKey).then(
+              fileName => ({
                 fileName,
                 title: path.basename(filePath),
                 isImage: true
               })
             )
+          } else {
+            return getOrientation(file)
+              .then(orientation => {
+                if (orientation === -1) {
+                  // The image rotation is correct and does not need adjustment
+                  return copyAttachment(filePath, storageKey, noteKey)
+                } else {
+                  return fixRotate(file).then(data =>
+                    copyAttachment(
+                      {
+                        type: 'base64',
+                        data: data,
+                        sourceFilePath: filePath
+                      },
+                      storageKey,
+                      noteKey
+                    )
+                  )
+                }
+              })
+              .then(fileName => ({
+                fileName,
+                title: path.basename(filePath),
+                isImage: true
+              }))
+          }
+        } else {
+          return copyAttachment(filePath, storageKey, noteKey).then(
+            fileName => ({
+              fileName,
+              title: path.basename(filePath),
+              isImage: false
+            })
+          )
         }
-      } else {
-        return copyAttachment(filePath, storageKey, noteKey).then(fileName => ({
-          fileName,
-          title: path.basename(filePath),
-          isImage: false
-        }))
-      }
-    }))
+      })
+    )
   } else {
     let imageURL = dropEvent.dataTransfer.getData('text/plain')
 
     if (!imageURL) {
-      const match = /<img[^>]*[\s"']src="([^"]+)"/.exec(dropEvent.dataTransfer.getData('text/html'))
+      const match = /<img[^>]*[\s"']src="([^"]+)"/.exec(
+        dropEvent.dataTransfer.getData('text/html')
+      )
       if (match) {
         imageURL = match[1]
       }
@@ -334,30 +407,43 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
       return
     }
 
-    promise = Promise.all([getImage(imageURL)
-      .then(image => {
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
-        canvas.width = image.width
-        canvas.height = image.height
-        context.drawImage(image, 0, 0)
+    promise = Promise.all([
+      getImage(imageURL)
+        .then(image => {
+          const canvas = document.createElement('canvas')
+          const context = canvas.getContext('2d')
+          canvas.width = image.width
+          canvas.height = image.height
+          context.drawImage(image, 0, 0)
 
-        return copyAttachment({
-          type: 'base64',
-          data: canvas.toDataURL(),
-          sourceFilePath: imageURL
-        }, storageKey, noteKey)
-      })
-      .then(fileName => ({
-        fileName,
-        title: imageURL,
-        isImage: true
-      }))
+          return copyAttachment(
+            {
+              type: 'base64',
+              data: canvas.toDataURL(),
+              sourceFilePath: imageURL
+            },
+            storageKey,
+            noteKey
+          )
+        })
+        .then(fileName => ({
+          fileName,
+          title: imageURL,
+          isImage: true
+        }))
     ])
   }
 
   promise.then(files => {
-    const attachments = files.filter(file => !!file).map(file => generateAttachmentMarkdown(file.title, path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, file.fileName), file.isImage))
+    const attachments = files
+      .filter(file => !!file)
+      .map(file =>
+        generateAttachmentMarkdown(
+          file.title,
+          path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, file.fileName),
+          file.isImage
+        )
+      )
 
     codeEditor.insertAttachmentMd(attachments.join('\n'))
   })
@@ -370,7 +456,12 @@ function handleAttachmentDrop (codeEditor, storageKey, noteKey, dropEvent) {
  * @param {String} noteKey Key of the current note
  * @param {DataTransferItem} dataTransferItem Part of the past-event
  */
-function handlePasteImageEvent (codeEditor, storageKey, noteKey, dataTransferItem) {
+function handlePasteImageEvent(
+  codeEditor,
+  storageKey,
+  noteKey,
+  dataTransferItem
+) {
   if (!codeEditor) {
     throw new Error('codeEditor has to be given')
   }
@@ -389,19 +480,31 @@ function handlePasteImageEvent (codeEditor, storageKey, noteKey, dataTransferIte
   const reader = new FileReader()
   let base64data
   const targetStorage = findStorage.findStorage(storageKey)
-  const destinationDir = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+  const destinationDir = path.join(
+    targetStorage.path,
+    DESTINATION_FOLDER,
+    noteKey
+  )
   createAttachmentDestinationFolder(targetStorage.path, noteKey)
 
   const imageName = `${uniqueSlug()}.png`
   const imagePath = path.join(destinationDir, imageName)
 
-  reader.onloadend = function () {
+  reader.onloadend = function() {
     base64data = reader.result.replace(/^data:image\/png;base64,/, '')
     base64data += base64data.replace('+', ' ')
     const binaryData = new Buffer(base64data, 'base64').toString('binary')
     fs.writeFileSync(imagePath, binaryData, 'binary')
-    const imageReferencePath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, imageName)
-    const imageMd = generateAttachmentMarkdown(imageName, imageReferencePath, true)
+    const imageReferencePath = path.join(
+      STORAGE_FOLDER_PLACEHOLDER,
+      noteKey,
+      imageName
+    )
+    const imageMd = generateAttachmentMarkdown(
+      imageName,
+      imageReferencePath,
+      true
+    )
     codeEditor.insertAttachmentMd(imageMd)
   }
   reader.readAsDataURL(blob)
@@ -414,7 +517,7 @@ function handlePasteImageEvent (codeEditor, storageKey, noteKey, dataTransferIte
  * @param {String} noteKey Key of the current note
  * @param {NativeImage} image The native image
  */
-function handlePasteNativeImage (codeEditor, storageKey, noteKey, image) {
+function handlePasteNativeImage(codeEditor, storageKey, noteKey, image) {
   if (!codeEditor) {
     throw new Error('codeEditor has to be given')
   }
@@ -430,7 +533,11 @@ function handlePasteNativeImage (codeEditor, storageKey, noteKey, image) {
   }
 
   const targetStorage = findStorage.findStorage(storageKey)
-  const destinationDir = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+  const destinationDir = path.join(
+    targetStorage.path,
+    DESTINATION_FOLDER,
+    noteKey
+  )
 
   createAttachmentDestinationFolder(targetStorage.path, noteKey)
 
@@ -440,19 +547,42 @@ function handlePasteNativeImage (codeEditor, storageKey, noteKey, image) {
   const binaryData = image.toPNG()
   fs.writeFileSync(imagePath, binaryData, 'binary')
 
-  const imageReferencePath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, imageName)
-  const imageMd = generateAttachmentMarkdown(imageName, imageReferencePath, true)
+  const imageReferencePath = path.join(
+    STORAGE_FOLDER_PLACEHOLDER,
+    noteKey,
+    imageName
+  )
+  const imageMd = generateAttachmentMarkdown(
+    imageName,
+    imageReferencePath,
+    true
+  )
   codeEditor.insertAttachmentMd(imageMd)
 }
 
 /**
-* @description Returns all attachment paths of the given markdown
-* @param {String} markdownContent content in which the attachment paths should be found
-* @returns {String[]} Array of the relative paths (starting with :storage) of the attachments of the given markdown
-*/
-function getAttachmentsInMarkdownContent (markdownContent) {
-  const preparedInput = markdownContent.replace(new RegExp('[' + PATH_SEPARATORS + ']', 'g'), path.sep)
-  const regexp = new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '(' + escapeStringRegexp(path.sep) + ')' + '?([a-zA-Z0-9]|-)*' + '(' + escapeStringRegexp(path.sep) + ')' + '([a-zA-Z0-9]|\\.)+(\\.[a-zA-Z0-9]+)?', 'g')
+ * @description Returns all attachment paths of the given markdown
+ * @param {String} markdownContent content in which the attachment paths should be found
+ * @returns {String[]} Array of the relative paths (starting with :storage) of the attachments of the given markdown
+ */
+function getAttachmentsInMarkdownContent(markdownContent) {
+  const preparedInput = markdownContent.replace(
+    new RegExp('[' + PATH_SEPARATORS + ']', 'g'),
+    path.sep
+  )
+  const regexp = new RegExp(
+    '/?' +
+      STORAGE_FOLDER_PLACEHOLDER +
+      '(' +
+      escapeStringRegexp(path.sep) +
+      ')' +
+      '?([a-zA-Z0-9]|-)*' +
+      '(' +
+      escapeStringRegexp(path.sep) +
+      ')' +
+      '([a-zA-Z0-9]|\\.)+(\\.[a-zA-Z0-9]+)?',
+    'g'
+  )
   return preparedInput.match(regexp)
 }
 
@@ -462,11 +592,16 @@ function getAttachmentsInMarkdownContent (markdownContent) {
  * @param {String} storagePath path of the current storage
  * @returns {String[]} Absolute paths of the referenced attachments
  */
-function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
+function getAbsolutePathsOfAttachmentsInContent(markdownContent, storagePath) {
   const temp = getAttachmentsInMarkdownContent(markdownContent) || []
   const result = []
   for (const relativePath of temp) {
-    result.push(relativePath.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER, 'g'), path.join(storagePath, DESTINATION_FOLDER)))
+    result.push(
+      relativePath.replace(
+        new RegExp(STORAGE_FOLDER_PLACEHOLDER, 'g'),
+        path.join(storagePath, DESTINATION_FOLDER)
+      )
+    )
   }
   return result
 }
@@ -478,7 +613,7 @@ function getAbsolutePathsOfAttachmentsInContent (markdownContent, storagePath) {
  * @param {String} storageKey Storage key of the destination storage
  * @param {String} noteKey Key of the current note. Will be used as subfolder in :storage
  */
-function importAttachments (markDownContent, filepath, storageKey, noteKey) {
+function importAttachments(markDownContent, filepath, storageKey, noteKey) {
   return new Promise((resolve, reject) => {
     const nameRegex = /(!\[.*?]\()(.+?\..+?)(\))/g
     let attachPath = nameRegex.exec(markDownContent)
@@ -489,8 +624,12 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
     while (attachPath) {
       let attachmentPath = attachPath[groupIndex]
       attachmentPaths.push(attachmentPath)
-      attachmentPath = path.isAbsolute(attachmentPath) ? attachmentPath : path.join(path.dirname(filepath), attachmentPath)
-      promiseArray.push(this.copyAttachment(attachmentPath, storageKey, noteKey))
+      attachmentPath = path.isAbsolute(attachmentPath)
+        ? attachmentPath
+        : path.join(path.dirname(filepath), attachmentPath)
+      promiseArray.push(
+        this.copyAttachment(attachmentPath, storageKey, noteKey)
+      )
       attachPath = nameRegex.exec(markDownContent)
     }
 
@@ -502,19 +641,23 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
 
     for (let j = 0; j < promiseArray.length; j++) {
       promiseArray[j]
-      .then((fileName) => {
-        const newPath = path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName)
-        markDownContent = markDownContent.replace(attachmentPaths[j], newPath)
-      })
-      .catch((e) => {
-        console.error('File does not exist in path: ' + attachmentPaths[j])
-      })
-      .finally(() => {
-        numResolvedPromises++
-        if (numResolvedPromises === promiseArray.length) {
-          resolve(markDownContent)
-        }
-      })
+        .then(fileName => {
+          const newPath = path.join(
+            STORAGE_FOLDER_PLACEHOLDER,
+            noteKey,
+            fileName
+          )
+          markDownContent = markDownContent.replace(attachmentPaths[j], newPath)
+        })
+        .catch(e => {
+          console.error('File does not exist in path: ' + attachmentPaths[j])
+        })
+        .finally(() => {
+          numResolvedPromises++
+          if (numResolvedPromises === promiseArray.length) {
+            resolve(markDownContent)
+          }
+        })
     }
   })
 }
@@ -529,7 +672,7 @@ function importAttachments (markDownContent, filepath, storageKey, noteKey) {
  * @param {String} noteContent Content of the note to be moved
  * @returns {String} Modified version of noteContent in which the paths of the attachments are fixed
  */
-function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
+function moveAttachments(oldPath, newPath, noteKey, newNoteKey, noteContent) {
   const src = path.join(oldPath, DESTINATION_FOLDER, noteKey)
   const dest = path.join(newPath, DESTINATION_FOLDER, newNoteKey)
   if (fse.existsSync(src)) {
@@ -545,10 +688,19 @@ function moveAttachments (oldPath, newPath, noteKey, newNoteKey, noteContent) {
  * @param newNoteKey note key serving as a replacement
  * @returns {String} modified note content
  */
-function replaceNoteKeyWithNewNoteKey (noteContent, oldNoteKey, newNoteKey) {
+function replaceNoteKeyWithNewNoteKey(noteContent, oldNoteKey, newNoteKey) {
   if (noteContent) {
-    const preparedInput = noteContent.replace(new RegExp('[' + PATH_SEPARATORS + ']', 'g'), path.sep)
-    return preparedInput.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + oldNoteKey, 'g'), path.join(STORAGE_FOLDER_PLACEHOLDER, newNoteKey))
+    const preparedInput = noteContent.replace(
+      new RegExp('[' + PATH_SEPARATORS + ']', 'g'),
+      path.sep
+    )
+    return preparedInput.replace(
+      new RegExp(
+        STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + oldNoteKey,
+        'g'
+      ),
+      path.join(STORAGE_FOLDER_PLACEHOLDER, newNoteKey)
+    )
   }
   return noteContent
 }
@@ -559,15 +711,28 @@ function replaceNoteKeyWithNewNoteKey (noteContent, oldNoteKey, newNoteKey) {
  * @param noteKey Key of the current note
  * @returns {String} Input without the references
  */
-function removeStorageAndNoteReferences (input, noteKey) {
-  return input.replace(new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?("|])', 'g'), function (match) {
-    const temp = match
-      .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), path.sep)
-      .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), path.sep)
-      .replace(new RegExp(escapeStringRegexp(path.win32.sep), 'g'), path.sep)
-      .replace(new RegExp(escapeStringRegexp(path.posix.sep), 'g'), path.sep)
-    return temp.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + '(' + escapeStringRegexp(path.sep) + noteKey + ')?', 'g'), DESTINATION_FOLDER)
-  })
+function removeStorageAndNoteReferences(input, noteKey) {
+  return input.replace(
+    new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?("|])', 'g'),
+    function(match) {
+      const temp = match
+        .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), path.sep)
+        .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), path.sep)
+        .replace(new RegExp(escapeStringRegexp(path.win32.sep), 'g'), path.sep)
+        .replace(new RegExp(escapeStringRegexp(path.posix.sep), 'g'), path.sep)
+      return temp.replace(
+        new RegExp(
+          STORAGE_FOLDER_PLACEHOLDER +
+            '(' +
+            escapeStringRegexp(path.sep) +
+            noteKey +
+            ')?',
+          'g'
+        ),
+        DESTINATION_FOLDER
+      )
+    }
+  )
 }
 
 /**
@@ -575,9 +740,13 @@ function removeStorageAndNoteReferences (input, noteKey) {
  * @param storageKey Key of the storage of the note to be deleted
  * @param noteKey Key of the note to be deleted
  */
-function deleteAttachmentFolder (storageKey, noteKey) {
+function deleteAttachmentFolder(storageKey, noteKey) {
   const storagePath = findStorage.findStorage(storageKey)
-  const noteAttachmentPath = path.join(storagePath.path, DESTINATION_FOLDER, noteKey)
+  const noteAttachmentPath = path.join(
+    storagePath.path,
+    DESTINATION_FOLDER,
+    noteKey
+  )
   sander.rimrafSync(noteAttachmentPath)
 }
 
@@ -587,36 +756,66 @@ function deleteAttachmentFolder (storageKey, noteKey) {
  * @param storageKey StorageKey of the current note. Is used to determine the belonging attachment folder.
  * @param noteKey NoteKey of the current note. Is used to determine the belonging attachment folder.
  */
-function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey) {
+function deleteAttachmentsNotPresentInNote(
+  markdownContent,
+  storageKey,
+  noteKey
+) {
   if (storageKey == null || noteKey == null || markdownContent == null) {
     return
   }
   const targetStorage = findStorage.findStorage(storageKey)
-  const attachmentFolder = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+  const attachmentFolder = path.join(
+    targetStorage.path,
+    DESTINATION_FOLDER,
+    noteKey
+  )
   const attachmentsInNote = getAttachmentsInMarkdownContent(markdownContent)
   const attachmentsInNoteOnlyFileNames = []
   if (attachmentsInNote) {
     for (let i = 0; i < attachmentsInNote.length; i++) {
-      attachmentsInNoteOnlyFileNames.push(attachmentsInNote[i].replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey + escapeStringRegexp(path.sep), 'g'), ''))
+      attachmentsInNoteOnlyFileNames.push(
+        attachmentsInNote[i].replace(
+          new RegExp(
+            STORAGE_FOLDER_PLACEHOLDER +
+              escapeStringRegexp(path.sep) +
+              noteKey +
+              escapeStringRegexp(path.sep),
+            'g'
+          ),
+          ''
+        )
+      )
     }
   }
   if (fs.existsSync(attachmentFolder)) {
     fs.readdir(attachmentFolder, (err, files) => {
       if (err) {
-        console.error('Error reading directory "' + attachmentFolder + '". Error:')
+        console.error(
+          'Error reading directory "' + attachmentFolder + '". Error:'
+        )
         console.error(err)
         return
       }
       files.forEach(file => {
         if (!attachmentsInNoteOnlyFileNames.includes(file)) {
-          const absolutePathOfFile = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey, file)
-          fs.unlink(absolutePathOfFile, (err) => {
+          const absolutePathOfFile = path.join(
+            targetStorage.path,
+            DESTINATION_FOLDER,
+            noteKey,
+            file
+          )
+          fs.unlink(absolutePathOfFile, err => {
             if (err) {
               console.error('Could not delete "%s"', absolutePathOfFile)
               console.error(err)
               return
             }
-            console.info('File "' + absolutePathOfFile + '" deleted because it was not included in the content of the note')
+            console.info(
+              'File "' +
+                absolutePathOfFile +
+                '" deleted because it was not included in the content of the note'
+            )
           })
         }
       })
@@ -632,31 +831,53 @@ function deleteAttachmentsNotPresentInNote (markdownContent, storageKey, noteKey
  * @param noteKey NoteKey of the currentNote
  * @return {Promise<Array<{path: String, isInUse: bool}>>} Promise returning the
  list of attachments with their properties */
-function getAttachmentsPathAndStatus (markdownContent, storageKey, noteKey) {
+function getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey) {
   if (storageKey == null || noteKey == null || markdownContent == null) {
     return null
   }
   const targetStorage = findStorage.findStorage(storageKey)
-  const attachmentFolder = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey)
+  const attachmentFolder = path.join(
+    targetStorage.path,
+    DESTINATION_FOLDER,
+    noteKey
+  )
   const attachmentsInNote = getAttachmentsInMarkdownContent(markdownContent)
   const attachmentsInNoteOnlyFileNames = []
   if (attachmentsInNote) {
     for (let i = 0; i < attachmentsInNote.length; i++) {
-      attachmentsInNoteOnlyFileNames.push(attachmentsInNote[i].replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + noteKey + escapeStringRegexp(path.sep), 'g'), ''))
+      attachmentsInNoteOnlyFileNames.push(
+        attachmentsInNote[i].replace(
+          new RegExp(
+            STORAGE_FOLDER_PLACEHOLDER +
+              escapeStringRegexp(path.sep) +
+              noteKey +
+              escapeStringRegexp(path.sep),
+            'g'
+          ),
+          ''
+        )
+      )
     }
   }
   if (fs.existsSync(attachmentFolder)) {
     return new Promise((resolve, reject) => {
       fs.readdir(attachmentFolder, (err, files) => {
         if (err) {
-          console.error('Error reading directory "' + attachmentFolder + '". Error:')
+          console.error(
+            'Error reading directory "' + attachmentFolder + '". Error:'
+          )
           console.error(err)
           reject(err)
           return
         }
         const attachments = []
         for (const file of files) {
-          const absolutePathOfFile = path.join(targetStorage.path, DESTINATION_FOLDER, noteKey, file)
+          const absolutePathOfFile = path.join(
+            targetStorage.path,
+            DESTINATION_FOLDER,
+            noteKey,
+            file
+          )
           if (!attachmentsInNoteOnlyFileNames.includes(file)) {
             attachments.push({ path: absolutePathOfFile, isInUse: false })
           } else {
@@ -675,11 +896,11 @@ function getAttachmentsPathAndStatus (markdownContent, storageKey, noteKey) {
  * @description Remove all specified attachment paths
  * @param attachments attachment paths
  * @return {Promise} Promise after all attachments are removed */
-function removeAttachmentsByPaths (attachments) {
+function removeAttachmentsByPaths(attachments) {
   const promises = []
   for (const attachment of attachments) {
     const promise = new Promise((resolve, reject) => {
-      fs.unlink(attachment, (err) => {
+      fs.unlink(attachment, err => {
         if (err) {
           console.error('Could not delete "%s"', attachment)
           console.error(err)
@@ -700,29 +921,54 @@ function removeAttachmentsByPaths (attachments) {
  * @param oldNote Note that is being cloned
  * @param newNote Clone of the note
  */
-function cloneAttachments (oldNote, newNote) {
+function cloneAttachments(oldNote, newNote) {
   if (newNote.type === 'MARKDOWN_NOTE') {
     const oldStorage = findStorage.findStorage(oldNote.storage)
     const newStorage = findStorage.findStorage(newNote.storage)
-    const attachmentsPaths = getAbsolutePathsOfAttachmentsInContent(oldNote.content, oldStorage.path) || []
+    const attachmentsPaths =
+      getAbsolutePathsOfAttachmentsInContent(
+        oldNote.content,
+        oldStorage.path
+      ) || []
 
-    const destinationFolder = path.join(newStorage.path, DESTINATION_FOLDER, newNote.key)
+    const destinationFolder = path.join(
+      newStorage.path,
+      DESTINATION_FOLDER,
+      newNote.key
+    )
     if (!sander.existsSync(destinationFolder)) {
       sander.mkdirSync(destinationFolder)
     }
 
     for (const attachment of attachmentsPaths) {
-      const destination = path.join(newStorage.path, DESTINATION_FOLDER, newNote.key, path.basename(attachment))
+      const destination = path.join(
+        newStorage.path,
+        DESTINATION_FOLDER,
+        newNote.key,
+        path.basename(attachment)
+      )
       sander.copyFileSync(attachment).to(destination)
     }
-    newNote.content = replaceNoteKeyWithNewNoteKey(newNote.content, oldNote.key, newNote.key)
+    newNote.content = replaceNoteKeyWithNewNoteKey(
+      newNote.content,
+      oldNote.key,
+      newNote.key
+    )
   } else {
-    console.debug('Cloning of the attachment was skipped since it only works for MARKDOWN_NOTEs')
+    console.debug(
+      'Cloning of the attachment was skipped since it only works for MARKDOWN_NOTEs'
+    )
   }
 }
 
-function generateFileNotFoundMarkdown () {
-  return '**' + i18n.__('⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠') + '**'
+function generateFileNotFoundMarkdown() {
+  return (
+    '**' +
+    i18n.__(
+      '⚠ You have pasted a link referring an attachment that could not be found in the storage location of this note. Pasting links referring attachments is only supported if the source and destination location is the same storage. Please Drag&Drop the attachment instead! ⚠'
+    ) +
+    '**'
+  )
 }
 
 /**
@@ -730,9 +976,21 @@ function generateFileNotFoundMarkdown () {
  * @param text Text that might contain a attachment link
  * @return {Boolean} Result of the test
  */
-function isAttachmentLink (text) {
+function isAttachmentLink(text) {
   if (text) {
-    return text.match(new RegExp('.*\\[.*\\]\\( *' + escapeStringRegexp(STORAGE_FOLDER_PLACEHOLDER) + '[' + PATH_SEPARATORS + ']' + '.*\\).*', 'gi')) != null
+    return (
+      text.match(
+        new RegExp(
+          '.*\\[.*\\]\\( *' +
+            escapeStringRegexp(STORAGE_FOLDER_PLACEHOLDER) +
+            '[' +
+            PATH_SEPARATORS +
+            ']' +
+            '.*\\).*',
+          'gi'
+        )
+      ) != null
+    )
   }
   return false
 }
@@ -745,38 +1003,72 @@ function isAttachmentLink (text) {
  * @param linkText Text that was pasted
  * @return {Promise<String>} Promise returning the modified text
  */
-function handleAttachmentLinkPaste (storageKey, noteKey, linkText) {
+function handleAttachmentLinkPaste(storageKey, noteKey, linkText) {
   if (storageKey != null && noteKey != null && linkText != null) {
     const storagePath = findStorage.findStorage(storageKey).path
     const attachments = getAttachmentsInMarkdownContent(linkText) || []
     const replaceInstructions = []
     const copies = []
     for (const attachment of attachments) {
-      const absPathOfAttachment = attachment.replace(new RegExp(STORAGE_FOLDER_PLACEHOLDER, 'g'), path.join(storagePath, DESTINATION_FOLDER))
+      const absPathOfAttachment = attachment.replace(
+        new RegExp(STORAGE_FOLDER_PLACEHOLDER, 'g'),
+        path.join(storagePath, DESTINATION_FOLDER)
+      )
       copies.push(
-        sander.exists(absPathOfAttachment)
-          .then((fileExists) => {
-            if (!fileExists) {
-              const fileNotFoundRegexp = new RegExp('!?' + escapeStringRegexp('[') + '[\\w|\\d|\\s|\\.]*\\]\\(\\s*' + STORAGE_FOLDER_PLACEHOLDER + '[\\w|\\d|\\-|' + PATH_SEPARATORS + ']*' + escapeStringRegexp(path.basename(absPathOfAttachment)) + escapeStringRegexp(')'))
-              replaceInstructions.push({regexp: fileNotFoundRegexp, replacement: this.generateFileNotFoundMarkdown()})
-              return Promise.resolve()
-            }
-            return this.copyAttachment(absPathOfAttachment, storageKey, noteKey)
-              .then((fileName) => {
-                const replaceLinkRegExp = new RegExp(escapeStringRegexp('(') + ' *' + STORAGE_FOLDER_PLACEHOLDER + '[\\w|\\d|\\-|' + PATH_SEPARATORS + ']*' + escapeStringRegexp(path.basename(absPathOfAttachment)) + ' *' + escapeStringRegexp(')'))
-                replaceInstructions.push({
-                  regexp: replaceLinkRegExp,
-                  replacement: '(' + path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName) + ')'
-                })
-                return Promise.resolve()
-              })
+        sander.exists(absPathOfAttachment).then(fileExists => {
+          if (!fileExists) {
+            const fileNotFoundRegexp = new RegExp(
+              '!?' +
+                escapeStringRegexp('[') +
+                '[\\w|\\d|\\s|\\.]*\\]\\(\\s*' +
+                STORAGE_FOLDER_PLACEHOLDER +
+                '[\\w|\\d|\\-|' +
+                PATH_SEPARATORS +
+                ']*' +
+                escapeStringRegexp(path.basename(absPathOfAttachment)) +
+                escapeStringRegexp(')')
+            )
+            replaceInstructions.push({
+              regexp: fileNotFoundRegexp,
+              replacement: this.generateFileNotFoundMarkdown()
+            })
+            return Promise.resolve()
+          }
+          return this.copyAttachment(
+            absPathOfAttachment,
+            storageKey,
+            noteKey
+          ).then(fileName => {
+            const replaceLinkRegExp = new RegExp(
+              escapeStringRegexp('(') +
+                ' *' +
+                STORAGE_FOLDER_PLACEHOLDER +
+                '[\\w|\\d|\\-|' +
+                PATH_SEPARATORS +
+                ']*' +
+                escapeStringRegexp(path.basename(absPathOfAttachment)) +
+                ' *' +
+                escapeStringRegexp(')')
+            )
+            replaceInstructions.push({
+              regexp: replaceLinkRegExp,
+              replacement:
+                '(' +
+                path.join(STORAGE_FOLDER_PLACEHOLDER, noteKey, fileName) +
+                ')'
+            })
+            return Promise.resolve()
           })
+        })
       )
     }
     return Promise.all(copies).then(() => {
       let modifiedLinkText = linkText
       for (const replaceInstruction of replaceInstructions) {
-        modifiedLinkText = modifiedLinkText.replace(replaceInstruction.regexp, replaceInstruction.replacement)
+        modifiedLinkText = modifiedLinkText.replace(
+          replaceInstruction.regexp,
+          replaceInstruction.replacement
+        )
       }
       return modifiedLinkText
     })

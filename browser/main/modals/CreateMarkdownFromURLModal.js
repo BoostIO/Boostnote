@@ -7,7 +7,7 @@ import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
 
 class CreateMarkdownFromURLModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -17,89 +17,101 @@ class CreateMarkdownFromURLModal extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.refs.name.focus()
     this.refs.name.select()
   }
 
-  handleCloseButtonClick (e) {
+  handleCloseButtonClick(e) {
     this.props.close()
   }
 
-  handleChange (e) {
+  handleChange(e) {
     this.setState({
       name: this.refs.name.value
     })
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  handleInputKeyDown (e) {
+  handleInputKeyDown(e) {
     switch (e.keyCode) {
       case 13:
         this.confirm()
     }
   }
 
-  handleConfirmButtonClick (e) {
+  handleConfirmButtonClick(e) {
     this.confirm()
   }
 
-  showError (message) {
+  showError(message) {
     this.setState({
       showerror: true,
       errormessage: message
     })
   }
 
-  hideError () {
+  hideError() {
     this.setState({
       showerror: false,
       errormessage: ''
     })
   }
 
-  confirm () {
+  confirm() {
     this.hideError()
     const { storage, folder, dispatch, location } = this.props
 
-    dataApi.createNoteFromUrl(this.state.name, storage, folder, dispatch, location).then((result) => {
-      this.props.close()
-    }).catch((result) => {
-      this.showError(result.error)
-    })
+    dataApi
+      .createNoteFromUrl(this.state.name, storage, folder, dispatch, location)
+      .then(result => {
+        this.props.close()
+      })
+      .catch(result => {
+        this.showError(result.error)
+      })
   }
 
-  render () {
+  render() {
     return (
-      <div styleName='root'
+      <div
+        styleName='root'
         tabIndex='-1'
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
         <div styleName='header'>
           <div styleName='title'>{i18n.__('Import Markdown From URL')}</div>
         </div>
-        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
+        <ModalEscButton
+          handleEscButtonClick={e => this.handleCloseButtonClick(e)}
+        />
         <div styleName='control'>
           <div styleName='control-folder'>
-            <div styleName='control-folder-label'>{i18n.__('Insert URL Here')}</div>
-            <input styleName='control-folder-input'
+            <div styleName='control-folder-label'>
+              {i18n.__('Insert URL Here')}
+            </div>
+            <input
+              styleName='control-folder-input'
               ref='name'
               value={this.state.name}
-              onChange={(e) => this.handleChange(e)}
-              onKeyDown={(e) => this.handleInputKeyDown(e)}
+              onChange={e => this.handleChange(e)}
+              onKeyDown={e => this.handleInputKeyDown(e)}
             />
           </div>
-          <button styleName='control-confirmButton'
-            onClick={(e) => this.handleConfirmButtonClick(e)}
+          <button
+            styleName='control-confirmButton'
+            onClick={e => this.handleConfirmButtonClick(e)}
           >
             {i18n.__('Import')}
           </button>
-          <div className='error' styleName='error'>{this.state.errormessage}</div>
+          <div className='error' styleName='error'>
+            {this.state.errormessage}
+          </div>
         </div>
       </div>
     )

@@ -24,8 +24,12 @@ class TagSelect extends React.Component {
     this.onInputBlur = this.onInputBlur.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
     this.onInputKeyDown = this.onInputKeyDown.bind(this)
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this)
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this)
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
+      this
+    )
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(
+      this
+    )
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this)
   }
 
@@ -45,9 +49,7 @@ class TagSelect extends React.Component {
     }
 
     let { value } = this.props
-    value = _.isArray(value)
-      ? value.slice()
-      : []
+    value = _.isArray(value) ? value.slice() : []
 
     if (!_.includes(value, newTag)) {
       value.push(newTag)
@@ -57,24 +59,28 @@ class TagSelect extends React.Component {
       value = _.sortBy(value)
     }
 
-    this.setState({
-      newTag: ''
-    }, () => {
-      this.value = value
-      this.props.onChange()
-    })
+    this.setState(
+      {
+        newTag: ''
+      },
+      () => {
+        this.value = value
+        this.props.onChange()
+      }
+    )
   }
 
   buildSuggestions () {
-    this.suggestions = _.sortBy(this.props.data.tagNoteMap.map(
-      (tag, name) => ({
-        name,
-        nameLC: name.toLowerCase(),
-        size: tag.size
-      })
-    ).filter(
-      tag => tag.size > 0
-    ), ['name'])
+    this.suggestions = _.sortBy(
+      this.props.data.tagNoteMap
+        .map((tag, name) => ({
+          name,
+          nameLC: name.toLowerCase(),
+          size: tag.size
+        }))
+        .filter(tag => tag.size > 0),
+      ['name']
+    )
   }
 
   componentDidMount () {
@@ -159,7 +165,8 @@ class TagSelect extends React.Component {
     const valueLC = value.toLowerCase()
     const suggestions = _.filter(
       this.suggestions,
-      tag => !_.includes(this.value, tag.name) && tag.nameLC.indexOf(valueLC) !== -1
+      tag =>
+        !_.includes(this.value, tag.name) && tag.nameLC.indexOf(valueLC) !== -1
     )
 
     this.setState({
@@ -172,7 +179,7 @@ class TagSelect extends React.Component {
   }
 
   removeLastTag () {
-    this.removeTagByCallback((value) => {
+    this.removeTagByCallback(value => {
       value.pop()
     })
   }
@@ -180,9 +187,7 @@ class TagSelect extends React.Component {
   removeTagByCallback (callback, tag = null) {
     let { value } = this.props
 
-    value = _.isArray(value)
-      ? value.slice()
-      : []
+    value = _.isArray(value) ? value.slice() : []
     callback(value, tag)
     value = _.uniq(value)
 
@@ -206,13 +211,14 @@ class TagSelect extends React.Component {
     const { value, className, showTagsAlphabetically, coloredTags } = this.props
 
     const tagList = _.isArray(value)
-      ? (showTagsAlphabetically ? _.sortBy(value) : value).map((tag) => {
+      ? (showTagsAlphabetically ? _.sortBy(value) : value).map(tag => {
         const wrapperStyle = {}
         const textStyle = {}
         const BLACK = '#333333'
         const WHITE = '#f1f1f1'
         const color = coloredTags[tag]
-        const invertedColor = color && invertColor(color, { black: BLACK, white: WHITE })
+        const invertedColor =
+            color && invertColor(color, { black: BLACK, white: WHITE })
         let iconRemove = '../resources/icon/icon-x.svg'
         if (color) {
           wrapperStyle.backgroundColor = color
@@ -222,15 +228,23 @@ class TagSelect extends React.Component {
           iconRemove = '../resources/icon/icon-x-light.svg'
         }
         return (
-          <span styleName='tag'
-            key={tag}
-            style={wrapperStyle}
-          >
-            <span styleName='tag-label' style={textStyle} onClick={(e) => this.handleTagLabelClick(tag)}>#{tag}</span>
-            <button styleName='tag-removeButton'
-              onClick={(e) => this.handleTagRemoveButtonClick(tag)}
-            >
-              <img className='tag-removeButton-icon' src={iconRemove} width='8px' />
+          <span styleName='tag' key={tag} style={wrapperStyle}>
+            <span
+              styleName='tag-label'
+              style={textStyle}
+              onClick={e => this.handleTagLabelClick(tag)}
+              >
+                #{tag}
+            </span>
+            <button
+              styleName='tag-removeButton'
+              onClick={e => this.handleTagRemoveButtonClick(tag)}
+              >
+              <img
+                className='tag-removeButton-icon'
+                src={iconRemove}
+                width='8px'
+                />
             </button>
           </span>
         )
@@ -240,9 +254,9 @@ class TagSelect extends React.Component {
     const { newTag, suggestions } = this.state
 
     return (
-      <div className={_.isString(className)
-          ? 'TagSelect ' + className
-          : 'TagSelect'
+      <div
+        className={
+          _.isString(className) ? 'TagSelect ' + className : 'TagSelect'
         }
         styleName='root'
       >
@@ -254,11 +268,7 @@ class TagSelect extends React.Component {
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           onSuggestionSelected={this.onSuggestionSelected}
           getSuggestionValue={suggestion => suggestion.name}
-          renderSuggestion={suggestion => (
-            <div>
-              {suggestion.name}
-            </div>
-          )}
+          renderSuggestion={suggestion => <div>{suggestion.name}</div>}
           inputProps={{
             placeholder: i18n.__('Add tag...'),
             value: newTag,

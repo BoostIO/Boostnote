@@ -51,74 +51,6 @@
       background-color alpha($ui-button--active-backgroundColor, 40%)
       color $ui-text-color
 
-body[data-theme="dark"]
-  .TagSelect
-    .react-autosuggest__input
-      color $ui-dark-text-color
-
-    ul
-      border-color $ui-dark-borderColor
-      background-color $ui-dark-noteList-backgroundColor
-      color $ui-dark-text-color
-
-      &:before
-        background-color $ui-dark-noteList-backgroundColor
-
-      li[aria-selected="true"]
-        background-color $ui-dark-button--active-backgroundColor
-        color $ui-dark-text-color
-
-body[data-theme="monokai"]
-  .TagSelect
-    .react-autosuggest__input
-      color $ui-monokai-text-color
-
-    ul
-      border-color $ui-monokai-borderColor
-      background-color $ui-monokai-noteList-backgroundColor
-      color $ui-monokai-text-color
-
-      &:before
-        background-color $ui-dark-noteList-backgroundColor
-
-      li[aria-selected="true"]
-        background-color $ui-monokai-button-backgroundColor
-        color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .TagSelect
-    .react-autosuggest__input
-      color $ui-dracula-text-color
-
-    ul
-      border-color $ui-dracula-borderColor
-      background-color $ui-dracula-noteList-backgroundColor
-      color $ui-dracula-text-color
-
-      &:before
-        background-color $ui-dark-noteList-backgroundColor
-
-      li[aria-selected="true"]
-        background-color $ui-dracula-button-backgroundColor
-        color $ui-dracula-text-color
-
-body[data-theme="solarized-dark"]
-  .TagSelect
-    .react-autosuggest__input
-      color $ui-solarized-dark-text-color
-
-    ul
-      border-color $ui-solarized-dark-borderColor
-      background-color $ui-solarized-dark-noteList-backgroundColor
-      color $ui-solarized-dark-text-color
-
-      &:before
-        background-color $ui-solarized-dark-noteList-backgroundColor
-
-      li[aria-selected="true"]
-        background-color $ui-dark-button--active-backgroundColor
-        color $ui-solarized-dark-text-color
-
 body[data-theme="white"]
   .TagSelect
     ul
@@ -126,3 +58,27 @@ body[data-theme="white"]
 
       li[aria-selected="true"]
         background-color $ui-button--active-backgroundColor
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .TagSelect
+      .react-autosuggest__input
+        color get-theme-var(theme, 'text-color')
+
+      ul
+        border-color get-theme-var(theme, 'borderColor')
+        background-color get-theme-var(theme, 'noteList-backgroundColor')
+        color get-theme-var(theme, 'text-color')
+
+        &:before
+          background-color $ui-dark-noteList-backgroundColor
+
+        li[aria-selected="true"]
+          background-color get-theme-var(theme, 'button-backgroundColor')
+          color get-theme-var(theme, 'text-color')
+
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

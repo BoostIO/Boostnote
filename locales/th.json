@@ -9,6 +9,7 @@
   "Toggle Mode": "Toggle Mode",
   "Add tag...": "เพิ่มแท็ก...",
   "Trash": "ถังขยะ",
+  "Ok": "ตกลง.",
   "MODIFICATION DATE": "แก้ไขเมื่อ",
   "Words": "คำ",
   "Letters": "ตัวอักษร",
@@ -144,6 +145,7 @@
   "Albanian": "Albanian",
   "Chinese (zh-CN)": "Chinese (zh-CN)",
   "Chinese (zh-TW)": "Chinese (zh-TW)",
+  "Czech": "Czech",
   "Danish": "Danish",
   "Japanese": "Japanese",
   "Korean": "Korean",
@@ -183,6 +185,7 @@
   "Spellcheck disabled": "Spellcheck disabled",
   "Show menu bar": "Show menu bar",
   "Auto Detect": "Auto Detect",
+  "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

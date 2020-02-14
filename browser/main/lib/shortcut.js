@@ -1,13 +1,16 @@
 import ee from 'browser/main/lib/eventEmitter'
 
 module.exports = {
-  'toggleMode': () => {
+  toggleMode: () => {
     ee.emit('topbar:togglemodebutton')
   },
-  'deleteNote': () => {
+  toggleDirection: () => {
+    ee.emit('topbar:toggledirectionbutton')
+  },
+  deleteNote: () => {
     ee.emit('hotkey:deletenote')
   },
-  'toggleMenuBar': () => {
+  toggleMenuBar: () => {
     ee.emit('menubar:togglemenubar')
   }
 }

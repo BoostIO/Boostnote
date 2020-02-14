@@ -19,8 +19,16 @@ const attachmentManagement = require('./attachmentManagement')
  * @param {function} outputFormatter
  * @return {Promise.<*[]>}
  */
-function exportNote (nodeKey, storageKey, noteContent, targetPath, outputFormatter) {
-  const storagePath = path.isAbsolute(storageKey) ? storageKey : findStorage(storageKey).path
+function exportNote(
+  nodeKey,
+  storageKey,
+  noteContent,
+  targetPath,
+  outputFormatter
+) {
+  const storagePath = path.isAbsolute(storageKey)
+    ? storageKey
+    : findStorage(storageKey).path
   const exportTasks = []
 
   if (!storagePath) {
@@ -50,18 +58,19 @@ function exportNote (nodeKey, storageKey, noteContent, targetPath, outputFormatt
 
   const tasks = prepareTasks(exportTasks, storagePath, path.dirname(targetPath))
 
-  return Promise.all(tasks.map((task) => copyFile(task.src, task.dst)))
-  .then(() => exportedData)
-  .then(data => {
-    return saveToFile(data, targetPath)
-  }).catch((err) => {
-    rollbackExport(tasks)
-    throw err
-  })
+  return Promise.all(tasks.map(task => copyFile(task.src, task.dst)))
+    .then(() => exportedData)
+    .then(data => {
+      return saveToFile(data, targetPath)
+    })
+    .catch(err => {
+      rollbackExport(tasks)
+      throw err
+    })
 }
 
-function prepareTasks (tasks, storagePath, targetPath) {
-  return tasks.map((task) => {
+function prepareTasks(tasks, storagePath, targetPath) {
+  return tasks.map(task => {
     if (!path.isAbsolute(task.src)) {
       task.src = path.join(storagePath, task.src)
     }
@@ -74,9 +83,9 @@ function prepareTasks (tasks, storagePath, targetPath) {
   })
 }
 
-function saveToFile (data, filename) {
+function saveToFile(data, filename) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filename, data, (err) => {
+    fs.writeFile(filename, data, err => {
       if (err) return reject(err)
 
       resolve(filename)
@@ -88,9 +97,9 @@ function saveToFile (data, filename) {
  * Remove exported files
  * @param tasks Array of copy task objects. Object consists of two mandatory fields – `src` and `dst`
  */
-function rollbackExport (tasks) {
+function rollbackExport(tasks) {
   const folders = new Set()
-  tasks.forEach((task) => {
+  tasks.forEach(task => {
     let fullpath = task.dst
 
     if (!path.extname(task.dst)) {
@@ -103,7 +112,7 @@ function rollbackExport (tasks) {
     }
   })
 
-  folders.forEach((folder) => {
+  folders.forEach(folder => {
     if (fs.readdirSync(folder).length === 0) {
       fs.rmdir(folder)
     }

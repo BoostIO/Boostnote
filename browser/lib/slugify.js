@@ -1,10 +1,14 @@
-module.exports = function slugify (title) {
+module.exports = function slugify(title) {
   const slug = encodeURI(
-    title.trim()
+    title
+      .trim()
       .replace(/^\s+/, '')
       .replace(/\s+$/, '')
       .replace(/\s+/g, '-')
-      .replace(/[\]\[\!\'\#\$\%\&\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '')
+      .replace(
+        /[\]\[\!\'\#\$\%\&\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g,
+        ''
+      )
   )
 
   return slug

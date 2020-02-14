@@ -8,6 +8,7 @@
   "to create a new note": "um eine neue Notiz zu erstellen",
   "Toggle Mode": "Modus umschalten",
   "Trash": "Papierkorb",
+  "Ok": "Ok",
   "MODIFICATION DATE": "ÄNDERUNGSDATUM",
   "Words": "Wörter",
   "Letters": "Buchstaben",
@@ -133,6 +134,7 @@
   "This will permanently remove this note.": "Diese Notiz wird dauerhaft gelöscht.",
   "Unsaved Changes!": "Speichern notwendig!",
   "Albanian": "Albanisch",
+  "Czech": "Tschechisch",
   "Danish": "Dänisch",
   "Japanese": "Japanisch",
   "Korean": "Koreanisch",
@@ -213,6 +215,7 @@
   "Spellcheck disabled": "Spellcheck disabled",
   "Show menu bar": "Show menu bar",
   "Auto Detect": "Auto Detect",
+  "Filter tags/folders...": "filter tags/ordner...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

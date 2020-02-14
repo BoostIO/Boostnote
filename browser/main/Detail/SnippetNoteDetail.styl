@@ -156,78 +156,35 @@ body[data-theme="dark"]
   .control-fullScreenButton
     topBarButtonDark()
 
-body[data-theme="solarized-dark"]
-  .root
-    border-left 1px solid $ui-solarized-dark-borderColor
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      border-left 1px solid get-theme-var(theme, 'borderColor')
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
 
-  .body
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
+    .body
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
 
-  .body .description textarea
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
-    color $ui-solarized-dark-text-color
-    border 1px solid $ui-solarized-dark-borderColor
+    .body .description textarea
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+      color get-theme-var(theme, 'text-color')
+      border 1px solid get-theme-var(theme, 'borderColor')
 
-  .tabList .tabButton
-    border-color $ui-solarized-dark-borderColor
+    .tabList .tabButton
+      border-color get-theme-var(theme, 'borderColor')
 
-  .tabButton
-    &:hover
-      color $ui-solarized-dark-button--active-color
-      background-color $ui-solarized-dark-noteDetail-backgroundColor
-      transition 0.15s
-    
-  .tabList
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
-    color $ui-solarized-dark-text-color
+    .tabButton
+      &:hover
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+        transition 0.15s
 
-body[data-theme="monokai"]
-  .root
-    border-left 1px solid $ui-monokai-borderColor
-    background-color $ui-monokai-noteDetail-backgroundColor
+    .tabList
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+      color get-theme-var(theme, 'text-color')
 
-  .body
-    background-color $ui-monokai-noteDetail-backgroundColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .body .description textarea
-    background-color $ui-monokai-noteDetail-backgroundColor
-    color $ui-monokai-text-color
-    border 1px solid $ui-monokai-borderColor
-
-  .tabList .tabButton
-    border-color $ui-monokai-borderColor
-
-  .tabButton
-    &:hover
-      color $ui-monokai-text-color
-      background-color $ui-monokai-noteDetail-backgroundColor
-
-  .tabList
-    background-color $ui-monokai-noteDetail-backgroundColor
-    color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .root
-    border-left 1px solid $ui-dracula-borderColor
-    background-color $ui-dracula-noteDetail-backgroundColor
-
-  .body
-    background-color $ui-dracula-noteDetail-backgroundColor
-
-  .body .description textarea
-    background-color $ui-dracula-noteDetail-backgroundColor
-    color $ui-dracula-text-color
-    border 1px solid $ui-dracula-borderColor
-
-  .tabList .tabButton
-    border-color $ui-dracula-borderColor
-
-  .tabButton
-    &:hover
-      color $ui-dracula-text-color
-      background-color $ui-dracula-noteDetail-backgroundColor
-
-  .tabList
-    background-color $ui-dracula-noteDetail-backgroundColor
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

@@ -54,8 +54,9 @@ const StorageItem = ({
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
     >
-      {!isFolded &&
-        <DraggableIcon className={styles['folderList-item-reorder']} />}
+      {!isFolded && (
+        <DraggableIcon className={styles['folderList-item-reorder']} />
+      )}
       <span
         styleName={
           isFolded ? 'folderList-item-name--folded' : 'folderList-item-name'
@@ -70,11 +71,12 @@ const StorageItem = ({
           ? _.truncate(folderName, { length: 1, omission: '' })
           : folderName}
       </span>
-      {!isFolded &&
-        _.isNumber(noteCount) &&
-        <span styleName='folderList-item-noteCount'>{noteCount}</span>}
-      {isFolded &&
-        <span styleName='folderList-item-tooltip'>{folderName}</span>}
+      {!isFolded && _.isNumber(noteCount) && (
+        <span styleName='folderList-item-noteCount'>{noteCount}</span>
+      )}
+      {isFolded && (
+        <span styleName='folderList-item-tooltip'>{folderName}</span>
+      )}
     </button>
   )
 }

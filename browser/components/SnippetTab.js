@@ -5,7 +5,7 @@ import context from 'browser/lib/context'
 import i18n from 'browser/lib/i18n'
 
 class SnippetTab extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -14,7 +14,7 @@ class SnippetTab extends React.Component {
     }
   }
 
-  componentWillUpdate (nextProps) {
+  componentWillUpdate(nextProps) {
     if (nextProps.snippet.name !== this.props.snippet.name) {
       this.setState({
         name: nextProps.snippet.name
@@ -22,34 +22,34 @@ class SnippetTab extends React.Component {
     }
   }
 
-  handleClick (e) {
+  handleClick(e) {
     this.props.onClick(e)
   }
 
-  handleContextMenu (e) {
+  handleContextMenu(e) {
     context.popup([
       {
         label: i18n.__('Rename'),
-        click: (e) => this.handleRenameClick(e)
+        click: e => this.handleRenameClick(e)
       }
     ])
   }
 
-  handleRenameClick (e) {
+  handleRenameClick(e) {
     this.startRenaming()
   }
 
-  handleNameInputBlur (e) {
+  handleNameInputBlur(e) {
     this.handleRename()
   }
 
-  handleNameInputChange (e) {
+  handleNameInputChange(e) {
     this.setState({
       name: e.target.value
     })
   }
 
-  handleNameInputKeyDown (e) {
+  handleNameInputKeyDown(e) {
     switch (e.keyCode) {
       case 13:
         this.handleRename()
@@ -63,84 +63,87 @@ class SnippetTab extends React.Component {
     }
   }
 
-  handleRename () {
-    this.setState({
-      isRenaming: false
-    }, () => {
-      if (this.props.snippet.name !== this.state.name) {
-        this.props.onRename(this.state.name)
+  handleRename() {
+    this.setState(
+      {
+        isRenaming: false
+      },
+      () => {
+        if (this.props.snippet.name !== this.state.name) {
+          this.props.onRename(this.state.name)
+        }
       }
-    })
+    )
   }
 
-  handleDeleteButtonClick (e) {
+  handleDeleteButtonClick(e) {
     this.props.onDelete(e)
   }
 
-  startRenaming () {
-    this.setState({
-      isRenaming: true
-    }, () => {
-      this.refs.name.focus()
-      this.refs.name.select()
-    })
+  startRenaming() {
+    this.setState(
+      {
+        isRenaming: true
+      },
+      () => {
+        this.refs.name.focus()
+        this.refs.name.select()
+      }
+    )
   }
 
-  handleDragStart (e) {
+  handleDragStart(e) {
     e.dataTransfer.dropEffect = 'move'
     this.props.onDragStart(e)
   }
 
-  handleDrop (e) {
+  handleDrop(e) {
     this.props.onDrop(e)
   }
 
-  render () {
+  render() {
     const { isActive, snippet, isDeletable } = this.props
     return (
-      <div styleName={isActive
-          ? 'root--active'
-          : 'root'
-        }
-      >
-        {!this.state.isRenaming
-          ? <button styleName='button'
-            onClick={(e) => this.handleClick(e)}
-            onDoubleClick={(e) => this.handleRenameClick(e)}
-            onContextMenu={(e) => this.handleContextMenu(e)}
-            onDragStart={(e) => this.handleDragStart(e)}
-            onDrop={(e) => this.handleDrop(e)}
+      <div styleName={isActive ? 'root--active' : 'root'}>
+        {!this.state.isRenaming ? (
+          <button
+            styleName='button'
+            onClick={e => this.handleClick(e)}
+            onDoubleClick={e => this.handleRenameClick(e)}
+            onContextMenu={e => this.handleContextMenu(e)}
+            onDragStart={e => this.handleDragStart(e)}
+            onDrop={e => this.handleDrop(e)}
             draggable='true'
           >
-            {snippet.name.trim().length > 0
-              ? snippet.name
-              : <span>
-                {i18n.__('Unnamed')}
-              </span>
-            }
+            {snippet.name.trim().length > 0 ? (
+              snippet.name
+            ) : (
+              <span>{i18n.__('Unnamed')}</span>
+            )}
           </button>
-          : <input styleName='input'
+        ) : (
+          <input
+            styleName='input'
             ref='name'
             value={this.state.name}
-            onChange={(e) => this.handleNameInputChange(e)}
-            onBlur={(e) => this.handleNameInputBlur(e)}
-            onKeyDown={(e) => this.handleNameInputKeyDown(e)}
+            onChange={e => this.handleNameInputChange(e)}
+            onBlur={e => this.handleNameInputBlur(e)}
+            onKeyDown={e => this.handleNameInputKeyDown(e)}
           />
-        }
-        {isDeletable &&
-          <button styleName='deleteButton'
-            onClick={(e) => this.handleDeleteButtonClick(e)}
+        )}
+        {isDeletable && (
+          <button
+            styleName='deleteButton'
+            onClick={e => this.handleDeleteButtonClick(e)}
           >
             <i className='fa fa-times' />
           </button>
-        }
+        )}
       </div>
     )
   }
 }
 
-SnippetTab.propTypes = {
-
-}
+SnippetTab.propTypes = {}
 
 export default CSSModules(SnippetTab, styles)

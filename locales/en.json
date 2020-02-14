@@ -9,6 +9,7 @@
   "Toggle Mode": "Toggle Mode",
   "Add tag...": "Add tag...",
   "Trash": "Trash",
+  "Ok": "Ok",
   "MODIFICATION DATE": "MODIFICATION DATE",
   "Words": "Words",
   "Letters": "Letters",
@@ -146,6 +147,7 @@
   "Albanian": "Albanian",
   "Chinese (zh-CN)": "Chinese (zh-CN)",
   "Chinese (zh-TW)": "Chinese (zh-TW)",
+  "Czech": "Czech",
   "Danish": "Danish",
   "Japanese": "Japanese",
   "Korean": "Korean",
@@ -188,6 +190,8 @@
   "New notes are tagged with the filtering tags": "New notes are tagged with the filtering tags",
   "Show menu bar": "Show menu bar",
   "Auto Detect": "Auto Detect",
+  "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Enable Auto Update": "Enable Auto Update"
 }

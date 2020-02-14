@@ -8,7 +8,7 @@ import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
 
 class RenameFolderModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -16,39 +16,39 @@ class RenameFolderModal extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.refs.name.focus()
     this.refs.name.select()
   }
 
-  handleCloseButtonClick (e) {
+  handleCloseButtonClick(e) {
     this.props.close()
   }
 
-  handleChange (e) {
+  handleChange(e) {
     this.setState({
       name: this.refs.name.value
     })
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  handleInputKeyDown (e) {
+  handleInputKeyDown(e) {
     switch (e.keyCode) {
       case 13:
         this.confirm()
     }
   }
 
-  handleConfirmButtonClick (e) {
+  handleConfirmButtonClick(e) {
     this.confirm()
   }
 
-  confirm () {
+  confirm() {
     if (this.state.name.trim().length > 0) {
       const { storage, folder } = this.props
       dataApi
@@ -56,7 +56,7 @@ class RenameFolderModal extends React.Component {
           name: this.state.name,
           color: folder.color
         })
-        .then((data) => {
+        .then(data => {
           store.dispatch({
             type: 'UPDATE_FOLDER',
             storage: data.storage
@@ -66,27 +66,32 @@ class RenameFolderModal extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
-      <div styleName='root'
+      <div
+        styleName='root'
         tabIndex='-1'
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
         <div styleName='header'>
           <div styleName='title'>{i18n.__('Rename Folder')}</div>
         </div>
-        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
+        <ModalEscButton
+          handleEscButtonClick={e => this.handleCloseButtonClick(e)}
+        />
 
         <div styleName='control'>
-          <input styleName='control-input'
+          <input
+            styleName='control-input'
             placeholder={i18n.__('Folder Name')}
             ref='name'
             value={this.state.name}
-            onChange={(e) => this.handleChange(e)}
-            onKeyDown={(e) => this.handleInputKeyDown(e)}
+            onChange={e => this.handleChange(e)}
+            onKeyDown={e => this.handleInputKeyDown(e)}
           />
-          <button styleName='control-confirmButton'
-            onClick={(e) => this.handleConfirmButtonClick(e)}
+          <button
+            styleName='control-confirmButton'
+            onClick={e => this.handleConfirmButtonClick(e)}
           >
             {i18n.__('Confirm')}
           </button>

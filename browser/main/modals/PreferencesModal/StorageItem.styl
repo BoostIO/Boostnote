@@ -103,10 +103,17 @@ body[data-theme="solarized-dark"]
     background-color $ui-solarized-dark-button-backgroundColor
     color $ui-solarized-dark-text-color
 
-body[data-theme="dracula"]
-  .header
-    border-color $ui-dracula-borderColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .header
+      border-color get-theme-var(theme, 'borderColor')
 
-  .header-control-button
-    colorDraculaDefaultButton()
-    border-color $ui-dracula-borderColor
+    .header-control-button
+      colorThemedPrimaryButton(theme)
+      border-color get-theme-var(theme, 'borderColor')
+
+for theme in 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

@@ -8,6 +8,7 @@
   "to create a new note": "to create a new note",
   "Toggle Mode": "모드 전환",
   "Trash": "쓰레기 통",
+  "Ok": "확인",
   "MODIFICATION DATE": "변경 날짜",
   "Words": "단어 수",
   "Letters": "글자 수",
@@ -135,6 +136,7 @@
   "Albanian": "Albanian",
   "Chinese (zh-CN)": "Chinese (zh-CN)",
   "Chinese (zh-TW)": "Chinese (zh-TW)",
+  "Czech": "체코 어",
   "Danish": "Danish",
   "Japanese": "Japanese",
   "Korean": "Korean",
@@ -164,6 +166,7 @@
   "Spellcheck disabled": "Spellcheck disabled",
   "Show menu bar": "Show menu bar",
   "Auto Detect": "Auto Detect",
+  "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

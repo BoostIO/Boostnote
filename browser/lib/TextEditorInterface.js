@@ -1,44 +1,44 @@
 import { Point } from '@susisu/mte-kernel'
 
 export default class TextEditorInterface {
-  constructor (editor) {
+  constructor(editor) {
     this.editor = editor
     this.doc = editor.getDoc()
     this.transaction = false
   }
 
-  getCursorPosition () {
+  getCursorPosition() {
     const { line, ch } = this.doc.getCursor()
     return new Point(line, ch)
   }
 
-  setCursorPosition (pos) {
+  setCursorPosition(pos) {
     this.doc.setCursor({
       line: pos.row,
       ch: pos.column
     })
   }
 
-  setSelectionRange (range) {
+  setSelectionRange(range) {
     this.doc.setSelection(
       { line: range.start.row, ch: range.start.column },
       { line: range.end.row, ch: range.end.column }
     )
   }
 
-  getLastRow () {
+  getLastRow() {
     return this.doc.lineCount() - 1
   }
 
-  acceptsTableEdit () {
+  acceptsTableEdit() {
     return true
   }
 
-  getLine (row) {
+  getLine(row) {
     return this.doc.getLine(row)
   }
 
-  insertLine (row, line) {
+  insertLine(row, line) {
     const lastRow = this.getLastRow()
     if (row > lastRow) {
       const lastLine = this.getLine(lastRow)
@@ -56,7 +56,7 @@ export default class TextEditorInterface {
     }
   }
 
-  deleteLine (row) {
+  deleteLine(row) {
     const lastRow = this.getLastRow()
     if (row >= lastRow) {
       if (lastRow > 0) {
@@ -76,15 +76,11 @@ export default class TextEditorInterface {
         )
       }
     } else {
-      this.doc.replaceRange(
-        '',
-        { line: row, ch: 0 },
-        { line: row + 1, ch: 0 }
-      )
+      this.doc.replaceRange('', { line: row, ch: 0 }, { line: row + 1, ch: 0 })
     }
   }
 
-  replaceLines (startRow, endRow, lines) {
+  replaceLines(startRow, endRow, lines) {
     const lastRow = this.getLastRow()
     if (endRow > lastRow) {
       const lastLine = this.getLine(lastRow)
@@ -102,7 +98,7 @@ export default class TextEditorInterface {
     }
   }
 
-  transact (func) {
+  transact(func) {
     this.transaction = true
     func()
     this.transaction = false

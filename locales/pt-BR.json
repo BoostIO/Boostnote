@@ -8,6 +8,7 @@
   "to create a new note": "para criar uma nova nota",
   "Toggle Mode": "Modo de alternância",
   "Trash": "Lixeira",
+  "Ok": "Ok",
   "MODIFICATION DATE": "DATA DE MODIFICAÇÃO",
   "Words": "Palavras",
   "Letters": "Letras",
@@ -135,6 +136,7 @@
   "Albanian": "Albanês",
   "Chinese (zh-CN)": "Chinês (zh-CN)",
   "Chinese (zh-TW)": "Chinês (zh-TW)",
+  "Czech": "Tcheco",
   "Danish": "Dinamarquês",
   "Japanese": "Japonês",
   "Korean": "Coreano",
@@ -157,6 +159,7 @@
   "Spellcheck disabled": "Spellcheck disabled",
   "Show menu bar": "Show menu bar",
   "Auto Detect": "Auto Detect",
+  "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

@@ -8,6 +8,7 @@
   "to create a new note": "pour créer une nouvelle note",
   "Toggle Mode": "Toggle Mode",
   "Trash": "Poubelle",
+  "Ok": "Ok",
   "MODIFICATION DATE": "DATE DE MODIFICATION",
   "Words": "Mots",
   "Letters": "Lettres",
@@ -137,6 +138,7 @@
   "Albanian": "Albanais",
   "Chinese (zh-CN)": "Chinois (zh-CN)",
   "Chinese (zh-TW)": "Chinois (zh-TW)",
+  "Czech": "Tchèque",
   "Toggle Editor Mode": "Basculer en mode éditeur",
   "Danish": "Danois",
   "Japanese": "Japonais",
@@ -173,6 +175,7 @@
   "Snippet prefix": "Préfixe du snippet",
   "Delete Note": "Supprimer la note",
   "New notes are tagged with the filtering tags": "Les nouvelles notes sont taggées avec les tags de filtrage",
+  "Filter tags/folders...": "filtrage tags/dossier...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note"
 }

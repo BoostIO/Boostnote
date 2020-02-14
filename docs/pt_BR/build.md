@@ -42,7 +42,9 @@ Então nós preparamos um _script_ separado, o qual somente cria um executável.
 grunt pre-build
 ```
 
-Você irá encontrar o executável na pasta `dist`. Nota: o atualizador automático não funciona porque o app não está certificado.
+Você irá encontrar o executável na pasta `dist`. 
+
+**Nota:** o atualizador automático não funciona porque o app não está certificado.
 
 Se você achar isto necessário, você pode usar o _codesign_ ou o _authenticode_ com esse executável.
 
@@ -50,7 +52,7 @@ Se você achar isto necessário, você pode usar o _codesign_ ou o _authenticode
 
 Pacotes de distribuição são gerados através do comando `grunt build` em plataforma Linux (e.g. Ubuntu, Fedora).
 
-> Nota: você pode criar `.deb` e `.rpm` em um mesmo ambiente.
+**Nota:** você pode criar `.deb` e `.rpm` em um mesmo ambiente.
 
 Depois de instalar uma versão suportada do `node` e do `npm`, deve-se instalar as dependências para gerar os pacotes.
 

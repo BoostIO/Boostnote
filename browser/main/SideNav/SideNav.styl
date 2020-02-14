@@ -9,16 +9,47 @@
   flex-direction column
 
 .top
-  padding-bottom 15px
+  display flex
+  align-items top
+  justify-content space-between
+  padding-bottom 10px
+  margin 14px 14px 4px
 
 .switch-buttons
   background-color transparent
   border 0
-  margin 24px auto 4px 14px
   display flex
+  align-items center
   text-align center
 
+.extra-buttons
+  position relative
+  display flex
+  align-items center
 
+.search
+  position relative
+  flex 1
+  display flex
+  max-height 0
+  overflow hidden
+  transition max-height .4s
+  margin -5px 10px 0
+  .search-input
+    flex 1
+    height 2em
+    vertical-align middle
+    font-size 14px
+    border solid 1px $border-color
+    border-radius 2px
+    padding 2px 6px
+    outline none
+  .search-clear
+    width 10px
+    position absolute
+    right 8px
+    top 9px
+    cursor pointer
 
 .top-menu-label
   margin-left 5px
@@ -68,8 +99,15 @@
   background-color #2E3235
   .switch-buttons
     display none
+  .extra-buttons > button:first-of-type // hide search icon
+    display none
   .top
     height 60px
+    align-items center
+    margin 0
+    justify-content center
+    position relative
+    left -4px
   .top-menu
     position static
     width $sideNav--folded-width
@@ -98,9 +136,23 @@
   .top-menu-preference
     position absolute
     left 7px
+  .search
+    height 28px
+    .search-input
+      display none
+    .search-clear
+      display none
+    .search-folded
+      width 16px
+      padding-left 4px
+      margin-bottom 8px
+      cursor pointer
 
 body[data-theme="white"]
   .root, .root--folded
+    background-color #f9f9f9
+    color $ui-text-color
+  .search .search-input
     background-color #f9f9f9
     color $ui-text-color
 
@@ -109,21 +161,27 @@ body[data-theme="dark"]
     border-right 1px solid $ui-dark-borderColor
     background-color $ui-dark-backgroundColor
     color $ui-dark-text-color
+  .search .search-input
+    background-color $ui-dark-backgroundColor
+    color $ui-dark-text-color
+    border-color $ui-dark-borderColor
 
   .top
     border-color $ui-dark-borderColor
 
-body[data-theme="solarized-dark"]
-  .root, .root--folded
-    background-color $ui-solarized-dark-backgroundColor
-    border-right 1px solid $ui-solarized-dark-borderColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root, .root--folded
+      background-color get-theme-var(theme, 'backgroundColor')
+      border-right 1px solid get-theme-var(theme, 'borderColor')
 
-body[data-theme="monokai"]
-  .root, .root--folded
-    background-color $ui-monokai-backgroundColor
-    border-right 1px solid $ui-monokai-borderColor
+    .search .search-input
+      background-color get-theme-var(theme, 'backgroundColor')
+      color get-theme-var(theme, 'text-color')
+      border-color get-theme-var(theme, 'borderColor')
 
-body[data-theme="dracula"]
-  .root, .root--folded
-    background-color $ui-dracula-backgroundColor
-    border-right 1px solid $ui-dracula-borderColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

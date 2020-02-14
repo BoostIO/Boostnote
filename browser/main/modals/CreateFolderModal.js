@@ -10,7 +10,7 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import i18n from 'browser/lib/i18n'
 
 class CreateFolderModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -18,39 +18,39 @@ class CreateFolderModal extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.refs.name.focus()
     this.refs.name.select()
   }
 
-  handleCloseButtonClick (e) {
+  handleCloseButtonClick(e) {
     this.props.close()
   }
 
-  handleChange (e) {
+  handleChange(e) {
     this.setState({
       name: this.refs.name.value
     })
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  handleInputKeyDown (e) {
+  handleInputKeyDown(e) {
     switch (e.keyCode) {
       case 13:
         this.confirm()
     }
   }
 
-  handleConfirmButtonClick (e) {
+  handleConfirmButtonClick(e) {
     this.confirm()
   }
 
-  confirm () {
+  confirm() {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_FOLDER')
     if (this.state.name.trim().length > 0) {
       const { storage } = this.props
@@ -59,42 +59,48 @@ class CreateFolderModal extends React.Component {
         color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7) % 7]
       }
 
-      dataApi.createFolder(storage.key, input)
-        .then((data) => {
+      dataApi
+        .createFolder(storage.key, input)
+        .then(data => {
           store.dispatch({
             type: 'UPDATE_FOLDER',
             storage: data.storage
           })
           this.props.close()
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err)
         })
     }
   }
 
-  render () {
+  render() {
     return (
-      <div styleName='root'
+      <div
+        styleName='root'
         tabIndex='-1'
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
         <div styleName='header'>
           <div styleName='title'>{i18n.__('Create new folder')}</div>
         </div>
-        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
+        <ModalEscButton
+          handleEscButtonClick={e => this.handleCloseButtonClick(e)}
+        />
         <div styleName='control'>
           <div styleName='control-folder'>
             <div styleName='control-folder-label'>{i18n.__('Folder name')}</div>
-            <input styleName='control-folder-input'
+            <input
+              styleName='control-folder-input'
               ref='name'
               value={this.state.name}
-              onChange={(e) => this.handleChange(e)}
-              onKeyDown={(e) => this.handleInputKeyDown(e)}
+              onChange={e => this.handleChange(e)}
+              onKeyDown={e => this.handleInputKeyDown(e)}
             />
           </div>
-          <button styleName='control-confirmButton'
-            onClick={(e) => this.handleConfirmButtonClick(e)}
+          <button
+            styleName='control-confirmButton'
+            onClick={e => this.handleConfirmButtonClick(e)}
           >
             {i18n.__('Create')}
           </button>

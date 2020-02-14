@@ -5,7 +5,8 @@ const noop = () => {}
 mock('electron', {
   remote: {
     app: {
-      getAppPath: noop
+      getAppPath: noop,
+      getPath: noop
     }
   }
 })

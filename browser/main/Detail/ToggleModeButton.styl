@@ -26,6 +26,13 @@
   &:hover .tooltip
     opacity 1
 
+.control-toggleModeButton
+  -webkit-user-drag none
+  user-select none
+  > div img
+    -webkit-user-drag none
+    user-select none
+
 .tooltip
   tooltip()
   position absolute
@@ -62,23 +69,16 @@ body[data-theme="solarized-dark"]
       background-color #1EC38B
       box-shadow 2px 0px 7px #222222
 
-body[data-theme="monokai"]
-  .control-toggleModeButton
-      background-color #373831
-    .active
-      background-color #f92672
-      box-shadow 2px 0px 7px #222222
+apply-theme(theme)
+  body[data-theme={theme}]
+    .control-toggleModeButton
+      background-color get-theme-var(theme, 'borderColor')
+      .active
+        background-color get-theme-var(theme, 'active-color')
+        box-shadow 2px 0px 7px #222222
 
-body[data-theme="dracula"]
-  .control-toggleModeButton
-      background-color #44475a
-    .active
-      background-color #bd93f9
-      box-shadow 2px 0px 7px #222222
+for theme in 'dracula'
+  apply-theme(theme)
 
-.control-toggleModeButton
-  -webkit-user-drag none
-  user-select none
-  > div img
-    -webkit-user-drag none
-    user-select none
+for theme in $themes
+  apply-theme(theme)

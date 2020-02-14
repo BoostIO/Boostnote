@@ -11,6 +11,7 @@
   "Star": "お気に入り",
   "Fullscreen": "全画面",
   "Trash": "ゴミ箱",
+  "Ok": "OK",
   "Info": "情報",
   "MODIFICATION DATE": "修正日",
   "Words": "ワード",
@@ -182,6 +183,7 @@
   "Albanian": "アルバニア語",
   "Chinese (zh-CN)": "簡体字中国語 (zh-CN)",
   "Chinese (zh-TW)": "繁体字中国語 (zh-TW)",
+  "Czech": "チェコ語",
   "Danish": "デンマーク語",
   "Japanese": "日本語",
   "Korean": "韓国語",
@@ -220,6 +222,7 @@
   "Spellcheck disabled": "スペルチェック無効",
   "Show menu bar": "メニューバーを表示",
   "Auto Detect": "自動検出",
+  "Filter tags/folders...": "タグ/フォルダをフィルタ...",
   "Enable HTML label in mermaid flowcharts": "mermaid flowchartでHTMLラベルを有効にする  ⚠ このオプションには潜在的なXSSの危険性があります。",
   "Wrap line in Snippet Note": "行を右端で折り返す（Snippet Note）"
 }

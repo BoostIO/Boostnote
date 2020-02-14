@@ -24,23 +24,16 @@ body[data-theme="dark"]
   .empty-message
     color $ui-dark-inactive-text-color
 
-body[data-theme="solarized-dark"]
-  .root
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
-    border-left 1px solid $ui-solarized-dark-borderColor
-  .empty-message
-    color $ui-solarized-dark-text-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+      border-left 1px solid get-theme-var(theme, 'borderColor')
+    .empty-message
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="monokai"]
-  .root
-    background-color $ui-monokai-noteDetail-backgroundColor
-    border-left 1px solid $ui-monokai-borderColor
-  .empty-message
-    color $ui-monokai-text-color
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="dracula"]
-  .root
-    background-color $ui-dracula-noteDetail-backgroundColor
-    border-left 1px solid $ui-dracula-borderColor
-  .empty-message
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)
