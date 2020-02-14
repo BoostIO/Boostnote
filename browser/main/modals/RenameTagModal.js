@@ -5,9 +5,13 @@ import styles from './RenameModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import i18n from 'browser/lib/i18n'
-import { hashHistory } from 'react-router'
+import { replace } from 'connected-react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import { isEmpty } from 'lodash'
+import electron from 'electron'
+
+const { remote } = electron
+const { dialog } = remote
 
 class RenameTagModal extends React.Component {
   constructor (props) {
@@ -70,6 +74,23 @@ class RenameTagModal extends React.Component {
   renameTag (tag, updatedTag) {
     const { data, dispatch } = this.props
 
+    if (data.noteMap.map(note => note).some(note => note.tags.indexOf(updatedTag) !== -1)) {
+      const alertConfig = {
+        type: 'warning',
+        message: i18n.__('Confirm tag merge'),
+        detail: i18n.__(`Tag ${tag} will be merged with existing tag ${updatedTag}`),
+        buttons: [i18n.__('Confirm'), i18n.__('Cancel')]
+      }
+
+      const dialogButtonIndex = dialog.showMessageBox(
+        remote.getCurrentWindow(), alertConfig
+      )
+
+      if (dialogButtonIndex === 1) {
+        return // bail early on cancel click
+      }
+    }
+
     const notes = data.noteMap
       .map(note => note)
       .filter(note => note.tags.indexOf(tag) !== -1 && note.tags.indexOf(updatedTag))
@@ -100,7 +121,7 @@ class RenameTagModal extends React.Component {
       })
       .then(() => {
         if (window.location.hash.includes(tag)) {
-          hashHistory.replace(`/tags/${updatedTag}`)
+          dispatch(replace(`/tags/${updatedTag}`))
         }
         ee.emit('sidebar:rename-tag', { tag, updatedTag })
         this.props.close()
