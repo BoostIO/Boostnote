@@ -26,13 +26,13 @@ import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import ColorPicker from 'browser/components/ColorPicker'
 import { every, sortBy } from 'lodash'
 
-function matchActiveTags (tags, activeTags) {
+function matchActiveTags(tags, activeTags) {
   return every(activeTags, v => tags.indexOf(v) >= 0)
 }
 
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -54,15 +54,15 @@ class SideNav extends React.Component {
     this.handleSearchInputClear = this.handleSearchInputClear.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     EventEmitter.on('side:preferences', this.handleMenuButtonClick)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     EventEmitter.off('side:preferences', this.handleMenuButtonClick)
   }
 
-  deleteTag (tag) {
+  deleteTag(tag) {
     const selectedButton = remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
@@ -120,11 +120,11 @@ class SideNav extends React.Component {
     }
   }
 
-  handleMenuButtonClick (e) {
+  handleMenuButtonClick(e) {
     openModal(PreferencesModal)
   }
 
-  handleSearchButtonClick (e) {
+  handleSearchButtonClick(e) {
     const { showSearch } = this.state
     this.setState({
       showSearch: !showSearch,
@@ -132,29 +132,29 @@ class SideNav extends React.Component {
     })
   }
 
-  handleSearchInputClear (e) {
+  handleSearchInputClear(e) {
     this.setState({
       searchText: ''
     })
   }
 
-  handleSearchInputChange (e) {
+  handleSearchInputChange(e) {
     this.setState({
       searchText: e.target.value
     })
   }
 
-  handleHomeButtonClick (e) {
+  handleHomeButtonClick(e) {
     const { dispatch } = this.props
     dispatch(push('/home'))
   }
 
-  handleStarredButtonClick (e) {
+  handleStarredButtonClick(e) {
     const { dispatch } = this.props
     dispatch(push('/starred'))
   }
 
-  handleTagContextMenu (e, tag) {
+  handleTagContextMenu(e, tag) {
     const menu = []
 
     menu.push({
@@ -179,7 +179,7 @@ class SideNav extends React.Component {
     context.popup(menu)
   }
 
-  dismissColorPicker () {
+  dismissColorPicker() {
     this.setState({
       colorPicker: {
         show: false
@@ -187,7 +187,7 @@ class SideNav extends React.Component {
     })
   }
 
-  displayColorPicker (tagName, rect) {
+  displayColorPicker(tagName, rect) {
     const { config } = this.props
     this.setState({
       colorPicker: {
@@ -199,7 +199,7 @@ class SideNav extends React.Component {
     })
   }
 
-  handleRenameTagClick (tagName) {
+  handleRenameTagClick(tagName) {
     const { data, dispatch } = this.props
 
     openModal(RenameTagModal, {
@@ -209,10 +209,17 @@ class SideNav extends React.Component {
     })
   }
 
-  handleColorPickerConfirm (color) {
-    const { dispatch, config: {coloredTags} } = this.props
-    const { colorPicker: { tagName } } = this.state
-    const newColoredTags = Object.assign({}, coloredTags, {[tagName]: color.hex})
+  handleColorPickerConfirm(color) {
+    const {
+      dispatch,
+      config: { coloredTags }
+    } = this.props
+    const {
+      colorPicker: { tagName }
+    } = this.state
+    const newColoredTags = Object.assign({}, coloredTags, {
+      [tagName]: color.hex
+    })
 
     const config = { coloredTags: newColoredTags }
     ConfigManager.set(config)
@@ -223,7 +230,7 @@ class SideNav extends React.Component {
     this.dismissColorPicker()
   }
 
-  handleColorPickerReset () {
+  handleColorPickerReset() {
     const {
       dispatch,
       config: { coloredTags }
@@ -244,7 +251,7 @@ class SideNav extends React.Component {
     this.dismissColorPicker()
   }
 
-  handleToggleButtonClick (e) {
+  handleToggleButtonClick(e) {
     const { dispatch, config } = this.props
     const { showSearch, searchText } = this.state
 
@@ -261,22 +268,22 @@ class SideNav extends React.Component {
     }
   }
 
-  handleTrashedButtonClick (e) {
+  handleTrashedButtonClick(e) {
     const { dispatch } = this.props
     dispatch(push('/trashed'))
   }
 
-  handleSwitchFoldersButtonClick () {
+  handleSwitchFoldersButtonClick() {
     const { dispatch } = this.props
     dispatch(push('/home'))
   }
 
-  handleSwitchTagsButtonClick () {
+  handleSwitchTagsButtonClick() {
     const { dispatch } = this.props
     dispatch(push('/alltags'))
   }
 
-  onSortEnd (storage) {
+  onSortEnd(storage) {
     return ({ oldIndex, newIndex }) => {
       const { dispatch } = this.props
       dataApi.reorderFolder(storage.key, oldIndex, newIndex).then(data => {
@@ -285,7 +292,7 @@ class SideNav extends React.Component {
     }
   }
 
-  SideNavComponent (isFolded) {
+  SideNavComponent(isFolded) {
     const { location, data, config, dispatch } = this.props
     const { showSearch, searchText } = this.state
 
@@ -390,7 +397,7 @@ class SideNav extends React.Component {
     return component
   }
 
-  tagListComponent () {
+  tagListComponent() {
     const { data, location, config } = this.props
     const { colorPicker, showSearch, searchText } = this.state
     const activeTags = this.getActiveTags(location.pathname)
@@ -445,7 +452,7 @@ class SideNav extends React.Component {
     })
   }
 
-  getRelatedTags (activeTags, noteMap) {
+  getRelatedTags(activeTags, noteMap) {
     if (activeTags.length === 0) {
       return new Set()
     }
@@ -457,22 +464,22 @@ class SideNav extends React.Component {
     return relatedTags
   }
 
-  getTagActive (path, tag) {
+  getTagActive(path, tag) {
     return this.getActiveTags(path).includes(tag)
   }
 
-  getActiveTags (path) {
+  getActiveTags(path) {
     const pathSegments = path.split('/')
     const tags = pathSegments[pathSegments.length - 1]
     return tags === 'alltags' ? [] : decodeURIComponent(tags).split(' ')
   }
 
-  handleClickTagListItem (name) {
+  handleClickTagListItem(name) {
     const { dispatch } = this.props
     dispatch(push(`/tags/${encodeURIComponent(name)}`))
   }
 
-  handleSortTagsByChange (e) {
+  handleSortTagsByChange(e) {
     const { dispatch } = this.props
 
     const config = {
@@ -486,7 +493,7 @@ class SideNav extends React.Component {
     })
   }
 
-  handleClickNarrowToTag (tag) {
+  handleClickNarrowToTag(tag) {
     const { dispatch, location } = this.props
     const listOfTags = this.getActiveTags(location.pathname)
     const indexOfTag = listOfTags.indexOf(tag)
@@ -498,7 +505,7 @@ class SideNav extends React.Component {
     dispatch(push(`/tags/${encodeURIComponent(listOfTags.join(' '))}`))
   }
 
-  emptyTrash (entries) {
+  emptyTrash(entries) {
     const { dispatch } = this.props
     const deletionPromises = entries.map(note => {
       return dataApi.deleteNote(note.storage, note.key)
@@ -516,7 +523,7 @@ class SideNav extends React.Component {
       })
   }
 
-  handleFilterButtonContextMenu (event) {
+  handleFilterButtonContextMenu(event) {
     const { data } = this.props
     const trashedNotes = data.trashedSet
       .toJS()
@@ -529,7 +536,7 @@ class SideNav extends React.Component {
     ])
   }
 
-  render () {
+  render() {
     const { location, config } = this.props
     const { showSearch, searchText, colorPicker: colorPickerState } = this.state
 

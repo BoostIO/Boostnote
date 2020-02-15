@@ -14,7 +14,7 @@ const { remote } = electron
 const { dialog } = remote
 
 class RenameTagModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.nameInput = null
@@ -31,12 +31,12 @@ class RenameTagModal extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.nameInput.focus()
     this.nameInput.select()
   }
 
-  handleChange (e) {
+  handleChange(e) {
     this.setState({
       name: this.nameInput.value,
       showerror: false,
@@ -44,46 +44,53 @@ class RenameTagModal extends React.Component {
     })
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  handleInputKeyDown (e) {
+  handleInputKeyDown(e) {
     switch (e.keyCode) {
       case 13:
         this.handleConfirm()
     }
   }
 
-  handleConfirm () {
+  handleConfirm() {
     if (this.state.name.trim().length > 0) {
       const { name, oldName } = this.state
       this.renameTag(oldName, name)
     }
   }
 
-  showError (message) {
+  showError(message) {
     this.setState({
       showerror: true,
       errormessage: message
     })
   }
 
-  renameTag (tag, updatedTag) {
+  renameTag(tag, updatedTag) {
     const { data, dispatch } = this.props
 
-    if (data.noteMap.map(note => note).some(note => note.tags.indexOf(updatedTag) !== -1)) {
+    if (
+      data.noteMap
+        .map(note => note)
+        .some(note => note.tags.indexOf(updatedTag) !== -1)
+    ) {
       const alertConfig = {
         type: 'warning',
         message: i18n.__('Confirm tag merge'),
-        detail: i18n.__(`Tag ${tag} will be merged with existing tag ${updatedTag}`),
+        detail: i18n.__(
+          `Tag ${tag} will be merged with existing tag ${updatedTag}`
+        ),
         buttons: [i18n.__('Confirm'), i18n.__('Cancel')]
       }
 
       const dialogButtonIndex = dialog.showMessageBox(
-        remote.getCurrentWindow(), alertConfig
+        remote.getCurrentWindow(),
+        alertConfig
       )
 
       if (dialogButtonIndex === 1) {
@@ -93,7 +100,9 @@ class RenameTagModal extends React.Component {
 
     const notes = data.noteMap
       .map(note => note)
-      .filter(note => note.tags.indexOf(tag) !== -1 && note.tags.indexOf(updatedTag))
+      .filter(
+        note => note.tags.indexOf(tag) !== -1 && note.tags.indexOf(updatedTag)
+      )
       .map(note => {
         note = Object.assign({}, note)
         note.tags = note.tags.slice()
@@ -109,8 +118,9 @@ class RenameTagModal extends React.Component {
       return
     }
 
-    Promise
-      .all(notes.map(note => dataApi.updateNote(note.storage, note.key, note)))
+    Promise.all(
+      notes.map(note => dataApi.updateNote(note.storage, note.key, note))
+    )
       .then(updatedNotes => {
         updatedNotes.forEach(note => {
           dispatch({
@@ -128,14 +138,15 @@ class RenameTagModal extends React.Component {
       })
   }
 
-  render () {
+  render() {
     const { close } = this.props
     const { errormessage } = this.state
 
     return (
-      <div styleName='root'
+      <div
+        styleName='root'
         tabIndex='-1'
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
         <div styleName='header'>
           <div styleName='title'>{i18n.__('Rename Tag')}</div>
@@ -143,20 +154,24 @@ class RenameTagModal extends React.Component {
         <ModalEscButton handleEscButtonClick={close} />
 
         <div styleName='control'>
-          <input styleName='control-input'
+          <input
+            styleName='control-input'
             placeholder={i18n.__('Tag Name')}
             ref={this.setTextInputRef}
             value={this.state.name}
             onChange={this.handleChange}
-            onKeyDown={(e) => this.handleInputKeyDown(e)}
+            onKeyDown={e => this.handleInputKeyDown(e)}
           />
-          <button styleName='control-confirmButton'
+          <button
+            styleName='control-confirmButton'
             onClick={() => this.handleConfirm()}
           >
             {i18n.__('Confirm')}
           </button>
         </div>
-        <div className='error' styleName='error'>{errormessage}</div>
+        <div className='error' styleName='error'>
+          {errormessage}
+        </div>
       </div>
     )
   }

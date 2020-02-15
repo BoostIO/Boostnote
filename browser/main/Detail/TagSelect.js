@@ -11,7 +11,7 @@ import Autosuggest from 'react-autosuggest'
 import { push } from 'connected-react-router'
 
 class TagSelect extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -33,7 +33,7 @@ class TagSelect extends React.Component {
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this)
   }
 
-  addNewTag (newTag) {
+  addNewTag(newTag) {
     AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_TAG')
 
     newTag = newTag.trim().replace(/ +/g, '_')
@@ -70,7 +70,7 @@ class TagSelect extends React.Component {
     )
   }
 
-  buildSuggestions () {
+  buildSuggestions() {
     this.suggestions = _.sortBy(
       this.props.data.tagNoteMap
         .map((tag, name) => ({
@@ -83,7 +83,7 @@ class TagSelect extends React.Component {
     )
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.value = this.props.value
 
     this.buildSuggestions()
@@ -92,20 +92,20 @@ class TagSelect extends React.Component {
     ee.on('sidebar:rename-tag', this.handleRenameTag)
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     this.value = this.props.value
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     ee.off('editor:add-tag', this.handleAddTag)
     ee.off('sidebar:rename-tag', this.handleRenameTag)
   }
 
-  handleAddTag () {
+  handleAddTag() {
     this.refs.newTag.input.focus()
   }
 
-  handleRenameTag (event, tagChange) {
+  handleRenameTag(event, tagChange) {
     const { value } = this.props
     const { tag, updatedTag } = tagChange
     const newTags = value.slice()
@@ -115,7 +115,7 @@ class TagSelect extends React.Component {
     this.props.onChange()
   }
 
-  handleTagLabelClick (tag) {
+  handleTagLabelClick(tag) {
     const { dispatch } = this.props
 
     // Note: `tag` requires encoding later.
@@ -123,23 +123,23 @@ class TagSelect extends React.Component {
     dispatch(push(`/tags/${tag}`))
   }
 
-  handleTagRemoveButtonClick (tag) {
+  handleTagRemoveButtonClick(tag) {
     this.removeTagByCallback((value, tag) => {
       value.splice(value.indexOf(tag), 1)
     }, tag)
   }
 
-  onInputBlur (e) {
+  onInputBlur(e) {
     this.submitNewTag()
   }
 
-  onInputChange (e, { newValue, method }) {
+  onInputChange(e, { newValue, method }) {
     this.setState({
       newTag: newValue
     })
   }
 
-  onInputKeyDown (e) {
+  onInputKeyDown(e) {
     switch (e.keyCode) {
       case 9:
         e.preventDefault()
@@ -155,13 +155,13 @@ class TagSelect extends React.Component {
     }
   }
 
-  onSuggestionsClearRequested () {
+  onSuggestionsClearRequested() {
     this.setState({
       suggestions: []
     })
   }
 
-  onSuggestionsFetchRequested ({ value }) {
+  onSuggestionsFetchRequested({ value }) {
     const valueLC = value.toLowerCase()
     const suggestions = _.filter(
       this.suggestions,
@@ -174,17 +174,17 @@ class TagSelect extends React.Component {
     })
   }
 
-  onSuggestionSelected (event, { suggestion, suggestionValue }) {
+  onSuggestionSelected(event, { suggestion, suggestionValue }) {
     this.addNewTag(suggestionValue)
   }
 
-  removeLastTag () {
+  removeLastTag() {
     this.removeTagByCallback(value => {
       value.pop()
     })
   }
 
-  removeTagByCallback (callback, tag = null) {
+  removeTagByCallback(callback, tag = null) {
     let { value } = this.props
 
     value = _.isArray(value) ? value.slice() : []
@@ -195,7 +195,7 @@ class TagSelect extends React.Component {
     this.props.onChange()
   }
 
-  reset () {
+  reset() {
     this.buildSuggestions()
 
     this.setState({
@@ -203,52 +203,52 @@ class TagSelect extends React.Component {
     })
   }
 
-  submitNewTag () {
+  submitNewTag() {
     this.addNewTag(this.refs.newTag.input.value)
   }
 
-  render () {
+  render() {
     const { value, className, showTagsAlphabetically, coloredTags } = this.props
 
     const tagList = _.isArray(value)
       ? (showTagsAlphabetically ? _.sortBy(value) : value).map(tag => {
-        const wrapperStyle = {}
-        const textStyle = {}
-        const BLACK = '#333333'
-        const WHITE = '#f1f1f1'
-        const color = coloredTags[tag]
-        const invertedColor =
+          const wrapperStyle = {}
+          const textStyle = {}
+          const BLACK = '#333333'
+          const WHITE = '#f1f1f1'
+          const color = coloredTags[tag]
+          const invertedColor =
             color && invertColor(color, { black: BLACK, white: WHITE })
-        let iconRemove = '../resources/icon/icon-x.svg'
-        if (color) {
-          wrapperStyle.backgroundColor = color
-          textStyle.color = invertedColor
-        }
-        if (invertedColor === WHITE) {
-          iconRemove = '../resources/icon/icon-x-light.svg'
-        }
-        return (
-          <span styleName='tag' key={tag} style={wrapperStyle}>
-            <span
-              styleName='tag-label'
-              style={textStyle}
-              onClick={e => this.handleTagLabelClick(tag)}
+          let iconRemove = '../resources/icon/icon-x.svg'
+          if (color) {
+            wrapperStyle.backgroundColor = color
+            textStyle.color = invertedColor
+          }
+          if (invertedColor === WHITE) {
+            iconRemove = '../resources/icon/icon-x-light.svg'
+          }
+          return (
+            <span styleName='tag' key={tag} style={wrapperStyle}>
+              <span
+                styleName='tag-label'
+                style={textStyle}
+                onClick={e => this.handleTagLabelClick(tag)}
               >
                 #{tag}
-            </span>
-            <button
-              styleName='tag-removeButton'
-              onClick={e => this.handleTagRemoveButtonClick(tag)}
+              </span>
+              <button
+                styleName='tag-removeButton'
+                onClick={e => this.handleTagRemoveButtonClick(tag)}
               >
-              <img
-                className='tag-removeButton-icon'
-                src={iconRemove}
-                width='8px'
+                <img
+                  className='tag-removeButton-icon'
+                  src={iconRemove}
+                  width='8px'
                 />
-            </button>
-          </span>
-        )
-      })
+              </button>
+            </span>
+          )
+        })
       : []
 
     const { newTag, suggestions } = this.state
