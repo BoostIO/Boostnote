@@ -168,122 +168,49 @@ body[data-theme="dark"]
   .list-attachement-clear-button
     colorDarkPrimaryButton()
 
-body[data-theme="solarized-dark"]
-  .root
-    color $ui-solarized-dark-text-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      color get-theme-var(theme, 'text-color')
 
-  .folderList-item
-    border-bottom $ui-solarized-dark-borderColor
+    .folderList-item
+      border-bottom get-theme-var(theme, 'borderColor')
 
-  .folderList-empty
-    color $ui-solarized-dark-text-color
+    .folderList-empty
+      color get-theme-var(theme, 'text-color')
 
-  .list-empty
-    color $ui-solarized-dark-text-color
-  .list-control-addStorageButton
-    border-color $ui-solarized-dark-button-backgroundColor
-    background-color $ui-solarized-dark-button-backgroundColor
-    color $ui-solarized-dark-text-color
+    .list-empty
+      color get-theme-var(theme, 'text-color')
+    .list-control-addStorageButton
+      border-color get-theme-var(theme, 'button-backgroundColor')
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      color get-theme-var(theme, 'text-color')
 
-  .addStorage-header
-    color $ui-solarized-dark-text-color
-    border-color $ui-solarized-dark-borderColor
+    .addStorage-header
+      color get-theme-var(theme, 'text-color')
+      border-color get-theme-var(theme, 'borderColor')
 
-  .addStorage-body-section-name-input
-    border-color $$ui-solarized-dark-borderColor
+    .addStorage-body-section-name-input
+      border-color $get-theme-var(theme, 'borderColor')
 
-  .addStorage-body-section-type-description
-    color $ui-solarized-dark-text-color
+    .addStorage-body-section-type-description
+      color get-theme-var(theme, 'text-color')
 
-  .addStorage-body-section-path-button
-    colorPrimaryButton()
-  .addStorage-body-control
-    border-color $ui-solarized-dark-borderColor
+    .addStorage-body-section-path-button
+      colorPrimaryButton()
+    .addStorage-body-control
+      border-color get-theme-var(theme, 'borderColor')
 
-  .addStorage-body-control-createButton
-    colorDarkPrimaryButton()
-  .addStorage-body-control-cancelButton
-    colorDarkDefaultButton()
-    border-color $ui-solarized-dark-borderColor
-  .list-attachement-clear-button
-    colorSolarizedDarkPrimaryButton()
+    .addStorage-body-control-createButton
+      colorDarkPrimaryButton()
+    .addStorage-body-control-cancelButton
+      colorDarkDefaultButton()
+      border-color get-theme-var(theme, 'borderColor')
+    .list-attachement-clear-button
+      colorThemedPrimaryButton(theme)
 
-body[data-theme="monokai"]
-  .root
-    color $ui-monokai-text-color
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .folderList-item
-    border-bottom $ui-monokai-borderColor
-
-  .folderList-empty
-    color $ui-monokai-text-color
-
-  .list-empty
-    color $ui-monokai-text-color
-  .list-control-addStorageButton
-    border-color $ui-monokai-button-backgroundColor
-    background-color $ui-monokai-button-backgroundColor
-    color $ui-monokai-text-color
-
-  .addStorage-header
-    color $ui-monokai-text-color
-    border-color $ui-monokai-borderColor
-
-  .addStorage-body-section-name-input
-    border-color $$ui-monokai-borderColor
-
-  .addStorage-body-section-type-description
-    color $ui-monokai-text-color
-
-  .addStorage-body-section-path-button
-    colorPrimaryButton()
-  .addStorage-body-control
-    border-color $ui-monokai-borderColor
-
-  .addStorage-body-control-createButton
-    colorDarkPrimaryButton()
-  .addStorage-body-control-cancelButton
-    colorDarkDefaultButton()
-    border-color $ui-monokai-borderColor
-  .list-attachement-clear-button
-    colorMonokaiPrimaryButton()
-
-body[data-theme="dracula"]
-  .root
-    color $ui-dracula-text-color
-
-  .folderList-item
-    border-bottom $ui-dracula-borderColor
-
-  .folderList-empty
-    color $ui-dracula-text-color
-
-  .list-empty
-    color $ui-dracula-text-color
-  .list-control-addStorageButton
-    border-color $ui-dracula-button-backgroundColor
-    background-color $ui-dracula-button-backgroundColor
-    color $ui-dracula-text-color
-
-  .addStorage-header
-    color $ui-dracula-text-color
-    border-color $ui-dracula-borderColor
-
-  .addStorage-body-section-name-input
-    border-color $$ui-dracula-borderColor
-
-  .addStorage-body-section-type-description
-    color $ui-dracula-text-color
-
-  .addStorage-body-section-path-button
-    colorPrimaryButton()
-  .addStorage-body-control
-    border-color $ui-dracula-borderColor
-
-  .addStorage-body-control-createButton
-    colorDarkPrimaryButton()
-  .addStorage-body-control-cancelButton
-    colorDarkDefaultButton()
-    border-color $ui-dracula-borderColor
-  .list-attachement-clear-button
-    colorDraculaPrimaryButton()
+for theme in $themes
+  apply-theme(theme)

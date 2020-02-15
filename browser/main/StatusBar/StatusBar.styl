@@ -78,24 +78,19 @@ body[data-theme="dark"]
     border-color $ui-dark-borderColor
     border-left 1px solid $ui-dark-borderColor
 
-body[data-theme="monokai"]
-   navButtonColor()
-  .zoom
-    border-color $ui-dark-borderColor
-    color $ui-monokai-text-color
-    &:hover
-      transition 0.15s
-      color $ui-monokai-active-color
-    &:active
-      color $ui-monokai-active-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    .zoom
+      border-color $ui-dark-borderColor
+      color get-theme-var(theme, 'text-color')
+      &:hover
+        transition 0.15s
+        color get-theme-var(theme, 'active-color')
+      &:active
+        color get-theme-var(theme, 'active-color')
 
-body[data-theme="dracula"]
-   navButtonColor()
-  .zoom
-    border-color $ui-dark-borderColor
-    color $ui-dracula-text-color
-    &:hover
-      transition 0.15s
-      color $ui-dracula-active-color
-    &:active
-      color $ui-dracula-active-color
+for theme in 'dracula' 'solarized-dark'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

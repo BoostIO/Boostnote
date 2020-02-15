@@ -107,36 +107,18 @@ colorDarkPrimaryButton()
   &:active:hover
     background-color $dark-primary-button-background--active
 
-
-colorSolarizedDarkPrimaryButton()
-  color $ui-solarized-dark-text-color
-  background-color $ui-solarized-dark-button-backgroundColor
-  border none
-  &:hover
-    background-color $dark-primary-button-background--hover
-  &:active
-  &:active:hover
-    background-color $dark-primary-button-background--active
-
-colorMonokaiPrimaryButton()
-  color $ui-monokai-text-color
-  background-color $ui-monokai-button-backgroundColor
-  border none
-  &:hover
-    background-color $dark-primary-button-background--hover
-  &:active
-  &:active:hover
-    background-color $dark-primary-button-background--active
-
-colorDraculaPrimaryButton()
-  color $ui-dracula-text-color
-  background-color $ui-dracula-button-backgroundColor
-  border none
-  &:hover
-    background-color $ui-dracula-button--active-backgroundColor
-  &:active
-  &:active:hover
-    background-color $ui-dracula-button--active-backgroundColor
+colorThemedPrimaryButton(theme)
+  if theme == 'dark'
+    colorDarkPrimaryButton()
+  else
+    color get-theme-var(theme, 'text-color')
+    background-color get-theme-var(theme, 'button-backgroundColor')
+    border none
+    &:hover
+      background-color get-theme-var(theme, 'button--hover-backgroundColor')
+    &:active
+    &:active:hover
+      background-color get-theme-var(theme, 'button--active-backgroundColor')
 
 
 // Danger button(Brand color)
@@ -257,12 +239,14 @@ $ui-dark-borderColor = #444444
 $ui-dark-backgroundColor = #2C3033
 $ui-dark-noteList-backgroundColor = #2C3033
 $ui-dark-noteDetail-backgroundColor = #2C3033
+$ui-dark-tagList-backgroundColor = #FFFFFF
 
 $ui-dark-tag-backgroundColor = #3A404C
 $dark-background-color = lighten($ui-dark-backgroundColor, 10%)
 $ui-dark-text-color = #DDDDDD
 $ui-dark-button--active-color = #f4f4f4
 $ui-dark-button--active-backgroundColor = #3A404C
+$ui-dark-button--hover-color = #c0392b
 $ui-dark-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
 $ui-dark-button--focus-borderColor = lighten(#369DCD, 25%)
 $ui-dark-topbar-button-color = #939395
@@ -332,19 +316,11 @@ darkTooltip()
   pointer-events none
   transition 0.1s
 
-modalDark()
-  position relative
-  z-index $modal-z-index
-  width 100%
-  background-color $ui-dark-backgroundColor
-  overflow hidden
-  border-radius $modal-border-radius
-
-
 /******* Solarized Dark theme ********/
 $ui-solarized-dark-backgroundColor = #073642
 $ui-solarized-dark-noteList-backgroundColor = #073642
 $ui-solarized-dark-noteDetail-backgroundColor = #073642
+$ui-solarized-dark-tagList-backgroundColor = #FFFFFF
 
 $ui-solarized-dark-text-color = #93a1a1
 $ui-solarized-dark-active-color = #2aa198
@@ -356,21 +332,23 @@ $ui-solarized-dark-tag-backgroundColor = #002b36
 $ui-solarized-dark-button-backgroundColor = #002b36
 $ui-solarized-dark-button--active-color = #93a1a1
 $ui-solarized-dark-button--active-backgroundColor = #073642
+$ui-solarized-dark-button--hover-color = #c0392b
 $ui-solarized-dark-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
 $ui-solarized-dark-button--focus-borderColor = lighten(#369DCD, 25%)
 
-modalSolarizedDark()
-  position relative
-  z-index $modal-z-index
-  width 100%
-  background-color $ui-solarized-dark-backgroundColor
-  overflow hidden
-  border-radius $modal-border-radius
+$ui-solarized-dark-kbd-backgroundColor = darken(#21252B, 10%)
+$ui-solarized-dark-kbd-color = $ui-solarized-dark-text-color
+
+$ui-solarized-dark-table-odd-backgroundColor = $ui-solarized-dark-noteDetail-backgroundColor
+$ui-solarized-dark-table-even-backgroundColor = darken($ui-solarized-dark-noteDetail-backgroundColor, 10%)
+$ui-solarized-dark-table-head-backgroundColor = $ui-solarized-dark-table-even-backgroundColor
+$ui-solarized-dark-table-borderColor = lighten(darken(#21252B, 10%), 20%)
 
 /******* Monokai theme ********/
 $ui-monokai-backgroundColor = #272822
 $ui-monokai-noteList-backgroundColor = #272822
 $ui-monokai-noteDetail-backgroundColor = #272822
+$ui-monokai-tagList-backgroundColor = #FFFFFF
 
 $ui-monokai-text-color = #f8f8f2
 $ui-monokai-active-color = #f92672
@@ -382,21 +360,23 @@ $ui-monokai-tag-backgroundColor = #373831
 $ui-monokai-button-backgroundColor = #373831
 $ui-monokai-button--active-color = white
 $ui-monokai-button--active-backgroundColor = #f92672
+$ui-monokai-button--hover-color = #f92672
 $ui-monokai-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
 $ui-monokai-button--focus-borderColor = lighten(#369DCD, 25%)
 
-modalMonokai()
-  position relative
-  z-index $modal-z-index
-  width 100%
-  background-color $ui-monokai-backgroundColor
-  overflow hidden
-  border-radius $modal-border-radius
+$ui-monokai-kbd-backgroundColor = darken(#21252B, 10%)
+$ui-monokai-kbd-color = $ui-monokai-text-color
+
+$ui-monokai-table-odd-backgroundColor = $ui-monokai-noteDetail-backgroundColor
+$ui-monokai-table-even-backgroundColor = darken($ui-monokai-noteDetail-backgroundColor, 10%)
+$ui-monokai-table-head-backgroundColor = $ui-monokai-table-even-backgroundColor
+$ui-monokai-table-borderColor = lighten(darken(#21252B, 10%), 20%)
 
 /******* Dracula theme ********/
 $ui-dracula-backgroundColor = #282a36
 $ui-dracula-noteList-backgroundColor = #282a36
 $ui-dracula-noteDetail-backgroundColor = #282a36
+$ui-dracula-tagList-backgroundColor = #f8f8f2
 
 $ui-dracula-text-color = #f8f8f2
 $ui-dracula-active-color = #bd93f9
@@ -408,22 +388,79 @@ $ui-dracula-tag-backgroundColor = #8be9fd
 $ui-dracula-button-backgroundColor = #44475a
 $ui-dracula-button--active-color = #f8f8f2
 $ui-dracula-button--active-backgroundColor = #bd93f9
+$ui-dracula-button--hover-color = #ff79c6
 $ui-dracula-button--hover-backgroundColor = lighten($ui-dracula-backgroundColor, 10%)
 $ui-dracula-button--focus-borderColor = lighten(#44475a, 25%)
-colorDraculaDefaultButton()
-  border-color $ui-dracula-borderColor
-  color $ui-dracula-text-color
-  background-color $ui-dracula-button-backgroundColor
-  &:hover
-    background-color $ui-dracula-button--hover-backgroundColor
-  &:active
-  &:active:hover
-    background-color $ui-dracula-button--active-backgroundColor
 
-modalDracula()
-  position relative
-  z-index $modal-z-index
-  width 100%
-  background-color $ui-dracula-backgroundColor
-  overflow hidden
-  border-radius $modal-border-radius
+$ui-dracula-kbd-backgroundColor = darken(#21252B, 10%)
+$ui-dracula-kbd-color = $ui-monokai-text-color
+
+$ui-dracula-table-odd-backgroundColor = $ui-dracula-noteDetail-backgroundColor
+$ui-dracula-table-even-backgroundColor = darken($ui-dracula-noteDetail-backgroundColor, 10%)
+$ui-dracula-table-head-backgroundColor = $ui-dracula-table-even-backgroundColor
+$ui-dracula-table-borderColor = lighten(darken(#21252B, 10%), 20%)
+
+/******* Nord theme ********/
+$ui-nord-backgroundColor = #2e3440
+$ui-nord-noteList-backgroundColor = #2e3440
+$ui-nord-noteDetail-backgroundColor = #2e3440
+$ui-nord-tagList-backgroundColor = #FFFFFF
+
+$ui-nord-text-color = #d8dee9
+$ui-nord-inactive-text-color = #8fbcbb
+$ui-nord-active-color = #5e81ac
+
+$ui-nord-borderColor = #3b4252
+
+$ui-nord-tag-backgroundColor = #3b4252
+
+$ui-nord-button-backgroundColor = #434c5e
+$ui-nord-button--active-color = #d8dee9
+$ui-nord-button--active-backgroundColor = #5e81ac
+$ui-nord-button--hover-color = #c0392b
+$ui-nord-button--hover-backgroundColor = #434c5e
+
+$ui-nord-kbd-backgroundColor = $ui-nord-text-color
+$ui-nord-kbd-color = $ui-nord-backgroundColor
+
+$ui-nord-table-odd-backgroundColor = $ui-nord-noteDetail-backgroundColor
+$ui-nord-table-even-backgroundColor = darken($ui-nord-noteDetail-backgroundColor, 10%)
+$ui-nord-table-head-backgroundColor = $ui-nord-table-even-backgroundColor
+$ui-nord-table-borderColor = lighten(darken(#21252B, 10%), 20%)
+
+/******* Vulcan theme ********/
+$ui-vulcan-backgroundColor = #161719
+$ui-vulcan-noteList-backgroundColor = #161719
+$ui-vulcan-noteDetail-backgroundColor = #161719
+$ui-vulcan-tagList-backgroundColor = #FFFFFF
+
+$ui-vulcan-text-color = #999999
+$ui-vulcan-inactive-text-color = #999999
+$ui-vulcan-active-color = #ffffff
+
+$ui-vulcan-borderColor = #282a2e
+
+$ui-vulcan-tag-backgroundColor = #282a2e
+
+$ui-vulcan-button-backgroundColor = #282a2e
+$ui-vulcan-button--active-color = #a3a8ae
+$ui-vulcan-button--active-backgroundColor = #282a2e
+$ui-vulcan-button--hover-backgroundColor = #282a2e
+
+$ui-vulcan-kbd-backgroundColor = lighten($ui-vulcan-text-color, 50%)
+$ui-vulcan-kbd-color = $ui-vulcan-backgroundColor
+
+$ui-vulcan-table-odd-backgroundColor = $ui-vulcan-noteDetail-backgroundColor
+$ui-vulcan-table-even-backgroundColor = darken($ui-vulcan-noteDetail-backgroundColor, 10%)
+$ui-vulcan-table-head-backgroundColor = $ui-vulcan-table-even-backgroundColor
+$ui-vulcan-table-borderColor = lighten(darken(#21252B, 10%), 20%)
+
+
+
+debug-theme-var(theme, suffix)
+  '$ui-' + theme + '-' + suffix
+
+get-theme-var(theme, suffix)
+  lookup('$ui-' + theme + '-' + suffix)
+
+$themes = 'monokai' 'nord' 'vulcan'

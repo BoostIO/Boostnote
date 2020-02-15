@@ -13,13 +13,13 @@ const srcPath = path.join(srcFolder, testFile)
 const dstFolder = path.join(__dirname, '😇')
 const dstPath = path.join(dstFolder, testFile)
 
-test.before((t) => {
+test.before(t => {
   if (!fs.existsSync(srcFolder)) fs.mkdirSync(srcFolder)
 
   fs.writeFileSync(srcPath, 'test')
 })
 
-test('`copyFile` should handle encoded URI on src path', (t) => {
+test('`copyFile` should handle encoded URI on src path', t => {
   return copyFile(encodeURI(srcPath), dstPath)
     .then(() => {
       t.true(true)
@@ -29,10 +29,9 @@ test('`copyFile` should handle encoded URI on src path', (t) => {
     })
 })
 
-test.after((t) => {
+test.after(t => {
   fs.unlinkSync(srcPath)
   fs.unlinkSync(dstPath)
   execSync(removeDirCommand + '"' + srcFolder + '"')
   execSync(removeDirCommand + '"' + dstFolder + '"')
 })
-

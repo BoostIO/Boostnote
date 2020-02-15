@@ -37,7 +37,7 @@ Visit the page for the pull request and look at the end of the url for the PR nu
 https://github.com/BoostIO/Boostnote/pull/2794
 </pre>
 In the following, replace \<PR> with that number (no brackets).
-For the above url, you would replace \<PR> with 2794
+For URLs below, you would replace \<PR> with 2794
 
 _If you do not have a local copy of the master branch yet_
 ```
@@ -82,13 +82,17 @@ Distribution packages are created by exec `grunt build` on Linux platform (e.g. 
 
 After installing the supported version of `node` and `npm`, install build dependency packages.
 
-Ubuntu/Debian:
+```
+$ yarn add --dev grunt-electron-installer-debian grunt-electron-installer-redhat
+```
+
+**Ubuntu/Debian:**
 
 ```
 $ sudo apt-get install -y rpm fakeroot
 ```
 
-Fedora:
+**Fedora:**
 
 ```
 $ sudo dnf install -y dpkg dpkg-dev rpm-build fakeroot
@@ -100,4 +104,4 @@ Then execute `grunt build`.
 $ grunt build
 ```
 
-You will find `.deb` and `.rpm` in the `dist` directory.
+> You will find `.deb` and `.rpm` in the `dist` directory.

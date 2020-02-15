@@ -78,13 +78,13 @@ const languages = [
 ]
 
 module.exports = {
-  getLocales () {
-    return languages.reduce(function (localeList, locale) {
+  getLocales() {
+    return languages.reduce(function(localeList, locale) {
       localeList.push(locale.locale)
       return localeList
     }, [])
   },
-  getLanguages () {
+  getLanguages() {
     return languages
   }
 }

@@ -8,7 +8,7 @@ import styles from './MarkdownSplitEditor.styl'
 import CSSModules from 'browser/lib/CSSModules'
 
 class MarkdownSplitEditor extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.value = props.value
     this.focus = () => this.refs.code.focus()
@@ -20,19 +20,22 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  setValue (value) {
+  setValue(value) {
     this.refs.code.setValue(value)
   }
 
-  handleOnChange (e) {
+  handleOnChange(e) {
     this.value = this.refs.code.value
     this.props.onChange(e)
   }
 
-  handleScroll (e) {
+  handleScroll(e) {
     if (!this.props.config.preview.scrollSync) return
 
-    const previewDoc = _.get(this, 'refs.preview.refs.root.contentWindow.document')
+    const previewDoc = _.get(
+      this,
+      'refs.preview.refs.root.contentWindow.document'
+    )
     const codeDoc = _.get(this, 'refs.code.editor.doc')
     let srcTop, srcHeight, targetTop, targetHeight
 
@@ -49,7 +52,7 @@ class MarkdownSplitEditor extends React.Component {
         targetHeight = _.get(codeDoc, 'height')
       }
 
-      const distance = (targetHeight * srcTop / srcHeight) - targetTop
+      const distance = (targetHeight * srcTop) / srcHeight - targetTop
       const framerate = 1000 / 60
       const frames = 20
       const refractory = frames * framerate
@@ -60,21 +63,29 @@ class MarkdownSplitEditor extends React.Component {
       let scrollPos, time
       const timer = setInterval(() => {
         time = frame / frames
-        scrollPos = time < 0.5
-                  ? 2 * time * time // ease in
-                  : -1 + (4 - 2 * time) * time // ease out
-        if (e.doc) _.set(previewDoc, 'body.scrollTop', targetTop + scrollPos * distance)
-        else _.get(this, 'refs.code.editor').scrollTo(0, targetTop + scrollPos * distance)
+        scrollPos =
+          time < 0.5
+            ? 2 * time * time // ease in
+            : -1 + (4 - 2 * time) * time // ease out
+        if (e.doc)
+          _.set(previewDoc, 'body.scrollTop', targetTop + scrollPos * distance)
+        else
+          _.get(this, 'refs.code.editor').scrollTo(
+            0,
+            targetTop + scrollPos * distance
+          )
         if (frame >= frames) {
           clearInterval(timer)
-          setTimeout(() => { this.userScroll = true }, refractory)
+          setTimeout(() => {
+            this.userScroll = true
+          }, refractory)
         }
         frame++
       }, framerate)
     }
   }
 
-  handleCheckboxClick (e) {
+  handleCheckboxClick(e) {
     e.preventDefault()
     e.stopPropagation()
     const idMatch = /checkbox-([0-9]+)/
@@ -83,9 +94,9 @@ class MarkdownSplitEditor extends React.Component {
     const checkReplace = /\[x]/i
     const uncheckReplace = /\[ ]/
     if (idMatch.test(e.target.getAttribute('id'))) {
-      const lineIndex = parseInt(e.target.getAttribute('id').match(idMatch)[1], 10) - 1
-      const lines = this.refs.code.value
-        .split('\n')
+      const lineIndex =
+        parseInt(e.target.getAttribute('id').match(idMatch)[1], 10) - 1
+      const lines = this.refs.code.value.split('\n')
 
       const targetLine = lines[lineIndex]
       let newLine = targetLine
@@ -100,12 +111,12 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  handleMouseMove (e) {
+  handleMouseMove(e) {
     if (this.state.isSliderFocused) {
       const rootRect = this.refs.root.getBoundingClientRect()
       const rootWidth = rootRect.width
       const offset = rootRect.left
-      let newCodeEditorWidthInPercent = (e.pageX - offset) / rootWidth * 100
+      let newCodeEditorWidthInPercent = ((e.pageX - offset) / rootWidth) * 100
 
       // limit minSize to 10%, maxSize to 90%
       if (newCodeEditorWidthInPercent <= 10) {
@@ -122,34 +133,45 @@ class MarkdownSplitEditor extends React.Component {
     }
   }
 
-  handleMouseUp (e) {
+  handleMouseUp(e) {
     e.preventDefault()
     this.setState({
       isSliderFocused: false
     })
   }
 
-  handleMouseDown (e) {
+  handleMouseDown(e) {
     e.preventDefault()
     this.setState({
       isSliderFocused: true
     })
   }
 
-  render () {
-    const {config, value, storageKey, noteKey, linesHighlighted, RTL} = this.props
+  render() {
+    const {
+      config,
+      value,
+      storageKey,
+      noteKey,
+      linesHighlighted,
+      RTL
+    } = this.props
     const storage = findStorage(storageKey)
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
     const previewStyle = {}
-    previewStyle.width = (100 - this.state.codeEditorWidthInPercent) + '%'
-    if (this.props.ignorePreviewPointerEvents || this.state.isSliderFocused) previewStyle.pointerEvents = 'none'
+    previewStyle.width = 100 - this.state.codeEditorWidthInPercent + '%'
+    if (this.props.ignorePreviewPointerEvents || this.state.isSliderFocused)
+      previewStyle.pointerEvents = 'none'
     return (
-      <div styleName='root' ref='root'
+      <div
+        styleName='root'
+        ref='root'
         onMouseMove={e => this.handleMouseMove(e)}
-        onMouseUp={e => this.handleMouseUp(e)}>
+        onMouseUp={e => this.handleMouseUp(e)}
+      >
         <CodeEditor
           ref='code'
           width={this.state.codeEditorWidthInPercent + '%'}
@@ -174,7 +196,7 @@ class MarkdownSplitEditor extends React.Component {
           storageKey={storageKey}
           noteKey={noteKey}
           linesHighlighted={linesHighlighted}
-          onChange={(e) => this.handleOnChange(e)}
+          onChange={e => this.handleOnChange(e)}
           onScroll={this.handleScroll.bind(this)}
           spellCheck={config.editor.spellcheck}
           enableSmartPaste={config.editor.enableSmartPaste}
@@ -184,8 +206,12 @@ class MarkdownSplitEditor extends React.Component {
           customMarkdownLintConfig={config.editor.customMarkdownLintConfig}
           deleteUnusedAttachments={config.editor.deleteUnusedAttachments}
           RTL={RTL}
-       />
-        <div styleName='slider' style={{left: this.state.codeEditorWidthInPercent + '%'}} onMouseDown={e => this.handleMouseDown(e)} >
+        />
+        <div
+          styleName='slider'
+          style={{ left: this.state.codeEditorWidthInPercent + '%' }}
+          onMouseDown={e => this.handleMouseDown(e)}
+        >
           <div styleName='slider-hitbox' />
         </div>
         <MarkdownPreview
@@ -206,7 +232,7 @@ class MarkdownSplitEditor extends React.Component {
           ref='preview'
           tabInde='0'
           value={value}
-          onCheckboxClick={(e) => this.handleCheckboxClick(e)}
+          onCheckboxClick={e => this.handleCheckboxClick(e)}
           onScroll={this.handleScroll.bind(this)}
           showCopyNotification={config.ui.showCopyNotification}
           storagePath={storage.path}
@@ -215,7 +241,7 @@ class MarkdownSplitEditor extends React.Component {
           allowCustomCSS={config.preview.allowCustomCSS}
           lineThroughCheckbox={config.preview.lineThroughCheckbox}
           RTL={RTL}
-       />
+        />
       </div>
     )
   }

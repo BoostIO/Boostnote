@@ -61,7 +61,7 @@
   width 100%
   outline none
 
-body[data-theme="default"], body[data-theme="white"]  
+body[data-theme="default"], body[data-theme="white"]
   .root--active
     &:hover
       background-color alpha($ui-button--active-backgroundColor, 60%)
@@ -100,103 +100,43 @@ body[data-theme="dark"]
     color $ui-dark-text-color
     transition 0.15s
 
-body[data-theme="solarized-dark"]
-  .root
-    border-color $ui-solarized-dark-borderColor
-    &:hover
-      background-color $ui-solarized-dark-noteDetail-backgroundColor
-      transition 0.15s
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      border-color get-theme-var(theme, 'borderColor')
+      &:hover
+        background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+        transition 0.15s
+        .deleteButton
+          color get-theme-var(theme, 'text-color')
+          transition 0.15s
+        .button
+          color get-theme-var(theme, 'text-color')
+          transition 0.15s
+
+    .root--active
+      color get-theme-var(theme, 'active-color')
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      border-color get-theme-var(theme, 'borderColor')
       .deleteButton
-        color $ui-solarized-dark-button--active-color
-        transition 0.15s
+        color get-theme-var(theme, 'text-color')
       .button
-        color $ui-solarized-dark-button--active-color
-        transition 0.15s
+        color get-theme-var(theme, 'active-color')
 
-  .root--active
-    color $ui-solarized-dark-button--active-color
-    background-color $ui-solarized-dark-button-backgroundColor
-    border-color $ui-solarized-dark-borderColor
-    .deleteButton
-      color $ui-solarized-dark-button--active-color
     .button
-      color $ui-solarized-dark-button--active-color
+      border none
+      color $ui-inactive-text-color
+      background-color transparent
+      transition color background-color 0.15s
+      border-left 4px solid transparent
 
-  .button
-    border none
-    color $ui-solarized-dark-text-color
-    background-color transparent
-    transition color background-color 0.15s
-    border-left 4px solid transparent
-
-  .input
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
-    color $ui-solarized-dark-button--active-color
-    transition 0.15s
-
-body[data-theme="monokai"]
-  .root
-    border-color $ui-monokai-borderColor
-    &:hover
-      background-color $ui-monokai-noteDetail-backgroundColor
+    .input
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+      color get-theme-var(theme, 'text-color')
       transition 0.15s
-      .deleteButton
-        color $ui-monokai-text-color
-        transition 0.15s
-      .button
-        color $ui-monokai-text-color
-        transition 0.15s
 
-  .root--active
-    color $ui-monokai-active-color
-    background-color $ui-monokai-button-backgroundColor
-    border-color $ui-monokai-borderColor
-    .deleteButton
-      color $ui-monokai-text-color
-    .button
-      color $ui-monokai-active-color
-        
-  .button
-    border none
-    color $ui-inactive-text-color
-    background-color transparent
-    transition color background-color 0.15s
-    border-left 4px solid transparent
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .input
-    background-color $ui-monokai-noteDetail-backgroundColor
-    color $ui-monokai-text-color
-    transition 0.15s
-
-body[data-theme="dracula"]
-  .root
-    border-color $ui-dracula-borderColor
-    &:hover
-      background-color $ui-dracula-noteDetail-backgroundColor
-      transition 0.15s
-      .deleteButton
-        color $ui-dracula-text-color
-        transition 0.15s
-      .button
-        color $ui-dracula-text-color
-        transition 0.15s
-
-  .root--active
-    color $ui-dracula-text-color
-    background-color $ui-dracula-button-backgroundColor
-    border-color $ui-dracula-borderColor
-    .deleteButton
-      color $ui-dracula-text-color
-    .button
-      color $ui-dracula-active-color
-
-  .button
-    border none
-    color $ui-inactive-text-color
-    background-color transparent
-    transition color background-color 0.15s
-    border-left 4px solid transparent
-
-  .input
-    background-color $ui-dracula-noteDetail-backgroundColor
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

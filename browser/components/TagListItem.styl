@@ -94,23 +94,30 @@ body[data-theme="white"]
   .tagList-item-count
     color $ui-text-color
 
-body[data-theme="dark"]
-  .tagList-item
-    color $ui-dark-inactive-text-color
-    &:hover
-      color $ui-dark-text-color
-      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-    &:active
-      color $ui-dark-text-color
-      background-color $ui-dark-button--active-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .tagList-item
+      color get-theme-var(theme, 'inactive-text-color')
+      &:hover
+        color get-theme-var(theme, 'text-color')
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 20%)
+      &:active
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button--active-backgroundColor')
 
-  .tagList-item-active
-    background-color $ui-dark-button--active-backgroundColor
-    color $ui-dark-text-color
-    &:active
-      background-color alpha($ui-dark-button--active-backgroundColor, 50%)
-    &:hover
-      color $ui-dark-text-color
-      background-color alpha($ui-dark-button--active-backgroundColor, 50%)
-  .tagList-item-count
-    color $ui-dark-button--active-color
+    .tagList-item-active
+      background-color get-theme-var(theme, 'button--active-backgroundColor')
+      color get-theme-var(theme, 'text-color')
+      &:active
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 50%)
+      &:hover
+        color get-theme-var(theme, 'text-color')
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 50%)
+    .tagList-item-count
+      color get-theme-var(theme, 'button--active-color')
+
+for theme in 'dark'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

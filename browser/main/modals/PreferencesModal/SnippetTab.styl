@@ -140,66 +140,25 @@ body[data-theme="default"], body[data-theme="white"]
     .snippet-item-selected
       background darken($ui-backgroundColor, 5)
 
-body[data-theme="dark"]
-  .snippets
-    background $ui-dark-backgroundColor
-    .snippet-item
-      color white
-      &::after
-        background $ui-dark-borderColor
-      &:hover
-        background darken($ui-dark-backgroundColor, 5)
-    .snippet-item-selected
-      background darken($ui-dark-backgroundColor, 5)
-  .snippet-detail
-    color white
-  .group-control-button
-    colorDarkPrimaryButton()
+apply-theme(theme)
+  body[data-theme={theme}]
+    .snippets
+      background get-theme-var(theme, 'backgroundColor')
+      .snippet-item
+        color get-theme-var(theme, 'text-color')
+        &::after
+          background get-theme-var(theme, 'borderColor')
+        &:hover
+          background darken(get-theme-var(theme, 'backgroundColor'), 5)
+      .snippet-item-selected
+        background darken(get-theme-var(theme, 'backgroundColor'), 5)
+    .snippet-detail
+      color get-theme-var(theme, 'text-color')
+    .group-control-button
+      colorThemedPrimaryButton(theme)
 
-body[data-theme="solarized-dark"]
-  .snippets
-    background $ui-solarized-dark-backgroundColor
-    .snippet-item
-      color white
-      &::after
-        background $ui-solarized-dark-borderColor
-      &:hover
-        background darken($ui-solarized-dark-backgroundColor, 5)
-    .snippet-item-selected
-      background darken($ui-solarized-dark-backgroundColor, 5)
-  .snippet-detail
-    color white
-  .group-control-button
-    colorSolarizedDarkPrimaryButton()
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="monokai"]
-  .snippets
-    background $ui-monokai-backgroundColor
-    .snippet-item
-      color White
-      &::after
-        background $ui-monokai-borderColor
-      &:hover
-        background darken($ui-monokai-backgroundColor, 5)
-    .snippet-item-selected
-      background darken($ui-monokai-backgroundColor, 5)
-  .snippet-detail
-    color white
-  .group-control-button
-    colorMonokaiPrimaryButton()
-
-body[data-theme="dracula"]
-  .snippets
-    background $ui-dracula-backgroundColor
-    .snippet-item
-      color #f8f8f2
-      &::after
-        background $ui-dracula-borderColor
-      &:hover
-        background darken($ui-dracula-backgroundColor, 5)
-    .snippet-item-selected
-      background darken($ui-dracula-backgroundColor, 5)
-  .snippet-detail
-    color #f8f8f2
-  .group-control-button
-    colorDraculaPrimaryButton()
+for theme in $themes
+  apply-theme(theme)

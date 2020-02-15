@@ -64,102 +64,31 @@ top-bar--height = 50px
   margin-top 10px
   overflow-y auto
 
-body[data-theme="dark"]
-  .root
-    modalDark()
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      background-color transparent
+    .top-bar
+      background-color transparent
+      border-color get-theme-var(theme, 'borderColor')
+      p
+        color get-theme-var(theme, 'text-color')
+    .nav
+      background-color transparent
+      border-color get-theme-var(theme, 'borderColor')
+    .nav-button
+      background-color transparent
+      color get-theme-var(theme, 'text-color')
+      &:hover
+        color get-theme-var(theme, 'text-color')
 
-  .top-bar
-    background-color transparent
-    border-color #4A4D52
-    p
-      color $tab--dark-text-color
+    .nav-button--active
+      @extend .nav-button
+      color get-theme-var(theme, 'button--active-color')
+      background-color get-theme-var(theme, 'button--active-backgroundColor')
 
-  .nav
-    background-color transparent
-    border-color $ui-dark-borderColor
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .nav-button
-    background-color transparent
-    color $tab--dark-text-color
-    &:hover
-      color $ui-dark-text-color
-
-  .nav-button--active
-    @extend .nav-button
-    color white
-    background-color $dark-primary-button-background--active
-    &:hover
-      color white
-
-
-body[data-theme="solarized-dark"]
-  .root
-    background-color transparent
-  .top-bar
-    background-color transparent
-    border-color $ui-solarized-dark-borderColor
-    p
-      color $ui-solarized-dark-text-color
-  .nav
-    background-color transparent
-    border-color $ui-solarized-dark-borderColor
-  .nav-button
-    background-color transparent
-    color $ui-solarized-dark-text-color
-    &:hover
-      color $ui-solarized-dark-text-color
-
-  .nav-button--active
-    @extend .nav-button
-    color $ui-solarized-dark-button--active-color
-    background-color $ui-solarized-dark-button--active-backgroundColor
-    &:hover
-      color white
-
-body[data-theme="monokai"]
-  .root
-    background-color transparent
-  .top-bar
-    background-color transparent
-    border-color $ui-monokai-borderColor
-    p
-      color $ui-monokai-text-color
-  .nav
-    background-color transparent
-    border-color $ui-monokai-borderColor
-  .nav-button
-    background-color transparent
-    color $ui-monokai-text-color
-    &:hover
-      color $ui-monokai-text-color
-
-  .nav-button--active
-    @extend .nav-button
-    color $ui-monokai-button--active-color
-    background-color $ui-monokai-button--active-backgroundColor
-    &:hover
-      color white
-
-body[data-theme="dracula"]
-  .root
-    background-color transparent
-  .top-bar
-    background-color transparent
-    border-color $ui-dracula-borderColor
-    p
-      color $ui-dracula-text-color
-  .nav
-    background-color transparent
-    border-color $ui-dracula-borderColor
-  .nav-button
-    background-color transparent
-    color $ui-dracula-text-color
-    &:hover
-      color $ui-dracula-text-color
-
-  .nav-button--active
-    @extend .nav-button
-    color $ui-dracula-button--active-color
-    background-color $ui-dracula-button--active-backgroundColor
-    &:hover
-      color #f8f8f2
+for theme in $themes
+  apply-theme(theme)

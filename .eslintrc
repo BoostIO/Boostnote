@@ -1,6 +1,6 @@
 {
-  "extends": ["standard", "standard-jsx", "plugin:react/recommended"],
-  "plugins": ["react"],
+  "extends": ["standard", "standard-jsx", "plugin:react/recommended", "prettier"],
+  "plugins": ["react", "prettier"],
   "rules": {
     "no-useless-escape": 0,
     "prefer-const": ["warn", {
@@ -13,7 +13,8 @@
     "react/no-string-refs": 0,
     "react/no-find-dom-node": "warn",
     "react/no-render-return-value": "warn",
-    "react/no-deprecated": "warn"
+    "react/no-deprecated": "warn",
+    "prettier/prettier": ["error"]
   },
   "globals": {
     "FileReader": true,

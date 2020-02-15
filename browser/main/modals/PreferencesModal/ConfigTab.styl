@@ -2,7 +2,6 @@
 
 .root
   padding 15px
-  color $ui-text-color
   margin-bottom 30px
 
 .group
@@ -14,7 +13,6 @@
 
 .group-header2
   font-size 20px
-  color $ui-text-color
   margin-bottom 15px
   margin-top 30px
 
@@ -136,20 +134,18 @@ colorDarkControl()
   background-color $ui-dark-backgroundColor
   color $ui-dark-text-color
 
-colorSolarizedDarkControl()
+colorThemedControl(theme)
   border none
-  background-color $ui-solarized-dark-button-backgroundColor
-  color $ui-solarized-dark-text-color
+  background-color get-theme-var(theme, 'button-backgroundColor')
+  color get-theme-var(theme, 'text-color')
 
-colorMonokaiControl()
-  border none
-  background-color $ui-monokai-button-backgroundColor
-  color $ui-monokai-text-color
+body[data-theme="default"],
+body[data-theme="white"]
+  .root
+      color $ui-text-color
 
-colorDraculaControl()
-  border none
-  background-color $ui-dracula-button-backgroundColor
-  color $ui-dracula-text-color
+  .group-header2
+      color $ui-text-color
 
 body[data-theme="dark"]
   .root
@@ -180,90 +176,38 @@ body[data-theme="dark"]
     select, .group-section-control-input
       colorDarkControl()
 
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="solarized-dark"]
-  .root
-    color $ui-solarized-dark-text-color
+    .group-header
+    .group-header--sub
+      color get-theme-var(theme, 'text-color')
+      border-color get-theme-var(theme, 'borderColor')
 
-  .group-header
-  .group-header--sub
-    color $ui-solarized-dark-text-color
-    border-color $ui-solarized-dark-borderColor
+    .group-header2
+    .group-header2--sub
+      color get-theme-var(theme, 'text-color')
 
-  .group-header2
-  .group-header2--sub
-    color $ui-solarized-dark-text-color
+    .group-section-control-input
+      border-color get-theme-var(theme, 'borderColor')
 
-  .group-section-control-input
-    border-color $ui-solarized-dark-borderColor
+    .group-control
+      border-color get-theme-var(theme, 'borderColor')
+    .group-control-leftButton
+      colorDarkDefaultButton()
+      border-color get-theme-var(theme, 'borderColor')
+    .group-control-rightButton
+      colorThemedPrimaryButton(theme)
+    .group-hint
+      colorThemedControl(theme)
+    .group-section-control
+      select, .group-section-control-input
+        colorThemedControl(theme)
 
-  .group-control
-    border-color $ui-solarized-dark-borderColor
-  .group-control-leftButton
-    colorDarkDefaultButton()
-    border-color $ui-solarized-dark-borderColor
-  .group-control-rightButton
-    colorSolarizedDarkPrimaryButton()
-  .group-hint
-    colorSolarizedDarkControl()
-  .group-section-control
-    select, .group-section-control-input
-      colorSolarizedDarkControl()
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="monokai"]
-  .root
-    color $ui-monokai-text-color
-
-  .group-header
-  .group-header--sub
-    color $ui-monokai-text-color
-    border-color $ui-monokai-borderColor
-
-  .group-header2
-  .group-header2--sub
-    color $ui-monokai-text-color
-
-  .group-section-control-input
-    border-color $ui-monokai-borderColor
-
-  .group-control
-    border-color $ui-monokai-borderColor
-  .group-control-leftButton
-    colorDarkDefaultButton()
-    border-color $ui-monokai-borderColor
-  .group-control-rightButton
-    colorMonokaiPrimaryButton()
-  .group-hint
-    colorMonokaiControl()
-  .group-section-control
-    select, .group-section-control-input
-      colorMonokaiControl()
-
-body[data-theme="dracula"]
-  .root
-    color $ui-dracula-text-color
-
-  .group-header
-  .group-header--sub
-    color $ui-dracula-text-color
-    border-color $ui-dracula-borderColor
-
-  .group-header2
-  .group-header2--sub
-    color $ui-dracula-text-color
-
-  .group-section-control-input
-    border-color $ui-dracula-borderColor
-
-  .group-control
-    border-color $ui-dracula-borderColor
-  .group-control-leftButton
-    colorDarkDefaultButton()
-    border-color $ui-dracula-borderColor
-  .group-control-rightButton
-    colorDraculaPrimaryButton()
-  .group-hint
-    colorDraculaControl()
-  .group-section-control
-    select, .group-section-control-input
-      colorDraculaControl()
+for theme in $themes
+  apply-theme(theme)

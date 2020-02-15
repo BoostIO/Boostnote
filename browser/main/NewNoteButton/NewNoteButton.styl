@@ -72,14 +72,13 @@ body[data-theme="dark"]
   .control-newNoteButton-tooltip
     darkTooltip()
 
-body[data-theme="solarized-dark"]
-  .root, .root--expanded
-    background-color $ui-solarized-dark-noteList-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root, .root--expanded
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-body[data-theme="monokai"]
-  .root, .root--expanded
-    background-color $ui-monokai-noteList-backgroundColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="dracula"]
-  .root, .root--expanded
-    background-color $ui-dracula-noteList-backgroundColor
+for theme in $themes
+  apply-theme(theme)

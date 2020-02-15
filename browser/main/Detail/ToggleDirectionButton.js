@@ -4,9 +4,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './ToggleDirectionButton.styl'
 import i18n from 'browser/lib/i18n'
 
-const ToggleDirectionButton = ({
-  onClick, isRTL
-}) => (
+const ToggleDirectionButton = ({ onClick, isRTL }) => (
   <div styleName='control-toggleModeButton'>
     <div styleName={isRTL ? 'active' : undefined} onClick={() => onClick()}>
       <img src={!isRTL ? '../resources/icon/icon-left-to-right.svg' : ''} />
@@ -14,7 +12,9 @@ const ToggleDirectionButton = ({
     <div styleName={!isRTL ? 'active' : undefined} onClick={() => onClick()}>
       <img src={!isRTL ? '' : '../resources/icon/icon-right-to-left.svg'} />
     </div>
-    <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Toggle Direction')}</span>
+    <span lang={i18n.locale} styleName='tooltip'>
+      {i18n.__('Toggle Direction')}
+    </span>
   </div>
 )
 

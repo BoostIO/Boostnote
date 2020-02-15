@@ -134,54 +134,39 @@ body[data-theme="dark"]
   .search-optionList-item-name-surfix
     color $ui-dark-inactive-text-color
 
-body[data-theme="monokai"]
- .root
-    color $ui-dark-text-color
-    &:hover
-      color white
-      background-color $ui-monokai-button--hover-backgroundColor
-      border-color $ui-monokai-borderColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      &:hover
+        background-color get-theme-var(theme, 'button--hover-backgroundColor')
+        border-color get-theme-var(theme, 'borderColor')
 
-  .search-optionList
-    color white
-    border-color $ui-monokai-borderColor
-    background-color $ui-monokai-button-backgroundColor
+    .search-input
+      color get-theme-var(theme, 'text-color')
+      background-color transparent
+      border-color get-theme-var(theme, 'borderColor')
 
-  .search-optionList-item
-    &:hover
-      background-color lighten($ui-monokai-button--hover-backgroundColor, 15%)
+    .search-optionList
+      color get-theme-var(theme, 'text-color')
+      border-color get-theme-var(theme, 'borderColor')
+      background-color get-theme-var(theme, 'button-backgroundColor')
 
-  .search-optionList-item--active
-    background-color $ui-monokai-button--active-backgroundColor
-    color $ui-monokai-button--active-color
-    &:hover
-      background-color $ui-monokai-button--active-backgroundColor
-      color $ui-monokai-button--active-color
-  .search-optionList-item-name-surfix
-    color $ui-monokai-inactive-text-color
+    .search-optionList-item
+      &:hover
+        background-color lighten(get-theme-var(theme, 'button--hover-backgroundColor'), 15%)
 
-body[data-theme="dracula"]
- .root
-    color $ui-dracula-text-color
-    &:hover
-      color #f8f8f2
-      background-color $ui-dark-button--hover-backgroundColor
-      border-color $ui-dracula-borderColor
+    .search-optionList-item--active
+      background-color get-theme-var(theme, 'button--active-backgroundColor')
+      color get-theme-var(theme, 'button--active-color')
+      &:hover
+        background-color get-theme-var(theme, 'button--active-backgroundColor')
+        color get-theme-var(theme, 'button--active-color')
 
-  .search-optionList
-    color #f8f8f2
-    border-color $ui-dracula-borderColor
-    background-color $ui-dracula-button-backgroundColor
+    .search-optionList-item-name-surfix
+      color get-theme-var(theme, 'inactive-text-color')
 
-  .search-optionList-item
-    &:hover
-      background-color lighten($ui-dracula-button--hover-backgroundColor, 15%)
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .search-optionList-item--active
-    background-color $ui-dracula-button--active-backgroundColor
-    color $ui-dracula-button--active-color
-    &:hover
-      background-color $ui-dark-button--hover-backgroundColor
-      color $ui-dracula-button--active-color
-  .search-optionList-item-name-surfix
-    color $ui-dracula-inactive-text-color
+for theme in $themes
+  apply-theme(theme)

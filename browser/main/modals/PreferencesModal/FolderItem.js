@@ -10,7 +10,7 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 
 class FolderItem extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -24,7 +24,7 @@ class FolderItem extends React.Component {
     }
   }
 
-  handleEditChange (e) {
+  handleEditChange(e) {
     const { folder } = this.state
 
     folder.name = this.refs.nameInput.value
@@ -33,18 +33,18 @@ class FolderItem extends React.Component {
     })
   }
 
-  handleConfirmButtonClick (e) {
+  handleConfirmButtonClick(e) {
     this.confirm()
   }
 
-  confirm () {
+  confirm() {
     const { storage, folder } = this.props
     dataApi
       .updateFolder(storage.key, folder.key, {
         color: this.state.folder.color,
         name: this.state.folder.name
       })
-      .then((data) => {
+      .then(data => {
         store.dispatch({
           type: 'UPDATE_FOLDER',
           storage: data.storage
@@ -55,9 +55,12 @@ class FolderItem extends React.Component {
       })
   }
 
-  handleColorButtonClick (e) {
-    const folder = Object.assign({}, this.state.folder, { showColumnPicker: true, colorPickerPos: { left: 0, top: 0 } })
-    this.setState({ folder }, function () {
+  handleColorButtonClick(e) {
+    const folder = Object.assign({}, this.state.folder, {
+      showColumnPicker: true,
+      colorPickerPos: { left: 0, top: 0 }
+    })
+    this.setState({ folder }, function() {
       // After the color picker has been painted, re-calculate its position
       // by comparing its dimensions to the host dimensions.
       const { hostBoundingBox } = this.props
@@ -67,30 +70,32 @@ class FolderItem extends React.Component {
       const folder = Object.assign({}, this.state.folder, {
         colorPickerPos: {
           left: 25,
-          top: offsetTop < 0 ? offsetTop - 5 : 0  // subtract 5px for aestetics
+          top: offsetTop < 0 ? offsetTop - 5 : 0 // subtract 5px for aestetics
         }
       })
       this.setState({ folder })
     })
   }
 
-  handleColorChange (color) {
+  handleColorChange(color) {
     const folder = Object.assign({}, this.state.folder, { color: color.hex })
     this.setState({ folder })
   }
 
-  handleColorPickerClose (event) {
-    const folder = Object.assign({}, this.state.folder, { showColumnPicker: false })
+  handleColorPickerClose(event) {
+    const folder = Object.assign({}, this.state.folder, {
+      showColumnPicker: false
+    })
     this.setState({ folder })
   }
 
-  handleCancelButtonClick (e) {
+  handleCancelButtonClick(e) {
     this.setState({
       status: 'IDLE'
     })
   }
 
-  handleFolderItemBlur (e) {
+  handleFolderItemBlur(e) {
     let el = e.relatedTarget
     while (el != null) {
       if (el === this.refs.root) {
@@ -101,7 +106,7 @@ class FolderItem extends React.Component {
     this.confirm()
   }
 
-  renderEdit (e) {
+  renderEdit(e) {
     const popover = { position: 'absolute', zIndex: 2 }
     const cover = {
       position: 'fixed',
@@ -110,51 +115,64 @@ class FolderItem extends React.Component {
       bottom: 0,
       left: 0
     }
-    const pickerStyle = Object.assign({}, {
-      position: 'absolute'
-    }, this.state.folder.colorPickerPos)
+    const pickerStyle = Object.assign(
+      {},
+      {
+        position: 'absolute'
+      },
+      this.state.folder.colorPickerPos
+    )
     return (
-      <div styleName='folderItem'
-        onBlur={(e) => this.handleFolderItemBlur(e)}
+      <div
+        styleName='folderItem'
+        onBlur={e => this.handleFolderItemBlur(e)}
         tabIndex='-1'
         ref='root'
       >
         <div styleName='folderItem-left'>
-          <button styleName='folderItem-left-colorButton' style={{color: this.state.folder.color}}
-            onClick={(e) => !this.state.folder.showColumnPicker && this.handleColorButtonClick(e)}
+          <button
+            styleName='folderItem-left-colorButton'
+            style={{ color: this.state.folder.color }}
+            onClick={e =>
+              !this.state.folder.showColumnPicker &&
+              this.handleColorButtonClick(e)
+            }
           >
-            {this.state.folder.showColumnPicker
-              ? <div style={popover}>
-                <div style={cover}
+            {this.state.folder.showColumnPicker ? (
+              <div style={popover}>
+                <div
+                  style={cover}
                   onClick={() => this.handleColorPickerClose()}
                 />
                 <div style={pickerStyle}>
                   <SketchPicker
                     ref='colorPicker'
                     color={this.state.folder.color}
-                    onChange={(color) => this.handleColorChange(color)}
-                    onChangeComplete={(color) => this.handleColorChange(color)}
+                    onChange={color => this.handleColorChange(color)}
+                    onChangeComplete={color => this.handleColorChange(color)}
                   />
                 </div>
               </div>
-              : null
-            }
+            ) : null}
             <i className='fa fa-square' />
           </button>
-          <input styleName='folderItem-left-nameInput'
+          <input
+            styleName='folderItem-left-nameInput'
             value={this.state.folder.name}
             ref='nameInput'
-            onChange={(e) => this.handleEditChange(e)}
+            onChange={e => this.handleEditChange(e)}
           />
         </div>
         <div styleName='folderItem-right'>
-          <button styleName='folderItem-right-confirmButton'
-            onClick={(e) => this.handleConfirmButtonClick(e)}
+          <button
+            styleName='folderItem-right-confirmButton'
+            onClick={e => this.handleConfirmButtonClick(e)}
           >
             {i18n.__('Confirm')}
           </button>
-          <button styleName='folderItem-right-button'
-            onClick={(e) => this.handleCancelButtonClick(e)}
+          <button
+            styleName='folderItem-right-button'
+            onClick={e => this.handleCancelButtonClick(e)}
           >
             {i18n.__('Cancel')}
           </button>
@@ -163,79 +181,85 @@ class FolderItem extends React.Component {
     )
   }
 
-  handleDeleteConfirmButtonClick (e) {
+  handleDeleteConfirmButtonClick(e) {
     const { storage, folder } = this.props
-    dataApi
-      .deleteFolder(storage.key, folder.key)
-      .then((data) => {
-        store.dispatch({
-          type: 'DELETE_FOLDER',
-          storage: data.storage,
-          folderKey: data.folderKey
-        })
+    dataApi.deleteFolder(storage.key, folder.key).then(data => {
+      store.dispatch({
+        type: 'DELETE_FOLDER',
+        storage: data.storage,
+        folderKey: data.folderKey
       })
-  }
-
-  renderDelete () {
-    return (
-      <div styleName='folderItem'>
-        <div styleName='folderItem-left'>
-          {i18n.__('Are you sure to ')} <span styleName='folderItem-left-danger'>{i18n.__(' delete')}</span> {i18n.__('this folder?')}
-        </div>
-        <div styleName='folderItem-right'>
-          <button styleName='folderItem-right-dangerButton'
-            onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
-          >
-            {i18n.__('Confirm')}
-          </button>
-          <button styleName='folderItem-right-button'
-            onClick={(e) => this.handleCancelButtonClick(e)}
-          >
-            {i18n.__('Cancel')}
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  handleEditButtonClick (e) {
-    const { folder: propsFolder } = this.props
-    const { folder: stateFolder } = this.state
-    const folder = Object.assign({}, stateFolder, propsFolder)
-    this.setState({
-      status: 'EDIT',
-      folder
-    }, () => {
-      this.refs.nameInput.select()
     })
   }
 
-  handleDeleteButtonClick (e) {
+  renderDelete() {
+    return (
+      <div styleName='folderItem'>
+        <div styleName='folderItem-left'>
+          {i18n.__('Are you sure to ')}{' '}
+          <span styleName='folderItem-left-danger'>{i18n.__(' delete')}</span>{' '}
+          {i18n.__('this folder?')}
+        </div>
+        <div styleName='folderItem-right'>
+          <button
+            styleName='folderItem-right-dangerButton'
+            onClick={e => this.handleDeleteConfirmButtonClick(e)}
+          >
+            {i18n.__('Confirm')}
+          </button>
+          <button
+            styleName='folderItem-right-button'
+            onClick={e => this.handleCancelButtonClick(e)}
+          >
+            {i18n.__('Cancel')}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  handleEditButtonClick(e) {
+    const { folder: propsFolder } = this.props
+    const { folder: stateFolder } = this.state
+    const folder = Object.assign({}, stateFolder, propsFolder)
+    this.setState(
+      {
+        status: 'EDIT',
+        folder
+      },
+      () => {
+        this.refs.nameInput.select()
+      }
+    )
+  }
+
+  handleDeleteButtonClick(e) {
     this.setState({
       status: 'DELETE'
     })
   }
 
-  renderIdle () {
+  renderIdle() {
     const { folder } = this.props
     return (
-      <div styleName='folderItem'
-        onDoubleClick={(e) => this.handleEditButtonClick(e)}
+      <div
+        styleName='folderItem'
+        onDoubleClick={e => this.handleEditButtonClick(e)}
       >
-        <div styleName='folderItem-left'
-          style={{borderColor: folder.color}}
-        >
+        <div styleName='folderItem-left' style={{ borderColor: folder.color }}>
           <span>{folder.name}</span>
           <span styleName='folderItem-left-key'>({folder.key})</span>
         </div>
         <div styleName='folderItem-right'>
-          <button styleName='folderItem-right-button'
-            onClick={(e) => this.handleEditButtonClick(e)}
+          <button
+            styleName='folderItem-right-button'
+            onClick={e => this.handleEditButtonClick(e)}
           >
             {i18n.__('Edit')}
           </button>
-          <button styleName='folderItem-right-button'
-            onClick={(e) => this.handleDeleteButtonClick(e)}
+          <button
+            styleName='folderItem-right-button'
+            onClick={e => this.handleDeleteButtonClick(e)}
           >
             {i18n.__('Delete')}
           </button>
@@ -244,7 +268,7 @@ class FolderItem extends React.Component {
     )
   }
 
-  render () {
+  render() {
     switch (this.state.status) {
       case 'DELETE':
         return this.renderDelete()
@@ -277,7 +301,7 @@ FolderItem.propTypes = {
 }
 
 class Handle extends React.Component {
-  render () {
+  render() {
     return (
       <div styleName='folderItem-drag-handle'>
         <i className='fa fa-reorder' />
@@ -287,7 +311,7 @@ class Handle extends React.Component {
 }
 
 class SortableFolderItemComponent extends React.Component {
-  render () {
+  render() {
     const StyledHandle = CSSModules(Handle, styles)
     const DragHandle = SortableHandle(StyledHandle)
 

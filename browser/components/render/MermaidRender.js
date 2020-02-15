@@ -1,4 +1,5 @@
 import mermaidAPI from 'mermaid'
+import uiThemes from 'browser/lib/ui-themes'
 
 // fixes bad styling in the mermaid dark theme
 const darkThemeStyling = `
@@ -6,11 +7,11 @@ const darkThemeStyling = `
   fill: white;
 }`
 
-function getRandomInt (min, max) {
+function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min
 }
 
-function getId () {
+function getId() {
   const pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let id = 'm-'
   for (let i = 0; i < 7; i++) {
@@ -19,14 +20,19 @@ function getId () {
   return id
 }
 
-function render (element, content, theme, enableHTMLLabel) {
+function render(element, content, theme, enableHTMLLabel) {
   try {
     const height = element.attributes.getNamedItem('data-height')
     const isPredefined = height && height.value !== 'undefined'
+
     if (isPredefined) {
       element.style.height = height.value + 'vh'
     }
-    const isDarkTheme = theme === 'dark' || theme === 'solarized-dark' || theme === 'monokai' || theme === 'dracula'
+
+    const isDarkTheme = uiThemes.some(
+      item => item.name === theme && item.isDark
+    )
+
     mermaidAPI.initialize({
       theme: isDarkTheme ? 'dark' : 'default',
       themeCSS: isDarkTheme ? darkThemeStyling : '',
@@ -37,7 +43,8 @@ function render (element, content, theme, enableHTMLLabel) {
         useWidth: element.clientWidth
       }
     })
-    mermaidAPI.render(getId(), content, (svgGraph) => {
+
+    mermaidAPI.render(getId(), content, svgGraph => {
       element.innerHTML = svgGraph
 
       if (!isPredefined) {
