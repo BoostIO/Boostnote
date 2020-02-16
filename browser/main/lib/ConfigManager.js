@@ -27,6 +27,7 @@ export const DEFAULT_CONFIG = {
   },
   sortTagsBy: 'ALPHABETICAL', // 'ALPHABETICAL', 'COUNTER'
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
+  listDirection: 'ASCENDING', // 'ASCENDING', 'DESCENDING'
   amaEnabled: true,
   autoUpdateEnabled: true,
   hotkey: {

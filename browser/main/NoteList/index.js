@@ -581,6 +581,20 @@ class NoteList extends React.Component {
     })
   }
 
+  handleListDirectionButtonClick(e, direction) {
+    const { dispatch } = this.props
+
+    const config = {
+      listDirection: direction
+    }
+
+    ConfigManager.set(config)
+    dispatch({
+      type: 'SET_CONFIG',
+      config
+    })
+  }
+
   alertIfSnippet(msg) {
     const warningMessage = msg =>
       ({
@@ -1120,6 +1134,7 @@ class NoteList extends React.Component {
     let { notes } = this.props
     const { selectedNoteKeys } = this.state
     const sortBy = _.get(config, [folderKey, 'sortBy'], config.sortBy.default)
+    const sortDir = config.listDirection
     const sortFunc =
       sortBy === 'CREATED_AT'
         ? sortByCreatedAt
@@ -1129,6 +1144,7 @@ class NoteList extends React.Component {
     const sortedNotes = location.pathname.match(/\/starred|\/trash/)
       ? this.getNotes().sort(sortFunc)
       : this.sortByPin(this.getNotes().sort(sortFunc))
+    if (sortDir === 'DESCENDING') sortedNotes.reverse()
     this.notes = notes = sortedNotes.filter(note => {
       // this is for the trash box
       if (note.isTrashed !== true || location.pathname === '/trashed')
@@ -1241,6 +1257,30 @@ class NoteList extends React.Component {
             </select>
           </div>
           <div styleName='control-button-area'>
+            <button
+              title={i18n.__('Ascending Order')}
+              styleName={
+                config.listDirection === 'ASCENDING'
+                  ? 'control-button--active'
+                  : 'control-button'
+              }
+              onClick={e => this.handleListDirectionButtonClick(e, 'ASCENDING')}
+            >
+              <img src='../resources/icon/icon-up.svg' />
+            </button>
+            <button
+              title={i18n.__('Descending Order')}
+              styleName={
+                config.listDirection === 'DESCENDING'
+                  ? 'control-button--active'
+                  : 'control-button'
+              }
+              onClick={e =>
+                this.handleListDirectionButtonClick(e, 'DESCENDING')
+              }
+            >
+              <img src='../resources/icon/icon-down.svg' />
+            </button>
             <button
               title={i18n.__('Default View')}
               styleName={
