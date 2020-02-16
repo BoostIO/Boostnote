@@ -18,84 +18,68 @@ const DEFAULT_MARKDOWN_LINT_CONFIG = `{
 
 const DEFAULT_CSS_CONFIG = `
 /* Drop Your Custom CSS Code Here */
-[data-theme="default"] p code,
-[data-theme="default"] li code{
+p code,
+li code
+{
   padding: 2px;
-  background-color: #F4F4F4;
   border-width: 1px;
   border-style: solid;
-  border-color: #d9d9d9;
   border-radius: 5px;
+}
+[data-theme="default"] p code,
+[data-theme="default"] li code
+{
+  background-color: #F4F4F4;
+  border-color: #d9d9d9;
   color: #03C588;
 }
 [data-theme="white"] p code,
-[data-theme="white"] li code{
-  padding: 2px;
+[data-theme="white"] li code
+{
   background-color: #F4F4F4;
-  border-width: 1px;
-  border-style: solid;
   border-color: #03C588;
-  border-radius: 5px;
   color: #03C588;
 }
 [data-theme="dark"] p code,
-[data-theme="dark"] li code{
-  padding: 2px;
+[data-theme="dark"] li code
+{
   background-color: #444444;
-  border-width: 1px;
-  border-style: solid;
   border-color: #555;
-  border-radius: 5px;
   color: #FFFFFF;
 }
 [data-theme="dracula"] p code,
-[data-theme="dracula"] li code{
-  padding: 2px;
+[data-theme="dracula"] li code
+{
   background-color: #282a36;
-  border-width: 1px;
-  border-style: solid;
   border-color: #bd93f9;
-  border-radius: 5px;
   color: #bd93f9;
 }
 [data-theme="monokai"] p code,
-[data-theme="monokai"] li code{
-  padding: 2px;
+[data-theme="monokai"] li code
+{
   background-color: #272822;
-  border-width: 1px;
-  border-style: solid;
   border-color: #f92672;
-  border-radius: 5px;
   color: #f92672;
 }
 [data-theme="nord"] p code,
-[data-theme="nord"] li code{
-  padding: 2px;
+[data-theme="nord"] li code
+{
   background-color: #2e3440;
-  border-width: 1px;
-  border-style: solid;
   border-color: #5e81ac;
-  border-radius: 5px;
   color: #5e81ac;
 }
 [data-theme="solarized-dark"] p code,
-[data-theme="solarized-dark"] li code{
-  padding: 2px;
+[data-theme="solarized-dark"] li code
+{
   background-color: #073642;
-  border-width: 1px;
-  border-style: solid;
   border-color: #36abe3;
-  border-radius: 5px;
   color: #36abe3;
 }
 [data-theme="vulcan"] p code,
-[data-theme="vulcan"] li code{
-  padding: 2px;
+[data-theme="vulcan"] li code
+{
   background-color: #161719;
-  border-width: 1px;
-  border-style: solid;
   border-color: #ffffff;
-  border-radius: 5px;
   color: #ffffff;
 }`
 
