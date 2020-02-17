@@ -1144,12 +1144,12 @@ class NoteList extends React.Component {
     const sortedNotes = location.pathname.match(/\/starred|\/trash/)
       ? this.getNotes().sort(sortFunc)
       : this.sortByPin(this.getNotes().sort(sortFunc))
-    if (sortDir === 'DESCENDING') sortedNotes.reverse()
     this.notes = notes = sortedNotes.filter(note => {
       // this is for the trash box
       if (note.isTrashed !== true || location.pathname === '/trashed')
         return true
     })
+    if (sortDir === 'DESCENDING') this.notes.reverse()
 
     moment.updateLocale('en', {
       relativeTime: {
