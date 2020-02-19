@@ -83,11 +83,11 @@ if (!config.get().ui.showScrollBar) {
   document.styleSheets[54].insertRule(
     '::-webkit-scrollbar-corner {display: none}'
   )
-  
+
   document.styleSheets[54].insertRule(
     '::-webkit-scrollbar-thumb {display: none}'
   )
-  }
+}
 
 const el = document.getElementById('content')
 
