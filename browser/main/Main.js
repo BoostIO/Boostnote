@@ -181,6 +181,7 @@ class Main extends React.Component {
       'menubar:togglemenubar',
       this.toggleMenuBarVisible.bind(this)
     )
+    eventEmitter.on('dispatch:push', this.changeRoutePush.bind(this))
   }
 
   componentWillUnmount() {
@@ -189,6 +190,12 @@ class Main extends React.Component {
       'menubar:togglemenubar',
       this.toggleMenuBarVisible.bind(this)
     )
+    eventEmitter.off('dispatch:push', this.changeRoutePush.bind(this))
+  }
+
+  changeRoutePush(event, destination) {
+    const { dispatch } = this.props
+    dispatch(push(destination))
   }
 
   toggleMenuBarVisible() {
