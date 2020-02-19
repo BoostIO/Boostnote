@@ -48,6 +48,7 @@ export const DEFAULT_CONFIG = {
     theme: 'default',
     showCopyNotification: true,
     disableDirectWrite: false,
+    showScrollBar: true,
     defaultNote: 'ALWAYS_ASK', // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
     showMenuBar: false
   },

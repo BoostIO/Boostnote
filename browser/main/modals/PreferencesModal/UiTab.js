@@ -96,7 +96,8 @@ class UiTab extends React.Component {
         enableLiveNoteCounts: this.refs.enableLiveNoteCounts.checked,
         showMenuBar: this.refs.showMenuBar.checked,
         disableDirectWrite:
-          this.refs.uiD2w != null ? this.refs.uiD2w.checked : false
+          this.refs.uiD2w != null ? this.refs.uiD2w.checked : false,
+        showScrollBar: this.refs.showScrollBar.checked
       },
       editor: {
         theme: this.refs.editorTheme.value,
@@ -351,7 +352,18 @@ class UiTab extends React.Component {
               </label>
             </div>
           ) : null}
-
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input
+                onChange={e => this.handleUIChange(e)}
+                checked={this.state.config.ui.showScrollBar}
+                ref='scrollBar'
+                type='checkBox'
+              />
+              &nbsp;
+              {i18n.__('Show the scroll bars')}
+            </label>
+          </div>
           <div styleName='group-header2'>Tags</div>
 
           <div styleName='group-checkBoxSection'>

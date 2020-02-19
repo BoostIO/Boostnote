@@ -7,6 +7,7 @@ require('!!style!css!stylus?sourceMap!./global.styl')
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import DevTools from './DevTools'
+import config from 'browser/main/lib/ConfigManager'
 
 require('./lib/ipcClient')
 require('../lib/customMeta')
@@ -76,6 +77,12 @@ document.addEventListener('click', function(e) {
   const infoPanel = document.querySelector('.infoPanel')
   if (infoPanel) infoPanel.style.display = 'none'
 })
+
+if (!config.get().ui.showScrollBar) {
+  document.styleSheets[54].insertRule('::-webkit-scrollbar {display: none}')
+  document.styleSheets[54].insertRule('::-webkit-scrollbar-corner {display: none}')
+  document.styleSheets[54].insertRule('::-webkit-scrollbar-thumb {display: none}')
+}
 
 const el = document.getElementById('content')
 

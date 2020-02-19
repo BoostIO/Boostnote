@@ -23,6 +23,7 @@ import Carousel from 'react-image-carousel'
 import ConfigManager from '../main/lib/ConfigManager'
 import uiThemes from 'browser/lib/ui-themes'
 import i18n from 'browser/lib/i18n'
+import config from 'browser/main/lib/ConfigManager'
 
 const { remote, shell } = require('electron')
 const attachmentManagement = require('../main/lib/dataApi/attachmentManagement')
@@ -186,10 +187,12 @@ ${allowCustomCSS ? customCSS : ''}
 
 const scrollBarStyle = `
 ::-webkit-scrollbar {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.15);
 }
 
@@ -199,10 +202,12 @@ const scrollBarStyle = `
 `
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.3);
 }
 
