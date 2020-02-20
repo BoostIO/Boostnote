@@ -22,7 +22,7 @@ if (!getSendEventCond()) {
   })
 }
 
-function convertPlatformName (platformName) {
+function convertPlatformName(platformName) {
   if (platformName === 'darwin') {
     return 'MacOS'
   } else if (platformName === 'win32') {
@@ -34,16 +34,16 @@ function convertPlatformName (platformName) {
   }
 }
 
-function getSendEventCond () {
+function getSendEventCond() {
   const isDev = process.env.NODE_ENV !== 'production'
   const isDisable = !ConfigManager.default.get().amaEnabled
   const isOffline = !window.navigator.onLine
   return isDev || isDisable || isOffline
 }
 
-function initAwsMobileAnalytics () {
+function initAwsMobileAnalytics() {
   if (getSendEventCond()) return
-  AWS.config.credentials.get((err) => {
+  AWS.config.credentials.get(err => {
     if (!err) {
       recordDynamicCustomEvent('APP_STARTED')
       recordStaticCustomEvent()
@@ -51,7 +51,7 @@ function initAwsMobileAnalytics () {
   })
 }
 
-function recordDynamicCustomEvent (type, options = {}) {
+function recordDynamicCustomEvent(type, options = {}) {
   if (getSendEventCond()) return
   try {
     mobileAnalyticsClient.recordEvent(type, options)
@@ -62,7 +62,7 @@ function recordDynamicCustomEvent (type, options = {}) {
   }
 }
 
-function recordStaticCustomEvent () {
+function recordStaticCustomEvent() {
   if (getSendEventCond()) return
   try {
     mobileAnalyticsClient.recordEvent('UI_COLOR_THEME', {

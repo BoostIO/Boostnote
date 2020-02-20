@@ -54,35 +54,20 @@ body[data-theme="dark"]
   .tag-label
     color $ui-dark-text-color
 
-body[data-theme="solarized-dark"]
-  .tag
-    background-color $ui-solarized-dark-tag-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .tag
+      background-color get-theme-var(theme, 'tag-backgroundColor')
 
-  .tag-removeButton
-    border-color $ui-button--focus-borderColor
-    background-color transparent
+    .tag-removeButton
+      border-color $ui-button--focus-borderColor
+      background-color transparent
 
-  .tag-label
-    color $ui-solarized-dark-text-color
+    .tag-label
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="monokai"]
-  .tag
-    background-color $ui-monokai-tag-backgroundColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .tag-removeButton
-    border-color $ui-button--focus-borderColor
-    background-color transparent
-
-  .tag-label
-    color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .tag
-    background-color $ui-dracula-tag-backgroundColor
-
-  .tag-removeButton
-    border-color $ui-dracula-button--focus-borderColor
-    background-color transparent
-
-  .tag-label
-    color $ui-dracula-borderColor
+for theme in $themes
+  apply-theme(theme)

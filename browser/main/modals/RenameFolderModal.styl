@@ -43,23 +43,31 @@
   border-radius 2px
   padding 0 25px
   margin 0 auto
+  font-size 14px
   colorPrimaryButton()
 
-body[data-theme="dark"]
-  .root
-    modalDark()
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      background-color transparent
 
-  .header
-    background-color $ui-dark-button--hover-backgroundColor
-    border-color $ui-dark-borderColor
-    color $ui-dark-text-color
+    .header
+      background-color get-theme-var(theme, 'button--hover-backgroundColor')
+      border-color get-theme-var(theme, 'borderColor')
+      color get-theme-var(theme, 'text-color')
 
-   .description
-    color $ui-inactive-text-color
+    .description
+      color $ui-inactive-text-color
 
-  .control-input
-    border-color $ui-dark-borderColor
-    color $ui-dark-text-color
+    .control-input
+      border-color get-theme-var(theme, 'borderColor')
+      color get-theme-var(theme, 'text-color')
 
-  .control-confirmButton
-    colorDarkPrimaryButton()
+    .control-confirmButton
+      colorThemedPrimaryButton(theme)
+
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

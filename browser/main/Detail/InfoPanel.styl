@@ -138,162 +138,49 @@
 .export--unable
   cursor not-allowed
 
-body[data-theme="dark"]
-  .control-infoButton-panel
-    background-color $ui-dark-noteList-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .control-infoButton-panel
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-  .control-infoButton-panel-trash
-    background-color $ui-dark-noteList-backgroundColor
+    .control-infoButton-panel-trash
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-  .modification-date
-    color $ui-dark-text-color
+    .modification-date
+      color get-theme-var(theme, 'text-color')
 
-  .modification-date-desc
-    color $ui-inactive-text-color
+    .modification-date-desc
+      color $ui-inactive-text-color
 
-  .infoPanel-defaul-count
-    color $ui-dark-text-color
+    .infoPanel-defaul-count
+      color get-theme-var(theme, 'text-color')
 
-  .infoPanel-sub-count
-    color $ui-inactive-text-color
+    .infoPanel-sub-count
+      color $ui-inactive-text-color
 
-  .infoPanel-default
-    color $ui-dark-text-color
+    .infoPanel-default
+      color get-theme-var(theme, 'text-color')
 
-  .infoPanel-sub
-    color $ui-inactive-text-color
+    .infoPanel-sub
+      color $ui-inactive-text-color
 
-  .infoPanel-noteLink
-    background-color alpha($ui-dark-borderColor, 60%)
-    color $ui-dark-text-color
+    .infoPanel-noteLink
+      background-color alpha(get-theme-var(theme, 'borderColor'), 20%)
+      color get-theme-var(theme, 'text-color')
 
-  [id=export-wrap]
-    button
-      color $ui-dark-inactive-text-color
-      &:hover
-        background-color alpha($ui-dark-borderColor, 20%)
-        color $ui-dark-text-color
-    p
-      color $ui-dark-inactive-text-color
-      &:hover
-        color $ui-dark-text-color
+    [id=export-wrap]
+      button
+        color $ui-dark-inactive-text-color
+        &:hover
+          background-color alpha(get-theme-var(theme, 'borderColor'), 20%)
+          color get-theme-var(theme, 'text-color')
+      p
+        color $ui-dark-inactive-text-color
+        &:hover
+          color get-theme-var(theme, 'text-color')
 
-body[data-theme="solarized-dark"]
-  .control-infoButton-panel
-    background-color $ui-solarized-dark-noteList-backgroundColor
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .control-infoButton-panel-trash
-    background-color $ui-solarized-ark-noteList-backgroundColor
-
-  .modification-date
-    color $ui-solarized-ark-text-color
-
-  .modification-date-desc
-    color $ui-inactive-text-color
-
-  .infoPanel-defaul-count
-    color $ui-solarized-dark-text-color
-
-  .infoPanel-sub-count
-    color $ui-inactive-text-color
-
-  .infoPanel-default
-    color $ui-solarized-ark-text-color
-
-  .infoPanel-sub
-    color $ui-inactive-text-color
-
-  .infoPanel-noteLink
-    background-color alpha($ui-solarized-dark-borderColor, 20%)
-    color $ui-solarized-dark-text-color
-
-  [id=export-wrap]
-    button
-      color $ui-dark-inactive-text-color
-      &:hover
-        background-color alpha($ui-solarized-dark-borderColor, 20%)
-        color $ui-solarized-ark-text-color
-    p
-      color $ui-dark-inactive-text-color
-      &:hover
-        color $ui-solarized-ark-text-color
-
-body[data-theme="monokai"]
-  .control-infoButton-panel
-    background-color $ui-monokai-noteList-backgroundColor
-
-  .control-infoButton-panel-trash
-    background-color $ui-monokai-noteList-backgroundColor
-
-  .modification-date
-    color $ui-monokai-text-color
-
-  .modification-date-desc
-    color $ui-inactive-text-color
-
-  .infoPanel-defaul-count
-    color $ui-monokai-text-color
-
-  .infoPanel-sub-count
-    color $ui-inactive-text-color
-
-  .infoPanel-default
-    color $ui-monokai-text-color
-
-  .infoPanel-sub
-    color $ui-inactive-text-color
-
-  .infoPanel-noteLink
-    background-color alpha($ui-monokai-borderColor, 20%)
-    color $ui-monokai-text-color
-
-  [id=export-wrap]
-    button
-      color $ui-dark-inactive-text-color
-      &:hover
-        background-color alpha($ui-monokai-borderColor, 20%)
-        color $ui-monokai-text-color
-    p
-      color $ui-dark-inactive-text-color
-      &:hover
-        color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .control-infoButton-panel
-    background-color $ui-dracula-noteList-backgroundColor
-
-  .control-infoButton-panel-trash
-    background-color $ui-dracula-noteList-backgroundColor
-
-  .modification-date
-    color $ui-dracula-text-color
-
-  .modification-date-desc
-    color $ui-inactive-text-color
-
-  .infoPanel-defaul-count
-    color $ui-dracula-text-color
-
-  .infoPanel-sub-count
-    color $ui-inactive-text-color
-
-  .infoPanel-default
-    color $ui-dracula-text-color
-
-  .infoPanel-sub
-    color $ui-inactive-text-color
-
-  .infoPanel-noteLink
-    background-color alpha($ui-dracula-borderColor, 20%)
-    color $ui-dracula-text-color
-
-  [id=export-wrap]
-    button
-      color $ui-dark-inactive-text-color
-      &:hover
-        background-color alpha($ui-dracula-borderColor, 20%)
-        color $ui-dracula-text-color
-    p
-      color $ui-dark-inactive-text-color
-      &:hover
-        color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

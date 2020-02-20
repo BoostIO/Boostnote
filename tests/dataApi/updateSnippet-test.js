@@ -21,20 +21,20 @@ const newSnippet = {
   content: 'new content'
 }
 
-test.beforeEach((t) => {
+test.beforeEach(t => {
   sander.writeFileSync(snippetFile, JSON.stringify([oldSnippet]))
 })
 
-test.serial('Update a snippet', (t) => {
+test.serial('Update a snippet', t => {
   return Promise.resolve()
-    .then(function doTest () {
-      return Promise.all([
-        updateSnippet(newSnippet, snippetFile)
-      ])
+    .then(function doTest() {
+      return Promise.all([updateSnippet(newSnippet, snippetFile)])
     })
-    .then(function assert () {
+    .then(function assert() {
       const snippets = JSON.parse(sander.readFileSync(snippetFile))
-      const snippet = snippets.find(currentSnippet => currentSnippet.id === newSnippet.id)
+      const snippet = snippets.find(
+        currentSnippet => currentSnippet.id === newSnippet.id
+      )
       t.not(snippet, undefined)
       t.is(snippet.name, newSnippet.name)
       t.deepEqual(snippet.prefix, newSnippet.prefix)

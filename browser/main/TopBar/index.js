@@ -11,7 +11,7 @@ import CInput from 'react-composition-input'
 import { push } from 'connected-react-router'
 
 class TopBar extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -33,19 +33,25 @@ class TopBar extends React.Component {
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleSearchClearButton = this.handleSearchClearButton.bind(this)
 
-    this.debouncedUpdateKeyword = debounce((keyword) => {
-      dispatch(push(`/searched/${encodeURIComponent(keyword)}`))
-      this.setState({
-        search: keyword
-      })
-      ee.emit('top:search', keyword)
-    }, 1000 / 60, {
-      maxWait: 1000 / 8
-    })
+    this.debouncedUpdateKeyword = debounce(
+      keyword => {
+        dispatch(push(`/searched/${encodeURIComponent(keyword)}`))
+        this.setState({
+          search: keyword
+        })
+        ee.emit('top:search', keyword)
+      },
+      1000 / 60,
+      {
+        maxWait: 1000 / 8
+      }
+    )
   }
 
-  componentDidMount () {
-    const { match: { params } } = this.props
+  componentDidMount() {
+    const {
+      match: { params }
+    } = this.props
     const searchWord = params && params.searchword
     if (searchWord !== undefined) {
       this.setState({
@@ -57,12 +63,12 @@ class TopBar extends React.Component {
     ee.on('code:init', this.codeInitHandler)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     ee.off('top:focus-search', this.focusSearchHandler)
     ee.off('code:init', this.codeInitHandler)
   }
 
-  handleSearchClearButton (e) {
+  handleSearchClearButton(e) {
     const { dispatch } = this.props
     this.setState({
       search: '',
@@ -74,7 +80,7 @@ class TopBar extends React.Component {
     this.debouncedUpdateKeyword('')
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     // Re-apply search field on ENTER key
     if (e.keyCode === 13) {
       this.debouncedUpdateKeyword(e.target.value)
@@ -98,18 +104,18 @@ class TopBar extends React.Component {
     }
   }
 
-  handleSearchChange (e) {
+  handleSearchChange(e) {
     const keyword = e.target.value
     this.debouncedUpdateKeyword(keyword)
   }
 
-  handleSearchFocus (e) {
+  handleSearchFocus(e) {
     this.setState({
       isSearching: true
     })
   }
 
-  handleSearchBlur (e) {
+  handleSearchBlur(e) {
     e.stopPropagation()
 
     let el = e.relatedTarget
@@ -128,7 +134,7 @@ class TopBar extends React.Component {
     }
   }
 
-  handleOnSearchFocus () {
+  handleOnSearchFocus() {
     const el = this.refs.search.childNodes[0]
     if (this.state.isSearching) {
       el.blur()
@@ -137,20 +143,22 @@ class TopBar extends React.Component {
     }
   }
 
-  handleCodeInit () {
+  handleCodeInit() {
     ee.emit('top:search', this.refs.searchInput.value || '')
   }
 
-  render () {
+  render() {
     const { config, style, location } = this.props
     return (
-      <div className='TopBar'
+      <div
+        className='TopBar'
         styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
         style={style}
       >
         <div styleName='control'>
           <div styleName='control-search'>
-            <div styleName='control-search-input'
+            <div
+              styleName='control-search-input'
               onFocus={this.handleSearchFocus}
               onBlur={this.handleSearchBlur}
               tabIndex='-1'
@@ -165,27 +173,33 @@ class TopBar extends React.Component {
                 type='text'
                 className='searchInput'
               />
-              {this.state.search !== '' &&
-                <button styleName='control-search-input-clear'
+              {this.state.search !== '' && (
+                <button
+                  styleName='control-search-input-clear'
                   onClick={this.handleSearchClearButton}
                 >
                   <i className='fa fa-fw fa-times' />
-                  <span styleName='control-search-input-clear-tooltip'>{i18n.__('Clear Search')}</span>
+                  <span styleName='control-search-input-clear-tooltip'>
+                    {i18n.__('Clear Search')}
+                  </span>
                 </button>
-              }
+              )}
             </div>
           </div>
         </div>
-        {location.pathname === '/trashed' ? ''
-        : <NewNoteButton
-          {..._.pick(this.props, [
-            'dispatch',
-            'data',
-            'config',
-            'location',
-            'match'
-          ])}
-        />}
+        {location.pathname === '/trashed' ? (
+          ''
+        ) : (
+          <NewNoteButton
+            {..._.pick(this.props, [
+              'dispatch',
+              'data',
+              'config',
+              'location',
+              'match'
+            ])}
+          />
+        )}
       </div>
     )
   }

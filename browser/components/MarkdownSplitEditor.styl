@@ -16,22 +16,14 @@
     z-index 10
     cursor col-resize
 
-body[data-theme="dark"]
-  .root
-    .slider
-      border-left 1px solid $ui-dark-borderColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      .slider
+        border-left 1px solid get-theme-var(theme, 'borderColor')
 
-body[data-theme="solarized-dark"]
-  .root
-    .slider
-      border-left 1px solid $ui-solarized-dark-borderColor
+for theme in 'dark' 'dracula' 'solarized-dark'
+  apply-theme(theme)
 
-body[data-theme="monokai"]
-  .root
-    .slider
-      border-left 1px solid $ui-monokai-borderColor
-
-body[data-theme="dracula"]
-  .root
-    .slider
-      border-left 1px solid $ui-dracula-borderColor
+for theme in $themes
+  apply-theme(theme)

@@ -9,24 +9,28 @@ import { SortableContainer } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 
 class FolderList extends React.Component {
-  render () {
+  render() {
     const { storage, hostBoundingBox } = this.props
 
     const folderList = storage.folders.map((folder, index) => {
-      return <FolderItem key={folder.key}
-        folder={folder}
-        storage={storage}
-        index={index}
-        hostBoundingBox={hostBoundingBox}
-      />
+      return (
+        <FolderItem
+          key={folder.key}
+          folder={folder}
+          storage={storage}
+          index={index}
+          hostBoundingBox={hostBoundingBox}
+        />
+      )
     })
 
     return (
       <div>
-        {folderList.length > 0
-          ? folderList
-          : <div styleName='folderList-empty'>{i18n.__('No Folders')}</div>
-        }
+        {folderList.length > 0 ? (
+          folderList
+        ) : (
+          <div styleName='folderList-empty'>{i18n.__('No Folders')}</div>
+        )}
       </div>
     )
   }
@@ -52,23 +56,21 @@ FolderList.propTypes = {
 }
 
 class SortableFolderListComponent extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.onSortEnd = ({oldIndex, newIndex}) => {
+    this.onSortEnd = ({ oldIndex, newIndex }) => {
       const { storage } = this.props
-      dataApi
-        .reorderFolder(storage.key, oldIndex, newIndex)
-        .then((data) => {
-          store.dispatch({
-            type: 'REORDER_FOLDER',
-            storage: data.storage
-          })
-          this.setState()
+      dataApi.reorderFolder(storage.key, oldIndex, newIndex).then(data => {
+        store.dispatch({
+          type: 'REORDER_FOLDER',
+          storage: data.storage
         })
+        this.setState()
+      })
     }
   }
 
-  render () {
+  render() {
     const StyledFolderList = CSSModules(FolderList, this.props.styles)
     const SortableFolderList = SortableContainer(StyledFolderList)
 

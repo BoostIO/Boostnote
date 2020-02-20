@@ -11,7 +11,7 @@ const electron = require('electron')
 const { shell } = electron
 const ipc = electron.ipcRenderer
 class Blog extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -20,12 +20,12 @@ class Blog extends React.Component {
     }
   }
 
-  handleLinkClick (e) {
+  handleLinkClick(e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  clearMessage () {
+  clearMessage() {
     _.debounce(() => {
       this.setState({
         BlogAlert: null
@@ -33,30 +33,41 @@ class Blog extends React.Component {
     }, 2000)()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.handleSettingDone = () => {
-      this.setState({BlogAlert: {
-        type: 'success',
-        message: i18n.__('Successfully applied!')
-      }})
+      this.setState({
+        BlogAlert: {
+          type: 'success',
+          message: i18n.__('Successfully applied!')
+        }
+      })
     }
-    this.handleSettingError = (err) => {
-      this.setState({BlogAlert: {
-        type: 'error',
-        message: err.message != null ? err.message : i18n.__('An error occurred!')
-      }})
+    this.handleSettingError = err => {
+      this.setState({
+        BlogAlert: {
+          type: 'error',
+          message:
+            err.message != null ? err.message : i18n.__('An error occurred!')
+        }
+      })
     }
     this.oldBlog = this.state.config.blog
     ipc.addListener('APP_SETTING_DONE', this.handleSettingDone)
     ipc.addListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  handleBlogChange (e) {
+  handleBlogChange(e) {
     const { config } = this.state
     config.blog = {
-      password: !_.isNil(this.refs.passwordInput) ? this.refs.passwordInput.value : config.blog.password,
-      username: !_.isNil(this.refs.usernameInput) ? this.refs.usernameInput.value : config.blog.username,
-      token: !_.isNil(this.refs.tokenInput) ? this.refs.tokenInput.value : config.blog.token,
+      password: !_.isNil(this.refs.passwordInput)
+        ? this.refs.passwordInput.value
+        : config.blog.password,
+      username: !_.isNil(this.refs.usernameInput)
+        ? this.refs.usernameInput.value
+        : config.blog.username,
+      token: !_.isNil(this.refs.tokenInput)
+        ? this.refs.tokenInput.value
+        : config.blog.token,
       authMethod: this.refs.authMethodDropdown.value,
       address: this.refs.addressInput.value,
       type: this.refs.typeDropdown.value
@@ -75,7 +86,7 @@ class Blog extends React.Component {
     }
   }
 
-  handleSaveButtonClick (e) {
+  handleSaveButtonClick(e) {
     const newConfig = {
       blog: this.state.config.blog
     }
@@ -90,36 +101,36 @@ class Blog extends React.Component {
     this.props.haveToSave()
   }
 
-  render () {
-    const {config, BlogAlert} = this.state
-    const blogAlertElement = BlogAlert != null
-      ? <p className={`alert ${BlogAlert.type}`}>
-        {BlogAlert.message}
-      </p>
-      : null
+  render() {
+    const { config, BlogAlert } = this.state
+    const blogAlertElement =
+      BlogAlert != null ? (
+        <p className={`alert ${BlogAlert.type}`}>{BlogAlert.message}</p>
+      ) : null
     return (
       <div styleName='root'>
         <div styleName='group'>
           <div styleName='group-header'>{i18n.__('Blog')}</div>
           <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Blog Type')}
-            </div>
+            <div styleName='group-section-label'>{i18n.__('Blog Type')}</div>
             <div styleName='group-section-control'>
               <select
                 value={config.blog.type}
                 ref='typeDropdown'
-                onChange={(e) => this.handleBlogChange(e)}
+                onChange={e => this.handleBlogChange(e)}
               >
-                <option value='wordpress' key='wordpress'>{i18n.__('wordpress')}</option>
+                <option value='wordpress' key='wordpress'>
+                  {i18n.__('wordpress')}
+                </option>
               </select>
             </div>
           </div>
           <div styleName='group-section'>
             <div styleName='group-section-label'>{i18n.__('Blog Address')}</div>
             <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleBlogChange(e)}
+              <input
+                styleName='group-section-control-input'
+                onChange={e => this.handleBlogChange(e)}
                 ref='addressInput'
                 value={config.blog.address}
                 type='text'
@@ -127,8 +138,11 @@ class Blog extends React.Component {
             </div>
           </div>
           <div styleName='group-control'>
-            <button styleName='group-control-rightButton'
-              onClick={(e) => this.handleSaveButtonClick(e)}>{i18n.__('Save')}
+            <button
+              styleName='group-control-rightButton'
+              onClick={e => this.handleSaveButtonClick(e)}
+            >
+              {i18n.__('Save')}
             </button>
             {blogAlertElement}
           </div>
@@ -143,49 +157,59 @@ class Blog extends React.Component {
             <select
               value={config.blog.authMethod}
               ref='authMethodDropdown'
-              onChange={(e) => this.handleBlogChange(e)}
+              onChange={e => this.handleBlogChange(e)}
             >
-              <option value='JWT' key='JWT'>{i18n.__('JWT')}</option>
-              <option value='USER' key='USER'>{i18n.__('USER')}</option>
+              <option value='JWT' key='JWT'>
+                {i18n.__('JWT')}
+              </option>
+              <option value='USER' key='USER'>
+                {i18n.__('USER')}
+              </option>
             </select>
           </div>
         </div>
-        { config.blog.authMethod === 'JWT' &&
+        {config.blog.authMethod === 'JWT' && (
           <div styleName='group-section'>
             <div styleName='group-section-label'>{i18n.__('Token')}</div>
             <div styleName='group-section-control'>
-              <input styleName='group-section-control-input'
-                onChange={(e) => this.handleBlogChange(e)}
+              <input
+                styleName='group-section-control-input'
+                onChange={e => this.handleBlogChange(e)}
                 ref='tokenInput'
                 value={config.blog.token}
-                type='text' />
+                type='text'
+              />
             </div>
           </div>
-        }
-        { config.blog.authMethod === 'USER' &&
+        )}
+        {config.blog.authMethod === 'USER' && (
           <div>
             <div styleName='group-section'>
               <div styleName='group-section-label'>{i18n.__('UserName')}</div>
               <div styleName='group-section-control'>
-                <input styleName='group-section-control-input'
-                  onChange={(e) => this.handleBlogChange(e)}
+                <input
+                  styleName='group-section-control-input'
+                  onChange={e => this.handleBlogChange(e)}
                   ref='usernameInput'
                   value={config.blog.username}
-                  type='text' />
+                  type='text'
+                />
               </div>
             </div>
             <div styleName='group-section'>
               <div styleName='group-section-label'>{i18n.__('Password')}</div>
               <div styleName='group-section-control'>
-                <input styleName='group-section-control-input'
-                  onChange={(e) => this.handleBlogChange(e)}
+                <input
+                  styleName='group-section-control-input'
+                  onChange={e => this.handleBlogChange(e)}
                   ref='passwordInput'
                   value={config.blog.password}
-                  type='password' />
+                  type='password'
+                />
               </div>
             </div>
           </div>
-        }
+        )}
       </div>
     )
   }

@@ -1,0 +1,85 @@
+.control-toggleModeButton
+  height 25px
+  border-radius 50px
+  background-color #F4F4F4
+  width 52px
+  display flex
+  align-items center
+  position: relative
+  top 2px
+  margin-left 5px
+  .active
+    background-color #1EC38B
+    width 33px
+    height 24px
+    box-shadow 2px 0px 7px #eee
+    z-index 1
+
+  div
+    width 40px
+    height 100%
+    border-radius 50%
+    display flex
+    align-items center
+    justify-content center
+    cursor pointer
+
+  &:hover .tooltip
+    opacity 1
+
+.tooltip
+  tooltip()
+  position absolute
+  pointer-events none
+  top 33px
+  left -10px
+  z-index 200
+  width 80px
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
+.tooltip:lang(ja)
+  @extend .tooltip
+  left -8px
+  width 70px
+
+.control-toggleModeButton
+  -webkit-user-drag none
+  user-select none
+  > div img
+    -webkit-user-drag none
+    user-select none
+
+body[data-theme="dark"]
+  .control-fullScreenButton
+    topBarButtonDark()
+
+  .control-toggleModeButton
+      background-color #3A404C
+    .active
+      background-color #1EC38B
+      box-shadow 2px 0px 7px #444444
+
+body[data-theme="solarized-dark"]
+  .control-toggleModeButton
+      background-color #002B36
+    .active
+      background-color #1EC38B
+      box-shadow 2px 0px 7px #222222
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .control-toggleModeButton
+      background-color get-theme-var(theme, 'borderColor')
+      .active
+        background-color get-theme-var(theme, 'active-color')
+        box-shadow 2px 0px 7px #222222
+
+for theme in 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

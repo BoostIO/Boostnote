@@ -132,55 +132,57 @@ body[data-theme="white"]
       background-color alpha($ui-button--active-backgroundColor, 40%)
       color $ui-text-color
 
-body[data-theme="dark"]
-  .header--active
-    background-color $ui-dark-button--active-backgroundColor
-    transition color background-color  0.15s
+apply-theme(theme)
+  body[data-theme={theme}]
+    .header--active
+      background-color get-theme-var(theme, 'button--active-backgroundColor')
+      transition color background-color  0.15s
 
-  .header--active
+    .header--active
+      .header-toggleButton
+        color get-theme-var(theme, 'text-color')
+
+    .header--active
+      .header-info
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button--active-backgroundColor')
+        &:active
+          color get-theme-var(theme, 'text-color')
+          background-color get-theme-var(theme, 'button--active-backgroundColor')
+
+    .header--active
+      .header-addFolderButton
+        color get-theme-var(theme, 'text-color')
+
     .header-toggleButton
-      color $ui-dark-text-color
+      &:hover
+        transition 0.2s
+        color get-theme-var(theme, 'text-color')
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 60%)
+      &:active, &:active:hover
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button--active-backgroundColor')
 
-  .header--active
     .header-info
-      color $ui-dark-text-color
-      background-color $ui-dark-button--active-backgroundColor
-      &:active
-        color $ui-dark-text-color
-        background-color $ui-dark-button--active-backgroundColor
+      background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 20%)
+      &:hover
+        transition 0.2s
+        color get-theme-var(theme, 'text-color')
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 20%)
+      &:active, &:active:hover
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button--active-backgroundColor')
 
-  .header--active
     .header-addFolderButton
-      color $ui-dark-text-color
+      &:hover
+        transition 0.2s
+        color get-theme-var(theme, 'text-color')
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 60%)
+      &:active, &:active:hover
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button--active-backgroundColor')
 
-  .header-toggleButton
-    &:hover
-      transition 0.2s
-      color $ui-dark-text-color
-      background-color alpha($ui-dark-button--active-backgroundColor, 60%)
-    &:active, &:active:hover
-      color $ui-dark-text-color
-      background-color $ui-dark-button--active-backgroundColor
+apply-theme('dark')
 
-  .header-info
-    background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-    &:hover
-      transition 0.2s
-      color $ui-dark-text-color
-      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-    &:active, &:active:hover
-      color $ui-dark-text-color
-      background-color $ui-dark-button--active-backgroundColor
-
-  .header-addFolderButton
-    &:hover
-      transition 0.2s
-      color $ui-dark-text-color
-      background-color alpha($ui-dark-button--active-backgroundColor, 60%)
-    &:active, &:active:hover
-      color $ui-dark-text-color
-      background-color $ui-dark-button--active-backgroundColor
-
-
-
-
+for theme in $themes
+  apply-theme(theme)

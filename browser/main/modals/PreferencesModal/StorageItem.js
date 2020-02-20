@@ -12,7 +12,7 @@ const { shell, remote } = require('electron')
 const { dialog } = remote
 
 class StorageItem extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -20,137 +20,156 @@ class StorageItem extends React.Component {
     }
   }
 
-  handleNewFolderButtonClick (e) {
+  handleNewFolderButtonClick(e) {
     const { storage } = this.props
     const input = {
       name: i18n.__('New Folder'),
       color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7) % 7]
     }
 
-    dataApi.createFolder(storage.key, input)
-      .then((data) => {
+    dataApi
+      .createFolder(storage.key, input)
+      .then(data => {
         store.dispatch({
           type: 'UPDATE_FOLDER',
           storage: data.storage
         })
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err)
       })
   }
 
-  handleExternalButtonClick () {
+  handleExternalButtonClick() {
     const { storage } = this.props
     shell.showItemInFolder(storage.path)
   }
 
-  handleUnlinkButtonClick (e) {
+  handleUnlinkButtonClick(e) {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Unlink Storage'),
-      detail: i18n.__('Unlinking removes this linked storage from Boostnote. No data is removed, please manually delete the folder from your hard drive if needed.'),
+      detail: i18n.__(
+        'Unlinking removes this linked storage from Boostnote. No data is removed, please manually delete the folder from your hard drive if needed.'
+      ),
       buttons: [i18n.__('Unlink'), i18n.__('Cancel')]
     })
 
     if (index === 0) {
       const { storage } = this.props
-      dataApi.removeStorage(storage.key)
+      dataApi
+        .removeStorage(storage.key)
         .then(() => {
           store.dispatch({
             type: 'REMOVE_STORAGE',
             storageKey: storage.key
           })
         })
-        .catch((err) => {
+        .catch(err => {
           throw err
         })
     }
   }
 
-  handleLabelClick (e) {
+  handleLabelClick(e) {
     const { storage } = this.props
-    this.setState({
-      isLabelEditing: true,
-      name: storage.name
-    }, () => {
-      this.refs.label.focus()
-    })
+    this.setState(
+      {
+        isLabelEditing: true,
+        name: storage.name
+      },
+      () => {
+        this.refs.label.focus()
+      }
+    )
   }
-  handleLabelChange (e) {
+  handleLabelChange(e) {
     this.setState({
       name: this.refs.label.value
     })
   }
 
-  handleLabelBlur (e) {
+  handleLabelBlur(e) {
     const { storage } = this.props
-    dataApi
-      .renameStorage(storage.key, this.state.name)
-      .then((_storage) => {
-        store.dispatch({
-          type: 'RENAME_STORAGE',
-          storage: _storage
-        })
-        this.setState({
-          isLabelEditing: false
-        })
+    dataApi.renameStorage(storage.key, this.state.name).then(_storage => {
+      store.dispatch({
+        type: 'RENAME_STORAGE',
+        storage: _storage
       })
+      this.setState({
+        isLabelEditing: false
+      })
+    })
   }
 
-  render () {
+  render() {
     const { storage, hostBoundingBox } = this.props
 
     return (
       <div styleName='root' key={storage.key}>
         <div styleName='header'>
-          {this.state.isLabelEditing
-            ? <div styleName='header-label--edit'>
-              <input styleName='header-label-input'
+          {this.state.isLabelEditing ? (
+            <div styleName='header-label--edit'>
+              <input
+                styleName='header-label-input'
                 value={this.state.name}
                 ref='label'
-                onChange={(e) => this.handleLabelChange(e)}
-                onBlur={(e) => this.handleLabelBlur(e)}
+                onChange={e => this.handleLabelChange(e)}
+                onBlur={e => this.handleLabelBlur(e)}
               />
             </div>
-            : <div styleName='header-label'
-              onClick={(e) => this.handleLabelClick(e)}
+          ) : (
+            <div
+              styleName='header-label'
+              onClick={e => this.handleLabelClick(e)}
             >
-              <i className='fa fa-folder-open' />&nbsp;
+              <i className='fa fa-folder-open' />
+              &nbsp;
               {storage.name}&nbsp;
               <span styleName='header-label-path'>({storage.path})</span>&nbsp;
               <i styleName='header-label-editButton' className='fa fa-pencil' />
             </div>
-          }
+          )}
           <div styleName='header-control'>
-            <button styleName='header-control-button'
-              onClick={(e) => this.handleNewFolderButtonClick(e)}
+            <button
+              styleName='header-control-button'
+              onClick={e => this.handleNewFolderButtonClick(e)}
             >
               <i className='fa fa-plus' />
-              <span styleName='header-control-button-tooltip'
-                style={{left: -20}}
-              >{i18n.__('Add Folder')}</span>
+              <span
+                styleName='header-control-button-tooltip'
+                style={{ left: -20 }}
+              >
+                {i18n.__('Add Folder')}
+              </span>
             </button>
-            <button styleName='header-control-button'
-              onClick={(e) => this.handleExternalButtonClick(e)}
+            <button
+              styleName='header-control-button'
+              onClick={e => this.handleExternalButtonClick(e)}
             >
               <i className='fa fa-external-link' />
-              <span styleName='header-control-button-tooltip'
-                style={{left: -50}}
-              >{i18n.__('Open Storage folder')}</span>
+              <span
+                styleName='header-control-button-tooltip'
+                style={{ left: -50 }}
+              >
+                {i18n.__('Open Storage folder')}
+              </span>
             </button>
-            <button styleName='header-control-button'
-              onClick={(e) => this.handleUnlinkButtonClick(e)}
+            <button
+              styleName='header-control-button'
+              onClick={e => this.handleUnlinkButtonClick(e)}
             >
               <i className='fa fa-unlink' />
-              <span styleName='header-control-button-tooltip'
-                style={{left: -10}}
-              >{i18n.__('Unlink')}</span>
+              <span
+                styleName='header-control-button-tooltip'
+                style={{ left: -10 }}
+              >
+                {i18n.__('Unlink')}
+              </span>
             </button>
           </div>
         </div>
-        <FolderList storage={storage}
-          hostBoundingBox={hostBoundingBox}
-        />
+        <FolderList storage={storage} hostBoundingBox={hostBoundingBox} />
       </div>
     )
   }
