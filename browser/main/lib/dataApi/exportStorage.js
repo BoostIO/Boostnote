@@ -20,7 +20,7 @@ import * as fs from 'fs'
  * ```
  */
 
-function exportStorage (storageKey, fileType, exportDir) {
+function exportStorage(storageKey, fileType, exportDir) {
   let targetStorage
   try {
     targetStorage = findStorage(storageKey)
@@ -29,14 +29,17 @@ function exportStorage (storageKey, fileType, exportDir) {
   }
 
   return resolveStorageData(targetStorage)
-    .then(storage => (
-      resolveStorageNotes(storage).then(notes => ({storage, notes}))
-    ))
-    .then(function exportNotes (data) {
+    .then(storage =>
+      resolveStorageNotes(storage).then(notes => ({ storage, notes }))
+    )
+    .then(function exportNotes(data) {
       const { storage, notes } = data
       const folderNamesMapping = {}
       storage.folders.forEach(folder => {
-        const folderExportedDir = path.join(exportDir, filenamify(folder.name, {replacement: '_'}))
+        const folderExportedDir = path.join(
+          exportDir,
+          filenamify(folder.name, { replacement: '_' })
+        )
         folderNamesMapping[folder.key] = folderExportedDir
         // make sure directory exists
         try {
@@ -47,7 +50,9 @@ function exportStorage (storageKey, fileType, exportDir) {
         .filter(note => !note.isTrashed && note.type === 'MARKDOWN_NOTE')
         .forEach(markdownNote => {
           const folderExportedDir = folderNamesMapping[markdownNote.folder]
-          const snippetName = `${filenamify(markdownNote.title, {replacement: '_'})}.${fileType}`
+          const snippetName = `${filenamify(markdownNote.title, {
+            replacement: '_'
+          })}.${fileType}`
           const notePath = path.join(folderExportedDir, snippetName)
           fs.writeFileSync(notePath, markdownNote.content)
         })

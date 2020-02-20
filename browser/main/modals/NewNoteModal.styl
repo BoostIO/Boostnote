@@ -54,70 +54,26 @@
   margin-bottom 25px
   cursor pointer
 
-body[data-theme="dark"]
-  .root
-    modalDark()
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      background-color transparent
 
-  .header
-    color $ui-dark-text-color
+    .header
+      color get-theme-var(theme, 'text-color')
 
-  .control-button
-    border-color $ui-dark-borderColor
-    color $ui-dark-text-color
-    background-color transparent
-    &:focus
-      colorDarkPrimaryButton()
+    .control-button
+      border-color get-theme-var(theme, 'borderColor')
+      color get-theme-var(theme, 'text-color')
+      background-color transparent
+      &:focus
+        colorThemedPrimaryButton(theme)
 
-  .description, .from-url
-    color $ui-inactive-text-color
+    .description
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="solarized-dark"]
-  .root
-    background-color transparent
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .header
-    color $ui-solarized-dark-text-color
-
-  .control-button
-    border-color $ui-solarized-dark-borderColor
-    color $ui-solarized-dark-text-color
-    background-color transparent
-    &:focus
-      colorDarkPrimaryButton()
-
-  .description, .from-url
-    color $ui-solarized-dark-text-color
-
-body[data-theme="monokai"]
-  .root
-    background-color transparent
-
-  .header
-    color $ui-monokai-text-color
-
-  .control-button
-    border-color $ui-monokai-borderColor
-    color $ui-monokai-text-color
-    background-color transparent
-    &:focus
-      colorDarkPrimaryButton()
-
-  .description, .from-url
-    color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .root
-    background-color transparent
-
-  .header
-    color $ui-dracula-text-color
-
-  .control-button
-    border-color $ui-dracula-borderColor
-    color $ui-dracula-text-color
-    background-color transparent
-    &:focus
-      colorDraculaPrimaryButton()
-
-  .description
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

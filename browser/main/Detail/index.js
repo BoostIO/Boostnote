@@ -15,7 +15,7 @@ import queryString from 'query-string'
 const OSX = global.process.platform === 'darwin'
 
 class Detail extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.focusHandler = () => {
@@ -26,41 +26,55 @@ class Detail extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     ee.on('detail:focus', this.focusHandler)
     ee.on('detail:delete', this.deleteHandler)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     ee.off('detail:focus', this.focusHandler)
     ee.off('detail:delete', this.deleteHandler)
   }
 
-  render () {
-    const { location, data, match: { params }, config } = this.props
-    const noteKey = location.search !== '' && queryString.parse(location.search).key
+  render() {
+    const {
+      location,
+      data,
+      match: { params },
+      config
+    } = this.props
+    const noteKey =
+      location.search !== '' && queryString.parse(location.search).key
     let note = null
 
     if (location.search !== '') {
       const allNotes = data.noteMap.map(note => note)
-      const trashedNotes = data.trashedSet.toJS().map(uniqueKey => data.noteMap.get(uniqueKey))
+      const trashedNotes = data.trashedSet
+        .toJS()
+        .map(uniqueKey => data.noteMap.get(uniqueKey))
       let displayedNotes = allNotes
 
       if (location.pathname.match(/\/searched/)) {
         const searchStr = params.searchword
-        displayedNotes = searchStr === undefined || searchStr === '' ? allNotes
-          : searchFromNotes(allNotes, searchStr)
+        displayedNotes =
+          searchStr === undefined || searchStr === ''
+            ? allNotes
+            : searchFromNotes(allNotes, searchStr)
       } else if (location.pathname.match(/^\/tags/)) {
         const listOfTags = params.tagname.split(' ')
-        displayedNotes = data.noteMap.map(note => note).filter(note =>
-          listOfTags.every(tag => note.tags.includes(tag))
-        )
+        displayedNotes = data.noteMap
+          .map(note => note)
+          .filter(note => listOfTags.every(tag => note.tags.includes(tag)))
       }
 
       if (location.pathname.match(/^\/trashed/)) {
         displayedNotes = trashedNotes
       } else {
-        displayedNotes = _.differenceWith(displayedNotes, trashedNotes, (note, trashed) => note.key === trashed.key)
+        displayedNotes = _.differenceWith(
+          displayedNotes,
+          trashedNotes,
+          (note, trashed) => note.key === trashed.key
+        )
       }
 
       const noteKeys = displayedNotes.map(note => note.key)
@@ -71,12 +85,12 @@ class Detail extends React.Component {
 
     if (note == null) {
       return (
-        <div styleName='root'
-          style={this.props.style}
-          tabIndex='0'
-        >
+        <div styleName='root' style={this.props.style} tabIndex='0'>
           <div styleName='empty'>
-            <div styleName='empty-message'>{OSX ? i18n.__('Command(⌘)') : i18n.__('Ctrl(^)')} + N<br />{i18n.__('to create a new note')}</div>
+            <div styleName='empty-message'>
+              {OSX ? i18n.__('Command(⌘)') : i18n.__('Ctrl(^)')} + N<br />
+              {i18n.__('to create a new note')}
+            </div>
           </div>
           <StatusBar
             {..._.pick(this.props, ['config', 'location', 'dispatch'])}

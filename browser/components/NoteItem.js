@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { isArray, sortBy } from 'lodash'
 import invertColor from 'invert-color'
+import Emoji from 'react-emoji-render'
 import CSSModules from 'browser/lib/CSSModules'
 import { getTodoStatus } from 'browser/lib/getTodoStatus'
 import styles from './NoteItem.styl'
@@ -21,7 +22,11 @@ const TagElement = ({ tagName, color }) => {
   const style = {}
   if (color) {
     style.backgroundColor = color
-    style.color = invertColor(color, { black: '#222', white: '#f1f1f1', threshold: 0.3 })
+    style.color = invertColor(color, {
+      black: '#222',
+      white: '#f1f1f1',
+      threshold: 0.3
+    })
   }
   return (
     <span styleName='item-bottom-tagList-item' key={tagName} style={style}>
@@ -43,9 +48,13 @@ const TagElementList = (tags, showTagsAlphabetically, coloredTags) => {
   }
 
   if (showTagsAlphabetically) {
-    return sortBy(tags).map(tag => TagElement({ tagName: tag, color: coloredTags[tag] }))
+    return sortBy(tags).map(tag =>
+      TagElement({ tagName: tag, color: coloredTags[tag] })
+    )
   } else {
-    return tags.map(tag => TagElement({ tagName: tag, color: coloredTags[tag] }))
+    return tags.map(tag =>
+      TagElement({ tagName: tag, color: coloredTags[tag] })
+    )
   }
 }
 
@@ -82,13 +91,17 @@ const NoteItem = ({
     draggable='true'
   >
     <div styleName='item-wrapper'>
-      {note.type === 'SNIPPET_NOTE'
-        ? <i styleName='item-title-icon' className='fa fa-fw fa-code' />
-        : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />}
+      {note.type === 'SNIPPET_NOTE' ? (
+        <i styleName='item-title-icon' className='fa fa-fw fa-code' />
+      ) : (
+        <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o' />
+      )}
       <div styleName='item-title'>
-        {note.title.trim().length > 0
-          ? note.title
-          : <span styleName='item-title-empty'>{i18n.__('Empty note')}</span>}
+        {note.title.trim().length > 0 ? (
+          <Emoji text={note.title} />
+        ) : (
+          <span styleName='item-title-empty'>{i18n.__('Empty note')}</span>
+        )}
       </div>
       <div styleName='item-middle'>
         <div styleName='item-middle-time'>{dateDisplay}</div>
@@ -97,7 +110,9 @@ const NoteItem = ({
             title={
               viewType === 'ALL'
                 ? storageName
-                : viewType === 'STORAGE' ? folderName : null
+                : viewType === 'STORAGE'
+                ? folderName
+                : null
             }
             styleName='item-middle-app-meta-label'
           >
@@ -108,28 +123,36 @@ const NoteItem = ({
       </div>
       <div styleName='item-bottom'>
         <div styleName='item-bottom-tagList'>
-          {note.tags.length > 0
-            ? TagElementList(note.tags, showTagsAlphabetically, coloredTags)
-            : <span
+          {note.tags.length > 0 ? (
+            TagElementList(note.tags, showTagsAlphabetically, coloredTags)
+          ) : (
+            <span
               style={{ fontStyle: 'italic', opacity: 0.5 }}
               styleName='item-bottom-tagList-empty'
-              >
+            >
               {i18n.__('No tags')}
-            </span>}
+            </span>
+          )}
         </div>
         <div>
-          {note.isStarred
-            ? <img
+          {note.isStarred ? (
+            <img
               styleName='item-star'
               src='../resources/icon/icon-starred.svg'
-              />
-            : ''}
-          {note.isPinned && !pathname.match(/\/starred|\/trash/)
-            ? <i styleName='item-pin' className='fa fa-thumb-tack' />
-            : ''}
-          {note.type === 'MARKDOWN_NOTE'
-            ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
-            : ''}
+            />
+          ) : (
+            ''
+          )}
+          {note.isPinned && !pathname.match(/\/starred|\/trash/) ? (
+            <i styleName='item-pin' className='fa fa-thumb-tack' />
+          ) : (
+            ''
+          )}
+          {note.type === 'MARKDOWN_NOTE' ? (
+            <TodoProcess todoStatus={getTodoStatus(note.content)} />
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </div>

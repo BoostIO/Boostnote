@@ -1,9 +1,9 @@
 'use strict'
 
-module.exports = function (md, renderers, defaultRenderer) {
+module.exports = function(md, renderers, defaultRenderer) {
   const paramsRE = /^[ \t]*([\w+#-]+)?(?:\(((?:\s*\w[-\w]*(?:=(?:'(?:.*?[^\\])?'|"(?:.*?[^\\])?"|(?:[^'"][^\s]*)))?)*)\))?(?::([^:]*)(?::(\d+))?)?\s*$/
 
-  function fence (state, startLine, endLine, silent) {
+  function fence(state, startLine, endLine, silent) {
     let pos = state.bMarks[startLine] + state.tShift[startLine]
     let max = state.eMarks[startLine]
 
@@ -12,7 +12,7 @@ module.exports = function (md, renderers, defaultRenderer) {
     }
 
     const marker = state.src.charCodeAt(pos)
-    if (marker !== 0x7E/* ~ */ && marker !== 0x60 /* ` */) {
+    if (marker !== 0x7e /* ~ */ && marker !== 0x60 /* ` */) {
       return false
     }
 
@@ -46,7 +46,10 @@ module.exports = function (md, renderers, defaultRenderer) {
       if (pos < max && state.sCount[nextLine] < state.blkIndent) {
         break
       }
-      if (state.src.charCodeAt(pos) !== marker || state.sCount[nextLine] - state.blkIndent >= 4) {
+      if (
+        state.src.charCodeAt(pos) !== marker ||
+        state.sCount[nextLine] - state.blkIndent >= 4
+      ) {
         continue
       }
 
@@ -127,10 +130,12 @@ module.exports = function (md, renderers, defaultRenderer) {
   })
 
   for (const name in renderers) {
-    md.renderer.rules[`${name}_fence`] = (tokens, index) => renderers[name](tokens[index])
+    md.renderer.rules[`${name}_fence`] = (tokens, index) =>
+      renderers[name](tokens[index])
   }
 
   if (defaultRenderer) {
-    md.renderer.rules['_fence'] = (tokens, index) => defaultRenderer(tokens[index])
+    md.renderer.rules['_fence'] = (tokens, index) =>
+      defaultRenderer(tokens[index])
   }
 }

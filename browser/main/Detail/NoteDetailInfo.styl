@@ -15,6 +15,14 @@ $info-margin-under-border = 30px
   padding 0 20px
   z-index 99
 
+.info > div
+  > button
+    -webkit-user-drag none
+    user-select none
+    > img, span
+      -webkit-user-drag none
+      user-select none
+
 .info-left
   padding 0 10px
   width 100%
@@ -94,25 +102,14 @@ body[data-theme="dark"]
   .undo-button
     topBarButtonDark()
 
-body[data-theme="solarized-dark"]
-  .info
-    border-color $ui-solarized-dark-borderColor
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .info
+      border-color get-theme-var(theme, 'borderColor')
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
 
-body[data-theme="monokai"]
-  .info
-    border-color $ui-monokai-borderColor
-    background-color $ui-monokai-noteDetail-backgroundColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="dracula"]
-  .info
-    border-color $ui-dracula-borderColor
-    background-color $ui-dracula-noteDetail-backgroundColor
-
-.info > div
-  > button
-    -webkit-user-drag none
-    user-select none
-    > img, span
-      -webkit-user-drag none
-      user-select none
+for theme in $themes
+  apply-theme(theme)

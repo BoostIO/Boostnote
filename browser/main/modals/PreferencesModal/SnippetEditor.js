@@ -6,13 +6,19 @@ import CSSModules from 'browser/lib/CSSModules'
 import dataApi from 'browser/main/lib/dataApi'
 import snippetManager from '../../../lib/SnippetManager'
 
-const defaultEditorFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
+const defaultEditorFontFamily = [
+  'Monaco',
+  'Menlo',
+  'Ubuntu Mono',
+  'Consolas',
+  'source-code-pro',
+  'monospace'
+]
 const buildCMRulers = (rulers, enableRulers) =>
   enableRulers ? rulers.map(ruler => ({ column: ruler })) : []
 
 class SnippetEditor extends React.Component {
-
-  componentDidMount () {
+  componentDidMount() {
     this.props.onRef(this)
     const { rulers, enableRulers } = this.props
     this.cm = CodeMirror(this.refs.root, {
@@ -49,38 +55,50 @@ class SnippetEditor extends React.Component {
     })
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onRef(undefined)
   }
 
-  onSnippetChanged (newSnippet) {
+  onSnippetChanged(newSnippet) {
     this.snippet = newSnippet
     this.cm.setValue(this.snippet.content)
   }
 
-  onSnippetNameOrPrefixChanged (newSnippet) {
+  onSnippetNameOrPrefixChanged(newSnippet) {
     this.snippet.name = newSnippet.name
-    this.snippet.prefix = newSnippet.prefix.toString().replace(/\s/g, '').split(',')
+    this.snippet.prefix = newSnippet.prefix
+      .toString()
+      .replace(/\s/g, '')
+      .split(',')
     this.saveSnippet()
   }
 
-  saveSnippet () {
-    dataApi.updateSnippet(this.snippet)
+  saveSnippet() {
+    dataApi
+      .updateSnippet(this.snippet)
       .then(snippets => snippetManager.assignSnippets(snippets))
-      .catch((err) => { throw err })
+      .catch(err => {
+        throw err
+      })
   }
 
-  render () {
+  render() {
     const { fontSize } = this.props
     let fontFamily = this.props.fontFamily
-    fontFamily = _.isString(fontFamily) && fontFamily.length > 0
-      ? [fontFamily].concat(defaultEditorFontFamily)
-      : defaultEditorFontFamily
+    fontFamily =
+      _.isString(fontFamily) && fontFamily.length > 0
+        ? [fontFamily].concat(defaultEditorFontFamily)
+        : defaultEditorFontFamily
     return (
-      <div styleName='SnippetEditor' ref='root' tabIndex='-1' style={{
-        fontFamily: fontFamily.join(', '),
-        fontSize: fontSize
-      }} />
+      <div
+        styleName='SnippetEditor'
+        ref='root'
+        tabIndex='-1'
+        style={{
+          fontFamily: fontFamily.join(', '),
+          fontSize: fontSize
+        }}
+      />
     )
   }
 }

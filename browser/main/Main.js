@@ -16,13 +16,15 @@ import { store } from 'browser/main/store'
 import i18n from 'browser/lib/i18n'
 import { getLocales } from 'browser/lib/Languages'
 import applyShortcuts from 'browser/main/lib/shortcutManager'
+import uiThemes from 'browser/lib/ui-themes'
 import { push } from 'connected-react-router'
+
 const path = require('path')
 const electron = require('electron')
 const { remote } = electron
 
 class Main extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if (process.env.NODE_ENV === 'production') {
@@ -44,7 +46,7 @@ class Main extends React.Component {
     this.toggleFullScreen = () => this.handleFullScreenButton()
   }
 
-  getChildContext () {
+  getChildContext() {
     const { status, config } = this.props
 
     return {
@@ -53,7 +55,7 @@ class Main extends React.Component {
     }
   }
 
-  init () {
+  init() {
     dataApi
       .addStorage({
         name: 'My Storage Location',
@@ -91,18 +93,21 @@ class Main extends React.Component {
             type: 'SNIPPET_NOTE',
             folder: data.storage.folders[0].key,
             title: 'Snippet note example',
-            description: 'Snippet note example\nYou can store a series of snippets as a single note, like Gist.',
+            description:
+              'Snippet note example\nYou can store a series of snippets as a single note, like Gist.',
             snippets: [
               {
                 name: 'example.html',
                 mode: 'html',
-                content: "<html>\n<body>\n<h1 id='hello'>Enjoy Boostnote!</h1>\n</body>\n</html>",
+                content:
+                  "<html>\n<body>\n<h1 id='hello'>Enjoy Boostnote!</h1>\n</body>\n</html>",
                 linesHighlighted: []
               },
               {
                 name: 'example.js',
                 mode: 'javascript',
-                content: "var boostnote = document.getElementById('hello').innerHTML\n\nconsole.log(boostnote)",
+                content:
+                  "var boostnote = document.getElementById('hello').innerHTML\n\nconsole.log(boostnote)",
                 linesHighlighted: []
               }
             ]
@@ -118,7 +123,8 @@ class Main extends React.Component {
             type: 'MARKDOWN_NOTE',
             folder: data.storage.folders[0].key,
             title: 'Welcome to Boostnote!',
-            content: '# Welcome to Boostnote!\n## Click here to edit markdown :wave:\n\n<iframe width="560" height="315" src="https://www.youtube.com/embed/L0qNPLsvmyM" frameborder="0" allowfullscreen></iframe>\n\n## Docs :memo:\n- [Boostnote | Boost your happiness, productivity and creativity.](https://hackernoon.com/boostnote-boost-your-happiness-productivity-and-creativity-315034efeebe)\n- [Cloud Syncing & Backups](https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup)\n- [How to sync your data across Desktop and Mobile apps](https://github.com/BoostIO/Boostnote/wiki/Sync-Data-Across-Desktop-and-Mobile-apps)\n- [Convert data from **Evernote** to Boostnote.](https://github.com/BoostIO/Boostnote/wiki/Evernote)\n- [Keyboard Shortcuts](https://github.com/BoostIO/Boostnote/wiki/Keyboard-Shortcuts)\n- [Keymaps in Editor mode](https://github.com/BoostIO/Boostnote/wiki/Keymaps-in-Editor-mode)\n- [How to set syntax highlight in Snippet note](https://github.com/BoostIO/Boostnote/wiki/Syntax-Highlighting)\n\n---\n\n## Article Archive :books:\n- [Reddit English](http://bit.ly/2mOJPu7)\n- [Reddit Spanish](https://www.reddit.com/r/boostnote_es/)\n- [Reddit Chinese](https://www.reddit.com/r/boostnote_cn/)\n- [Reddit Japanese](https://www.reddit.com/r/boostnote_jp/)\n\n---\n\n## Community :beers:\n- [GitHub](http://bit.ly/2AWWzkD)\n- [Twitter](http://bit.ly/2z8BUJZ)\n- [Facebook Group](http://bit.ly/2jcca8t)'
+            content:
+              '# Welcome to Boostnote!\n## Click here to edit markdown :wave:\n\n<iframe width="560" height="315" src="https://www.youtube.com/embed/L0qNPLsvmyM" frameborder="0" allowfullscreen></iframe>\n\n## Docs :memo:\n- [Boostnote | Boost your happiness, productivity and creativity.](https://hackernoon.com/boostnote-boost-your-happiness-productivity-and-creativity-315034efeebe)\n- [Cloud Syncing & Backups](https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup)\n- [How to sync your data across Desktop and Mobile apps](https://github.com/BoostIO/Boostnote/wiki/Sync-Data-Across-Desktop-and-Mobile-apps)\n- [Convert data from **Evernote** to Boostnote.](https://github.com/BoostIO/Boostnote/wiki/Evernote)\n- [Keyboard Shortcuts](https://github.com/BoostIO/Boostnote/wiki/Keyboard-Shortcuts)\n- [Keymaps in Editor mode](https://github.com/BoostIO/Boostnote/wiki/Keymaps-in-Editor-mode)\n- [How to set syntax highlight in Snippet note](https://github.com/BoostIO/Boostnote/wiki/Syntax-Highlighting)\n\n---\n\n## Article Archive :books:\n- [Reddit English](http://bit.ly/2mOJPu7)\n- [Reddit Spanish](https://www.reddit.com/r/boostnote_es/)\n- [Reddit Chinese](https://www.reddit.com/r/boostnote_cn/)\n- [Reddit Japanese](https://www.reddit.com/r/boostnote_jp/)\n\n---\n\n## Community :beers:\n- [GitHub](http://bit.ly/2AWWzkD)\n- [Twitter](http://bit.ly/2z8BUJZ)\n- [Facebook Group](http://bit.ly/2jcca8t)'
           })
           .then(note => {
             store.dispatch({
@@ -139,12 +145,10 @@ class Main extends React.Component {
       })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { dispatch, config } = this.props
 
-    const supportedThemes = ['dark', 'white', 'solarized-dark', 'monokai', 'dracula']
-
-    if (supportedThemes.indexOf(config.ui.theme) !== -1) {
+    if (uiThemes.some(theme => theme.name === config.ui.theme)) {
       document.body.setAttribute('data-theme', config.ui.theme)
     } else {
       document.body.setAttribute('data-theme', 'default')
@@ -173,38 +177,44 @@ class Main extends React.Component {
     delete CodeMirror.keyMap.emacs['Ctrl-V']
 
     eventEmitter.on('editor:fullscreen', this.toggleFullScreen)
-    eventEmitter.on('menubar:togglemenubar', this.toggleMenuBarVisible.bind(this))
+    eventEmitter.on(
+      'menubar:togglemenubar',
+      this.toggleMenuBarVisible.bind(this)
+    )
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     eventEmitter.off('editor:fullscreen', this.toggleFullScreen)
-    eventEmitter.off('menubar:togglemenubar', this.toggleMenuBarVisible.bind(this))
+    eventEmitter.off(
+      'menubar:togglemenubar',
+      this.toggleMenuBarVisible.bind(this)
+    )
   }
 
-  toggleMenuBarVisible () {
+  toggleMenuBarVisible() {
     const { config } = this.props
     const { ui } = config
 
-    const newUI = Object.assign(ui, {showMenuBar: !ui.showMenuBar})
+    const newUI = Object.assign(ui, { showMenuBar: !ui.showMenuBar })
     const newConfig = Object.assign(config, newUI)
     ConfigManager.set(newConfig)
   }
 
-  handleLeftSlideMouseDown (e) {
+  handleLeftSlideMouseDown(e) {
     e.preventDefault()
     this.setState({
       isLeftSliderFocused: true
     })
   }
 
-  handleRightSlideMouseDown (e) {
+  handleRightSlideMouseDown(e) {
     e.preventDefault()
     this.setState({
       isRightSliderFocused: true
     })
   }
 
-  handleMouseUp (e) {
+  handleMouseUp(e) {
     // Change width of NoteList component.
     if (this.state.isRightSliderFocused) {
       this.setState(
@@ -244,7 +254,7 @@ class Main extends React.Component {
     }
   }
 
-  handleMouseMove (e) {
+  handleMouseMove(e) {
     if (this.state.isRightSliderFocused) {
       const offset = this.refs.body.getBoundingClientRect().left
       let newListWidth = e.pageX - offset
@@ -270,7 +280,7 @@ class Main extends React.Component {
     }
   }
 
-  handleFullScreenButton (e) {
+  handleFullScreenButton(e) {
     this.setState({ fullScreen: !this.state.fullScreen }, () => {
       const noteDetail = document.querySelector('.NoteDetail')
       const noteList = document.querySelector('.NoteList')
@@ -284,7 +294,7 @@ class Main extends React.Component {
     })
   }
 
-  hideLeftLists (noteDetail, noteList, mainBody) {
+  hideLeftLists(noteDetail, noteList, mainBody) {
     this.setState({ noteDetailWidth: noteDetail.style.left })
     this.setState({ mainBodyWidth: mainBody.style.left })
     noteDetail.style.left = '0px'
@@ -292,13 +302,13 @@ class Main extends React.Component {
     noteList.style.display = 'none'
   }
 
-  showLeftLists (noteDetail, noteList, mainBody) {
+  showLeftLists(noteDetail, noteList, mainBody) {
     noteDetail.style.left = this.state.noteDetailWidth
     mainBody.style.left = this.state.mainBodyWidth
     noteList.style.display = 'inline'
   }
 
-  render () {
+  render() {
     const { config } = this.props
 
     // the width of the navigation bar when it is folded/collapsed
@@ -312,10 +322,16 @@ class Main extends React.Component {
         onMouseUp={e => this.handleMouseUp(e)}
       >
         <SideNav
-          {..._.pick(this.props, ['dispatch', 'data', 'config', 'match', 'location'])}
+          {..._.pick(this.props, [
+            'dispatch',
+            'data',
+            'config',
+            'match',
+            'location'
+          ])}
           width={this.state.navWidth}
         />
-        {!config.isSideNavFolded &&
+        {!config.isSideNavFolded && (
           <div
             styleName={
               this.state.isLeftSliderFocused ? 'slider--active' : 'slider'
@@ -325,7 +341,8 @@ class Main extends React.Component {
             draggable='false'
           >
             <div styleName='slider-hitbox' />
-          </div>}
+          </div>
+        )}
         <div
           styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
           id='main-body'

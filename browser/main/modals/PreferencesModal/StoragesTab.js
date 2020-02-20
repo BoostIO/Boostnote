@@ -12,24 +12,27 @@ import fs from 'fs'
 const electron = require('electron')
 const { shell, remote } = electron
 
-function browseFolder () {
+function browseFolder() {
   const dialog = remote.dialog
 
   const defaultPath = remote.app.getPath('home')
   return new Promise((resolve, reject) => {
-    dialog.showOpenDialog({
-      title: i18n.__('Select Directory'),
-      defaultPath,
-      properties: ['openDirectory', 'createDirectory']
-    }, function (targetPaths) {
-      if (targetPaths == null) return resolve('')
-      resolve(targetPaths[0])
-    })
+    dialog.showOpenDialog(
+      {
+        title: i18n.__('Select Directory'),
+        defaultPath,
+        properties: ['openDirectory', 'createDirectory']
+      },
+      function(targetPaths) {
+        if (targetPaths == null) return resolve('')
+        resolve(targetPaths[0])
+      }
+    )
   })
 }
 
 class StoragesTab extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -44,7 +47,7 @@ class StoragesTab extends React.Component {
     this.loadAttachmentStorage()
   }
 
-  loadAttachmentStorage () {
+  loadAttachmentStorage() {
     const promises = []
     this.props.data.noteMap.map(note => {
       const promise = attachmentManagement.getAttachmentsPathAndStatus(
@@ -58,106 +61,128 @@ class StoragesTab extends React.Component {
     Promise.all(promises)
       .then(data => {
         const result = data.reduce((acc, curr) => acc.concat(curr), [])
-        this.setState({attachments: result})
+        this.setState({ attachments: result })
       })
       .catch(console.error)
   }
 
-  handleAddStorageButton (e) {
-    this.setState({
-      page: 'ADD_STORAGE',
-      newStorage: {
-        name: 'Unnamed',
-        type: 'FILESYSTEM',
-        path: ''
+  handleAddStorageButton(e) {
+    this.setState(
+      {
+        page: 'ADD_STORAGE',
+        newStorage: {
+          name: 'Unnamed',
+          type: 'FILESYSTEM',
+          path: ''
+        }
+      },
+      () => {
+        this.refs.addStorageName.select()
       }
-    }, () => {
-      this.refs.addStorageName.select()
-    })
+    )
   }
 
-  handleLinkClick (e) {
+  handleLinkClick(e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
-  handleRemoveUnusedAttachments (attachments) {
-    attachmentManagement.removeAttachmentsByPaths(attachments)
+  handleRemoveUnusedAttachments(attachments) {
+    attachmentManagement
+      .removeAttachmentsByPaths(attachments)
       .then(() => this.loadAttachmentStorage())
       .catch(console.error)
   }
 
-  renderList () {
+  renderList() {
     const { data, boundingBox } = this.props
     const { attachments } = this.state
 
-    const unusedAttachments = attachments.filter(attachment => !attachment.isInUse)
-    const inUseAttachments = attachments.filter(attachment => attachment.isInUse)
+    const unusedAttachments = attachments.filter(
+      attachment => !attachment.isInUse
+    )
+    const inUseAttachments = attachments.filter(
+      attachment => attachment.isInUse
+    )
 
     const totalUnusedAttachments = unusedAttachments.length
     const totalInuseAttachments = inUseAttachments.length
     const totalAttachments = totalUnusedAttachments + totalInuseAttachments
 
-    const totalUnusedAttachmentsSize = unusedAttachments
-      .reduce((acc, curr) => {
-        const stats = fs.statSync(curr.path)
-        const fileSizeInBytes = stats.size
-        return acc + fileSizeInBytes
-      }, 0)
-    const totalInuseAttachmentsSize = inUseAttachments
-      .reduce((acc, curr) => {
-        const stats = fs.statSync(curr.path)
-        const fileSizeInBytes = stats.size
-        return acc + fileSizeInBytes
-      }, 0)
-    const totalAttachmentsSize = totalUnusedAttachmentsSize + totalInuseAttachmentsSize
+    const totalUnusedAttachmentsSize = unusedAttachments.reduce((acc, curr) => {
+      const stats = fs.statSync(curr.path)
+      const fileSizeInBytes = stats.size
+      return acc + fileSizeInBytes
+    }, 0)
+    const totalInuseAttachmentsSize = inUseAttachments.reduce((acc, curr) => {
+      const stats = fs.statSync(curr.path)
+      const fileSizeInBytes = stats.size
+      return acc + fileSizeInBytes
+    }, 0)
+    const totalAttachmentsSize =
+      totalUnusedAttachmentsSize + totalInuseAttachmentsSize
 
-    const unusedAttachmentPaths = unusedAttachments
-      .reduce((acc, curr) => acc.concat(curr.path), [])
+    const unusedAttachmentPaths = unusedAttachments.reduce(
+      (acc, curr) => acc.concat(curr.path),
+      []
+    )
 
-    if (!boundingBox) { return null }
-    const storageList = data.storageMap.map((storage) => {
-      return <StorageItem
-        key={storage.key}
-        storage={storage}
-        hostBoundingBox={boundingBox}
-      />
+    if (!boundingBox) {
+      return null
+    }
+    const storageList = data.storageMap.map(storage => {
+      return (
+        <StorageItem
+          key={storage.key}
+          storage={storage}
+          hostBoundingBox={boundingBox}
+        />
+      )
     })
     return (
       <div styleName='list'>
         <div styleName='header'>{i18n.__('Storage Locations')}</div>
-        {storageList.length > 0
-          ? storageList
-          : <div styleName='list-empty'>{i18n.__('No storage found.')}</div>
-        }
+        {storageList.length > 0 ? (
+          storageList
+        ) : (
+          <div styleName='list-empty'>{i18n.__('No storage found.')}</div>
+        )}
         <div styleName='list-control'>
-          <button styleName='list-control-addStorageButton'
-            onClick={(e) => this.handleAddStorageButton(e)}
+          <button
+            styleName='list-control-addStorageButton'
+            onClick={e => this.handleAddStorageButton(e)}
           >
             <i className='fa fa-plus' /> {i18n.__('Add Storage Location')}
           </button>
         </div>
         <div styleName='header'>{i18n.__('Attachment storage')}</div>
         <p styleName='list-attachment-label'>
-          Unused attachments size: {humanFileSize(totalUnusedAttachmentsSize)} ({totalUnusedAttachments} items)
+          Unused attachments size: {humanFileSize(totalUnusedAttachmentsSize)} (
+          {totalUnusedAttachments} items)
         </p>
         <p styleName='list-attachment-label'>
-          In use attachments size: {humanFileSize(totalInuseAttachmentsSize)} ({totalInuseAttachments} items)
+          In use attachments size: {humanFileSize(totalInuseAttachmentsSize)} (
+          {totalInuseAttachments} items)
         </p>
         <p styleName='list-attachment-label'>
-          Total attachments size: {humanFileSize(totalAttachmentsSize)} ({totalAttachments} items)
+          Total attachments size: {humanFileSize(totalAttachmentsSize)} (
+          {totalAttachments} items)
         </p>
-        <button styleName='list-attachement-clear-button'
-          onClick={() => this.handleRemoveUnusedAttachments(unusedAttachmentPaths)}>
+        <button
+          styleName='list-attachement-clear-button'
+          onClick={() =>
+            this.handleRemoveUnusedAttachments(unusedAttachmentPaths)
+          }
+        >
           {i18n.__('Clear unused attachments')}
         </button>
       </div>
     )
   }
 
-  handleAddStorageBrowseButtonClick (e) {
+  handleAddStorageBrowseButtonClick(e) {
     browseFolder()
-      .then((targetPath) => {
+      .then(targetPath => {
         if (targetPath.length > 0) {
           const { newStorage } = this.state
           newStorage.path = targetPath
@@ -166,13 +191,13 @@ class StoragesTab extends React.Component {
           })
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.error('BrowseFAILED')
         console.error(err)
       })
   }
 
-  handleAddStorageChange (e) {
+  handleAddStorageChange(e) {
     const { newStorage } = this.state
     newStorage.name = this.refs.addStorageName.value
     newStorage.path = this.refs.addStoragePath.value
@@ -181,13 +206,13 @@ class StoragesTab extends React.Component {
     })
   }
 
-  handleAddStorageCreateButton (e) {
+  handleAddStorageCreateButton(e) {
     dataApi
       .addStorage({
         name: this.state.newStorage.name,
         path: this.state.newStorage.path
       })
-      .then((data) => {
+      .then(data => {
         const { dispatch } = this.props
         dispatch({
           type: 'ADD_STORAGE',
@@ -200,37 +225,39 @@ class StoragesTab extends React.Component {
       })
   }
 
-  handleAddStorageCancelButton (e) {
+  handleAddStorageCancelButton(e) {
     this.setState({
       page: 'LIST'
     })
   }
 
-  renderAddStorage () {
+  renderAddStorage() {
     return (
       <div styleName='addStorage'>
-
         <div styleName='addStorage-header'>{i18n.__('Add Storage')}</div>
 
         <div styleName='addStorage-body'>
-
           <div styleName='addStorage-body-section'>
             <div styleName='addStorage-body-section-label'>
               {i18n.__('Name')}
             </div>
             <div styleName='addStorage-body-section-name'>
-              <input styleName='addStorage-body-section-name-input'
+              <input
+                styleName='addStorage-body-section-name-input'
                 ref='addStorageName'
                 value={this.state.newStorage.name}
-                onChange={(e) => this.handleAddStorageChange(e)}
+                onChange={e => this.handleAddStorageChange(e)}
               />
             </div>
           </div>
 
           <div styleName='addStorage-body-section'>
-            <div styleName='addStorage-body-section-label'>{i18n.__('Type')}</div>
+            <div styleName='addStorage-body-section-label'>
+              {i18n.__('Type')}
+            </div>
             <div styleName='addStorage-body-section-type'>
-              <select styleName='addStorage-body-section-type-select'
+              <select
+                styleName='addStorage-body-section-type-select'
                 value={this.state.newStorage.type}
                 readOnly
               >
@@ -238,25 +265,31 @@ class StoragesTab extends React.Component {
               </select>
               <div styleName='addStorage-body-section-type-description'>
                 {i18n.__('Setting up 3rd-party cloud storage integration:')}{' '}
-                <a href='https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup'
-                  onClick={(e) => this.handleLinkClick(e)}
-                >{i18n.__('Cloud-Syncing-and-Backup')}</a>
+                <a
+                  href='https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup'
+                  onClick={e => this.handleLinkClick(e)}
+                >
+                  {i18n.__('Cloud-Syncing-and-Backup')}
+                </a>
               </div>
             </div>
           </div>
 
           <div styleName='addStorage-body-section'>
-            <div styleName='addStorage-body-section-label'>{i18n.__('Location')}
+            <div styleName='addStorage-body-section-label'>
+              {i18n.__('Location')}
             </div>
             <div styleName='addStorage-body-section-path'>
-              <input styleName='addStorage-body-section-path-input'
+              <input
+                styleName='addStorage-body-section-path-input'
                 ref='addStoragePath'
                 placeholder={i18n.__('Select Folder')}
                 value={this.state.newStorage.path}
-                onChange={(e) => this.handleAddStorageChange(e)}
+                onChange={e => this.handleAddStorageChange(e)}
               />
-              <button styleName='addStorage-body-section-path-button'
-                onClick={(e) => this.handleAddStorageBrowseButtonClick(e)}
+              <button
+                styleName='addStorage-body-section-path-button'
+                onClick={e => this.handleAddStorageBrowseButtonClick(e)}
               >
                 ...
               </button>
@@ -264,21 +297,25 @@ class StoragesTab extends React.Component {
           </div>
 
           <div styleName='addStorage-body-control'>
-            <button styleName='addStorage-body-control-createButton'
-              onClick={(e) => this.handleAddStorageCreateButton(e)}
-            >{i18n.__('Add')}</button>
-            <button styleName='addStorage-body-control-cancelButton'
-              onClick={(e) => this.handleAddStorageCancelButton(e)}
-            >{i18n.__('Cancel')}</button>
+            <button
+              styleName='addStorage-body-control-createButton'
+              onClick={e => this.handleAddStorageCreateButton(e)}
+            >
+              {i18n.__('Add')}
+            </button>
+            <button
+              styleName='addStorage-body-control-cancelButton'
+              onClick={e => this.handleAddStorageCancelButton(e)}
+            >
+              {i18n.__('Cancel')}
+            </button>
           </div>
-
         </div>
-
       </div>
     )
   }
 
-  renderContent () {
+  renderContent() {
     switch (this.state.page) {
       case 'ADD_STORAGE':
       case 'ADD_FOLDER':
@@ -289,12 +326,8 @@ class StoragesTab extends React.Component {
     }
   }
 
-  render () {
-    return (
-      <div styleName='root'>
-        {this.renderContent()}
-      </div>
-    )
+  render() {
+    return <div styleName='root'>{this.renderContent()}</div>
   }
 }
 

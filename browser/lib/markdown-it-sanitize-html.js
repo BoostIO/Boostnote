@@ -4,7 +4,7 @@ import sanitizeHtml from 'sanitize-html'
 import { escapeHtmlCharacters } from './utils'
 import url from 'url'
 
-module.exports = function sanitizePlugin (md, options) {
+module.exports = function sanitizePlugin(md, options) {
   options = options || {}
 
   md.core.ruler.after('linkify', 'sanitize_inline', state => {
@@ -38,15 +38,20 @@ module.exports = function sanitizePlugin (md, options) {
 }
 
 const tagRegex = /<([A-Z][A-Z0-9]*)\s*((?:\s*[A-Z][A-Z0-9]*(?:=("|')(?:[^\3]+?)\3)?)*)\s*\/?>|<\/([A-Z][A-Z0-9]*)\s*>/i
-const attributesRegex = /([A-Z][A-Z0-9]*)(?:=("|')([^\2]+?)\2)?/ig
+const attributesRegex = /([A-Z][A-Z0-9]*)(?:=("|')([^\2]+?)\2)?/gi
 
-function sanitizeInline (html, options) {
+function sanitizeInline(html, options) {
   let match = tagRegex.exec(html)
   if (!match) {
     return ''
   }
 
-  const { allowedTags, allowedAttributes, selfClosing, allowedSchemesAppliedToAttributes } = options
+  const {
+    allowedTags,
+    allowedAttributes,
+    selfClosing,
+    allowedSchemesAppliedToAttributes
+  } = options
 
   if (match[1] !== undefined) {
     // opening tag
@@ -65,9 +70,17 @@ function sanitizeInline (html, options) {
       name = match[1].toLowerCase()
       value = match[3]
 
-      if (allowedAttributes['*'].indexOf(name) !== -1 || (allowedAttributes[tag] && allowedAttributes[tag].indexOf(name) !== -1)) {
+      if (
+        allowedAttributes['*'].indexOf(name) !== -1 ||
+        (allowedAttributes[tag] && allowedAttributes[tag].indexOf(name) !== -1)
+      ) {
         if (allowedSchemesAppliedToAttributes.indexOf(name) !== -1) {
-          if (naughtyHRef(value, options) || (tag === 'iframe' && name === 'src' && naughtyIFrame(value, options))) {
+          if (
+            naughtyHRef(value, options) ||
+            (tag === 'iframe' &&
+              name === 'src' &&
+              naughtyIFrame(value, options))
+          ) {
             continue
           }
         }
@@ -94,7 +107,7 @@ function sanitizeInline (html, options) {
   }
 }
 
-function naughtyHRef (href, options) {
+function naughtyHRef(href, options) {
   // href = href.replace(/[\x00-\x20]+/g, '')
   if (!href) {
     // No href
@@ -117,7 +130,7 @@ function naughtyHRef (href, options) {
   return options.allowedSchemes.indexOf(scheme) === -1
 }
 
-function naughtyIFrame (src, options) {
+function naughtyIFrame(src, options) {
   try {
     const parsed = url.parse(src, false, true)
 

@@ -6,7 +6,7 @@ import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
 class StarButton extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -14,47 +14,51 @@ class StarButton extends React.Component {
     }
   }
 
-  handleMouseDown (e) {
+  handleMouseDown(e) {
     this.setState({
       isActive: true
     })
   }
 
-  handleMouseUp (e) {
+  handleMouseUp(e) {
     this.setState({
       isActive: false
     })
   }
 
-  handleMouseLeave (e) {
+  handleMouseLeave(e) {
     this.setState({
       isActive: false
     })
   }
 
-  render () {
+  render() {
     const { className } = this.props
 
     return (
-      <button className={_.isString(className)
-          ? 'StarButton ' + className
-          : 'StarButton'
+      <button
+        className={
+          _.isString(className) ? 'StarButton ' + className : 'StarButton'
         }
-        styleName={this.state.isActive || this.props.isActive
-          ? 'root--active'
-          : 'root'
+        styleName={
+          this.state.isActive || this.props.isActive ? 'root--active' : 'root'
         }
-        onMouseDown={(e) => this.handleMouseDown(e)}
-        onMouseUp={(e) => this.handleMouseUp(e)}
-        onMouseLeave={(e) => this.handleMouseLeave(e)}
-        onClick={this.props.onClick}>
-        <img styleName='icon'
-          src={this.state.isActive || this.props.isActive
-            ? '../resources/icon/icon-starred.svg'
-            : '../resources/icon/icon-star.svg'
+        onMouseDown={e => this.handleMouseDown(e)}
+        onMouseUp={e => this.handleMouseUp(e)}
+        onMouseLeave={e => this.handleMouseLeave(e)}
+        onClick={this.props.onClick}
+      >
+        <img
+          styleName='icon'
+          src={
+            this.state.isActive || this.props.isActive
+              ? '../resources/icon/icon-starred.svg'
+              : '../resources/icon/icon-star.svg'
           }
         />
-        <span lang={i18n.locale} styleName='tooltip'>{i18n.__('Star')}</span>
+        <span lang={i18n.locale} styleName='tooltip'>
+          {i18n.__('Star')}
+        </span>
       </button>
     )
   }

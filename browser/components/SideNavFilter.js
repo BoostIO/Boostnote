@@ -16,54 +16,70 @@ import i18n from 'browser/lib/i18n'
  * @return {React.Component}
  */
 const SideNavFilter = ({
-  isFolded, isHomeActive, handleAllNotesButtonClick,
-  isStarredActive, handleStarredButtonClick, isTrashedActive, handleTrashedButtonClick, counterDelNote,
-  counterTotalNote, counterStarredNote, handleFilterButtonContextMenu
+  isFolded,
+  isHomeActive,
+  handleAllNotesButtonClick,
+  isStarredActive,
+  handleStarredButtonClick,
+  isTrashedActive,
+  handleTrashedButtonClick,
+  counterDelNote,
+  counterTotalNote,
+  counterStarredNote,
+  handleFilterButtonContextMenu
 }) => (
   <div styleName={isFolded ? 'menu--folded' : 'menu'}>
-
-    <button styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
+    <button
+      styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
       onClick={handleAllNotesButtonClick}
     >
       <div styleName='iconWrap'>
-        <img src={isHomeActive
-          ? '../resources/icon/icon-all-active.svg'
-          : '../resources/icon/icon-all.svg'
-        }
+        <img
+          src={
+            isHomeActive
+              ? '../resources/icon/icon-all-active.svg'
+              : '../resources/icon/icon-all.svg'
+          }
         />
       </div>
       <span styleName='menu-button-label'>{i18n.__('All Notes')}</span>
       <span styleName='counters'>{counterTotalNote}</span>
     </button>
 
-    <button styleName={isStarredActive ? 'menu-button-star--active' : 'menu-button'}
+    <button
+      styleName={isStarredActive ? 'menu-button-star--active' : 'menu-button'}
       onClick={handleStarredButtonClick}
     >
       <div styleName='iconWrap'>
-        <img src={isStarredActive
-          ? '../resources/icon/icon-star-active.svg'
-          : '../resources/icon/icon-star-sidenav.svg'
-        }
+        <img
+          src={
+            isStarredActive
+              ? '../resources/icon/icon-star-active.svg'
+              : '../resources/icon/icon-star-sidenav.svg'
+          }
         />
       </div>
       <span styleName='menu-button-label'>{i18n.__('Starred')}</span>
       <span styleName='counters'>{counterStarredNote}</span>
     </button>
 
-    <button styleName={isTrashedActive ? 'menu-button-trash--active' : 'menu-button'}
-      onClick={handleTrashedButtonClick} onContextMenu={handleFilterButtonContextMenu}
+    <button
+      styleName={isTrashedActive ? 'menu-button-trash--active' : 'menu-button'}
+      onClick={handleTrashedButtonClick}
+      onContextMenu={handleFilterButtonContextMenu}
     >
       <div styleName='iconWrap'>
-        <img src={isTrashedActive
-          ? '../resources/icon/icon-trash-active.svg'
-          : '../resources/icon/icon-trash-sidenav.svg'
-        }
+        <img
+          src={
+            isTrashedActive
+              ? '../resources/icon/icon-trash-active.svg'
+              : '../resources/icon/icon-trash-sidenav.svg'
+          }
         />
       </div>
       <span styleName='menu-button-label'>{i18n.__('Trash')}</span>
       <span styleName='counters'>{counterDelNote}</span>
     </button>
-
   </div>
 )
 

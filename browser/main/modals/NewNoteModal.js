@@ -9,21 +9,21 @@ import { createMarkdownNote, createSnippetNote } from 'browser/lib/newNote'
 import queryString from 'query-string'
 
 class NewNoteModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.lock = false
     this.state = {}
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.refs.markdownButton.focus()
   }
 
-  handleCloseButtonClick (e) {
+  handleCloseButtonClick(e) {
     this.props.close()
   }
 
-  handleCreateMarkdownFromUrlClick (e) {
+  handleCreateMarkdownFromUrlClick(e) {
     this.props.close()
 
     const { storage, folder, dispatch, location } = this.props
@@ -35,49 +35,63 @@ class NewNoteModal extends React.Component {
     })
   }
 
-  handleMarkdownNoteButtonClick (e) {
+  handleMarkdownNoteButtonClick(e) {
     const { storage, folder, dispatch, location, config } = this.props
     const params = location.search !== '' && queryString.parse(location.search)
     if (!this.lock) {
       this.lock = true
-      createMarkdownNote(storage, folder, dispatch, location, params, config).then(() => {
+      createMarkdownNote(
+        storage,
+        folder,
+        dispatch,
+        location,
+        params,
+        config
+      ).then(() => {
         setTimeout(this.props.close, 200)
       })
     }
   }
 
-  handleMarkdownNoteButtonKeyDown (e) {
+  handleMarkdownNoteButtonKeyDown(e) {
     if (e.keyCode === 9) {
       e.preventDefault()
       this.refs.snippetButton.focus()
     }
   }
 
-  handleSnippetNoteButtonClick (e) {
+  handleSnippetNoteButtonClick(e) {
     const { storage, folder, dispatch, location, config } = this.props
     const params = location.search !== '' && queryString.parse(location.search)
     if (!this.lock) {
       this.lock = true
-      createSnippetNote(storage, folder, dispatch, location, params, config).then(() => {
+      createSnippetNote(
+        storage,
+        folder,
+        dispatch,
+        location,
+        params,
+        config
+      ).then(() => {
         setTimeout(this.props.close, 200)
       })
     }
   }
 
-  handleSnippetNoteButtonKeyDown (e) {
+  handleSnippetNoteButtonKeyDown(e) {
     if (e.keyCode === 9) {
       e.preventDefault()
       this.refs.markdownButton.focus()
     }
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  render () {
+  render() {
     return (
       <div
         styleName='root'
@@ -116,7 +130,8 @@ class NewNoteModal extends React.Component {
             onKeyDown={e => this.handleSnippetNoteButtonKeyDown(e)}
             ref='snippetButton'
           >
-            <i styleName='control-button-icon' className='fa fa-code' /><br />
+            <i styleName='control-button-icon' className='fa fa-code' />
+            <br />
             <span styleName='control-button-label'>
               {i18n.__('Snippet Note')}
             </span>
@@ -127,10 +142,17 @@ class NewNoteModal extends React.Component {
               )}
             </span>
           </button>
-
         </div>
-        <div styleName='description'><i className='fa fa-arrows-h' />{i18n.__('Tab to switch format')}</div>
-        <div styleName='from-url' onClick={(e) => this.handleCreateMarkdownFromUrlClick(e)}>Or, create a new markdown note from a URL</div>
+        <div styleName='description'>
+          <i className='fa fa-arrows-h' />
+          {i18n.__('Tab to switch format')}
+        </div>
+        <div
+          styleName='from-url'
+          onClick={e => this.handleCreateMarkdownFromUrlClick(e)}
+        >
+          Or, create a new markdown note from a URL
+        </div>
       </div>
     )
   }

@@ -16,7 +16,7 @@ import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
 class Preferences extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -27,44 +27,39 @@ class Preferences extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.refs.root.focus()
     const boundingBox = this.getContentBoundingBox()
     this.setState({ boundingBox })
   }
 
-  switchTeam (teamId) {
-    this.setState({currentTeamId: teamId})
+  switchTeam(teamId) {
+    this.setState({ currentTeamId: teamId })
   }
 
-  handleNavButtonClick (tab) {
-    return (e) => {
-      this.setState({currentTab: tab})
+  handleNavButtonClick(tab) {
+    return e => {
+      this.setState({ currentTab: tab })
     }
   }
 
-  handleEscButtonClick () {
+  handleEscButtonClick() {
     this.props.close()
   }
 
-  renderContent () {
+  renderContent() {
     const { boundingBox } = this.state
     const { dispatch, config, data } = this.props
 
     switch (this.state.currentTab) {
       case 'INFO':
-        return (
-          <InfoTab
-            dispatch={dispatch}
-            config={config}
-          />
-        )
+        return <InfoTab dispatch={dispatch} config={config} />
       case 'HOTKEY':
         return (
           <HotkeyTab
             dispatch={dispatch}
             config={config}
-            haveToSave={alert => this.setState({HotkeyAlert: alert})}
+            haveToSave={alert => this.setState({ HotkeyAlert: alert })}
           />
         )
       case 'UI':
@@ -72,29 +67,21 @@ class Preferences extends React.Component {
           <UiTab
             dispatch={dispatch}
             config={config}
-            haveToSave={alert => this.setState({UIAlert: alert})}
+            haveToSave={alert => this.setState({ UIAlert: alert })}
           />
         )
       case 'CROWDFUNDING':
-        return (
-          <Crowdfunding />
-        )
+        return <Crowdfunding />
       case 'BLOG':
         return (
           <Blog
             dispatch={dispatch}
             config={config}
-            haveToSave={alert => this.setState({BlogAlert: alert})}
+            haveToSave={alert => this.setState({ BlogAlert: alert })}
           />
         )
       case 'SNIPPET':
-        return (
-          <SnippetTab
-            dispatch={dispatch}
-            config={config}
-            data={data}
-          />
-        )
+        return <SnippetTab dispatch={dispatch} config={config} data={data} />
       case 'STORAGES':
       default:
         return (
@@ -107,67 +94,69 @@ class Preferences extends React.Component {
     }
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     if (e.keyCode === 27) {
       this.props.close()
     }
   }
 
-  getContentBoundingBox () {
+  getContentBoundingBox() {
     return this.refs.content.getBoundingClientRect()
   }
 
-  haveToSaveNotif (type, message) {
-    return (
-      <p styleName={`saving--${type}`}>{message}</p>
-    )
+  haveToSaveNotif(type, message) {
+    return <p styleName={`saving--${type}`}>{message}</p>
   }
 
-  render () {
+  render() {
     const content = this.renderContent()
 
     const tabs = [
-      {target: 'STORAGES', label: i18n.__('Storage')},
-      {target: 'HOTKEY', label: i18n.__('Hotkeys'), Hotkey: this.state.HotkeyAlert},
-      {target: 'UI', label: i18n.__('Interface'), UI: this.state.UIAlert},
-      {target: 'INFO', label: i18n.__('About')},
-      {target: 'CROWDFUNDING', label: i18n.__('Crowdfunding')},
-      {target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert},
-      {target: 'SNIPPET', label: i18n.__('Snippets')}
+      { target: 'STORAGES', label: i18n.__('Storage') },
+      {
+        target: 'HOTKEY',
+        label: i18n.__('Hotkeys'),
+        Hotkey: this.state.HotkeyAlert
+      },
+      { target: 'UI', label: i18n.__('Interface'), UI: this.state.UIAlert },
+      { target: 'INFO', label: i18n.__('About') },
+      { target: 'CROWDFUNDING', label: i18n.__('Crowdfunding') },
+      { target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert },
+      { target: 'SNIPPET', label: i18n.__('Snippets') }
     ]
 
-    const navButtons = tabs.map((tab) => {
+    const navButtons = tabs.map(tab => {
       const isActive = this.state.currentTab === tab.target
-      const isUiHotkeyTab = _.isObject(tab[tab.label]) && tab.label === tab[tab.label].tab
+      const isUiHotkeyTab =
+        _.isObject(tab[tab.label]) && tab.label === tab[tab.label].tab
       return (
-        <button styleName={isActive
-            ? 'nav-button--active'
-            : 'nav-button'
-          }
+        <button
+          styleName={isActive ? 'nav-button--active' : 'nav-button'}
           key={tab.target}
-          onClick={(e) => this.handleNavButtonClick(tab.target)(e)}
+          onClick={e => this.handleNavButtonClick(tab.target)(e)}
         >
-          <span>
-            {tab.label}
-          </span>
-          {isUiHotkeyTab ? this.haveToSaveNotif(tab[tab.label].type, tab[tab.label].message) : null}
+          <span>{tab.label}</span>
+          {isUiHotkeyTab
+            ? this.haveToSaveNotif(tab[tab.label].type, tab[tab.label].message)
+            : null}
         </button>
       )
     })
 
     return (
-      <div styleName='root'
+      <div
+        styleName='root'
         ref='root'
         tabIndex='-1'
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
         <div styleName='top-bar'>
           <p>{i18n.__('Your preferences for Boostnote')}</p>
         </div>
-        <ModalEscButton handleEscButtonClick={(e) => this.handleEscButtonClick(e)} />
-        <div styleName='nav'>
-          {navButtons}
-        </div>
+        <ModalEscButton
+          handleEscButtonClick={e => this.handleEscButtonClick(e)}
+        />
+        <div styleName='nav'>{navButtons}</div>
         <div ref='content' styleName='content'>
           {content}
         </div>
@@ -181,4 +170,4 @@ Preferences.propTypes = {
   dispatch: PropTypes.func
 }
 
-export default connect((x) => x)(CSSModules(Preferences, styles))
+export default connect(x => x)(CSSModules(Preferences, styles))

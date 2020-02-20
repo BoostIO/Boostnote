@@ -1,6 +1,6 @@
 # Build
 
-This page is also available in [Japanese](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Korean](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russain](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Simplified Chinese](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [French](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md), [Portuguese](https://github.com/BoostIO/Boostnote/blob/master/docs/pt_BR/build.md) and [German](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
+This page is also available in [Japanese](https://github.com/BoostIO/Boostnote/blob/master/docs/jp/build.md), [Korean](https://github.com/BoostIO/Boostnote/blob/master/docs/ko/build.md), [Russain](https://github.com/BoostIO/Boostnote/blob/master/docs/ru/build.md), [Traditional Chinese](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_TW/build.md), [Simplified Chinese](https://github.com/BoostIO/Boostnote/blob/master/docs/zh_CN/build.md), [French](https://github.com/BoostIO/Boostnote/blob/master/docs/fr/build.md), [Portuguese](https://github.com/BoostIO/Boostnote/blob/master/docs/pt_BR/build.md) and [German](https://github.com/BoostIO/Boostnote/blob/master/docs/de/build.md).
 
 ## Environments
 
@@ -37,7 +37,7 @@ Visit the page for the pull request and look at the end of the url for the PR nu
 https://github.com/BoostIO/Boostnote/pull/2794
 </pre>
 In the following, replace \<PR> with that number (no brackets).
-For the above url, you would replace \<PR> with 2794
+For URLs below, you would replace \<PR> with 2794
 
 _If you do not have a local copy of the master branch yet_
 ```
@@ -82,13 +82,17 @@ Distribution packages are created by exec `grunt build` on Linux platform (e.g. 
 
 After installing the supported version of `node` and `npm`, install build dependency packages.
 
-Ubuntu/Debian:
+```
+$ yarn add --dev grunt-electron-installer-debian grunt-electron-installer-redhat
+```
+
+**Ubuntu/Debian:**
 
 ```
 $ sudo apt-get install -y rpm fakeroot
 ```
 
-Fedora:
+**Fedora:**
 
 ```
 $ sudo dnf install -y dpkg dpkg-dev rpm-build fakeroot
@@ -100,4 +104,4 @@ Then execute `grunt build`.
 $ grunt build
 ```
 
-You will find `.deb` and `.rpm` in the `dist` directory.
+> You will find `.deb` and `.rpm` in the `dist` directory.
