@@ -351,14 +351,19 @@ class UiTab extends React.Component {
                 )}
               </label>
             </div>
+          ) : null}
           <div styleName='group-checkBoxSection'>
             <label>
-              <input onChange={(e) => this.handleUIChange(e)}
+              <input
+                onChange={e => this.handleUIChange(e)}
                 checked={this.state.config.ui.scrollBar}
                 ref='scrollBar'
                 type='checkbox'
-              />&nbsp;
-              {i18n.__('Show the scroll bars in the editor and in the markdown preview (It will be applied after restarting)')}
+              />
+              &nbsp;
+              {i18n.__(
+                'Show the scroll bars in the editor and in the markdown preview (It will be applied after restarting)'
+              )}
             </label>
           </div>
           <div styleName='group-header2'>Tags</div>
