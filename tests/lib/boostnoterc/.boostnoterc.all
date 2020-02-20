@@ -25,6 +25,7 @@
     "sortBy": "UPDATED_AT",
     "sortTagsBy": "ALPHABETICAL",
     "ui": {
+        "closeToTray": false,
         "defaultNote": "ALWAYS_ASK",
         "disableDirectWrite": false,
         "theme": "default"

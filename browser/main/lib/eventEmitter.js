@@ -17,9 +17,14 @@ function emit(name, ...args) {
   remote.getCurrentWindow().webContents.send(name, ...args)
 }
 
+function emitIpc(name, ...args) {
+  ipcRenderer.send(name, ...args)
+}
+
 export default {
   emit,
   on,
   off,
-  once
+  once,
+  emitIpc
 }

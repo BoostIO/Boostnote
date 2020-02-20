@@ -147,7 +147,7 @@ class NoteList extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { dispatch, location } = this.props
+    const { data, dispatch, location } = this.props
     const { selectedNoteKeys } = this.state
     const visibleNoteKeys = this.notes && this.notes.map(note => note.key)
     const note = this.notes && this.notes[0]
@@ -158,6 +158,16 @@ class NoteList extends React.Component {
     const noteKey = visibleNoteKeys.includes(prevKey)
       ? prevKey
       : note && note.key
+
+    console.log('tray:update trigger', data)
+    ee.emitIpc(
+      'tray:update',
+      data.noteMap
+        .map(note => note)
+        .sort(sortByUpdatedAt)
+        .slice(0, 10)
+        .filter(note => note.title !== '' && !note.isTrashed)
+    )
 
     if (note && location.search === '') {
       if (!location.pathname.match(/\/searched/))
