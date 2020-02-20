@@ -317,7 +317,7 @@ class Markdown {
           <span class="filename">${token.fileName}</span>
           <div class="sequence" data-height="${token.parameters.height}">${
             token.content
-        }</div>
+          }</div>
         </pre>`
         }
       },

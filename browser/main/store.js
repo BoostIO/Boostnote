@@ -481,9 +481,9 @@ const store = createStore(
   undefined,
   process.env.NODE_ENV === 'development'
     ? compose(
-      applyMiddleware(routerMiddleware(history)),
-      DevTools.instrument()
-    )
+        applyMiddleware(routerMiddleware(history)),
+        DevTools.instrument()
+      )
     : applyMiddleware(routerMiddleware(history))
 )
 
