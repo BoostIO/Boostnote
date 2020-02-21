@@ -78,7 +78,7 @@ document.addEventListener('click', function(e) {
   if (infoPanel) infoPanel.style.display = 'none'
 })
 
-if (!config.get().ui.scrollBar) {
+if (!config.get().ui.showScrollBar) {
   document.styleSheets[54].insertRule('::-webkit-scrollbar {display: none}')
   document.styleSheets[54].insertRule(
     '::-webkit-scrollbar-corner {display: none}'

@@ -94,7 +94,7 @@ class UiTab extends React.Component {
         showTagsAlphabetically: this.refs.showTagsAlphabetically.checked,
         saveTagsAlphabetically: this.refs.saveTagsAlphabetically.checked,
         enableLiveNoteCounts: this.refs.enableLiveNoteCounts.checked,
-        scrollBar: this.refs.scrollBar.checked,
+        showScrollBar: this.refs.showScrollBar.checked,
         showMenuBar: this.refs.showMenuBar.checked,
         disableDirectWrite:
           this.refs.uiD2w != null ? this.refs.uiD2w.checked : false
@@ -356,8 +356,8 @@ class UiTab extends React.Component {
             <label>
               <input
                 onChange={e => this.handleUIChange(e)}
-                checked={this.state.config.ui.scrollBar}
-                ref='scrollBar'
+                checked={this.state.config.ui.showScrollBar}
+                ref='showScrollBar'
                 type='checkbox'
               />
               &nbsp;

@@ -187,12 +187,12 @@ ${allowCustomCSS ? customCSS : ''}
 
 const scrollBarStyle = `
 ::-webkit-scrollbar {
-  ${config.get().ui.scrollBar ? '' : 'display: none;'}
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
-  ${config.get().ui.scrollBar ? '' : 'display: none;'}
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.15);
 }
 
@@ -202,12 +202,12 @@ const scrollBarStyle = `
 `
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar {
-  ${config.get().ui.scrollBar ? '' : 'display: none;'}
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
-  ${config.get().ui.scrollBar ? '' : 'display: none;'}
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.3);
 }
 
