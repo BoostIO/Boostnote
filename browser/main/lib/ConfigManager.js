@@ -18,70 +18,19 @@ const DEFAULT_MARKDOWN_LINT_CONFIG = `{
 
 const DEFAULT_CSS_CONFIG = `
 /* Drop Your Custom CSS Code Here */
-p code,
-li code
+[data-theme="default"] p code,
+[data-theme="default"] li code,
+[data-theme="default"] td code
 {
   padding: 2px;
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;
-}
-[data-theme="default"] p code,
-[data-theme="default"] li code
-{
   background-color: #F4F4F4;
   border-color: #d9d9d9;
   color: #03C588;
 }
-[data-theme="white"] p code,
-[data-theme="white"] li code
-{
-  background-color: #F4F4F4;
-  border-color: #03C588;
-  color: #03C588;
-}
-[data-theme="dark"] p code,
-[data-theme="dark"] li code
-{
-  background-color: #444444;
-  border-color: #555;
-  color: #FFFFFF;
-}
-[data-theme="dracula"] p code,
-[data-theme="dracula"] li code
-{
-  background-color: #282a36;
-  border-color: #bd93f9;
-  color: #bd93f9;
-}
-[data-theme="monokai"] p code,
-[data-theme="monokai"] li code
-{
-  background-color: #272822;
-  border-color: #f92672;
-  color: #f92672;
-}
-[data-theme="nord"] p code,
-[data-theme="nord"] li code
-{
-  background-color: #2e3440;
-  border-color: #5e81ac;
-  color: #5e81ac;
-}
-[data-theme="solarized-dark"] p code,
-[data-theme="solarized-dark"] li code
-{
-  background-color: #073642;
-  border-color: #36abe3;
-  color: #36abe3;
-}
-[data-theme="vulcan"] p code,
-[data-theme="vulcan"] li code
-{
-  background-color: #161719;
-  border-color: #ffffff;
-  color: #ffffff;
-}`
+`
 
 export const DEFAULT_CONFIG = {
   zoom: 1,
