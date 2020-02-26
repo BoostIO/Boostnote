@@ -144,6 +144,21 @@ class StorageItem extends React.Component {
     }
   }
 
+  handleFolderMouseEnter(e, tooltipRef, isFolded) {
+    if (isFolded) {
+      const buttonEl = e.currentTarget
+      const tooltipEl = tooltipRef.current
+
+      const tooltipDisplay = window
+        .getComputedStyle(tooltipEl, null)
+        .getPropertyValue('display')
+
+      tooltipEl.style.display = 'none'
+      tooltipEl.style.top = buttonEl.getBoundingClientRect().y + 'px'
+      tooltipEl.style.display = tooltipDisplay
+    }
+  }
+
   handleFolderButtonContextMenu(e, folder) {
     context.popup([
       {
@@ -316,6 +331,7 @@ class StorageItem extends React.Component {
           folder.key
       )
       const isActive = !!location.pathname.match(folderRegex)
+      const tooltipRef = React.createRef(null)
       const noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
 
       let noteCount = 0
@@ -339,7 +355,11 @@ class StorageItem extends React.Component {
           key={folder.key}
           index={index}
           isActive={isActive || folder.key === this.state.draggedOver}
+          tooltipRef={tooltipRef}
           handleButtonClick={e => this.handleFolderButtonClick(folder.key)(e)}
+          handleMouseEnter={e =>
+            this.handleFolderMouseEnter(e, tooltipRef, isFolded)
+          }
           handleContextMenu={e => this.handleFolderButtonContextMenu(e, folder)}
           folderName={folder.name}
           folderColor={folder.color}
