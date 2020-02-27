@@ -149,13 +149,7 @@ class StorageItem extends React.Component {
       const buttonEl = e.currentTarget
       const tooltipEl = tooltipRef.current
 
-      const tooltipDisplay = window
-        .getComputedStyle(tooltipEl, null)
-        .getPropertyValue('display')
-
-      tooltipEl.style.display = 'none'
       tooltipEl.style.top = buttonEl.getBoundingClientRect().y + 'px'
-      tooltipEl.style.display = tooltipDisplay
     }
   }
 
