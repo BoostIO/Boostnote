@@ -33,7 +33,7 @@ export const DEFAULT_CONFIG = {
   hotkey: {
     toggleMain: OSX ? 'Command + Alt + L' : 'Super + Alt + E',
     toggleMode: OSX ? 'Command + Alt + M' : 'Ctrl + M',
-    toggleDirection: OSX ? 'Command + Alt + Right' : 'Ctrl + Right',
+    toggleDirection: OSX ? 'Command + Alt + Right' : 'Ctrl + Alt + Right',
     deleteNote: OSX
       ? 'Command + Shift + Backspace'
       : 'Ctrl + Shift + Backspace',
@@ -85,7 +85,8 @@ export const DEFAULT_CONFIG = {
       "semi": false,
       "singleQuote": true
     }`,
-    deleteUnusedAttachments: true
+    deleteUnusedAttachments: true,
+    rtlEnabled: false
   },
   preview: {
     fontSize: '14',

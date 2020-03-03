@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
@@ -29,20 +30,23 @@ class MarkdownEditor extends React.Component {
       isLocked: props.isLocked
     }
 
-    this.lockEditorCode = () => this.handleLockEditor()
+    this.lockEditorCode = this.handleLockEditor.bind(this)
+    this.focusEditor = this.focusEditor.bind(this)
+
+    this.previewRef = React.createRef()
   }
 
   componentDidMount() {
     this.value = this.refs.code.value
     eventEmitter.on('editor:lock', this.lockEditorCode)
-    eventEmitter.on('editor:focus', this.focusEditor.bind(this))
+    eventEmitter.on('editor:focus', this.focusEditor)
   }
 
   componentDidUpdate() {
     this.value = this.refs.code.value
   }
 
-  componentWillReceiveProps(props) {
+  UNSAFE_componentWillReceiveProps(props) {
     if (props.value !== this.props.value) {
       this.queueRendering(props.value)
     }
@@ -51,7 +55,7 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount() {
     this.cancelQueue()
     eventEmitter.off('editor:lock', this.lockEditorCode)
-    eventEmitter.off('editor:focus', this.focusEditor.bind(this))
+    eventEmitter.off('editor:focus', this.focusEditor)
   }
 
   focusEditor() {
@@ -60,6 +64,9 @@ class MarkdownEditor extends React.Component {
         status: 'CODE'
       },
       () => {
+        if (this.refs.code == null) {
+          return
+        }
         this.refs.code.focus()
       }
     )
@@ -104,7 +111,7 @@ class MarkdownEditor extends React.Component {
           if (newStatus === 'CODE') {
             this.refs.code.focus()
           } else {
-            this.refs.preview.focus()
+            this.previewRef.current.focus()
           }
           eventEmitter.emit('topbar:togglelockbutton', this.state.status)
 
@@ -131,8 +138,8 @@ class MarkdownEditor extends React.Component {
           status: 'PREVIEW'
         },
         () => {
-          this.refs.preview.focus()
-          this.refs.preview.scrollToRow(cursorPosition.line)
+          this.previewRef.current.focus()
+          this.previewRef.current.scrollToRow(cursorPosition.line)
         }
       )
       eventEmitter.emit('topbar:togglelockbutton', this.state.status)
@@ -379,6 +386,7 @@ class MarkdownEditor extends React.Component {
           RTL={RTL}
         />
         <MarkdownPreview
+          ref={this.previewRef}
           styleName={
             this.state.status === 'PREVIEW' ? 'preview' : 'preview--hide'
           }
@@ -397,7 +405,6 @@ class MarkdownEditor extends React.Component {
           breaks={config.preview.breaks}
           sanitize={config.preview.sanitize}
           mermaidHTMLLabel={config.preview.mermaidHTMLLabel}
-          ref='preview'
           onContextMenu={e => this.handleContextMenu(e)}
           onDoubleClick={e => this.handleDoubleClick(e)}
           tabIndex='0'

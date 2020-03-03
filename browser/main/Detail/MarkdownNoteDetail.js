@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
@@ -57,7 +58,8 @@ class MarkdownNoteDetail extends React.Component {
     this.dispatchTimer = null
 
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
-    this.generateToc = () => this.handleGenerateToc()
+    this.generateToc = this.handleGenerateToc.bind(this)
+    this.handleUpdateContent = this.handleUpdateContent.bind(this)
   }
 
   focus() {
@@ -76,7 +78,7 @@ class MarkdownNoteDetail extends React.Component {
     ee.on('code:generate-toc', this.generateToc)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const isNewNote = nextProps.note.key !== this.props.note.key
     const hasDeletedTags =
       nextProps.note.tags.length < this.props.note.tags.length
@@ -392,6 +394,9 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleSwitchDirection() {
+    if (!this.props.config.editor.rtlEnabled) {
+      return
+    }
     // If in split mode, hide the lock button
     const direction = this.state.RTL
     this.setState({ RTL: !direction })
@@ -436,10 +441,10 @@ class MarkdownNoteDetail extends React.Component {
           storageKey={note.storage}
           noteKey={note.key}
           linesHighlighted={note.linesHighlighted}
-          onChange={this.handleUpdateContent.bind(this)}
+          onChange={this.handleUpdateContent}
           isLocked={this.state.isLocked}
           ignorePreviewPointerEvents={ignorePreviewPointerEvents}
-          RTL={this.state.RTL}
+          RTL={config.editor.rtlEnabled && this.state.RTL}
         />
       )
     } else {
@@ -451,9 +456,9 @@ class MarkdownNoteDetail extends React.Component {
           storageKey={note.storage}
           noteKey={note.key}
           linesHighlighted={note.linesHighlighted}
-          onChange={this.handleUpdateContent.bind(this)}
+          onChange={this.handleUpdateContent}
           ignorePreviewPointerEvents={ignorePreviewPointerEvents}
-          RTL={this.state.RTL}
+          RTL={config.editor.rtlEnabled && this.state.RTL}
         />
       )
     }
@@ -536,10 +541,12 @@ class MarkdownNoteDetail extends React.Component {
             onClick={e => this.handleSwitchMode(e)}
             editorType={editorType}
           />
-          <ToggleDirectionButton
-            onClick={e => this.handleSwitchDirection(e)}
-            isRTL={this.state.RTL}
-          />
+          {this.props.config.editor.rtlEnabled && (
+            <ToggleDirectionButton
+              onClick={e => this.handleSwitchDirection(e)}
+              isRTL={this.state.RTL}
+            />
+          )}
           <StarButton
             onClick={e => this.handleStarButtonClick(e)}
             isActive={note.isStarred}

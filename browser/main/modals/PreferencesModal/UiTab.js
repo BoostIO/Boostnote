@@ -127,7 +127,8 @@ class UiTab extends React.Component {
           .getCodeMirror()
           .getValue(),
         prettierConfig: this.prettierConfigCM.getCodeMirror().getValue(),
-        deleteUnusedAttachments: this.refs.deleteUnusedAttachments.checked
+        deleteUnusedAttachments: this.refs.deleteUnusedAttachments.checked,
+        rtlEnabled: this.refs.rtlEnabled.checked
       },
       preview: {
         fontSize: this.refs.previewFontSize.value,
@@ -740,6 +741,18 @@ class UiTab extends React.Component {
               {i18n.__(
                 'Delete attachments, that are not referenced in the text anymore'
               )}
+            </label>
+          </div>
+          <div styleName='group-checkBoxSection'>
+            <label>
+              <input
+                onChange={e => this.handleUIChange(e)}
+                checked={this.state.config.editor.rtlEnabled}
+                ref='rtlEnabled'
+                type='checkbox'
+              />
+              &nbsp;
+              {i18n.__('Enable right to left direction(RTL)')}
             </label>
           </div>
 
