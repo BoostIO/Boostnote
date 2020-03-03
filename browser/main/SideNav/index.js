@@ -589,7 +589,7 @@ class SideNav extends React.Component {
               onClick={this.handleSearchButtonClick}
               isActive={showSearch}
             />
-            <PreferenceButton onClick={this.handlePreferenceButtonClick} />
+            <PreferenceButton onClick={this.handleMenuButtonClick} />
           </div>
         </div>
         {navSearch}

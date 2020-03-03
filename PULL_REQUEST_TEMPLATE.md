@@ -3,13 +3,16 @@ Before submitting this PR, please make sure that:
 - You have read and understand the contributing.md
 - You have checked docs/code_style.md for information on code style
 -->
+
 ## Description
+
 <!--
 Tell us what your PR does.
 Please attach a screenshot/ video/gif image describing your PR if possible.
 -->
 
 ## Issue fixed
+
 <!--
 Please list out all issue fixed with this PR here.
 -->
@@ -20,6 +23,7 @@ your PR will be reviewed faster if we know exactly what it does.
 
 Change :white_circle: to :radio_button: in all the options that apply
 -->
+
 ## Type of changes
 
 - :white_circle: Bug fix (Change that fixed an issue)
@@ -34,3 +38,5 @@ Change :white_circle: to :radio_button: in all the options that apply
 - :white_circle: I have written test for my code and it has been tested
 - :white_circle: All existing tests have been passed
 - :white_circle: I have attached a screenshot/video to visualize my change if possible
+- :white_circle: This PR will modify the UI or affects the UX
+- :white_circle: This PR will add/update/delete a keybinding

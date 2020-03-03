@@ -59,13 +59,6 @@ $control-height = 30px
   top $control-height
   overflow auto
 
-body[data-theme="white"]
-  .root
-    background-color $ui-white-noteList-backgroundColor
-
-  .control
-    background-color $ui-white-noteList-backgroundColor
-
 apply-theme(theme)
   body[data-theme={theme}]
     .root
@@ -80,6 +73,7 @@ apply-theme(theme)
       &:hover
         transition 0.2s
         color get-theme-var(theme, 'text-color')
+        background-color: get-theme-var(theme, 'noteList-backgroundColor')
 
     .control-button
       color get-theme-var(theme, 'inactive-text-color')
@@ -91,7 +85,7 @@ apply-theme(theme)
       &:active
         color get-theme-var(theme, 'text-color')
 
-for theme in 'dark' 'solarized-dark' 'dracula'
+for theme in 'white' 'dark' 'solarized-dark' 'dracula'
   apply-theme(theme)
 
 for theme in $themes

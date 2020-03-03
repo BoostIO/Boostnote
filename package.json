@@ -1,7 +1,7 @@
 {
   "name": "boost",
   "productName": "Boostnote",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "main": "index.js",
   "description": "Boostnote",
   "license": "GPL-3.0",
@@ -188,7 +188,7 @@
     "webpack-dev-server": "^1.12.0"
   },
   "optionalDependencies": {
-    "grunt-electron-installer-debian": "^0.2.0",
+    "grunt-electron-installer-debian": "^0.5.0",
     "grunt-electron-installer-redhat": "^0.3.1"
   },
   "optional": false,

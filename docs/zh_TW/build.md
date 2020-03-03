@@ -83,6 +83,10 @@ grunt pre-build
 
 安裝支援版本的 `node` 和 `npm` 後，安裝編譯相依套件。
 
+```
+$ yarn add --dev grunt-electron-installer-debian grunt-electron-installer-redhat
+```
+
 Ubuntu/Debian:
 
 ```
@@ -101,4 +105,4 @@ $ sudo dnf install -y dpkg dpkg-dev rpm-build fakeroot
 $ grunt build
 ```
 
-於 `dist` 資料夾下找到 `.deb` 及 `.rpm`。
+> 於 `dist` 資料夾下找到 `.deb` 及 `.rpm`。

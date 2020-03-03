@@ -4,6 +4,7 @@ import { store, history } from './store'
 import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 require('!!style!css!stylus?sourceMap!./global.styl')
+import config from 'browser/main/lib/ConfigManager'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
 import DevTools from './DevTools'
@@ -76,6 +77,16 @@ document.addEventListener('click', function(e) {
   const infoPanel = document.querySelector('.infoPanel')
   if (infoPanel) infoPanel.style.display = 'none'
 })
+
+if (!config.get().ui.showScrollBar) {
+  document.styleSheets[54].insertRule('::-webkit-scrollbar {display: none}')
+  document.styleSheets[54].insertRule(
+    '::-webkit-scrollbar-corner {display: none}'
+  )
+  document.styleSheets[54].insertRule(
+    '::-webkit-scrollbar-thumb {display: none}'
+  )
+}
 
 const el = document.getElementById('content')
 

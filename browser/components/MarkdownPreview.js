@@ -12,6 +12,7 @@ import mermaidRender from './render/MermaidRender'
 import SequenceDiagram from '@rokt33r/js-sequence-diagrams'
 import Chart from 'chart.js'
 import eventEmitter from 'browser/main/lib/eventEmitter'
+import config from 'browser/main/lib/ConfigManager'
 import htmlTextHelper from 'browser/lib/htmlTextHelper'
 import convertModeName from 'browser/lib/convertModeName'
 import copy from 'copy-to-clipboard'
@@ -158,14 +159,22 @@ h1, h2 {
   border: none;
 }
 
+h3 {
+  margin: 1em 0 0.8em;
+}
+
+h4, h5, h6 {
+  margin: 1.1em 0 0.5em;
+}
+
 h1 {
-  padding-bottom: 4px;
+  padding: 0.2em 0 0.2em;
   margin: 1em 0 8px;
 }
 
 h2 {
-  padding-bottom: 0.2em;
-  margin: 1em 0 0.37em;
+  padding: 0.2em 0 0.2em;
+  margin: 1em 0 0.7em;
 }
 
 body p {
@@ -188,10 +197,12 @@ ${allowCustomCSS ? customCSS : ''}
 
 const scrollBarStyle = `
 ::-webkit-scrollbar {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.15);
 }
 
@@ -201,10 +212,12 @@ const scrollBarStyle = `
 `
 const scrollBarDarkStyle = `
 ::-webkit-scrollbar {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
+  ${config.get().ui.showScrollBar ? '' : 'display: none;'}
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -1161,7 +1174,7 @@ class MarkdownPreview extends React.Component {
       return
     }
 
-    const regexIsTagLink = /^:tag:#([\w]+)$/
+    const regexIsTagLink = /^:tag:([\w]+)$/
     if (regexIsTagLink.test(rawHref)) {
       const tag = rawHref.match(regexIsTagLink)[1]
       dispatch(push(`/tags/${encodeURIComponent(tag)}`))
