@@ -1126,8 +1126,6 @@ class MarkdownPreview extends React.Component {
     const isStartWithHash = rawHref[0] === '#'
     const { href, hash } = parser
 
-    if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
-
     const linkHash = hash === '' ? rawHref : hash // needed because we're having special link formats that are removed by parser e.g. :line:10
 
     const extractIdRegex = /file:\/\/.*main.?\w*.html#/ // file://path/to/main(.development.)html
