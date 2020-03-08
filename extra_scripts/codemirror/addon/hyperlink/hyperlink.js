@@ -1,4 +1,4 @@
-;(function (mod) {
+;(function(mod) {
   if (typeof exports === 'object' && typeof module === 'object') {
     // Common JS
     mod(require('../codemirror/lib/codemirror'))
@@ -9,13 +9,13 @@
     // Plain browser env
     mod(CodeMirror)
   }
-})(function (CodeMirror) {
+})(function(CodeMirror) {
   'use strict'
 
   const shell = require('electron').shell
   const remote = require('electron').remote
   const eventEmitter = {
-    emit: function () {
+    emit: function() {
       remote.getCurrentWindow().webContents.send.apply(null, arguments)
     }
   }
@@ -25,7 +25,7 @@
   const modifier = macOS ? 'metaKey' : 'ctrlKey'
 
   class HyperLink {
-    constructor (cm) {
+    constructor(cm) {
       this.cm = cm
       this.lineDiv = cm.display.lineDiv
 
@@ -61,7 +61,7 @@
         passive: true
       })
     }
-    getUrl (el) {
+    getUrl(el) {
       const className = el.className.split(' ')
 
       if (className.indexOf('cm-url') !== -1) {
@@ -74,7 +74,7 @@
 
       return null
     }
-    specialLinkHandler (e, rawHref, linkHash) {
+    specialLinkHandler(e, rawHref, linkHash) {
       const isStartWithHash = rawHref[0] === '#'
 
       const extractIdRegex = /file:\/\/.*main.?\w*.html#/ // file://path/to/main(.development.)html
@@ -128,7 +128,7 @@
         return
       }
     }
-    onMouseDown (e) {
+    onMouseDown(e) {
       const { target } = e
       if (!e[modifier]) {
         return
@@ -155,7 +155,7 @@
         shell.openExternal(url)
       }
     }
-    onMouseEnter (e) {
+    onMouseEnter(e) {
       const { target } = e
 
       const url = this.getUrl(target)
@@ -172,7 +172,7 @@
         this.showInfo(target)
       }
     }
-    onMouseLeave (e) {
+    onMouseLeave(e) {
       if (this.tooltip.parentElement === this.lineDiv) {
         e.target.classList.remove(
           'CodeMirror-activeline-background',
@@ -182,7 +182,7 @@
         this.lineDiv.removeChild(this.tooltip)
       }
     }
-    onMouseMove (e) {
+    onMouseMove(e) {
       if (this.tooltip.parentElement === this.lineDiv) {
         if (e[modifier]) {
           e.target.classList.add('CodeMirror-hyperlink')
@@ -191,7 +191,7 @@
         }
       }
     }
-    showInfo (relatedTo) {
+    showInfo(relatedTo) {
       const b1 = relatedTo.getBoundingClientRect()
       const b2 = this.lineDiv.getBoundingClientRect()
       const tdiv = this.tooltip
