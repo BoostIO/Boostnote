@@ -65,7 +65,16 @@
       const className = el.className.split(' ')
 
       if (className.indexOf('cm-url') !== -1) {
-        const match = /^\((.*)\)|\[(.*)\]|(.*)$/.exec(el.textContent)
+        // multiple cm-url because of search term
+        const cmUrlSpans = Array.from(
+          el.parentNode.getElementsByClassName('cm-url')
+        )
+        const textContent =
+          cmUrlSpans.length > 1
+            ? cmUrlSpans.map(span => span.textContent).join('')
+            : el.textContent
+
+        const match = /^\((.*)\)|\[(.*)\]|(.*)$/.exec(textContent)
         const url = match[1] || match[2] || match[3]
 
         // `:storage` is the value of the variable `STORAGE_FOLDER_PLACEHOLDER` defined in `browser/main/lib/dataApi/attachmentManagement`
@@ -134,7 +143,16 @@
         return
       }
 
-      const rawHref = e.target.innerText.trim().slice(1, -1) // get link text from markdown text
+      // Create URL spans array used for special case "search term is hitting a link".
+      const cmUrlSpans = Array.from(
+        e.target.parentNode.getElementsByClassName('cm-url')
+      )
+
+      const innerText =
+        cmUrlSpans.length > 1
+          ? cmUrlSpans.map(span => span.textContent).join('')
+          : e.target.innerText
+      const rawHref = innerText.trim().slice(1, -1) // get link text from markdown text
 
       if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 
