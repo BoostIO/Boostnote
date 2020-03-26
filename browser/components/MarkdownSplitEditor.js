@@ -215,6 +215,7 @@ class MarkdownSplitEditor extends React.Component {
           <div styleName='slider-hitbox' />
         </div>
         <MarkdownPreview
+          ref='preview'
           style={previewStyle}
           theme={config.ui.theme}
           keyMap={config.editor.keyMap}
