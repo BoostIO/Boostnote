@@ -51,17 +51,13 @@
   color #F44336
   height 20px
 
-body[data-theme="dark"]
-  .root
-    modalDark()
-    
 apply-theme(theme)
   body[data-theme={theme}]
     .root
       background-color transparent
 
     .header
-      background-color get-theme-var(theme, 'button--hover-backgroundColor')
+      background-color transparent
       border-color get-theme-var(theme, 'borderColor')
       color get-theme-var(theme, 'text-color')
 
@@ -74,57 +70,6 @@ apply-theme(theme)
 
     .control-confirmButton
       colorThemedPrimaryButton(theme)
-
-  .control-confirmButton
-    colorDarkPrimaryButton()
-
-body[data-theme="solarized-dark"]
-  .root
-    modalSolarizedDark()
-
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-solarized-dark-text-color
-
-  .control-input
-    border 1px solid $ui-dark-borderColor
-    color white
-
-  .control-confirmButton
-    colorSolarizedDarkPrimaryButton()
-
-body[data-theme="monokai"]
-  .root
-    modalMonokai()
-
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-monokai-text-color
-
-  .control-input
-    border 1px solid $ui-dark-borderColor
-    color white
-
-  .control-confirmButton
-    colorMonokaiPrimaryButton()
-
-body[data-theme="dracula"]
-  .root
-    modalDracula()
-
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-dracula-text-color
-
-  .control-input
-    border 1px solid $ui-dark-borderColor
-    color white
-
-  .control-confirmButton
-    colorDraculaPrimaryButton()
 
 for theme in 'dark' 'solarized-dark' 'dracula'
   apply-theme(theme)
