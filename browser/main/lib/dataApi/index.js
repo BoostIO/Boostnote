@@ -11,6 +11,7 @@ const dataApi = {
   exportFolder: require('./exportFolder'),
   exportStorage: require('./exportStorage'),
   createNote: require('./createNote'),
+  createNoteFromUrl: require('./createNoteFromUrl'),
   updateNote: require('./updateNote'),
   deleteNote: require('./deleteNote'),
   moveNote: require('./moveNote'),

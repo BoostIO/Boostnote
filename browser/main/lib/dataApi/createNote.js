@@ -6,9 +6,11 @@ const path = require('path')
 const CSON = require('@rokt33r/season')
 const { findStorage } = require('browser/lib/findStorage')
 
-function validateInput (input) {
+function validateInput(input) {
   if (!_.isArray(input.tags)) input.tags = []
-  input.tags = input.tags.filter((tag) => _.isString(tag) && tag.trim().length > 0)
+  input.tags = input.tags.filter(
+    tag => _.isString(tag) && tag.trim().length > 0
+  )
   if (!_.isString(input.title)) input.title = ''
   input.isStarred = !!input.isStarred
   input.isTrashed = !!input.isTrashed
@@ -21,20 +23,24 @@ function validateInput (input) {
     case 'SNIPPET_NOTE':
       if (!_.isString(input.description)) input.description = ''
       if (!_.isArray(input.snippets)) {
-        input.snippets = [{
-          name: '',
-          mode: 'text',
-          content: '',
-          linesHighlighted: []
-        }]
+        input.snippets = [
+          {
+            name: '',
+            mode: 'text',
+            content: '',
+            linesHighlighted: []
+          }
+        ]
       }
       break
     default:
-      throw new Error('Invalid type: only MARKDOWN_NOTE and SNIPPET_NOTE are available.')
+      throw new Error(
+        'Invalid type: only MARKDOWN_NOTE and SNIPPET_NOTE are available.'
+      )
   }
 }
 
-function createNote (storageKey, input) {
+function createNote(storageKey, input) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
@@ -47,13 +53,13 @@ function createNote (storageKey, input) {
   }
 
   return resolveStorageData(targetStorage)
-    .then(function checkFolderExists (storage) {
-      if (_.find(storage.folders, {key: input.folder}) == null) {
-        throw new Error('Target folder doesn\'t exist.')
+    .then(function checkFolderExists(storage) {
+      if (_.find(storage.folders, { key: input.folder }) == null) {
+        throw new Error("Target folder doesn't exist.")
       }
       return storage
     })
-    .then(function saveNote (storage) {
+    .then(function saveNote(storage) {
       let key = keygen(true)
       let isUnique = false
       while (!isUnique) {
@@ -68,7 +74,8 @@ function createNote (storageKey, input) {
           }
         }
       }
-      const noteData = Object.assign({},
+      const noteData = Object.assign(
+        {},
         {
           createdAt: new Date(),
           updatedAt: new Date()
@@ -77,9 +84,13 @@ function createNote (storageKey, input) {
         {
           key,
           storage: storageKey
-        })
+        }
+      )
 
-      CSON.writeFileSync(path.join(storage.path, 'notes', key + '.cson'), _.omit(noteData, ['key', 'storage']))
+      CSON.writeFileSync(
+        path.join(storage.path, 'notes', key + '.cson'),
+        _.omit(noteData, ['key', 'storage'])
+      )
 
       return noteData
     })

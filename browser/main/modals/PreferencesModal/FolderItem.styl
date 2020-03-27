@@ -107,73 +107,32 @@ body[data-theme="dark"]
   .folderItem-right-dangerButton
     colorDarkDangerButton()
 
+apply-theme(theme)
+  body[data-theme={theme}]
+    .folderItem
+      &:hover
+        background-color get-theme-var(theme, 'button-backgroundColor')
 
+    .folderItem-left-danger
+      color $danger-color
 
-body[data-theme="solarized-dark"]
-  .folderItem
-    &:hover
-      background-color $ui-solarized-dark-button-backgroundColor
+    .folderItem-left-key
+      color $ui-dark-inactive-text-color
 
-  .folderItem-left-danger
-    color $danger-color
+    .folderItem-left-colorButton
+      colorThemedPrimaryButton(theme)
 
-  .folderItem-left-key
-    color $ui-dark-inactive-text-color
+    .folderItem-right-button
+      colorThemedPrimaryButton(theme)
 
-  .folderItem-left-colorButton
-    colorSolarizedDarkPrimaryButton()
+    .folderItem-right-confirmButton
+      colorThemedPrimaryButton(theme)
 
-  .folderItem-right-button
-    colorSolarizedDarkPrimaryButton()
+    .folderItem-right-dangerButton
+      colorThemedPrimaryButton(theme)
 
-  .folderItem-right-confirmButton
-    colorSolarizedDarkPrimaryButton()
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .folderItem-right-dangerButton
-    colorSolarizedDarkPrimaryButton()
-
-body[data-theme="monokai"]
-  .folderItem
-    &:hover
-      background-color $ui-monokai-button-backgroundColor
-
-  .folderItem-left-danger
-    color $danger-color
-
-  .folderItem-left-key
-    color $ui-dark-inactive-text-color
-
-  .folderItem-left-colorButton
-    colorMonokaiPrimaryButton()
-
-  .folderItem-right-button
-    colorMonokaiPrimaryButton()
-
-  .folderItem-right-confirmButton
-    colorMonokaiPrimaryButton()
-
-  .folderItem-right-dangerButton
-    colorMonokaiPrimaryButton()
-
-body[data-theme="dracula"]
-  .folderItem
-    &:hover
-      background-color $ui-dracula-button-backgroundColor
-
-  .folderItem-left-danger
-    color $danger-color
-
-  .folderItem-left-key
-    color $ui-dark-inactive-text-color
-
-  .folderItem-left-colorButton
-    colorDraculaPrimaryButton()
-
-  .folderItem-right-button
-    colorDraculaPrimaryButton()
-
-  .folderItem-right-confirmButton
-    colorDraculaPrimaryButton()
-
-  .folderItem-right-dangerButton
-    colorDraculaPrimaryButton()
+for theme in $themes
+  apply-theme(theme)

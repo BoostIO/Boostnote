@@ -14,7 +14,8 @@ var config = Object.assign({}, skeleton, {
       {
         test: /\.styl$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'style!css?modules&importLoaders=1&localIdentName=[name]__[local]___[path]!stylus?sourceMap'
+        loader:
+          'style!css?modules&importLoaders=1&localIdentName=[name]__[local]___[path]!stylus?sourceMap'
       },
       {
         test: /\.json$/,
@@ -35,8 +36,8 @@ var config = Object.assign({}, skeleton, {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-        'BABEL_ENV': JSON.stringify('production')
+        NODE_ENV: JSON.stringify('production'),
+        BABEL_ENV: JSON.stringify('production')
       }
     })
   ]

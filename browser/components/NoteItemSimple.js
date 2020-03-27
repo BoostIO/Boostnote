@@ -25,10 +25,8 @@ const NoteItemSimple = ({
   pathname,
   storage
 }) => (
-  <div styleName={isActive
-    ? 'item-simple--active'
-    : 'item-simple'
-  }
+  <div
+    styleName={isActive ? 'item-simple--active' : 'item-simple'}
     key={note.key}
     onClick={e => handleNoteClick(e, note.key)}
     onContextMenu={e => handleNoteContextMenu(e, note.key)}
@@ -36,23 +34,29 @@ const NoteItemSimple = ({
     draggable='true'
   >
     <div styleName='item-simple-title'>
-      {note.type === 'SNIPPET_NOTE'
-        ? <i styleName='item-simple-title-icon' className='fa fa-fw fa-code' />
-        : <i styleName='item-simple-title-icon' className='fa fa-fw fa-file-text-o' />
-      }
-      {note.isPinned && !pathname.match(/\/starred|\/trash/)
-        ? <i styleName='item-pin' className='fa fa-thumb-tack' />
-        : ''
-      }
-      {note.title.trim().length > 0
-        ? note.title
-        : <span styleName='item-simple-title-empty'>{i18n.__('Empty note')}</span>
-      }
-      {isAllNotesView && <div styleName='item-simple-right'>
-        <span styleName='item-simple-right-storageName'>
-          {storage.name}
-        </span>
-      </div>}
+      {note.type === 'SNIPPET_NOTE' ? (
+        <i styleName='item-simple-title-icon' className='fa fa-fw fa-code' />
+      ) : (
+        <i
+          styleName='item-simple-title-icon'
+          className='fa fa-fw fa-file-text-o'
+        />
+      )}
+      {note.isPinned && !pathname.match(/\/starred|\/trash/) ? (
+        <i styleName='item-pin' className='fa fa-thumb-tack' />
+      ) : (
+        ''
+      )}
+      {note.title.trim().length > 0 ? (
+        note.title
+      ) : (
+        <span styleName='item-simple-title-empty'>{i18n.__('Empty note')}</span>
+      )}
+      {isAllNotesView && (
+        <div styleName='item-simple-right'>
+          <span styleName='item-simple-right-storageName'>{storage.name}</span>
+        </div>
+      )}
     </div>
   </div>
 )

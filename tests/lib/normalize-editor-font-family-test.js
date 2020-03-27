@@ -12,5 +12,8 @@ test('normalizeEditorFontFamily() should return default font family (string[])',
 
 test('normalizeEditorFontFamily(["hoge", "huga"]) should return default font family connected with arg.', t => {
   const arg = 'font1, font2'
-  t.is(normalizeEditorFontFamily(arg), `${arg}, ${defaultEditorFontFamily.join(', ')}`)
+  t.is(
+    normalizeEditorFontFamily(arg),
+    `${arg}, ${defaultEditorFontFamily.join(', ')}`
+  )
 })

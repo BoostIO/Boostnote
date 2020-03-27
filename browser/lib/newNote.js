@@ -4,12 +4,22 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import queryString from 'query-string'
 import { push } from 'connected-react-router'
 
-export function createMarkdownNote (storage, folder, dispatch, location, params, config) {
+export function createMarkdownNote(
+  storage,
+  folder,
+  dispatch,
+  location,
+  params,
+  config
+) {
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_MARKDOWN')
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
 
   let tags = []
-  if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
+  if (
+    config.ui.tagNewNoteWithFilteringTags &&
+    location.pathname.match(/\/tags/)
+  ) {
     tags = params.tagname.split(' ')
   }
 
@@ -29,25 +39,40 @@ export function createMarkdownNote (storage, folder, dispatch, location, params,
         note: note
       })
 
-      dispatch(push({
-        pathname: location.pathname,
-        search: queryString.stringify({ key: noteHash })
-      }))
+      dispatch(
+        push({
+          pathname: location.pathname,
+          search: queryString.stringify({ key: noteHash })
+        })
+      )
       ee.emit('list:jump', noteHash)
       ee.emit('detail:focus')
     })
 }
 
-export function createSnippetNote (storage, folder, dispatch, location, params, config) {
+export function createSnippetNote(
+  storage,
+  folder,
+  dispatch,
+  location,
+  params,
+  config
+) {
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_SNIPPET')
   AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
 
   let tags = []
-  if (config.ui.tagNewNoteWithFilteringTags && location.pathname.match(/\/tags/)) {
+  if (
+    config.ui.tagNewNoteWithFilteringTags &&
+    location.pathname.match(/\/tags/)
+  ) {
     tags = params.tagname.split(' ')
   }
 
-  const defaultLanguage = config.editor.snippetDefaultLanguage === 'Auto Detect' ? null : config.editor.snippetDefaultLanguage
+  const defaultLanguage =
+    config.editor.snippetDefaultLanguage === 'Auto Detect'
+      ? null
+      : config.editor.snippetDefaultLanguage
 
   return dataApi
     .createNote(storage, {
@@ -71,10 +96,12 @@ export function createSnippetNote (storage, folder, dispatch, location, params, 
         type: 'UPDATE_NOTE',
         note: note
       })
-      dispatch(push({
-        pathname: location.pathname,
-        search: queryString.stringify({ key: noteHash })
-      }))
+      dispatch(
+        push({
+          pathname: location.pathname,
+          search: queryString.stringify({ key: noteHash })
+        })
+      )
       ee.emit('list:jump', noteHash)
       ee.emit('detail:focus')
     })

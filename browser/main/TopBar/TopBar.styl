@@ -212,69 +212,31 @@ body[data-theme="dark"]
   .control-newPostButton-tooltip
     darkTooltip()
 
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root, .root--expanded
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-body[data-theme="solarized-dark"]
-  .root, .root--expanded
-    background-color $ui-solarized-dark-noteList-backgroundColor
+    .control
+      border-color get-theme-var(theme, 'borderColor')
+    .control-search
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-  .control
-    border-color $ui-solarized-dark-borderColor
-  .control-search
-    background-color $ui-solarized-dark-noteList-backgroundColor
+    .control-search-icon
+      absolute top bottom left
+      line-height 32px
+      width 35px
+      color get-theme-var(theme, 'inactive-text-color')
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-  .control-search-icon
-    absolute top bottom left
-    line-height 32px
-    width 35px
-    color $ui-solarized-dark-inactive-text-color
-    background-color $ui-solarized-dark-noteList-backgroundColor
+    .control-search-input
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
+      input
+        background-color get-theme-var(theme, 'noteList-backgroundColor')
+        color get-theme-var(theme, 'text-color')
 
-  .control-search-input
-    background-color $ui-solarized-dark-noteList-backgroundColor
-    input
-      background-color $ui-solarized-dark-noteList-backgroundColor
-      color $ui-solarized-dark-text-color
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="monokai"]
-  .root, .root--expanded
-    background-color $ui-monokai-noteList-backgroundColor
-
-  .control
-    border-color $ui-monokai-borderColor
-  .control-search
-    background-color $ui-monokai-noteList-backgroundColor
-
-  .control-search-icon
-    absolute top bottom left
-    line-height 32px
-    width 35px
-    color $ui-monokai-inactive-text-color
-    background-color $ui-monokai-noteList-backgroundColor
-
-  .control-search-input
-    background-color $ui-monokai-noteList-backgroundColor
-    input
-      background-color $ui-monokai-noteList-backgroundColor
-      color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .root, .root--expanded
-    background-color $ui-dracula-noteList-backgroundColor
-
-  .control
-    border-color $ui-dracula-borderColor
-  .control-search
-    background-color $ui-dracula-noteList-backgroundColor
-
-  .control-search-icon
-    absolute top bottom left
-    line-height 32px
-    width 35px
-    color $ui-dracula-inactive-text-color
-    background-color $ui-dracula-noteList-backgroundColor
-
-  .control-search-input
-    background-color $ui-dracula-noteList-backgroundColor
-    input
-      background-color $ui-dracula-noteList-backgroundColor
-      color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

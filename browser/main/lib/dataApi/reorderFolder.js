@@ -17,7 +17,7 @@ const { findStorage } = require('browser/lib/findStorage')
  * }
  * ```
  */
-function reorderFolder (storageKey, oldIndex, newIndex) {
+function reorderFolder(storageKey, oldIndex, newIndex) {
   let targetStorage
   try {
     if (!_.isNumber(oldIndex)) throw new Error('oldIndex must be a number.')
@@ -28,15 +28,19 @@ function reorderFolder (storageKey, oldIndex, newIndex) {
     return Promise.reject(e)
   }
 
-  return resolveStorageData(targetStorage)
-    .then(function reorderFolder (storage) {
-      storage.folders = _.move(storage.folders, oldIndex, newIndex)
-      CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+  return resolveStorageData(targetStorage).then(function reorderFolder(
+    storage
+  ) {
+    storage.folders = _.move(storage.folders, oldIndex, newIndex)
+    CSON.writeFileSync(
+      path.join(storage.path, 'boostnote.json'),
+      _.pick(storage, ['folders', 'version'])
+    )
 
-      return {
-        storage
-      }
-    })
+    return {
+      storage
+    }
+  })
 }
 
 module.exports = reorderFolder

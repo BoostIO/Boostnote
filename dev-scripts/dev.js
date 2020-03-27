@@ -15,7 +15,7 @@ const options = {
   quiet: true
 }
 
-function startServer () {
+function startServer() {
   config.plugins.push(new webpack.HotModuleReplacementPlugin())
   config.entry.main.unshift(
     `webpack-dev-server/client?http://localhost:${port}/`,
@@ -25,7 +25,7 @@ function startServer () {
   server = new WebpackDevServer(compiler, options)
 
   return new Promise((resolve, reject) => {
-    server.listen(port, 'localhost', function (err) {
+    server.listen(port, 'localhost', function(err) {
       if (err) {
         reject(err)
       }
@@ -48,7 +48,7 @@ function startServer () {
   })
 }
 
-function startElectron () {
+function startElectron() {
   spawn(electron, ['--hot', './index.js'], { stdio: 'inherit' })
     .on('close', () => {
       server.close()

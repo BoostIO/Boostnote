@@ -22,7 +22,7 @@ const { findStorage } = require('browser/lib/findStorage')
  * }
  * ```
  */
-function createFolder (storageKey, input) {
+function createFolder(storageKey, input) {
   let targetStorage
   try {
     if (input == null) throw new Error('No input found.')
@@ -34,26 +34,28 @@ function createFolder (storageKey, input) {
     return Promise.reject(e)
   }
 
-  return resolveStorageData(targetStorage)
-    .then(function createFolder (storage) {
-      let key = keygen()
-      while (storage.folders.some((folder) => folder.key === key)) {
-        key = keygen()
-      }
-      const newFolder = {
-        key,
-        color: input.color,
-        name: input.name
-      }
+  return resolveStorageData(targetStorage).then(function createFolder(storage) {
+    let key = keygen()
+    while (storage.folders.some(folder => folder.key === key)) {
+      key = keygen()
+    }
+    const newFolder = {
+      key,
+      color: input.color,
+      name: input.name
+    }
 
-      storage.folders.push(newFolder)
+    storage.folders.push(newFolder)
 
-      CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+    CSON.writeFileSync(
+      path.join(storage.path, 'boostnote.json'),
+      _.pick(storage, ['folders', 'version'])
+    )
 
-      return {
-        storage
-      }
-    })
+    return {
+      storage
+    }
+  })
 }
 
 module.exports = createFolder
