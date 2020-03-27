@@ -74,6 +74,12 @@ class RenameTagModal extends React.Component {
   renameTag(tag, updatedTag) {
     const { data, dispatch } = this.props
 
+    if (tag === updatedTag) {
+      // confirm with-out any change - just dismiss the modal
+      this.props.close()
+      return
+    }
+
     if (
       data.noteMap
         .map(note => note)
