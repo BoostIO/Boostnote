@@ -835,7 +835,15 @@ function getAttachmentsPathAndStatus(markdownContent, storageKey, noteKey) {
   if (storageKey == null || noteKey == null || markdownContent == null) {
     return null
   }
-  const targetStorage = findStorage.findStorage(storageKey)
+  let targetStorage = null
+  try {
+    targetStorage = findStorage.findStorage(storageKey)
+  } catch (error) {
+    console.warn(`No stroage found for: ${storageKey}`)
+  }
+  if (!targetStorage) {
+    return null
+  }
   const attachmentFolder = path.join(
     targetStorage.path,
     DESTINATION_FOLDER,

@@ -156,7 +156,12 @@ class MarkdownSplitEditor extends React.Component {
       linesHighlighted,
       RTL
     } = this.props
-    const storage = findStorage(storageKey)
+    let storage
+    try {
+      storage = findStorage(storageKey)
+    } catch (e) {
+      return <div />
+    }
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
     let editorIndentSize = parseInt(config.editor.indentSize, 10)

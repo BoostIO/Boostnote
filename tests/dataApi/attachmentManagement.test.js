@@ -912,6 +912,19 @@ it('should test that getAttachmentsPathAndStatus return null if noteKey, storage
   expect(result).toBeNull()
 })
 
+it('should test that getAttachmentsPathAndStatus return null if no storage found', function() {
+  const noteKey = 'test'
+  const storageKey = 'not_exist'
+  const markdownContent = ''
+
+  const result = systemUnderTest.getAttachmentsPathAndStatus(
+    markdownContent,
+    storageKey,
+    noteKey
+  )
+  expect(result).toBeNull()
+})
+
 it('should test that getAttachmentsPathAndStatus return the correct path and status for attachments', async function() {
   const dummyStorage = { path: 'dummyStoragePath' }
   const noteKey = 'noteKey'
