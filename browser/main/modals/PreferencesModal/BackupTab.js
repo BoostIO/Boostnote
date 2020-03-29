@@ -162,8 +162,8 @@ class BackupTab extends React.Component {
         if (err) {
           return console.log(err)
         }
+        alert(i18n.__('Saved successfully'))
       })
-    alert(i18n.__('Saved successfully'))
   }
 
   clearMessage () {
