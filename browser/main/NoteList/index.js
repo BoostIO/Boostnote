@@ -1107,10 +1107,10 @@ class NoteList extends React.Component {
 
   getNoteFolder(note) {
     // note.folder = folder key
-    return _.find(
-      this.getNoteStorage(note).folders,
-      ({ key }) => key === note.folder
-    )
+    const storage = this.getNoteStorage(note)
+    return storage
+      ? _.find(storage.folders, ({ key }) => key === note.folder)
+      : []
   }
 
   getViewType() {
@@ -1145,9 +1145,14 @@ class NoteList extends React.Component {
       ? this.getNotes().sort(sortFunc)
       : this.sortByPin(this.getNotes().sort(sortFunc))
     this.notes = notes = sortedNotes.filter(note => {
-      // this is for the trash box
-      if (note.isTrashed !== true || location.pathname === '/trashed')
+      if (
+        // has matching storage
+        !!this.getNoteStorage(note) &&
+        // this is for the trash box
+        (note.isTrashed !== true || location.pathname === '/trashed')
+      ) {
         return true
+      }
     })
     if (sortDir === 'DESCENDING') this.notes.reverse()
 
@@ -1193,6 +1198,8 @@ class NoteList extends React.Component {
         sortBy === 'CREATED_AT' ? note.createdAt : note.updatedAt
       ).fromNow('D')
 
+      const storage = this.getNoteStorage(note)
+
       if (isDefault) {
         return (
           <NoteItem
@@ -1205,7 +1212,7 @@ class NoteList extends React.Component {
             handleDragStart={this.handleDragStart.bind(this)}
             pathname={location.pathname}
             folderName={this.getNoteFolder(note).name}
-            storageName={this.getNoteStorage(note).name}
+            storageName={storage.name}
             viewType={viewType}
             showTagsAlphabetically={config.ui.showTagsAlphabetically}
             coloredTags={config.coloredTags}
@@ -1223,7 +1230,7 @@ class NoteList extends React.Component {
           handleDragStart={this.handleDragStart.bind(this)}
           pathname={location.pathname}
           folderName={this.getNoteFolder(note).name}
-          storageName={this.getNoteStorage(note).name}
+          storageName={storage.name}
           viewType={viewType}
         />
       )
