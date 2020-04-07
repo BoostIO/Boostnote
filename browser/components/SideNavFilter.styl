@@ -1,5 +1,5 @@
 .menu
-  margin-bottom 30px
+  margin-bottom 20px
 
 .menu-button
   navButtonColor()
@@ -180,129 +180,51 @@ body[data-theme="dark"]
       .menu-button-label
         color $ui-dark-text-color
 
+apply-theme(theme)
+  body[data-theme={theme}]
+    .menu-button
+      &:active
+        background-color get-theme-var(theme, 'noteList-backgroundColor')
+        color get-theme-var(theme, 'text-color')
+      &:hover
+        background-color get-theme-var(theme, 'button-backgroundColor')
+        color get-theme-var(theme, 'text-color')
 
-body[data-theme="solarized-dark"]
-  .menu-button
-    &:active
-      background-color $ui-solarized-dark-noteList-backgroundColor
-      color $ui-solarized-dark-text-color
-    &:hover
-      background-color $ui-solarized-dark-button-backgroundColor
-      color $ui-solarized-dark-text-color
-
-  .menu-button--active
-    color $ui-solarized-dark-text-color
-    background-color $ui-solarized-dark-button-backgroundColor
-    .menu-button-label
-      color $ui-solarized-dark-text-color
-    &:hover
-      background-color $ui-solarized-dark-button-backgroundColor
-      color $ui-solarized-dark-text-color
+    .menu-button--active
+      color get-theme-var(theme, 'text-color')
+      background-color get-theme-var(theme, 'button-backgroundColor')
       .menu-button-label
-        color $ui-solarized-dark-text-color
+        color get-theme-var(theme, 'text-color')
+      &:hover
+        background-color get-theme-var(theme, 'button-backgroundColor')
+        color get-theme-var(theme, 'text-color')
+        .menu-button-label
+          color get-theme-var(theme, 'text-color')
 
-  .menu-button-star--active
-    color $ui-solarized-dark-text-color
-    background-color $ui-solarized-dark-button-backgroundColor
-    .menu-button-label
-      color $ui-solarized-dark-text-color
-    &:hover
-      background-color $ui-solarized-dark-button-backgroundColor
-      color $ui-solarized-dark-text-color
+    .menu-button-star--active
+      color get-theme-var(theme, 'text-color')
+      background-color get-theme-var(theme, 'button-backgroundColor')
       .menu-button-label
-        color $ui-solarized-dark-text-color
+        color get-theme-var(theme, 'text-color')
+      &:hover
+        background-color get-theme-var(theme, 'button-backgroundColor')
+        color get-theme-var(theme, 'text-color')
+        .menu-button-label
+          color get-theme-var(theme, 'text-color')
 
-  .menu-button-trash--active
-    color $ui-solarized-dark-text-color
-    background-color $ui-solarized-dark-button-backgroundColor
-    .menu-button-label
-      color $ui-solarized-dark-text-color
-    &:hover
-      background-color $ui-solarized-dark-button-backgroundColor
-      color $ui-solarized-dark-text-color
+    .menu-button-trash--active
+      color get-theme-var(theme, 'text-color')
+      background-color get-theme-var(theme, 'button-backgroundColor')
       .menu-button-label
-        color $ui-solarized-dark-text-color
+        color get-theme-var(theme, 'text-color')
+      &:hover
+        background-color get-theme-var(theme, 'button-backgroundColor')
+        color get-theme-var(theme, 'text-color')
+        .menu-button-label
+          color get-theme-var(theme, 'text-color')
 
-body[data-theme="monokai"]
-  .menu-button
-    &:active
-      background-color $ui-monokai-noteList-backgroundColor
-      color $ui-monokai-text-color
-    &:hover
-      background-color $ui-monokai-button-backgroundColor
-      color $ui-monokai-text-color
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .menu-button--active
-    color $ui-monokai-text-color
-    background-color $ui-monokai-button-backgroundColor
-    .menu-button-label
-      color $ui-monokai-text-color
-    &:hover
-      background-color $ui-monokai-button-backgroundColor
-      color $ui-monokai-text-color
-      .menu-button-label
-        color $ui-monokai-text-color
-
-  .menu-button-star--active
-    color $ui-monokai-text-color
-    background-color $ui-monokai-button-backgroundColor
-    .menu-button-label
-      color $ui-monokai-text-color
-    &:hover
-      background-color $ui-monokai-button-backgroundColor
-      color $ui-monokai-text-color
-      .menu-button-label
-        color $ui-monokai-text-color
-
-  .menu-button-trash--active
-    color $ui-monokai-text-color
-    background-color $ui-monokai-button-backgroundColor
-    .menu-button-label
-      color $ui-monokai-text-color
-    &:hover
-      background-color $ui-monokai-button-backgroundColor
-      color $ui-monokai-text-color
-      .menu-button-label
-        color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .menu-button
-    &:active
-      background-color $ui-dracula-noteList-backgroundColor
-      color $ui-dracula-text-color
-    &:hover
-      background-color $ui-dracula-button-backgroundColor
-      color $ui-dracula-text-color
-
-  .menu-button--active
-    color $ui-dracula-text-color
-    background-color $ui-dracula-button-backgroundColor
-    .menu-button-label
-      color $ui-dracula-text-color
-    &:hover
-      background-color $ui-dracula-button-backgroundColor
-      color $ui-dracula-text-color
-      .menu-button-label
-        color $ui-dracula-text-color
-
-  .menu-button-star--active
-    color $ui-dracula-text-color
-    background-color $ui-dracula-button-backgroundColor
-    .menu-button-label
-      color $ui-dracula-text-color
-    &:hover
-      background-color $ui-dracula-button-backgroundColor
-      color $ui-dracula-text-color
-      .menu-button-label
-        color $ui-dracula-text-color
-
-  .menu-button-trash--active
-    color $ui-dracula-text-color
-    background-color $ui-dracula-button-backgroundColor
-    .menu-button-label
-      color $ui-dracula-text-color
-    &:hover
-      background-color $ui-dracula-button-backgroundColor
-      color $ui-dracula-text-color
-      .menu-button-label
-        color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

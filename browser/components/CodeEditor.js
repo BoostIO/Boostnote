@@ -6,11 +6,7 @@ import hljs from 'highlight.js'
 import 'codemirror-mode-elixir'
 import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import convertModeName from 'browser/lib/convertModeName'
-import {
-  options,
-  TableEditor,
-  Alignment
-} from '@susisu/mte-kernel'
+import { options, TableEditor, Alignment } from '@susisu/mte-kernel'
 import TextEditorInterface from 'browser/lib/TextEditorInterface'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import iconv from 'iconv-lite'
@@ -21,27 +17,37 @@ const { ipcRenderer, remote, clipboard } = require('electron')
 import normalizeEditorFontFamily from 'browser/lib/normalizeEditorFontFamily'
 const spellcheck = require('browser/lib/spellcheck')
 const buildEditorContextMenu = require('browser/lib/contextMenuBuilder')
-import TurndownService from 'turndown'
-import {languageMaps} from '../lib/CMLanguageList'
+  .buildEditorContextMenu
+import { createTurndownService } from '../lib/turndown'
+import { languageMaps } from '../lib/CMLanguageList'
 import snippetManager from '../lib/SnippetManager'
-import {generateInEditor, tocExistsInEditor} from 'browser/lib/markdown-toc-generator'
+import {
+  generateInEditor,
+  tocExistsInEditor
+} from 'browser/lib/markdown-toc-generator'
 import markdownlint from 'markdownlint'
 import Jsonlint from 'jsonlint-mod'
 import { DEFAULT_CONFIG } from '../main/lib/ConfigManager'
+import prettier from 'prettier'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
 const buildCMRulers = (rulers, enableRulers) =>
-  (enableRulers ? rulers.map(ruler => ({
-    column: ruler
-  })) : [])
+  enableRulers
+    ? rulers.map(ruler => ({
+        column: ruler
+      }))
+    : []
 
-function translateHotkey (hotkey) {
-  return hotkey.replace(/\s*\+\s*/g, '-').replace(/Command/g, 'Cmd').replace(/Control/g, 'Ctrl')
+function translateHotkey(hotkey) {
+  return hotkey
+    .replace(/\s*\+\s*/g, '-')
+    .replace(/Command/g, 'Cmd')
+    .replace(/Control/g, 'Ctrl')
 }
 
 export default class CodeEditor extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.scrollHandler = _.debounce(this.handleScroll.bind(this), 100, {
@@ -51,12 +57,18 @@ export default class CodeEditor extends React.Component {
     this.state = {
       editorFocused: false
     }
-    this.changeHandler = (editor, changeObject) => this.handleChange(editor, changeObject)
-    this.highlightHandler = (editor, changeObject) => this.handleHighlight(editor, changeObject)
+    this.changeHandler = (editor, changeObject) =>
+      this.handleChange(editor, changeObject)
+    this.highlightHandler = (editor, changeObject) =>
+      this.handleHighlight(editor, changeObject)
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
       this.setState({editorFocused: true})
     }
+    const debouncedDeletionOfAttachments = _.debounce(
+      attachmentManagement.deleteAttachmentsNotPresentInNote,
+      30000
+    )
     this.blurHandler = (editor, e) => {
       ipcRenderer.send('editor:focused', false)
       this.setState({editorFocused: false})
@@ -69,16 +81,14 @@ export default class CodeEditor extends React.Component {
         el = el.parentNode
       }
       this.props.onBlur != null && this.props.onBlur(e)
-
-      const {
-        storageKey,
-        noteKey
-      } = this.props
-      attachmentManagement.deleteAttachmentsNotPresentInNote(
-        this.editor.getValue(),
-        storageKey,
-        noteKey
-      )
+      const { storageKey, noteKey } = this.props
+      if (this.props.deleteUnusedAttachments === true) {
+        debouncedDeletionOfAttachments(
+          this.editor.getValue(),
+          storageKey,
+          noteKey
+        )
+      }
     }
     this.pasteHandler = (editor, e) => {
       e.preventDefault()
@@ -97,7 +107,7 @@ export default class CodeEditor extends React.Component {
     this.formatTable = () => this.handleFormatTable()
 
     if (props.switchPreview !== 'RIGHTCLICK') {
-      this.contextMenuHandler = function (editor, event) {
+      this.contextMenuHandler = function(editor, event) {
         const menu = buildEditorContextMenu(editor, event)
         if (menu != null) {
           setTimeout(() => menu.popup(remote.getCurrentWindow()), 30)
@@ -107,27 +117,27 @@ export default class CodeEditor extends React.Component {
 
     this.editorActivityHandler = () => this.handleEditorActivity()
 
-    this.turndownService = new TurndownService()
+    this.turndownService = createTurndownService()
   }
 
-  handleSearch (msg) {
+  handleSearch(msg) {
     const cm = this.editor
     const component = this
 
     if (component.searchState) cm.removeOverlay(component.searchState)
-    if (msg.length < 3) return
+    if (msg.length < 1) return
 
-    cm.operation(function () {
+    cm.operation(function() {
       component.searchState = makeOverlay(msg, 'searching')
       cm.addOverlay(component.searchState)
 
-      function makeOverlay (query, style) {
+      function makeOverlay(query, style) {
         query = new RegExp(
           query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'),
           'gi'
         )
         return {
-          token: function (stream) {
+          token: function(stream) {
             query.lastIndex = stream.pos
             var match = query.exec(stream.string)
             if (match && match.index === stream.pos) {
@@ -144,25 +154,27 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  handleFormatTable () {
-    this.tableEditor.formatAll(options({
-      textWidthOptions: {}
-    }))
+  handleFormatTable() {
+    this.tableEditor.formatAll(
+      options({
+        textWidthOptions: {}
+      })
+    )
   }
 
-  handleEditorActivity () {
+  handleEditorActivity() {
     if (!this.textEditorInterface.transaction) {
       this.updateTableEditorState()
     }
   }
 
-  updateDefaultKeyMap () {
+  updateDefaultKeyMap() {
     const { hotkey } = this.props
     const self = this
     const expandSnippet = snippetManager.expandSnippet
 
     this.defaultKeyMap = CodeMirror.normalizeKeyMap({
-      Tab: function (cm) {
+      Tab: function(cm) {
         const cursor = cm.getCursor()
         const line = cm.getLine(cursor.line)
         const cursorPosition = cursor.ch
@@ -204,29 +216,17 @@ export default class CodeEditor extends React.Component {
           }
         }
       },
-      'Cmd-Left': function (cm) {
+      'Cmd-Left': function(cm) {
         cm.execCommand('goLineLeft')
       },
-      'Cmd-T': function (cm) {
+      'Cmd-T': function(cm) {
         // Do nothing
       },
-      'Ctrl-/': function (cm) {
-        if (global.process.platform === 'darwin') { return }
+      [translateHotkey(hotkey.insertDate)]: function(cm) {
         const dateNow = new Date()
         cm.replaceSelection(dateNow.toLocaleDateString())
       },
-      'Cmd-/': function (cm) {
-        if (global.process.platform !== 'darwin') { return }
-        const dateNow = new Date()
-        cm.replaceSelection(dateNow.toLocaleDateString())
-      },
-      'Shift-Ctrl-/': function (cm) {
-        if (global.process.platform === 'darwin') { return }
-        const dateNow = new Date()
-        cm.replaceSelection(dateNow.toLocaleString())
-      },
-      'Shift-Cmd-/': function (cm) {
-        if (global.process.platform !== 'darwin') { return }
+      [translateHotkey(hotkey.insertDateTime)]: function(cm) {
         const dateNow = new Date()
         cm.replaceSelection(dateNow.toLocaleString())
       },
@@ -237,13 +237,48 @@ export default class CodeEditor extends React.Component {
         }
         return CodeMirror.Pass
       },
+      [translateHotkey(hotkey.prettifyMarkdown)]: cm => {
+        // Default / User configured prettier options
+        const currentConfig = JSON.parse(self.props.prettierConfig)
+
+        // Parser type will always need to be markdown so we override the option before use
+        currentConfig.parser = 'markdown'
+
+        // Get current cursor position
+        const cursorPos = cm.getCursor()
+        currentConfig.cursorOffset = cm.doc.indexFromPos(cursorPos)
+
+        // Prettify contents of editor
+        const formattedTextDetails = prettier.formatWithCursor(
+          cm.doc.getValue(),
+          currentConfig
+        )
+
+        const formattedText = formattedTextDetails.formatted
+        const formattedCursorPos = formattedTextDetails.cursorOffset
+        cm.doc.setValue(formattedText)
+
+        // Reset Cursor position to be at the same markdown as was before prettifying
+        const newCursorPos = cm.doc.posFromIndex(formattedCursorPos)
+        cm.doc.setCursor(newCursorPos)
+      },
+      [translateHotkey(hotkey.sortLines)]: cm => {
+        const selection = cm.doc.getSelection()
+        const appendLineBreak = /\n$/.test(selection)
+
+        const sorted = _.split(selection.trim(), '\n').sort()
+        const sortedString =
+          _.join(sorted, '\n') + (appendLineBreak ? '\n' : '')
+
+        cm.doc.replaceSelection(sortedString)
+      },
       [translateHotkey(hotkey.pasteSmartly)]: cm => {
         this.handlePaste(cm, true)
       }
     })
   }
 
-  updateTableEditorState () {
+  updateTableEditorState() {
     const active = this.tableEditor.cursorIsInTable(this.tableEditorOptions)
     if (active) {
       if (this.extraKeysMode !== 'editor') {
@@ -259,8 +294,8 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  componentDidMount () {
-    const { rulers, enableRulers, enableMarkdownLint } = this.props
+  componentDidMount() {
+    const { rulers, enableRulers, enableMarkdownLint, RTL } = this.props
     eventEmitter.on('line:jump', this.scrollToLineHandeler)
 
     snippetManager.init()
@@ -272,7 +307,7 @@ export default class CodeEditor extends React.Component {
       value: this.props.value,
       linesHighlighted: this.props.linesHighlighted,
       lineNumbers: this.props.displayLineNumbers,
-      lineWrapping: true,
+      lineWrapping: this.props.lineWrapping,
       theme: this.props.theme,
       indentUnit: this.props.indentSize,
       tabSize: this.props.indentSize,
@@ -281,19 +316,28 @@ export default class CodeEditor extends React.Component {
       scrollPastEnd: this.props.scrollPastEnd,
       inputStyle: 'textarea',
       dragDrop: false,
+      direction: RTL ? 'rtl' : 'ltr',
+      rtlMoveVisually: RTL,
       foldGutter: true,
       lint: enableMarkdownLint ? this.getCodeEditorLintConfig() : false,
-      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
+      gutters: [
+        'CodeMirror-linenumbers',
+        'CodeMirror-foldgutter',
+        'CodeMirror-lint-markers'
+      ],
       autoCloseBrackets: {
         pairs: this.props.matchingPairs,
         triples: this.props.matchingTriples,
         explode: this.props.explodingPairs,
         override: true
       },
-      extraKeys: this.defaultKeyMap
+      extraKeys: this.defaultKeyMap,
+      prettierConfig: this.props.prettierConfig
     })
 
-    document.querySelector('.CodeMirror-lint-markers').style.display = enableMarkdownLint ? 'inline-block' : 'none'
+    document.querySelector(
+      '.CodeMirror-lint-markers'
+    ).style.display = enableMarkdownLint ? 'inline-block' : 'none'
 
     if (!this.props.mode && this.props.value && this.props.autoDetect) {
       this.autoDetectLanguage(this.props.value)
@@ -326,7 +370,7 @@ export default class CodeEditor extends React.Component {
     this.textEditorInterface = new TextEditorInterface(this.editor)
     this.tableEditor = new TableEditor(this.textEditorInterface)
     if (this.props.spellCheck) {
-      this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+      this.editor.addPanel(this.createSpellCheckPanel(), { position: 'bottom' })
     }
 
     eventEmitter.on('code:format-table', this.formatTable)
@@ -336,13 +380,13 @@ export default class CodeEditor extends React.Component {
     })
 
     this.editorKeyMap = CodeMirror.normalizeKeyMap({
-      'Tab': () => {
+      Tab: () => {
         this.tableEditor.nextCell(this.tableEditorOptions)
       },
       'Shift-Tab': () => {
         this.tableEditor.previousCell(this.tableEditorOptions)
       },
-      'Enter': () => {
+      Enter: () => {
         this.tableEditor.nextRow(this.tableEditorOptions)
       },
       'Ctrl-Enter': () => {
@@ -461,7 +505,7 @@ export default class CodeEditor extends React.Component {
     this.initialHighlighting()
   }
 
-  getWordBeforeCursor (line, lineNumber, cursorPosition) {
+  getWordBeforeCursor(line, lineNumber, cursorPosition) {
     let wordBeforeCursor = ''
     const originCursorPosition = cursorPosition
     const emptyChars = /\t|\s|\r|\n|\$/
@@ -498,11 +542,11 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  quitEditor () {
+  quitEditor() {
     document.querySelector('textarea').blur()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.editor.off('focus', this.focusHandler)
     this.editor.off('blur', this.blurHandler)
     this.editor.off('change', this.changeHandler)
@@ -517,7 +561,7 @@ export default class CodeEditor extends React.Component {
     eventEmitter.off('code:format-table', this.formatTable)
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     let needRefresh = false
     const {
       rulers,
@@ -546,13 +590,22 @@ export default class CodeEditor extends React.Component {
     if (prevProps.value !== value && !editorFocused) {
       this.editor.setValue(this.props.value)
     }
-    if (prevProps.enableMarkdownLint !== enableMarkdownLint || prevProps.customMarkdownLintConfig !== customMarkdownLintConfig) {
+    if (prevProps.RTL !== this.props.RTL) {
+      this.editor.setOption('direction', this.props.RTL ? 'rtl' : 'ltr')
+      this.editor.setOption('rtlMoveVisually', this.props.RTL)
+    }
+    if (
+      prevProps.enableMarkdownLint !== enableMarkdownLint ||
+      prevProps.customMarkdownLintConfig !== customMarkdownLintConfig
+    ) {
       if (!enableMarkdownLint) {
-        this.editor.setOption('lint', {default: false})
-        document.querySelector('.CodeMirror-lint-markers').style.display = 'none'
+        this.editor.setOption('lint', { default: false })
+        document.querySelector('.CodeMirror-lint-markers').style.display =
+          'none'
       } else {
         this.editor.setOption('lint', this.getCodeEditorLintConfig())
-        document.querySelector('.CodeMirror-lint-markers').style.display = 'inline-block'
+        document.querySelector('.CodeMirror-lint-markers').style.display =
+          'inline-block'
       }
       needRefresh = true
     }
@@ -576,13 +629,19 @@ export default class CodeEditor extends React.Component {
       this.editor.setOption('lineNumbers', this.props.displayLineNumbers)
     }
 
+    if (prevProps.lineWrapping !== this.props.lineWrapping) {
+      this.editor.setOption('lineWrapping', this.props.lineWrapping)
+    }
+
     if (prevProps.scrollPastEnd !== this.props.scrollPastEnd) {
       this.editor.setOption('scrollPastEnd', this.props.scrollPastEnd)
     }
 
-    if (prevProps.matchingPairs !== this.props.matchingPairs ||
+    if (
+      prevProps.matchingPairs !== this.props.matchingPairs ||
       prevProps.matchingTriples !== this.props.matchingTriples ||
-      prevProps.explodingPairs !== this.props.explodingPairs) {
+      prevProps.explodingPairs !== this.props.explodingPairs
+    ) {
       const bracketObject = {
         pairs: this.props.matchingPairs,
         triples: this.props.matchingTriples,
@@ -627,8 +686,18 @@ export default class CodeEditor extends React.Component {
         const elem = document.getElementById('editor-bottom-panel')
         elem.parentNode.removeChild(elem)
       } else {
-        this.editor.addPanel(this.createSpellCheckPanel(), {position: 'bottom'})
+        this.editor.addPanel(this.createSpellCheckPanel(), {
+          position: 'bottom'
+        })
       }
+    }
+    if (
+      prevProps.deleteUnusedAttachments !== this.props.deleteUnusedAttachments
+    ) {
+      this.editor.setOption(
+        'deleteUnusedAttachments',
+        this.props.deleteUnusedAttachments
+      )
     }
 
     if (needRefresh) {
@@ -636,17 +705,19 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  getCodeEditorLintConfig () {
+  getCodeEditorLintConfig() {
     const { mode } = this.props
     const checkMarkdownNoteIsOpen = mode === 'Boost Flavored Markdown'
 
-    return checkMarkdownNoteIsOpen ? {
-      'getAnnotations': this.validatorOfMarkdown,
-      'async': true
-    } : false
+    return checkMarkdownNoteIsOpen
+      ? {
+          getAnnotations: this.validatorOfMarkdown,
+          async: true
+        }
+      : false
   }
 
-  validatorOfMarkdown (text, updateLinting) {
+  validatorOfMarkdown(text, updateLinting) {
     const { customMarkdownLintConfig } = this.props
     let lintConfigJson
     try {
@@ -657,10 +728,10 @@ export default class CodeEditor extends React.Component {
       return
     }
     const lintOptions = {
-      'strings': {
-        'content': text
+      strings: {
+        content: text
       },
-      'config': lintConfigJson
+      config: lintConfigJson
     }
 
     return markdownlint(lintOptions, (err, result) => {
@@ -671,7 +742,7 @@ export default class CodeEditor extends React.Component {
           let ruleNames = ''
           item.ruleNames.map((ruleName, index) => {
             ruleNames += ruleName
-            ruleNames += (index === item.ruleNames.length - 1) ? ': ' : '/'
+            ruleNames += index === item.ruleNames.length - 1 ? ': ' : '/'
           })
           const lineNumber = item.lineNumber - 1
           foundIssues.push({
@@ -686,7 +757,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  setMode (mode) {
+  setMode(mode) {
     let syntax = CodeMirror.findModeByName(convertModeName(mode || 'text'))
     if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
 
@@ -694,7 +765,7 @@ export default class CodeEditor extends React.Component {
     CodeMirror.autoLoadMode(this.editor, syntax.mode)
   }
 
-  handleChange (editor, changeObject) {
+  handleChange(editor, changeObject) {
     spellcheck.handleChange(editor, changeObject)
 
     // The current note contains an toc. We'll check for changes on headlines.
@@ -704,7 +775,11 @@ export default class CodeEditor extends React.Component {
 
       // Check if one of the changed lines contains a headline
       for (let line = 0; line < changeObject.text.length; line++) {
-        if (this.linePossibleContainsHeadline(editor.getLine(changeObject.from.line + line))) {
+        if (
+          this.linePossibleContainsHeadline(
+            editor.getLine(changeObject.from.line + line)
+          )
+        ) {
           requireTocUpdate = true
           break
         }
@@ -733,13 +808,13 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  linePossibleContainsHeadline (currentLine) {
+  linePossibleContainsHeadline(currentLine) {
     // We can't check if the line start with # because when some write text before
     // the # we also need to update the toc
     return currentLine.includes('# ')
   }
 
-  incrementLines (start, linesAdded, linesRemoved, editor) {
+  incrementLines(start, linesAdded, linesRemoved, editor) {
     const highlightedLines = editor.options.linesHighlighted
 
     const totalHighlightedLines = highlightedLines.length
@@ -760,7 +835,7 @@ export default class CodeEditor extends React.Component {
         highlightedLines.splice(highlightedLines.indexOf(lineNumber), 1)
 
         // Lines that need to be relocated
-        if (lineNumber >= (start + linesRemoved)) {
+        if (lineNumber >= start + linesRemoved) {
           newLines.push(lineNumber + offset)
         }
       }
@@ -774,22 +849,30 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handleHighlight (editor, changeObject) {
+  handleHighlight(editor, changeObject) {
     const lines = editor.options.linesHighlighted
 
     if (!lines.includes(changeObject)) {
       lines.push(changeObject)
-      editor.addLineClass(changeObject, 'text', 'CodeMirror-activeline-background')
+      editor.addLineClass(
+        changeObject,
+        'text',
+        'CodeMirror-activeline-background'
+      )
     } else {
       lines.splice(lines.indexOf(changeObject), 1)
-      editor.removeLineClass(changeObject, 'text', 'CodeMirror-activeline-background')
+      editor.removeLineClass(
+        changeObject,
+        'text',
+        'CodeMirror-activeline-background'
+      )
     }
     if (this.props.onChange) {
       this.props.onChange(editor)
     }
   }
 
-  updateHighlight (editor, changeObject) {
+  updateHighlight(editor, changeObject) {
     const linesAdded = changeObject.text.length - 1
     const linesRemoved = changeObject.removed.length - 1
 
@@ -820,28 +903,28 @@ export default class CodeEditor extends React.Component {
     this.incrementLines(start, linesAdded, linesRemoved, editor)
   }
 
-  moveCursorTo (row, col) {}
+  moveCursorTo(row, col) {}
 
-  scrollToLine (event, num) {
+  scrollToLine(event, num) {
     const cursor = {
       line: num,
       ch: 1
     }
     this.editor.setCursor(cursor)
-    const top = this.editor.charCoords({line: num, ch: 0}, 'local').top
+    const top = this.editor.charCoords({ line: num, ch: 0 }, 'local').top
     const middleHeight = this.editor.getScrollerElement().offsetHeight / 2
     this.editor.scrollTo(null, top - middleHeight - 5)
   }
 
-  focus () {
+  focus() {
     this.editor.focus()
   }
 
-  blur () {
+  blur() {
     this.editor.blur()
   }
 
-  reload () {
+  reload() {
     // Change event shouldn't be fired when switch note
     this.editor.off('change', this.changeHandler)
     this.value = this.props.value
@@ -852,18 +935,30 @@ export default class CodeEditor extends React.Component {
     this.editor.refresh()
   }
 
-  setValue (value) {
+  setValue(value) {
     const cursor = this.editor.getCursor()
     this.editor.setValue(value)
     this.editor.setCursor(cursor)
   }
 
-  handleDropImage (dropEvent) {
+  /**
+   * Update content of one line
+   * @param {Number} lineNumber
+   * @param {String} content
+   */
+  setLineContent(lineNumber, content) {
+    const prevContent = this.editor.getLine(lineNumber)
+    const prevContentLength = prevContent ? prevContent.length : 0
+    this.editor.replaceRange(
+      content,
+      { line: lineNumber, ch: 0 },
+      { line: lineNumber, ch: prevContentLength }
+    )
+  }
+
+  handleDropImage(dropEvent) {
     dropEvent.preventDefault()
-    const {
-      storageKey,
-      noteKey
-    } = this.props
+    const { storageKey, noteKey } = this.props
     attachmentManagement.handleAttachmentDrop(
       this,
       storageKey,
@@ -872,37 +967,44 @@ export default class CodeEditor extends React.Component {
     )
   }
 
-  insertAttachmentMd (imageMd) {
+  insertAttachmentMd(imageMd) {
     this.editor.replaceSelection(imageMd)
   }
 
-  autoDetectLanguage (content) {
+  autoDetectLanguage(content) {
     const res = hljs.highlightAuto(content, Object.keys(languageMaps))
     this.setMode(languageMaps[res.language])
   }
 
-  handlePaste (editor, forceSmartPaste) {
+  handlePaste(editor, forceSmartPaste) {
     const { storageKey, noteKey, fetchUrlTitle, enableSmartPaste } = this.props
 
-    const isURL = str => /(?:^\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str)
+    const isURL = str =>
+      /(?:^\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str)
 
     const isInLinkTag = editor => {
       const startCursor = editor.getCursor('start')
-      const prevChar = editor.getRange({
-        line: startCursor.line,
-        ch: startCursor.ch - 2
-      }, {
-        line: startCursor.line,
-        ch: startCursor.ch
-      })
+      const prevChar = editor.getRange(
+        {
+          line: startCursor.line,
+          ch: startCursor.ch - 2
+        },
+        {
+          line: startCursor.line,
+          ch: startCursor.ch
+        }
+      )
       const endCursor = editor.getCursor('end')
-      const nextChar = editor.getRange({
-        line: endCursor.line,
-        ch: endCursor.ch
-      }, {
-        line: endCursor.line,
-        ch: endCursor.ch + 1
-      })
+      const nextChar = editor.getRange(
+        {
+          line: endCursor.line,
+          ch: endCursor.ch
+        },
+        {
+          line: endCursor.line,
+          ch: endCursor.ch + 1
+        }
+      )
       return prevChar === '](' && nextChar === ')'
     }
 
@@ -914,7 +1016,7 @@ export default class CodeEditor extends React.Component {
         return true
       }
 
-      let line = line = cursor.line - 1
+      let line = (line = cursor.line - 1)
       while (line >= 0) {
         token = editor.getTokenAt({
           ch: 3,
@@ -946,7 +1048,11 @@ export default class CodeEditor extends React.Component {
 
     if (isInFencedCodeBlock(editor)) {
       this.handlePasteText(editor, pastedTxt)
-    } else if (fetchUrlTitle && isMarkdownTitleURL(pastedTxt) && !isInLinkTag(editor)) {
+    } else if (
+      fetchUrlTitle &&
+      isMarkdownTitleURL(pastedTxt) &&
+      !isInLinkTag(editor)
+    ) {
       this.handlePasteUrl(editor, pastedTxt)
     } else if (fetchUrlTitle && isURL(pastedTxt) && !isInLinkTag(editor)) {
       this.handlePasteUrl(editor, pastedTxt)
@@ -982,13 +1088,13 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  handleScroll (e) {
+  handleScroll(e) {
     if (this.props.onScroll) {
       this.props.onScroll(e)
     }
   }
 
-  handlePasteUrl (editor, pastedTxt) {
+  handlePasteUrl(editor, pastedTxt) {
     let taggedUrl = `<${pastedTxt}>`
     let urlToFetch = pastedTxt
     let titleMark = ''
@@ -1038,16 +1144,16 @@ export default class CodeEditor extends React.Component {
       })
   }
 
-  handlePasteHtml (editor, pastedHtml) {
+  handlePasteHtml(editor, pastedHtml) {
     const markdown = this.turndownService.turndown(pastedHtml)
     editor.replaceSelection(markdown)
   }
 
-  handlePasteText (editor, pastedTxt) {
+  handlePasteText(editor, pastedTxt) {
     editor.replaceSelection(pastedTxt)
   }
 
-  mapNormalResponse (response, pastedTxt) {
+  mapNormalResponse(response, pastedTxt) {
     return this.decodeResponse(response).then(body => {
       return new Promise((resolve, reject) => {
         try {
@@ -1055,10 +1161,12 @@ export default class CodeEditor extends React.Component {
             body,
             'text/html'
           )
-          const escapePipe = (str) => {
+          const escapePipe = str => {
             return str.replace('|', '\\|')
           }
-          const linkWithTitle = `[${escapePipe(parsedBody.title)}](${pastedTxt})`
+          const linkWithTitle = `[${escapePipe(
+            parsedBody.title
+          )}](${pastedTxt})`
           resolve(linkWithTitle)
         } catch (e) {
           reject(e)
@@ -1067,7 +1175,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  initialHighlighting () {
+  initialHighlighting() {
     if (this.editor.options.linesHighlighted == null) {
       return
     }
@@ -1081,16 +1189,20 @@ export default class CodeEditor extends React.Component {
         // make sure that we skip the invalid lines althrough this case should not be happened.
         continue
       }
-      this.editor.addLineClass(lineNumber, 'text', 'CodeMirror-activeline-background')
+      this.editor.addLineClass(
+        lineNumber,
+        'text',
+        'CodeMirror-activeline-background'
+      )
     }
   }
 
-  restartHighlighting () {
+  restartHighlighting() {
     this.editor.options.linesHighlighted = this.props.linesHighlighted
     this.initialHighlighting()
   }
 
-  mapImageResponse (response, pastedTxt) {
+  mapImageResponse(response, pastedTxt) {
     return new Promise((resolve, reject) => {
       try {
         const url = response.url
@@ -1103,7 +1215,7 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  decodeResponse (response) {
+  decodeResponse(response) {
     const headers = response.headers
     const _charset = headers.has('content-type')
       ? this.extractContentTypeCharset(headers.get('content-type'))
@@ -1111,10 +1223,10 @@ export default class CodeEditor extends React.Component {
     return response.arrayBuffer().then(buff => {
       return new Promise((resolve, reject) => {
         try {
-          const charset = _charset !== undefined &&
-            iconv.encodingExists(_charset)
-            ? _charset
-            : 'utf-8'
+          const charset =
+            _charset !== undefined && iconv.encodingExists(_charset)
+              ? _charset
+              : 'utf-8'
           resolve(iconv.decode(Buffer.from(buff), charset).toString())
         } catch (e) {
           reject(e)
@@ -1123,50 +1235,49 @@ export default class CodeEditor extends React.Component {
     })
   }
 
-  extractContentTypeCharset (contentType) {
+  extractContentTypeCharset(contentType) {
     return contentType
       .split(';')
       .filter(str => {
-        return str.trim().toLowerCase().startsWith('charset')
+        return str
+          .trim()
+          .toLowerCase()
+          .startsWith('charset')
       })
       .map(str => {
         return str.replace(/['"]/g, '').split('=')[1]
       })[0]
   }
 
-  render () {
-    const {
-      className,
-      fontSize
-    } = this.props
+  render() {
+    const { className, fontSize } = this.props
     const fontFamily = normalizeEditorFontFamily(this.props.fontFamily)
     const width = this.props.width
-    return (<
-      div className={
-        className == null ? 'CodeEditor' : `CodeEditor ${className}`
-      }
-      ref='root'
-      tabIndex='-1'
-      style={{
-        fontFamily,
-        fontSize: fontSize,
-        width: width
-      }}
-      onDrop={
-        e => this.handleDropImage(e)
-      }
+    return (
+      <div
+        className={className == null ? 'CodeEditor' : `CodeEditor ${className}`}
+        ref='root'
+        tabIndex='-1'
+        style={{
+          fontFamily,
+          fontSize: fontSize,
+          width: width
+        }}
+        onDrop={e => this.handleDropImage(e)}
       />
     )
   }
 
-  createSpellCheckPanel () {
+  createSpellCheckPanel() {
     const panel = document.createElement('div')
     panel.className = 'panel bottom'
     panel.id = 'editor-bottom-panel'
     const dropdown = document.createElement('select')
     dropdown.title = 'Spellcheck'
     dropdown.className = styles['spellcheck-select']
-    dropdown.addEventListener('change', (e) => spellcheck.setLanguage(this.editor, dropdown.value))
+    dropdown.addEventListener('change', e =>
+      spellcheck.setLanguage(this.editor, dropdown.value)
+    )
     const options = spellcheck.getAvailableDictionaries()
     for (const op of options) {
       const option = document.createElement('option')
@@ -1191,7 +1302,9 @@ CodeEditor.propTypes = {
   autoDetect: PropTypes.bool,
   spellCheck: PropTypes.bool,
   enableMarkdownLint: PropTypes.bool,
-  customMarkdownLintConfig: PropTypes.string
+  customMarkdownLintConfig: PropTypes.string,
+  deleteUnusedAttachments: PropTypes.bool,
+  RTL: PropTypes.bool
 }
 
 CodeEditor.defaultProps = {
@@ -1205,5 +1318,8 @@ CodeEditor.defaultProps = {
   autoDetect: false,
   spellCheck: false,
   enableMarkdownLint: DEFAULT_CONFIG.editor.enableMarkdownLint,
-  customMarkdownLintConfig: DEFAULT_CONFIG.editor.customMarkdownLintConfig
+  customMarkdownLintConfig: DEFAULT_CONFIG.editor.customMarkdownLintConfig,
+  prettierConfig: DEFAULT_CONFIG.editor.prettierConfig,
+  deleteUnusedAttachments: DEFAULT_CONFIG.editor.deleteUnusedAttachments,
+  RTL: false
 }

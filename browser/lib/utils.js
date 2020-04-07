@@ -1,4 +1,4 @@
-export function lastFindInArray (array, callback) {
+export function lastFindInArray(array, callback) {
   for (let i = array.length - 1; i >= 0; --i) {
     if (callback(array[i], i, array)) {
       return array[i]
@@ -6,7 +6,7 @@ export function lastFindInArray (array, callback) {
   }
 }
 
-export function escapeHtmlCharacters (
+export function escapeHtmlCharacters(
   html,
   opt = { detectCodeBlock: false, skipSingleQuote: false }
 ) {
@@ -115,7 +115,7 @@ export function escapeHtmlCharacters (
   return html
 }
 
-export function isObjectEqual (a, b) {
+export function isObjectEqual(a, b) {
   const aProps = Object.getOwnPropertyNames(a)
   const bProps = Object.getOwnPropertyNames(b)
 
@@ -132,13 +132,30 @@ export function isObjectEqual (a, b) {
   return true
 }
 
-export function isMarkdownTitleURL (str) {
-  return /(^#{1,6}\s)(?:\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(str)
+export function isMarkdownTitleURL(str) {
+  return /(^#{1,6}\s)(?:\w+:|^)\/\/(?:[^\s\.]+\.\S{2}|localhost[\:?\d]*)/.test(
+    str
+  )
+}
+
+export function humanFileSize(bytes) {
+  const threshold = 1000
+  if (Math.abs(bytes) < threshold) {
+    return bytes + ' B'
+  }
+  var units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  var u = -1
+  do {
+    bytes /= threshold
+    ++u
+  } while (Math.abs(bytes) >= threshold && u < units.length - 1)
+  return bytes.toFixed(1) + ' ' + units[u]
 }
 
 export default {
   lastFindInArray,
   escapeHtmlCharacters,
   isObjectEqual,
-  isMarkdownTitleURL
+  isMarkdownTitleURL,
+  humanFileSize
 }

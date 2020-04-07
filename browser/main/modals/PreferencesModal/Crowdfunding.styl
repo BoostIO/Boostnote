@@ -24,20 +24,15 @@ body[data-theme="dark"]
   p
     color $ui-dark-text-color
 
-body[data-theme="solarized-dark"]
-  .root
-    color $ui-solarized-dark-text-color
-  p
-    color $ui-solarized-dark-text-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      color get-theme-var(theme, 'text-color')
+    p
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="monokai"]
-  .root
-    color $ui-monokai-text-color
-  p
-    color $ui-monokai-text-color
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="dracula"]
-  .root
-    color $ui-dracula-text-color
-  p
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

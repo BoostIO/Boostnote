@@ -19,6 +19,7 @@
 .control
   padding 25px 0px
   text-align center
+  display: flex
 
 .control-button
   width 240px
@@ -47,70 +48,32 @@
   text-align center
   margin-bottom 25px
 
-body[data-theme="dark"]
-  .root
-    modalDark()
+.from-url
+  color $ui-inactive-text-color
+  text-align center
+  margin-bottom 25px
+  cursor pointer
 
-  .header
-    color $ui-dark-text-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      background-color transparent
 
-  .control-button
-    border-color $ui-dark-borderColor
-    color $ui-dark-text-color
-    background-color transparent
-    &:focus
-      colorDarkPrimaryButton()
+    .header
+      color get-theme-var(theme, 'text-color')
 
-  .description
-    color $ui-inactive-text-color
+    .control-button
+      border-color get-theme-var(theme, 'borderColor')
+      color get-theme-var(theme, 'text-color')
+      background-color transparent
+      &:focus
+        colorThemedPrimaryButton(theme)
 
-body[data-theme="solarized-dark"]
-  .root
-    background-color transparent
+    .description
+      color get-theme-var(theme, 'text-color')
 
-  .header
-    color $ui-solarized-dark-text-color
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .control-button
-    border-color $ui-solarized-dark-borderColor
-    color $ui-solarized-dark-text-color
-    background-color transparent
-    &:focus
-      colorDarkPrimaryButton()
-
-  .description
-    color $ui-solarized-dark-text-color
-
-body[data-theme="monokai"]
-  .root
-    background-color transparent
-
-  .header
-    color $ui-monokai-text-color
-
-  .control-button
-    border-color $ui-monokai-borderColor
-    color $ui-monokai-text-color
-    background-color transparent
-    &:focus
-      colorDarkPrimaryButton()
-
-  .description
-    color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .root
-    background-color transparent
-
-  .header
-    color $ui-dracula-text-color
-
-  .control-button
-    border-color $ui-dracula-borderColor
-    color $ui-dracula-text-color
-    background-color transparent
-    &:focus
-      colorDraculaPrimaryButton()
-
-  .description
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

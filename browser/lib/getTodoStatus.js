@@ -1,9 +1,9 @@
-export function getTodoStatus (content) {
+export function getTodoStatus(content) {
   const splitted = content.split('\n')
   let numberOfTodo = 0
   let numberOfCompletedTodo = 0
 
-  splitted.forEach((line) => {
+  splitted.forEach(line => {
     const trimmedLine = line.trim().replace(/^(>\s*)*/, '')
     if (trimmedLine.match(/^[+\-*] \[(\s|x)] ./i)) {
       numberOfTodo++
@@ -19,7 +19,7 @@ export function getTodoStatus (content) {
   }
 }
 
-export function getTodoPercentageOfCompleted (content) {
+export function getTodoPercentageOfCompleted(content) {
   const state = getTodoStatus(content)
-  return Math.floor(state.completed / state.total * 100)
+  return Math.floor((state.completed / state.total) * 100)
 }

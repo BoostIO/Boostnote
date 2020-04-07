@@ -2,7 +2,7 @@
 global.Raphael = {
   setWindow: jest.fn(),
   registerFont: jest.fn(),
-  fn: function () {
+  fn: function() {
     return {}
   }
 }

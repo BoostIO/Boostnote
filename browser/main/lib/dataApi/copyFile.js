@@ -7,7 +7,7 @@ const path = require('path')
  * @param {String} dstPath
  * @return {Promise} an image path
  */
-function copyFile (srcPath, dstPath) {
+function copyFile(srcPath, dstPath) {
   if (!path.extname(dstPath)) {
     dstPath = path.join(dstPath, path.basename(srcPath))
   }

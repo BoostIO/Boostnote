@@ -96,16 +96,6 @@ modalBackColor = white
     z-index modalZIndex + 1
 
 
-body[data-theme="dark"]
-  background-color $ui-dark-backgroundColor
-  ::-webkit-scrollbar-thumb
-    background-color rgba(0, 0, 0, 0.3)
-  .ModalBase
-    .modalBack
-      background-color $ui-dark-backgroundColor
-  .sortableItemHelper
-    color: $ui-dark-text-color
-
 .CodeMirror
   font-family inherit !important
   line-height 1.4em
@@ -148,35 +138,22 @@ body[data-theme="dark"]
 .sortableItemHelper
   z-index modalZIndex + 5
 
-body[data-theme="solarized-dark"]
-  background-color $ui-solarized-dark-backgroundColor
-  ::-webkit-scrollbar-thumb
-    background-color rgba(0, 0, 0, 0.3)
-  .ModalBase
-    .modalBack
-      background-color $ui-solarized-dark-backgroundColor
-  .sortableItemHelper
-    color: $ui-solarized-dark-text-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    background-color get-theme-var(theme, 'backgroundColor')
+    ::-webkit-scrollbar-thumb
+      background-color rgba(0, 0, 0, 0.3)
+    .ModalBase
+      .modalBack
+        background-color get-theme-var(theme, 'backgroundColor')
+    .sortableItemHelper
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="monokai"]
-  background-color $ui-monokai-backgroundColor
-  ::-webkit-scrollbar-thumb
-    background-color rgba(0, 0, 0, 0.3)
-  .ModalBase
-    .modalBack
-      background-color $ui-monokai-backgroundColor
-  .sortableItemHelper
-    color: $ui-monokai-text-color
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-body[data-theme="dracula"]
-  background-color $ui-dracula-backgroundColor
-  ::-webkit-scrollbar-thumb
-    background-color rgba(0, 0, 0, 0.3)
-  .ModalBase
-    .modalBack
-      background-color $ui-dracula-backgroundColor
-  .sortableItemHelper
-    color: $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)
 
 body[data-theme="default"]
   .SideNav ::-webkit-scrollbar-thumb

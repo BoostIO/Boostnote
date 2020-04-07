@@ -59,106 +59,34 @@ $control-height = 30px
   top $control-height
   overflow auto
 
-body[data-theme="white"]
-  .root
-    background-color $ui-white-noteList-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      border-color get-theme-var(theme, 'borderColor')
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
 
-  .control
-    background-color $ui-white-noteList-backgroundColor
+    .control
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
+      border-color get-theme-var(theme, 'borderColor')
 
-body[data-theme="dark"]
-  .root
-    border-color $ui-dark-borderColor
-    background-color $ui-dark-noteList-backgroundColor
+    .control-sortBy-select
+      &:hover
+        transition 0.2s
+        color get-theme-var(theme, 'text-color')
+        background-color: get-theme-var(theme, 'noteList-backgroundColor')
 
-  .control
-    background-color $ui-dark-noteList-backgroundColor
-    border-color $ui-dark-borderColor
+    .control-button
+      color get-theme-var(theme, 'inactive-text-color')
+      &:hover
+        color get-theme-var(theme, 'text-color')
 
-  .control-sortBy-select
-    &:hover
-      transition 0.2s
-      color $ui-dark-text-color
+    .control-button--active
+      color get-theme-var(theme, 'text-color')
+      &:active
+        color get-theme-var(theme, 'text-color')
 
-  .control-button
-    color $ui-dark-inactive-text-color
-    &:hover
-      color $ui-dark-text-color
+for theme in 'white' 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .control-button--active
-    color $ui-dark-text-color
-    &:active
-      color $ui-dark-text-color
-
-
-body[data-theme="solarized-dark"]
-  .root
-    border-color $ui-solarized-dark-borderColor
-    background-color $ui-solarized-dark-noteList-backgroundColor
-
-  .control
-    background-color $ui-solarized-dark-noteList-backgroundColor
-    border-color $ui-solarized-dark-borderColor
-
-  .control-sortBy-select
-    &:hover
-      transition 0.2s
-      color $ui-solarized-dark-text-color
-
-  .control-button
-    color $ui-solarized-dark-inactive-text-color
-    &:hover
-      color $ui-solarized-dark-text-color
-
-  .control-button--active
-    color $ui-solarized-dark-text-color
-    &:active
-      color $ui-solarized-dark-text-color
-
-body[data-theme="monokai"]
-  .root
-    border-color $ui-monokai-borderColor
-    background-color $ui-monokai-noteList-backgroundColor
-
-  .control
-    background-color $ui-monokai-noteList-backgroundColor
-    border-color $ui-monokai-borderColor
-
-  .control-sortBy-select
-    &:hover
-      transition 0.2s
-      color $ui-monokai-text-color
-
-  .control-button
-    color $ui-monokai-inactive-text-color
-    &:hover
-      color $ui-monokai-text-color
-
-  .control-button--active
-    color $ui-monokai-text-color
-    &:active
-      color $ui-monokai-text-color
-
-body[data-theme="dracula"]
-  .root
-    border-color $ui-dracula-borderColor
-    background-color $ui-dracula-noteList-backgroundColor
-
-  .control
-    background-color $ui-dracula-noteList-backgroundColor
-    border-color $ui-dracula-borderColor
-
-  .control-sortBy-select
-    &:hover
-      transition 0.2s
-      color $ui-dracula-text-color
-
-  .control-button
-    color $ui-dracula-inactive-text-color
-    &:hover
-      color $ui-dracula-text-color
-
-  .control-button--active
-    color $ui-dracula-text-color
-    &:active
-      color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

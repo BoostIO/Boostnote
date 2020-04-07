@@ -4,7 +4,7 @@ const _ = require('lodash')
  * @param {String} key
  * @return {key}
  */
-function removeStorage (key) {
+function removeStorage(key) {
   let rawStorages
 
   try {
@@ -15,10 +15,9 @@ function removeStorage (key) {
     rawStorages = []
   }
 
-  rawStorages = rawStorages
-    .filter(function excludeTargetStorage (rawStorage) {
-      return rawStorage.key !== key
-    })
+  rawStorages = rawStorages.filter(function excludeTargetStorage(rawStorage) {
+    return rawStorage.key !== key
+  })
 
   localStorage.setItem('storages', JSON.stringify(rawStorages))
 

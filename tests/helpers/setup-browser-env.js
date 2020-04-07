@@ -2,14 +2,14 @@ import browserEnv from 'browser-env'
 browserEnv(['window', 'document', 'navigator'])
 
 // for CodeMirror mockup
-document.body.createTextRange = function () {
+document.body.createTextRange = function() {
   return {
-    setEnd: function () {},
-    setStart: function () {},
-    getBoundingClientRect: function () {
-      return {right: 0}
+    setEnd: function() {},
+    setStart: function() {},
+    getBoundingClientRect: function() {
+      return { right: 0 }
     },
-    getClientRects: function () {
+    getClientRects: function() {
       return {
         length: 0,
         left: 0,
@@ -21,7 +21,7 @@ document.body.createTextRange = function () {
 
 window.localStorage = {
   // polyfill
-  getItem () {
+  getItem() {
     return '{}'
   }
 }

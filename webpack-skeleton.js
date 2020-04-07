@@ -30,6 +30,7 @@ var config = {
     ]
   },
   externals: [
+    'prettier',
     'node-ipc',
     'electron',
     'lodash',

@@ -8,9 +8,22 @@
     top -2px
     width 0
     z-index 0
+    border-left 1px solid $ui-borderColor
   .slider-hitbox
     absolute top bottom left right
     width 7px
     left -3px
     z-index 10
     cursor col-resize
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      .slider
+        border-left 1px solid get-theme-var(theme, 'borderColor')
+
+for theme in 'dark' 'dracula' 'solarized-dark'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

@@ -6,7 +6,7 @@ const resolveStorageData = require('./resolveStorageData')
  * @param {Boolean} isOpen
  * @return {Object} Storage meta data
  */
-function toggleStorage (key, isOpen) {
+function toggleStorage(key, isOpen) {
   let cachedStorageList
   try {
     cachedStorageList = JSON.parse(localStorage.getItem('storages'))
@@ -15,7 +15,7 @@ function toggleStorage (key, isOpen) {
     console.error(err)
     return Promise.reject(err)
   }
-  const targetStorage = _.find(cachedStorageList, {key: key})
+  const targetStorage = _.find(cachedStorageList, { key: key })
   if (targetStorage == null) return Promise.reject('Storage')
 
   targetStorage.isOpen = isOpen

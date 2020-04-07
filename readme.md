@@ -1,4 +1,4 @@
-:mega: The Boostnote team uses [IssueHunt](https://issuehunt.io/) for a sustainable open-source ecosystem.
+> [We've launched desktop and mobile app of the new Boost Note now.](https://github.com/BoostIO/BoostNote.next)
 
 ![Boostnote app screenshot](./resources/repository/top.png)
 
@@ -11,11 +11,14 @@
   </a>
  </p>
 
+## Download
+
+[Find the latest release of Boostnote here!](https://github.com/BoostIO/boost-releases/releases/)
+
 ## Authors & Maintainers
 
 - [Rokt33r](https://github.com/rokt33r)
-- [Sosuke](https://github.com/sosukesuzuki)
-- [Kazz](https://github.com/kazup01)
+- [KZ](https://github.com/kazup01)
 - [ZeroX-DG](https://github.com/ZeroX-DG)
 
 ## Contributors
@@ -33,16 +36,15 @@ Issues on Boostnote can be funded by anyone and the money will be distributed to
 ## Community
 - [Facebook Group](https://www.facebook.com/groups/boostnote/)
 - [Twitter](https://twitter.com/boostnoteapp)
-- [Slack Group](https://join.slack.com/t/boostnote-group/shared_invite/enQtMzkxOTk4ODkyNzc0LThkNmMzY2VlZjVhYTNiYjE5YjQyZGVjNTJlYTY1OGMyZTFjNGU5YTUyYjUzOWZhYTU4OTVlNDYyNDFjYWMzNDM)
+- [Slack Group](https://join.slack.com/t/boostnote-group/shared_invite/enQtMzkxOTk4ODkyNzc0LWQxZTQwNjBlMDI4YjkyYjg2MTRiZGJhNzA1YjQ5ODA5M2M0M2NlMjI5YjhiYWQzNzgzYmU0MDMwOTlmZmZmMGE)
 - [Blog](https://medium.com/boostnote)
 - [Reddit](https://www.reddit.com/r/Boostnote/)
 
 
 #### More Information
 * Website: https://boostnote.io
-* Newsletters: https://boostnote.io/#subscribe
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md): Development configurations for Boostnote.
-* Copyright (C) 2016 - 2019 BoostIO, Inc.
+* Copyright (C) 2016 - 2020 BoostIO, Inc.
 
 
 #### License

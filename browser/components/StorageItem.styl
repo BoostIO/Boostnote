@@ -60,6 +60,7 @@
   border-bottom-right-radius 2px
   height 34px
   line-height 32px
+  transition-property opacity
 
 .folderList-item:hover, .folderList-item--active:hover
   .folderList-item-tooltip
@@ -120,59 +121,28 @@ body[data-theme="dark"]
       color $ui-dark-text-color
       background-color alpha($ui-dark-button--active-backgroundColor, 50%)
 
-body[data-theme="solarized-dark"]
-  .folderList-item
-    &:hover
-      background-color $ui-solarized-dark-button-backgroundColor
-      color $ui-solarized-dark-text-color
-    &:active
-      color $ui-solarized-dark-text-color
-      background-color $ui-solarized-dark-button-backgroundColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .folderList-item
+      &:hover
+        background-color get-theme-var(theme, 'button-backgroundColor')
+        color get-theme-var(theme, 'text-color')
+      &:active
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button-backgroundColor')
 
-  .folderList-item--active
-    @extend .folderList-item
-    color $ui-solarized-dark-text-color
-    background-color $ui-solarized-dark-button-backgroundColor
-    &:active
-      background-color $ui-solarized-dark-button-backgroundColor
-    &:hover
-      color $ui-solarized-dark-text-color
-      background-color $ui-solarized-dark-button-backgroundColor
+    .folderList-item--active
+      @extend .folderList-item
+      color get-theme-var(theme, 'text-color')
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      &:active
+        background-color get-theme-var(theme, 'button-backgroundColor')
+      &:hover
+        color get-theme-var(theme, 'text-color')
+        background-color get-theme-var(theme, 'button-backgroundColor')
 
-body[data-theme="monokai"]
-  .folderList-item
-    &:hover
-      background-color $ui-monokai-button-backgroundColor
-      color $ui-monokai-text-color
-    &:active
-      color $ui-monokai-text-color
-      background-color $ui-monokai-button-backgroundColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .folderList-item--active
-    @extend .folderList-item
-    color $ui-monokai-text-color
-    background-color $ui-monokai-button-backgroundColor
-    &:active
-      background-color $ui-monokai-button-backgroundColor
-    &:hover
-      color $ui-monokai-text-color
-      background-color $ui-monokai-button-backgroundColor
-
-body[data-theme="dracula"]
-  .folderList-item
-    &:hover
-      background-color $ui-dracula-button-backgroundColor
-      color $ui-dracula-text-color
-    &:active
-      color $ui-dracula-text-color
-      background-color $ui-dracula-button-backgroundColor
-
-  .folderList-item--active
-    @extend .folderList-item
-    color $ui-dracula-text-color
-    background-color $ui-dracula-button-backgroundColor
-    &:active
-      background-color $ui-dracula-button-backgroundColor
-    &:hover
-      color $ui-dracula-text-color
-      background-color $ui-dracula-button-backgroundColor
+for theme in $themes
+  apply-theme(theme)
