@@ -63,7 +63,7 @@ export default class CodeEditor extends React.Component {
       this.handleHighlight(editor, changeObject)
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
-      this.setState({editorFocused: true})
+      this.setState({ editorFocused: true })
     }
     const debouncedDeletionOfAttachments = _.debounce(
       attachmentManagement.deleteAttachmentsNotPresentInNote,
@@ -71,7 +71,7 @@ export default class CodeEditor extends React.Component {
     )
     this.blurHandler = (editor, e) => {
       ipcRenderer.send('editor:focused', false)
-      this.setState({editorFocused: false})
+      this.setState({ editorFocused: false })
       if (e == null) return null
       let el = e.relatedTarget
       while (el != null) {

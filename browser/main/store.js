@@ -480,10 +480,7 @@ const store = createStore(
   reducer,
   undefined,
   process.env.NODE_ENV === 'development'
-    ? compose(
-        applyMiddleware(routerMiddleware(history)),
-        DevTools.instrument()
-      )
+    ? compose(applyMiddleware(routerMiddleware(history)), DevTools.instrument())
     : applyMiddleware(routerMiddleware(history))
 )
 

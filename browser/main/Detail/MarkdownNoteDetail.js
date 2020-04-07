@@ -65,7 +65,7 @@ class MarkdownNoteDetail extends React.Component {
       // Main window, check for updates from children
       ipcRenderer.on('update-note-state', (_, noteData) => {
         const { note } = this.state
-        if (noteData.key === note.key) this.setState({note: noteData})
+        if (noteData.key === note.key) this.setState({ note: noteData })
       })
     }
     this.generateToc = this.handleGenerateToc.bind(this)
@@ -168,7 +168,7 @@ class MarkdownNoteDetail extends React.Component {
     clearTimeout(this.saveQueue)
     this.saveQueue = null
 
-    dataApi.updateNote(note.storage, note.key, this.state.note).then((note) => {
+    dataApi.updateNote(note.storage, note.key, this.state.note).then(note => {
       dispatch({
         type: 'UPDATE_NOTE',
         note: note
@@ -599,9 +599,9 @@ class MarkdownNoteDetail extends React.Component {
             return this.state.isLockButtonShown ? lockButtonComponent : ''
           })()}
 
-          {
-            renderFullScreenButton ? <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} /> : null
-          }
+          {renderFullScreenButton ? (
+            <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
+          ) : null}
 
           <TrashButton onClick={e => this.handleTrashButtonClick(e)} />
 

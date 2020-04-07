@@ -45,8 +45,8 @@ class Main extends React.Component {
     }
 
     ipcRenderer.on('set-current-note', (_, result) => {
-      this.setState({globRenderFlag: 2})
-      this.setState({currentNoteKey: result.key})
+      this.setState({ globRenderFlag: 2 })
+      this.setState({ currentNoteKey: result.key })
     })
 
     this.toggleFullScreen = () => this.handleFullScreenButton()

@@ -69,7 +69,7 @@ class SnippetNoteDetail extends React.Component {
       // Main window, check for updates from children
       ipcRenderer.on('update-note-state', (_, noteData) => {
         const { note } = this.state
-        if (noteData.key === note.key) this.setState({note: noteData})
+        if (noteData.key === note.key) this.setState({ note: noteData })
       })
     }
   }
@@ -168,7 +168,7 @@ class SnippetNoteDetail extends React.Component {
     clearTimeout(this.saveQueue)
     this.saveQueue = null
 
-    dataApi.updateNote(note.storage, note.key, this.state.note).then((note) => {
+    dataApi.updateNote(note.storage, note.key, this.state.note).then(note => {
       dispatch({
         type: 'UPDATE_NOTE',
         note: note
@@ -972,9 +972,9 @@ class SnippetNoteDetail extends React.Component {
             isActive={note.isStarred}
           />
 
-        {
-          renderFullScreenButton ? <FullscreenButton onClick={(e) => this.handleFullScreenButton(e)} /> : null
-        }
+          {renderFullScreenButton ? (
+            <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
+          ) : null}
 
           <TrashButton onClick={e => this.handleTrashButtonClick(e)} />
 
