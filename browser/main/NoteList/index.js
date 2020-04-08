@@ -723,7 +723,7 @@ class NoteList extends React.Component {
 
   openInNewWindow(note) {
     const { dispatch } = this.props
-    singleNoteWindow.createNewWindow('lib', note)
+    singleNoteWindow.createNewWindow(note)
     ipcRenderer.on('update-note-state', (_, noteData) => {
       dispatch({
         type: 'UPDATE_NOTE',

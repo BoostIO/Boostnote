@@ -61,7 +61,7 @@ class MarkdownNoteDetail extends React.Component {
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
     const { showFullScreen } = this.props.data
 
-    if (showFullScreen === undefined || showFullScreen === true) {
+    if (showFullScreen !== false) {
       // Main window, check for updates from children
       ipcRenderer.on('update-note-state', (_, noteData) => {
         const { note } = this.state
@@ -174,7 +174,7 @@ class MarkdownNoteDetail extends React.Component {
         note: note
       })
       const { showFullScreen } = this.props.data
-      if (showFullScreen !== undefined && showFullScreen === false) {
+      if (showFullScreen === false) {
         // Window is not main window, send update event to main window
         ipcRenderer.send('update-note-state', note)
       }
@@ -487,7 +487,7 @@ class MarkdownNoteDetail extends React.Component {
 
     let renderFullScreenButton = true
     const { showFullScreen } = this.props.data
-    if (showFullScreen !== undefined && showFullScreen === false) {
+    if (showFullScreen === false) {
       renderFullScreenButton = false
     }
 

@@ -41,11 +41,11 @@ class Main extends React.Component {
       fullScreen: false,
       noteDetailWidth: 0,
       mainBodyWidth: 0,
-      globRenderFlag: 1
+      isMainWindow: true
     }
 
     ipcRenderer.on('set-current-note', (_, result) => {
-      this.setState({ globRenderFlag: 2 })
+      this.setState({ isMainWindow: false })
       this.setState({ currentNoteKey: result.key })
     })
 
@@ -326,19 +326,22 @@ class Main extends React.Component {
 
   render() {
     const { config } = this.props
-    if (this.state.globRenderFlag !== 1) {
-      this.props.location.search = `?key=${this.state.currentNoteKey}`
-      this.props.data.showFullScreen = false
+    if (!this.state.isMainWindow) {
+      const detailProps = _.pick(this.props, [
+        'dispatch',
+        'data',
+        'config',
+        'match',
+        'location'
+      ])
+
+      detailProps.location.search = `?key=${this.state.currentNoteKey}`
+      detailProps.data.showFullScreen = false
+
       return (
         <Detail
           style={{ left: 0 }}
-          {..._.pick(this.props, [
-            'dispatch',
-            'data',
-            'config',
-            'match',
-            'location'
-          ])}
+          {...detailProps}
           ignorePreviewPointerEvents={this.state.isRightSliderFocused}
         />
       )

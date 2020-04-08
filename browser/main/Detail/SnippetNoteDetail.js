@@ -65,7 +65,7 @@ class SnippetNoteDetail extends React.Component {
 
     const { showFullScreen } = this.props.data
 
-    if (showFullScreen === undefined || showFullScreen === true) {
+    if (showFullScreen !== false) {
       // Main window, check for updates from children
       ipcRenderer.on('update-note-state', (_, noteData) => {
         const { note } = this.state
@@ -174,7 +174,7 @@ class SnippetNoteDetail extends React.Component {
         note: note
       })
       const { showFullScreen } = this.props.data
-      if (showFullScreen !== undefined && showFullScreen === false) {
+      if (showFullScreen === false) {
         // Window is not main window, send update event to main window
         ipcRenderer.send('update-note-state', note)
       }
@@ -814,7 +814,7 @@ class SnippetNoteDetail extends React.Component {
 
     let renderFullScreenButton = true
     const { showFullScreen } = this.props.data
-    if (showFullScreen !== undefined && showFullScreen === false) {
+    if (showFullScreen === false) {
       renderFullScreenButton = false
     }
 
