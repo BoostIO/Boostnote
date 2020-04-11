@@ -144,9 +144,7 @@ class BackupTab extends React.Component {
       })
       this.handleSaveImport(e)
     } catch (err) {
-      alert(i18n.__(
-        err instanceof SyntaxError ? 'File is not valid JSON.' : 'Something went wrong. Please try again'
-        ))
+      alert(i18n.__('File is not valid JSON.'))
       return false
     }
   }
