@@ -1,0 +1,55 @@
+.top-menu-search
+  navButtonColor()
+  position relative
+  margin-right 6px
+  top 3px
+  width 2em
+  background-color transparent
+  &:hover
+    color $ui-button-default--active-backgroundColor
+    background-color transparent
+    .tooltip
+      opacity 1
+  &:active, &:active:hover
+    color $ui-button-default--active-backgroundColor
+
+.icon-search
+  width 16px
+
+body[data-theme="white"]
+  .top-menu-search
+    navWhiteButtonColor()
+    background-color transparent
+    &:hover
+      color #0B99F1
+      background-color transparent
+    &:active, &:active:hover
+      color #0B99F1
+      background-color transparent
+
+body[data-theme="dark"]
+  .top-menu-search
+    navDarkButtonColor()
+    background-color transparent
+    &:active
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      background-color transparent
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      background-color transparent
+
+
+
+.tooltip
+  tooltip()
+  position absolute
+  pointer-events none
+  top 26px
+  left -20px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+  white-space nowrap

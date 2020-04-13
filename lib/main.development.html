@@ -72,6 +72,11 @@
       border-left-color: rgba(142, 142, 142, 0.5);
       mix-blend-mode: difference;
     }
+    
+    .CodeMirror-scroll {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
 
     .CodeMirror-lint-tooltip {
       z-index: 1003;
@@ -103,14 +108,13 @@
   <script src="../node_modules/codemirror/addon/display/panel.js"></script>
   <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
   <script src="../node_modules/codemirror/mode/markdown/markdown.js"></script>
-  <script src="../node_modules/codemirror/mode/gfm/gfm.js"></script>
   <script src="../node_modules/codemirror/mode/yaml/yaml.js"></script>
   <script src="../node_modules/codemirror/mode/yaml-frontmatter/yaml-frontmatter.js"></script>
 
   <script src="../extra_scripts/boost/boostNewLineIndentContinueMarkdownList.js"></script>
   <script src="../extra_scripts/codemirror/mode/bfm/bfm.js"></script>
+  <script src="../extra_scripts/codemirror/mode/gfm/gfm.js"></script>
   <script src="../extra_scripts/codemirror/addon/hyperlink/hyperlink.js"></script>
-  <script src="../extra_scripts/codemirror/mode/bfm/bfm.js"></script>
 
   <script src="../node_modules/codemirror/addon/edit/closebrackets.js"></script>
   <script src="../node_modules/codemirror/addon/edit/matchbrackets.js"></script>

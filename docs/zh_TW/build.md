@@ -10,7 +10,6 @@
 ## 開發
 
 我們使用 Webpack HMR 來開發 Boostnote。
-
 在專案根目錄底下執行下列指令，將會以原始設置啟動 Boostnote。
 
 **用 yarn 來安裝必要 packages**
@@ -19,41 +18,74 @@
 $ yarn
 ```
 
-**開始開發**
+**編譯及執行**
 
 ```
 $ yarn run dev
 ```
 
-> ### Notice
+> ### 注意
 >
-> There are some cases where you have to refresh the app manually.
+> 以下是一些可能要手動重新啟動程式的情況。
 >
-> 1. When editing a constructor method of a component
-> 2. When adding a new css class (similar to 1: the CSS class is re-written by each component. This process occurs at the Constructor method.)
+> 1. 修改一個 component 的 constructor 方法時。
+> 2. 新增新的 CSS 類別時 (和 1 很類似：CSS 類別會被每個 component 重寫過。這個過程在 constructor 方法中發生)。
 
-## Deploy
+## 使用 Pull Requests 中的程式碼
+瀏覽 pull request 的頁面，從 URL 的後面找到 PR 號碼。
 
-We use Grunt to automate deployment.
-You can build the program by using `grunt`. However, we don't recommend this because the default task includes codesign and authenticode.
+<pre>
+https://github.com/BoostIO/Boostnote/pull/2794
+</pre>
+接著，於底下步驟中把 \<PR> 換成這個號碼 (沒有括號)。
+請將下方 URL 中的 \<PR> 換置成 2794。
 
-So, we've prepared a separate script which just makes an executable file.
+_如果您還未取得一份 master branch 的本地備份_
+```
+git clone https://github.com/BoostIO/Boostnote.git
+cd Boostnote
+git fetch origin pull/<PR>/head:<PR>
+git checkout <PR>
+```
+
+_如果您已經擁有了 master branch_
+```
+git fetch origin pull/<PR>/head:<PR>
+git checkout <PR>
+```
+
+_編譯及執行程式碼_
+```
+yarn
+yarn run dev
+```
+
+## 佈署
+
+我們用 Grunt 做自動佈署。
+您能使用 `grung` 建構本程式。然而，我們並不建議這麼做，因為預設工作流程包含了程式簽名以及 Authenticode 驗證。
+
+所以，我們準備了一份額外的腳本用於建構可執行檔。
 
 ```
 grunt pre-build
 ```
 
-You will find the executable in the `dist` directory. Note, the auto updater won't work because the app isn't signed.
+您可以在 `dist` 資料夾下找到可執行檔。注意，自動更新功能 (auto updater) 並不會生效，因為程式沒有被簽署過。
 
-If you find it necessary, you can use codesign or authenticode with this executable.
+必要時您可以使用程式簽名或 authenticode 驗證執行檔。
 
-## Make own distribution packages (deb, rpm)
+## 建立您自己的發行版套件 (deb, rpm)
 
-Distribution packages are created by exec `grunt build` on Linux platform (e.g. Ubuntu, Fedora).
+發行版套件可以透過在 Linux 平台上 (如 Ubuntu, Fedora) 執行 `grunt build` 來建立。
 
-> Note: You can create both `.deb` and `.rpm` in a single environment.
+> 注意：您可以在同個環境中同時建立 `.deb` 及`.rpm` 。
 
-After installing the supported version of `node` and `npm`, install build dependency packages.
+安裝支援版本的 `node` 和 `npm` 後，安裝編譯相依套件。
+
+```
+$ yarn add --dev grunt-electron-installer-debian grunt-electron-installer-redhat
+```
 
 Ubuntu/Debian:
 
@@ -67,10 +99,10 @@ Fedora:
 $ sudo dnf install -y dpkg dpkg-dev rpm-build fakeroot
 ```
 
-Then execute `grunt build`.
+接著執行 `grunt build`。
 
 ```
 $ grunt build
 ```
 
-You will find `.deb` and `.rpm` in the `dist` directory.
+> 於 `dist` 資料夾下找到 `.deb` 及 `.rpm`。

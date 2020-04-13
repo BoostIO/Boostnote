@@ -11,30 +11,43 @@ const electron = require('electron')
 const { remote, ipcRenderer } = electron
 const { dialog } = remote
 
-const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
+const zoomOptions = [
+  0.8,
+  0.9,
+  1,
+  1.1,
+  1.2,
+  1.3,
+  1.4,
+  1.5,
+  1.6,
+  1.7,
+  1.8,
+  1.9,
+  2.0
+]
 
 class StatusBar extends React.Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.handleZoomInMenuItem = this.handleZoomInMenuItem.bind(this)
     this.handleZoomOutMenuItem = this.handleZoomOutMenuItem.bind(this)
     this.handleZoomResetMenuItem = this.handleZoomResetMenuItem.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     EventEmitter.on('status:zoomin', this.handleZoomInMenuItem)
     EventEmitter.on('status:zoomout', this.handleZoomOutMenuItem)
     EventEmitter.on('status:zoomreset', this.handleZoomResetMenuItem)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     EventEmitter.off('status:zoomin', this.handleZoomInMenuItem)
     EventEmitter.off('status:zoomout', this.handleZoomOutMenuItem)
     EventEmitter.off('status:zoomreset', this.handleZoomResetMenuItem)
   }
 
-  updateApp () {
+  updateApp() {
     const index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: i18n.__('Update Boostnote'),
@@ -47,10 +60,10 @@ class StatusBar extends React.Component {
     }
   }
 
-  handleZoomButtonClick (e) {
+  handleZoomButtonClick(e) {
     const templates = []
 
-    zoomOptions.forEach((zoom) => {
+    zoomOptions.forEach(zoom => {
       templates.push({
         label: Math.floor(zoom * 100) + '%',
         click: () => this.handleZoomMenuItemClick(zoom)
@@ -60,7 +73,7 @@ class StatusBar extends React.Component {
     context.popup(templates)
   }
 
-  handleZoomMenuItemClick (zoomFactor) {
+  handleZoomMenuItemClick(zoomFactor) {
     const { dispatch } = this.props
     ZoomManager.setZoom(zoomFactor)
     dispatch({
@@ -69,40 +82,36 @@ class StatusBar extends React.Component {
     })
   }
 
-  handleZoomInMenuItem () {
+  handleZoomInMenuItem() {
     const zoomFactor = ZoomManager.getZoom() + 0.1
     this.handleZoomMenuItemClick(zoomFactor)
   }
 
-  handleZoomOutMenuItem () {
+  handleZoomOutMenuItem() {
     const zoomFactor = ZoomManager.getZoom() - 0.1
     this.handleZoomMenuItemClick(zoomFactor)
   }
 
-  handleZoomResetMenuItem () {
+  handleZoomResetMenuItem() {
     this.handleZoomMenuItemClick(1.0)
   }
 
-  render () {
+  render() {
     const { config, status } = this.context
 
     return (
-      <div className='StatusBar'
-        styleName='root'
-      >
-        <button styleName='zoom'
-          onClick={(e) => this.handleZoomButtonClick(e)}
-        >
+      <div className='StatusBar' styleName='root'>
+        <button styleName='zoom' onClick={e => this.handleZoomButtonClick(e)}>
           <img src='../resources/icon/icon-zoom.svg' />
           <span>{Math.floor(config.zoom * 100)}%</span>
         </button>
 
-        {status.updateReady
-          ? <button onClick={this.updateApp} styleName='update'>
-            <i styleName='update-icon' className='fa fa-cloud-download' /> {i18n.__('Ready to Update!')}
+        {status.updateReady ? (
+          <button onClick={this.updateApp} styleName='update'>
+            <i styleName='update-icon' className='fa fa-cloud-download' />{' '}
+            {i18n.__('Ready to Update!')}
           </button>
-          : null
-        }
+        ) : null}
       </div>
     )
   }

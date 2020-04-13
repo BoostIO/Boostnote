@@ -124,40 +124,34 @@ hr
   border-bottom solid 1px borderColor
   margin 15px 0
 h1, h2, h3, h4, h5, h6
+  margin 1em 0 1.5em
+  line-height 1.4
   font-weight bold
   word-wrap break-word
+  padding .2em 0 .2em
 h1
   font-size 2.55em
-  padding-bottom 0.3em
-  line-height 1.2em
+  line-height 1.2
   border-bottom solid 1px borderColor
-  margin 1em 0 0.44em
   &:first-child
     margin-top 0
 h2
   font-size 1.75em
-  padding-bottom 0.3em
-  line-height 1.225em
+  line-height 1.225
   border-bottom solid 1px borderColor
-  margin 1em 0 0.57em
   &:first-child
     margin-top 0
 h3
   font-size 1.5em
-  line-height 1.43em
-  margin 1em 0 0.66em
+  line-height 1.43
 h4
   font-size 1.25em
-  line-height 1.4em
-  margin 1em 0 0.8em
+  line-height 1.4
 h5
   font-size 1em
-  line-height 1.4em
-  margin 1em 0 1em
+  line-height 1.1
 h6
   font-size 1em
-  line-height 1.4em
-  margin 1em 0 1em
   color #777
 p
   line-height 1.6em
@@ -363,7 +357,10 @@ admonition_types = {
     danger: {color: #c2185b, icon: "block"},
     caution: {color: #ffa726, icon: "warning"},
     error: {color: #d32f2f, icon: "error_outline"},
-    attention: {color: #455a64, icon: "priority_high"}
+    question: {color: #64dd17, icon: "help_outline"},
+    quote: {color: #9e9e9e, icon: "format_quote"},
+    abstract: {color: #00b0ff, icon: "subject"},
+    attention: {color: #455a64, icon: "priority_high"},
 }
 
 for name, val in admonition_types
@@ -424,6 +421,9 @@ pre.fence
     canvas, svg
       max-width 100% !important
 
+    svg[ratio]
+      width 100%
+
   .gallery
     width 100%
     height 50vh
@@ -443,6 +443,44 @@ pre.fence
       .prev, .next
         color $ui-text-color
         background-color $ui-tag-backgroundColor
+
+.markdownIt-TOC-wrapper
+  list-style none
+  position fixed
+  right 0
+  top 0
+  margin-left 15px
+  z-index 1000
+  transition transform .2s ease-in-out
+  transform translateX(100%)
+
+  .markdownIt-TOC
+    display block
+    max-height 90vh
+    overflow-y auto
+    padding 25px
+    padding-left 38px
+
+  &,
+  &:before
+    background-color $ui-dark-backgroundColor
+    color: $ui-dark-text-color
+
+  &:hover
+    transform translateX(-15px)
+
+  &:before
+    content 'TOC'
+    position absolute
+    width 60px
+    height 30px
+    top 60px
+    left -29px
+    display flex
+    align-items center
+    justify-content center
+    transform-origin top left
+    transform rotate(-90deg)
 
 themeDarkBackground = darken(#21252B, 10%)
 themeDarkText = #f9f9f9
@@ -511,137 +549,63 @@ body[data-theme="dark"]
         color $ui-dark-text-color
         background-color $ui-dark-tag-backgroundColor
 
-themeSolarizedDarkTableOdd = $ui-solarized-dark-noteDetail-backgroundColor
-themeSolarizedDarkTableEven = darken($ui-solarized-dark-noteDetail-backgroundColor, 10%)
-themeSolarizedDarkTableHead = themeSolarizedDarkTableEven
-themeSolarizedDarkTableBorder = themeDarkBorder
+  .markdownIt-TOC-wrapper
+    &,
+    &:before
+      background-color darken(themeDarkBackground, 5%)
+      color themeDarkText
 
-body[data-theme="solarized-dark"]
-  color $ui-solarized-dark-text-color
-  border-color themeDarkBorder
-  background-color $ui-solarized-dark-noteDetail-backgroundColor
-  table
-    thead
-      tr
-        background-color themeSolarizedDarkTableHead
-      th
-        border-color themeSolarizedDarkTableBorder
-        &:last-child
-          border-right solid 1px themeSolarizedDarkTableBorder
-    tbody
-      tr:nth-child(2n + 1)
-        background-color themeSolarizedDarkTableOdd
-      tr:nth-child(2n)
-        background-color themeSolarizedDarkTableEven
-      td
-        border-color themeSolarizedDarkTableBorder
-        &:last-child
-          border-right solid 1px themeSolarizedDarkTableBorder
-  dl
+apply-theme(theme)
+  body[data-theme={theme}]
+    color get-theme-var(theme, 'text-color')
     border-color themeDarkBorder
-    background-color themeSolarizedDarkTableHead
-  dt
-    border-color themeDarkBorder
-  dd
-    border-color themeDarkBorder
-    background-color $ui-solarized-dark-noteDetail-backgroundColor
+    background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+    table
+      thead
+        tr
+          background-color get-theme-var(theme, 'table-head-backgroundColor')
+        th
+          border-color get-theme-var(theme, 'table-borderColor')
+          &:last-child
+            border-right solid 1px get-theme-var(theme, 'table-borderColor')
+      tbody
+        tr:nth-child(2n + 1)
+          background-color get-theme-var(theme, 'table-odd-backgroundColor')
+        tr:nth-child(2n)
+          background-color get-theme-var(theme, 'table-even-backgroundColor')
+        td
+          border-color get-theme-var(theme, 'table-borderColor')
+          &:last-child
+            border-right solid 1px get-theme-var(theme, 'table-borderColor')
+    kbd
+      background-color get-theme-var(theme, 'kbd-backgroundColor')
+      color get-theme-var(theme, 'kbd-color')
 
-  pre.fence
-    .gallery
-      .carousel-main, .carousel-footer
-        background-color $ui-solarized-dark-noteDetail-backgroundColor
-      .prev, .next
-        color $ui-solarized-dark-button--active-color
-        background-color $ui-solarized-dark-button-backgroundColor
+    dl
+      border-color themeDarkBorder
+      background-color get-theme-var(theme, 'table-head-backgroundColor')
+    dt
+      border-color themeDarkBorder
+    dd
+      border-color themeDarkBorder
+      background-color get-theme-var(theme, 'noteDetail-backgroundColor')
 
-themeMonokaiTableOdd = $ui-monokai-noteDetail-backgroundColor
-themeMonokaiTableEven = darken($ui-monokai-noteDetail-backgroundColor, 10%)
-themeMonokaiTableHead = themeMonokaiTableEven
-themeMonokaiTableBorder = themeDarkBorder
+    pre.fence
+      .gallery
+        .carousel-main, .carousel-footer
+          background-color get-theme-var(theme, 'noteDetail-backgroundColor')
+        .prev, .next
+          color get-theme-var(theme, 'button--active-color')
+          background-color get-theme-var(theme, 'button-backgroundColor')
 
-body[data-theme="monokai"]
-  color $ui-monokai-text-color
-  border-color themeDarkBorder
-  background-color $ui-monokai-noteDetail-backgroundColor
-  table
-    thead
-      tr
-        background-color themeMonokaiTableHead
-      th
-        border-color themeMonokaiTableBorder
-        &:last-child
-          border-right solid 1px themeMonokaiTableBorder
-    tbody
-      tr:nth-child(2n + 1)
-        background-color themeMonokaiTableOdd
-      tr:nth-child(2n)
-        background-color themeMonokaiTableEven
-      td
-        border-color themeMonokaiTableBorder
-        &:last-child
-          border-right solid 1px themeMonokaiTableBorder
-  kbd
-    background-color themeDarkBackground
+    .markdownIt-TOC-wrapper
+      &,
+      &:before
+        background-color darken(get-theme-var(theme, 'noteDetail-backgroundColor'), 15%)
+        color themeDarkText
 
-  dl
-    border-color themeDarkBorder
-    background-color themeMonokaiTableHead
-  dt
-    border-color themeDarkBorder
-  dd
-    border-color themeDarkBorder
-    background-color $ui-monokai-noteDetail-backgroundColor
+for theme in 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  pre.fence
-    .gallery
-      .carousel-main, .carousel-footer
-        background-color $ui-monokai-noteDetail-backgroundColor
-      .prev, .next
-        color $ui-monokai-button--active-color
-        background-color $ui-monokai-button-backgroundColor
-
-themeDraculaTableOdd = $ui-dracula-noteDetail-backgroundColor
-themeDraculaTableEven = darken($ui-dracula-noteDetail-backgroundColor, 10%)
-themeDraculaTableHead = themeDraculaTableEven
-themeDraculaTableBorder = themeDarkBorder
-
-body[data-theme="dracula"]
-  color $ui-dracula-text-color
-  border-color themeDarkBorder
-  background-color $ui-dracula-noteDetail-backgroundColor
-  table
-    thead
-      tr
-        background-color themeDraculaTableHead
-      th
-        border-color themeDraculaTableBorder
-        &:last-child
-          border-right solid 1px themeDraculaTableBorder
-    tbody
-      tr:nth-child(2n + 1)
-        background-color themeDraculaTableOdd
-      tr:nth-child(2n)
-        background-color themeDraculaTableEven
-      td
-        border-color themeDraculaTableBorder
-        &:last-child
-          border-right solid 1px themeDraculaTableBorder
-  kbd
-    background-color themeDarkBackground
-
-  dl
-    border-color themeDarkBorder
-    background-color themeDraculaTableHead
-  dt
-    border-color themeDarkBorder
-  dd
-    border-color themeDarkBorder
-    background-color $ui-dracula-noteDetail-backgroundColor
-
-  pre.fence
-    .gallery
-      .carousel-main, .carousel-footer
-        background-color $ui-dracula-noteDetail-backgroundColor
-      .prev, .next
-        color $ui-dracula-button--active-color
-        background-color $ui-dracula-button-backgroundColor
+for theme in $themes
+  apply-theme(theme)

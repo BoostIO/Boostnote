@@ -17,10 +17,16 @@
 body[data-theme="white"]
   navWhiteButtonColor()
 
-body[data-theme="dark"]
-  .navToggle
-    &:hover
-      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+apply-theme(theme)
+  body[data-theme={theme}]
+    .navToggle:hover
+      background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 20%)
+      border 1px solid get-theme-var(theme, 'button--active-backgroundColor')
       transition 0.15s
-      color $ui-dark-text-color
+      color get-theme-var(theme, 'text-color')
 
+for theme in 'dark' 'dracula' 'solarized-dark'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

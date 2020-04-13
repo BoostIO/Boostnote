@@ -6,7 +6,7 @@
  * @param {string} input
  * @return {string}
  */
-export function strip (input) {
+export function strip(input) {
   let output = input
   try {
     output = output

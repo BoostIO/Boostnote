@@ -54,7 +54,7 @@ body[data-theme="dark"]
 
   .percentageText
     color $ui-dark-text-color
-  
+
   .todoClearText
     color $ui-dark-text-color
 
@@ -71,25 +71,19 @@ body[data-theme="solarized-dark"]
   .todoClearText
     color #fdf6e3
 
-body[data-theme="monokai"]
-  .percentageBar
-    background-color: $ui-monokai-borderColor
+apply-theme(theme)
+  body[data-theme={theme}]
+    .percentageBar
+      background-color: get-theme-var(theme, 'borderColor')
 
-  .progressBar
-    background-color $ui-monokai-active-color
+    .progressBar
+      background-color get-theme-var(theme, 'active-color')
 
-  .percentageText
-    color $ui-monokai-text-color
+    .percentageText
+      color get-theme-var(theme, 'text-color')
 
-body[data-theme="dracula"]
-  .percentageBar
-    background-color $ui-dracula-borderColor
+for theme in 'dracula'
+  apply-theme(theme)
 
-  .progressBar
-    background-color: $ui-dracula-active-color
-
-  .percentageText
-    color $ui-dracula-text-color
-
-  .percentageText
-    color $ui-dracula-text-color
+for theme in $themes
+  apply-theme(theme)

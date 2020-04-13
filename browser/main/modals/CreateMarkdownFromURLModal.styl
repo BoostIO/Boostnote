@@ -1,0 +1,89 @@
+.root
+  modal()
+  width 500px
+  height 270px
+  overflow hidden
+  position relative
+
+.header
+  height 80px
+  margin-bottom 10px
+  margin-top 20px
+  font-size 18px
+  line-height 50px
+  background-color $ui-backgroundColor
+  color $ui-text-color
+
+.title
+  font-size 36px
+  font-weight 600
+
+.control-folder-label
+  text-align left
+  font-size 14px
+  color $ui-text-color
+
+.control-folder-input
+  display block
+  height 40px
+  width 490px
+  padding 0 5px
+  margin 10px 0
+  border 1px solid $ui-input--create-folder-modal
+  border-radius 2px
+  background-color transparent
+  outline none
+  vertical-align middle
+  font-size 16px
+  &:disabled
+    background-color $ui-input--disabled-backgroundColor
+  &:focus, &:active
+    border-color $ui-active-color
+
+.control-confirmButton
+  display block
+  height 35px
+  width 140px
+  border none
+  border-radius 2px
+  padding 0 25px
+  margin 20px auto
+  font-size 14px
+  colorPrimaryButton()
+
+.error
+  text-align center
+  color #F44336
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      background-color transparent
+      width 500px
+      height 270px
+      overflow hidden
+      position relative
+
+    .header
+      background-color transparent
+      border-color get-theme-var(theme, 'borderColor')
+      color get-theme-var(theme, 'text-color')
+
+    .control-folder-label
+      color get-theme-var(theme, 'text-color')
+
+    .control-folder-input
+      border 1px solid $ui-input--create-folder-modal
+      color white
+
+    .description
+      color $ui-inactive-text-color
+
+    .control-confirmButton
+      colorThemedPrimaryButton(theme)
+
+for theme in 'dark' 'dracula' 'solarized-dark'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

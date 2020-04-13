@@ -40,8 +40,15 @@ test('getTodoStatus should return a correct hash object', t => {
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(getTodoStatus(input).total, expected.total, `Test for getTodoStatus() input: ${input} expected: ${expected.total}`)
-    t.is(getTodoStatus(input).completed, expected.completed, `Test for getTodoStatus() input: ${input} expected: ${expected.completed}`)
+    t.is(
+      getTodoStatus(input).total,
+      expected.total,
+      `Test for getTodoStatus() input: ${input} expected: ${expected.total}`
+    )
+    t.is(
+      getTodoStatus(input).completed,
+      expected.completed,
+      `Test for getTodoStatus() input: ${input} expected: ${expected.completed}`
+    )
   })
 })
-

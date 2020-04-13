@@ -6,7 +6,7 @@ import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
 
 class FolderSelect extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -16,24 +16,27 @@ class FolderSelect extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.value = this.props.value
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     this.value = this.props.value
   }
 
-  handleClick (e) {
-    this.setState({
-      status: 'SEARCH',
-      optionIndex: -1
-    }, () => {
-      this.refs.search.focus()
-    })
+  handleClick(e) {
+    this.setState(
+      {
+        status: 'SEARCH',
+        optionIndex: -1
+      },
+      () => {
+        this.refs.search.focus()
+      }
+    )
   }
 
-  handleFocus (e) {
+  handleFocus(e) {
     if (this.state.status === 'IDLE') {
       this.setState({
         status: 'FOCUS'
@@ -41,7 +44,7 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleBlur (e) {
+  handleBlur(e) {
     if (this.state.status === 'FOCUS') {
       this.setState({
         status: 'IDLE'
@@ -49,40 +52,49 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleKeyDown (e) {
+  handleKeyDown(e) {
     switch (e.keyCode) {
       case 13:
         if (this.state.status === 'FOCUS') {
-          this.setState({
-            status: 'SEARCH',
-            optionIndex: -1
-          }, () => {
-            this.refs.search.focus()
-          })
+          this.setState(
+            {
+              status: 'SEARCH',
+              optionIndex: -1
+            },
+            () => {
+              this.refs.search.focus()
+            }
+          )
         }
         break
       case 40:
       case 38:
         if (this.state.status === 'FOCUS') {
-          this.setState({
-            status: 'SEARCH',
-            optionIndex: 0
-          }, () => {
-            this.refs.search.focus()
-          })
+          this.setState(
+            {
+              status: 'SEARCH',
+              optionIndex: 0
+            },
+            () => {
+              this.refs.search.focus()
+            }
+          )
         }
         break
       case 9:
         if (e.shiftKey) {
           e.preventDefault()
-          const tabbable = document.querySelectorAll('a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])')
-          const previousEl = tabbable[Array.prototype.indexOf.call(tabbable, this.refs.root) - 1]
+          const tabbable = document.querySelectorAll(
+            'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])'
+          )
+          const previousEl =
+            tabbable[Array.prototype.indexOf.call(tabbable, this.refs.root) - 1]
           if (previousEl != null) previousEl.focus()
         }
     }
   }
 
-  handleSearchInputBlur (e) {
+  handleSearchInputBlur(e) {
     if (e.relatedTarget !== this.refs.root) {
       this.setState({
         status: 'IDLE'
@@ -90,14 +102,17 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleSearchInputChange (e) {
+  handleSearchInputChange(e) {
     const { folders } = this.props
     const search = this.refs.search.value
-    const optionIndex = search.length > 0
-      ? _.findIndex(folders, (folder) => {
-        return folder.name.match(new RegExp('^' + _.escapeRegExp(search), 'i'))
-      })
-      : -1
+    const optionIndex =
+      search.length > 0
+        ? _.findIndex(folders, folder => {
+            return folder.name.match(
+              new RegExp('^' + _.escapeRegExp(search), 'i')
+            )
+          })
+        : -1
 
     this.setState({
       search: this.refs.search.value,
@@ -105,7 +120,7 @@ class FolderSelect extends React.Component {
     })
   }
 
-  handleSearchInputKeyDown (e) {
+  handleSearchInputKeyDown(e) {
     switch (e.keyCode) {
       case 40:
         e.stopPropagation()
@@ -121,15 +136,18 @@ class FolderSelect extends React.Component {
         break
       case 27:
         e.stopPropagation()
-        this.setState({
-          status: 'FOCUS'
-        }, () => {
-          this.refs.root.focus()
-        })
+        this.setState(
+          {
+            status: 'FOCUS'
+          },
+          () => {
+            this.refs.root.focus()
+          }
+        )
     }
   }
 
-  nextOption () {
+  nextOption() {
     let { optionIndex } = this.state
     const { folders } = this.props
 
@@ -141,7 +159,7 @@ class FolderSelect extends React.Component {
     })
   }
 
-  previousOption () {
+  previousOption() {
     const { folders } = this.props
     let { optionIndex } = this.state
 
@@ -153,46 +171,52 @@ class FolderSelect extends React.Component {
     })
   }
 
-  selectOption () {
+  selectOption() {
     const { folders } = this.props
     const optionIndex = this.state.optionIndex
 
     const folder = folders[optionIndex]
     if (folder != null) {
-      this.setState({
-        status: 'FOCUS'
-      }, () => {
-        this.setValue(folder.key)
-        this.refs.root.focus()
-      })
+      this.setState(
+        {
+          status: 'FOCUS'
+        },
+        () => {
+          this.setValue(folder.key)
+          this.refs.root.focus()
+        }
+      )
     }
   }
 
-  handleOptionClick (storageKey, folderKey) {
-    return (e) => {
+  handleOptionClick(storageKey, folderKey) {
+    return e => {
       e.stopPropagation()
-      this.setState({
-        status: 'FOCUS'
-      }, () => {
-        this.setValue(storageKey + '-' + folderKey)
-        this.refs.root.focus()
-      })
+      this.setState(
+        {
+          status: 'FOCUS'
+        },
+        () => {
+          this.setValue(storageKey + '-' + folderKey)
+          this.refs.root.focus()
+        }
+      )
     }
   }
 
-  setValue (value) {
+  setValue(value) {
     this.value = value
     this.props.onChange()
   }
 
-  render () {
+  render() {
     const { className, data, value } = this.props
     const splitted = value.split('-')
     const storageKey = splitted.shift()
     const folderKey = splitted.shift()
     let options = []
     data.storageMap.forEach((storage, index) => {
-      storage.folders.forEach((folder) => {
+      storage.folders.forEach(folder => {
         options.push({
           storage: storage,
           folder: folder
@@ -200,68 +224,78 @@ class FolderSelect extends React.Component {
       })
     })
 
-    const currentOption = options.filter((option) => option.storage.key === storageKey && option.folder.key === folderKey)[0]
+    const currentOption = options.filter(
+      option =>
+        option.storage.key === storageKey && option.folder.key === folderKey
+    )[0]
 
     if (this.state.search.trim().length > 0) {
       const filter = new RegExp('^' + _.escapeRegExp(this.state.search), 'i')
-      options = options.filter((option) => filter.test(option.folder.name))
+      options = options.filter(option => filter.test(option.folder.name))
     }
 
-    const optionList = options
-      .map((option, index) => {
-        return (
-          <div styleName={index === this.state.optionIndex
+    const optionList = options.map((option, index) => {
+      return (
+        <div
+          styleName={
+            index === this.state.optionIndex
               ? 'search-optionList-item--active'
               : 'search-optionList-item'
-            }
-            key={option.storage.key + '-' + option.folder.key}
-            onClick={(e) => this.handleOptionClick(option.storage.key, option.folder.key)(e)}
+          }
+          key={option.storage.key + '-' + option.folder.key}
+          onClick={e =>
+            this.handleOptionClick(option.storage.key, option.folder.key)(e)
+          }
+        >
+          <span
+            styleName='search-optionList-item-name'
+            style={{ borderColor: option.folder.color }}
           >
-            <span styleName='search-optionList-item-name'
-              style={{borderColor: option.folder.color}}
-            >
-              {option.folder.name}
-              <span styleName='search-optionList-item-name-surfix'>in {option.storage.name}</span>
+            {option.folder.name}
+            <span styleName='search-optionList-item-name-surfix'>
+              in {option.storage.name}
             </span>
-          </div>
-        )
-      })
+          </span>
+        </div>
+      )
+    })
 
     return (
-      <div className={_.isString(className)
-          ? 'FolderSelect ' + className
-          : 'FolderSelect'
+      <div
+        className={
+          _.isString(className) ? 'FolderSelect ' + className : 'FolderSelect'
         }
-        styleName={this.state.status === 'SEARCH'
-          ? 'root--search'
-          : this.state.status === 'FOCUS'
-          ? 'root--focus'
-          : 'root'
+        styleName={
+          this.state.status === 'SEARCH'
+            ? 'root--search'
+            : this.state.status === 'FOCUS'
+            ? 'root--focus'
+            : 'root'
         }
         ref='root'
         tabIndex='0'
-        onClick={(e) => this.handleClick(e)}
-        onFocus={(e) => this.handleFocus(e)}
-        onBlur={(e) => this.handleBlur(e)}
-        onKeyDown={(e) => this.handleKeyDown(e)}
+        onClick={e => this.handleClick(e)}
+        onFocus={e => this.handleFocus(e)}
+        onBlur={e => this.handleBlur(e)}
+        onKeyDown={e => this.handleKeyDown(e)}
       >
-        {this.state.status === 'SEARCH'
-          ? <div styleName='search'>
-            <input styleName='search-input'
+        {this.state.status === 'SEARCH' ? (
+          <div styleName='search'>
+            <input
+              styleName='search-input'
               ref='search'
               value={this.state.search}
               placeholder={i18n.__('Folder...')}
-              onChange={(e) => this.handleSearchInputChange(e)}
-              onBlur={(e) => this.handleSearchInputBlur(e)}
-              onKeyDown={(e) => this.handleSearchInputKeyDown(e)}
+              onChange={e => this.handleSearchInputChange(e)}
+              onBlur={e => this.handleSearchInputBlur(e)}
+              onKeyDown={e => this.handleSearchInputKeyDown(e)}
             />
-            <div styleName='search-optionList'
-              ref='optionList'
-            >
+            <div styleName='search-optionList' ref='optionList'>
               {optionList}
             </div>
           </div>
-          : <div styleName='idle' style={{color: currentOption.folder.color}}>
+        ) : currentOption ? (
+          <div styleName='idle' style={{ color: currentOption.folder.color }}>
             <div styleName='idle-label'>
               <i className='fa fa-folder' />
               <span styleName='idle-label-name'>
@@ -269,8 +303,7 @@ class FolderSelect extends React.Component {
               </span>
             </div>
           </div>
-        }
-
+        ) : null}
       </div>
     )
   }
@@ -280,11 +313,13 @@ FolderSelect.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func,
   value: PropTypes.string,
-  folders: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    name: PropTypes.string,
-    color: PropTypes.string
-  }))
+  folders: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string,
+      name: PropTypes.string,
+      color: PropTypes.string
+    })
+  )
 }
 
 export default CSSModules(FolderSelect, styles)

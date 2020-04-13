@@ -8,7 +8,7 @@ import moment from 'moment'
  * @param {mixed}
  * @return {string}
  */
-export function formatDate (date) {
+export function formatDate(date) {
   const m = moment(date)
   if (!m.isValid()) {
     throw Error('Invalid argument.')

@@ -5,20 +5,20 @@ const { remote } = electron
 
 _init()
 
-function _init () {
+function _init() {
   setZoom(getZoom(), true)
 }
 
-function _saveZoom (zoomFactor) {
-  ConfigManager.set({zoom: zoomFactor})
+function _saveZoom(zoomFactor) {
+  ConfigManager.set({ zoom: zoomFactor })
 }
 
-function setZoom (zoomFactor, noSave = false) {
+function setZoom(zoomFactor, noSave = false) {
   if (!noSave) _saveZoom(zoomFactor)
   remote.getCurrentWebContents().setZoomFactor(zoomFactor)
 }
 
-function getZoom () {
+function getZoom() {
   const config = ConfigManager.get()
 
   return config.zoom

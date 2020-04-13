@@ -33,6 +33,7 @@
 
 .backup-body-section-path
   flex 1
+  margin-right 10px
 .backup-body-section-path-input
   height 30px
   vertical-align middle
@@ -64,97 +65,42 @@
   position relative
 
 .backup-submit-leftButton
-  colorPrimaryButton()
   border none
   border-radius 2px
   font-size $tab--button-font-size
   height $tab--button-height
   padding 0 15px
-  margin-left 25px
 
-body[data-theme="dark"]
-  .root
-    padding 15px
-    color $ui-dark-text-color
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      padding 15px
+      color get-theme-var(theme, 'text-color')
 
-  .backup-header
-    color $ui-dark-text-color
-    border-color $ui-dark-borderColor
+    .backup-header
+      color get-theme-var(theme, 'text-color')
+      border-color get-theme-var(theme, 'borderColor')
 
-  .backup-body-section-name-input
-    border-color $ui-dark-borderColor
+    .backup-body-section-name-input
+      border-color get-theme-var(theme, 'borderColor')
 
-  .backup-body-section-path-button
-    colorPrimaryButton()
+    .backup-body-section-path-button
+      colorPrimaryButton()
+        
+    .backup-body-control
+      border-color get-theme-var(theme, 'borderColor')
+
+    .backup-button-control
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      border-color get-theme-var(theme, 'borderColor')
+
+    .backup-submit-leftButton
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      color get-theme-var(theme, 'text-color')
       
-  .backup-body-control
-    border-color $ui-dark-borderColor
 
-  .backup-submit-leftButton
-    colorDarkDefaultButton()
-    border-color $ui-dark-borderColor
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-
-
-body[data-theme="solarized-dark"]
-  .root
-    color $ui-solarized-dark-text-color
-
-  .backup-header
-    color $ui-solarized-dark-text-color
-    border-color $ui-solarized-dark-borderColor
-
-  .backup-body-section-name-input
-    border-color $$ui-solarized-dark-borderColor
-
-  .backup-body-section-path-button
-    colorPrimaryButton()
-
-  .backup-body-control
-    border-color $ui-solarized-dark-borderColor
-
-  .backup-submit-leftButton
-    colorDarkDefaultButton()
-    border-color $ui-solarized-dark-borderColor
-
-body[data-theme="monokai"]
-  .root
-    color $ui-monokai-text-color
-
-  .backup-header
-    color $ui-monokai-text-color
-    border-color $ui-monokai-borderColor
-
-  .backup-body-section-name-input
-    border-color $$ui-monokai-borderColor
-
-  .backup-body-section-path-button
-    colorPrimaryButton()
-
-  .backup-body-control
-    border-color $ui-monokai-borderColor
-
-  .backup-submit-leftButton
-    colorDarkDefaultButton()
-    border-color $ui-monokai-borderColor
-
-body[data-theme="dracula"]
-  .root
-    color $ui-dracula-text-color
-
-  .backup-header
-    color $ui-dracula-text-color
-    border-color $ui-dracula-borderColor
-
-  .backup-body-section-name-input
-    border-color $$ui-dracula-borderColor
-
-  .backup-body-section-path-button
-    colorPrimaryButton()
-
-  .backup-body-control
-    border-color $ui-dracula-borderColor
-
-  .backup-submit-leftButton
-    colorDraculaPrimaryButton()
-    border-color $ui-dracula-borderColor
+for theme in $themes
+  apply-theme(theme)

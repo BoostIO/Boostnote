@@ -144,7 +144,9 @@ class BackupTab extends React.Component {
       })
       this.handleSaveImport(e)
     } catch (err) {
-      alert(i18n.__('File is not valid JSON.'))
+      alert(i18n.__(
+        err instanceof SyntaxError ? 'File is not valid JSON.' : 'Something went wrong. Please try again'
+        ))
       return false
     }
   }
@@ -158,9 +160,10 @@ class BackupTab extends React.Component {
       `${this.state.newExport.path}/boostnote.config`,
       JSON.stringify(this.state.config), (err) => {
         if (err) {
+          alert(i18n.__('Export failed. Please try again'))
           return console.log(err)
         }
-        alert(i18n.__('Saved successfully'))
+        else alert(i18n.__('Saved successfully'))
       })
   }
 

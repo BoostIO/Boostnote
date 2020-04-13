@@ -22,7 +22,7 @@ import * as path from 'path'
  * ```
  */
 
-function exportFolder (storageKey, folderKey, fileType, exportDir) {
+function exportFolder(storageKey, folderKey, fileType, exportDir) {
   let targetStorage
   try {
     targetStorage = findStorage(storageKey)
@@ -31,24 +31,38 @@ function exportFolder (storageKey, folderKey, fileType, exportDir) {
   }
 
   return resolveStorageData(targetStorage)
-    .then(function assignNotes (storage) {
-      return resolveStorageNotes(storage)
-        .then((notes) => {
-          return {
-            storage,
-            notes
-          }
-        })
+    .then(function assignNotes(storage) {
+      return resolveStorageNotes(storage).then(notes => {
+        return {
+          storage,
+          notes
+        }
+      })
     })
-    .then(function exportNotes (data) {
+    .then(function exportNotes(data) {
       const { storage, notes } = data
 
-      return Promise.all(notes
-        .filter(note => note.folder === folderKey && note.isTrashed === false && note.type === 'MARKDOWN_NOTE')
-        .map(note => {
-          const notePath = path.join(exportDir, `${filenamify(note.title, {replacement: '_'})}.${fileType}`)
-          return exportNote(note.key, storage.path, note.content, notePath, null)
-        })
+      return Promise.all(
+        notes
+          .filter(
+            note =>
+              note.folder === folderKey &&
+              note.isTrashed === false &&
+              note.type === 'MARKDOWN_NOTE'
+          )
+          .map(note => {
+            const notePath = path.join(
+              exportDir,
+              `${filenamify(note.title, { replacement: '_' })}.${fileType}`
+            )
+            return exportNote(
+              note.key,
+              storage.path,
+              note.content,
+              notePath,
+              null
+            )
+          })
       ).then(() => ({
         storage,
         folderKey,

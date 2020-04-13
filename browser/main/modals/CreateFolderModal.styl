@@ -51,106 +51,40 @@
   font-size 14px
   colorPrimaryButton()
 
-body[data-theme="dark"]
-  .root
-    modalDark()
-    width 500px
-    height 270px
-    overflow hidden
-    position relative
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      width 500px
+      height 270px
+      overflow hidden
+      position relative
+      position relative
+      z-index $modal-z-index
+      width 100%
+      background-color get-theme-var(theme, 'backgroundColor')
+      overflow hidden
+      border-radius $modal-border-radius
 
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-dark-text-color
+    .header
+      background-color transparent
+      border-color $ui-dark-borderColor
+      color get-theme-var(theme, 'text-color')
 
-  .control-folder-label
-    color $ui-dark-text-color
+    .control-folder-label
+      color get-theme-var(theme, 'text-color')
 
-  .control-folder-input
-    border 1px solid $ui-input--create-folder-modal
-    color white
+    .control-folder-input
+      border 1px solid $ui-input--create-folder-modal
+      color white
 
-   .description
-    color $ui-inactive-text-color
+    .description
+      color $ui-inactive-text-color
 
-  .control-confirmButton
-    colorDarkPrimaryButton()
+    .control-confirmButton
+      colorThemedPrimaryButton(theme)
 
-body[data-theme="solarized-dark"]
-  .root
-    modalSolarizedDark()
-    width 500px
-    height 270px
-    overflow hidden
-    position relative
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
 
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-solarized-dark-text-color
-
-  .control-folder-label
-    color $ui-solarized-dark-text-color
-
-  .control-folder-input
-    border 1px solid $ui-input--create-folder-modal
-    color white
-
-   .description
-    color $ui-inactive-text-color
-
-  .control-confirmButton
-    colorSolarizedDarkPrimaryButton()
-
-body[data-theme="monokai"]
-  .root
-    modalMonokai()
-    width 500px
-    height 270px
-    overflow hidden
-    position relative
-
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-monokai-text-color
-
-  .control-folder-label
-    color $ui-monokai-text-color
-
-  .control-folder-input
-    border 1px solid $ui-input--create-folder-modal
-    color white
-
-   .description
-    color $ui-inactive-text-color
-
-  .control-confirmButton
-    colorMonokaiPrimaryButton()
-
-body[data-theme="dracula"]
-  .root
-    modalDracula()
-    width 500px
-    height 270px
-    overflow hidden
-    position relative
-
-  .header
-    background-color transparent
-    border-color $ui-dark-borderColor
-    color $ui-dracula-text-color
-
-  .control-folder-label
-    color $ui-dracula-text-color
-
-  .control-folder-input
-    border 1px solid $ui-input--create-folder-modal
-    color white
-
-   .description
-    color $ui-inactive-text-color
-
-  .control-confirmButton
-    colorDraculaPrimaryButton()
+for theme in $themes
+  apply-theme(theme)
