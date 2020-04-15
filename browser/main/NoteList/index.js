@@ -694,7 +694,7 @@ class NoteList extends React.Component {
         },
         {
           label: openInNewWindow,
-          click: this.openInNewWindow.bind(this)(note)
+          click: this.openInNewWindow.bind(this, note)
         }
       )
 
@@ -723,7 +723,7 @@ class NoteList extends React.Component {
 
   openInNewWindow(note) {
     const { dispatch } = this.props
-    singleNoteWindow.createNewWindow(note)
+    singleNoteWindow.createNewWindow(window.boostnoteBasePath, note)
     ipcRenderer.on('update-note-state', (_, noteData) => {
       dispatch({
         type: 'UPDATE_NOTE',
