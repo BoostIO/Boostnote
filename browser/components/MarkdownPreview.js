@@ -146,15 +146,15 @@ td code
 {
   background-color: #F4F4F4;
   border-color: #d9d9d9;
-  color: #03C588;
+  color: inherit;
 }
 [data-theme="white"] p code,
 [data-theme="white"] li code,
 [data-theme="white"] td code
 {
   background-color: #F4F4F4;
-  border-color: #03C588;
-  color: #03C588;
+  border-color: #d9d9d9;
+  color: inherit;
 }
 [data-theme="dark"] p code,
 [data-theme="dark"] li code,
@@ -168,41 +168,41 @@ td code
 [data-theme="dracula"] li code,
 [data-theme="dracula"] td code
 {
-  background-color: #282a36;
-  border-color: #bd93f9;
-  color: #bd93f9;
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
 }
 [data-theme="monokai"] p code,
 [data-theme="monokai"] li code,
 [data-theme="monokai"] td code
 {
-  background-color: #272822;
-  border-color: #f92672;
-  color: #f92672;
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
 }
 [data-theme="nord"] p code,
 [data-theme="nord"] li code,
 [data-theme="nord"] td code
 {
-  background-color: #2e3440;
-  border-color: #5e81ac;
-  color: #5e81ac;
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
 }
 [data-theme="solarized-dark"] p code,
 [data-theme="solarized-dark"] li code,
 [data-theme="solarized-dark"] td code
 {
-  background-color: #073642;
-  border-color: #36abe3;
-  color: #36abe3;
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
 }
 [data-theme="vulcan"] p code,
 [data-theme="vulcan"] li code,
 [data-theme="vulcan"] td code
 {
-  background-color: #161719;
-  border-color: #ffffff;
-  color: #ffffff;
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
 }
 
 .lineNumber {
