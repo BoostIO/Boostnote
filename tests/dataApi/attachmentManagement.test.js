@@ -685,19 +685,19 @@ it('should remove the all ":storage" and noteKey references', function() {
     '        <p data-line="2">\n' +
     '            <img src="' +
     storageFolder +
-    path.sep +
+    path.posix.sep +
     '0.6r4zdgc22xp.png" alt="dummyImage.png" >\n' +
     '        </p>\n' +
     '        <p data-line="4">\n' +
     '            <a href="' +
     storageFolder +
-    path.sep +
+    path.posix.sep +
     '0.q2i4iw0fyx.pdf">dummyPDF.pdf</a>\n' +
     '        </p>\n' +
     '        <p data-line="6">\n' +
     '            <img src="' +
     storageFolder +
-    path.sep +
+    path.posix.sep +
     'd6c5ee92.jpg" alt="dummyImage2.jpg">\n' +
     '        </p>\n' +
     '    </body>\n' +
@@ -713,29 +713,29 @@ it('should make sure that "removeStorageAndNoteReferences" works with markdown c
   const noteKey = 'noteKey'
   const testInput =
     'Test input' +
-    '![' +
+    '![imageName](' +
     systemUnderTest.STORAGE_FOLDER_PLACEHOLDER +
     path.win32.sep +
     noteKey +
     path.win32.sep +
-    'image.jpg](imageName}) \n' +
-    '[' +
+    'image.jpg) \n' +
+    '[pdf](' +
     systemUnderTest.STORAGE_FOLDER_PLACEHOLDER +
     path.posix.sep +
     noteKey +
     path.posix.sep +
-    'pdf.pdf](pdf})'
+    'pdf.pdf)'
 
   const expectedOutput =
     'Test input' +
-    '![' +
+    '![imageName](' +
     systemUnderTest.DESTINATION_FOLDER +
-    path.sep +
-    'image.jpg](imageName}) \n' +
-    '[' +
+    path.posix.sep +
+    'image.jpg) \n' +
+    '[pdf](' +
     systemUnderTest.DESTINATION_FOLDER +
-    path.sep +
-    'pdf.pdf](pdf})'
+    path.posix.sep +
+    'pdf.pdf)'
   const actual = systemUnderTest.removeStorageAndNoteReferences(
     testInput,
     noteKey
