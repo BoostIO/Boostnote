@@ -713,24 +713,30 @@ function replaceNoteKeyWithNewNoteKey(noteContent, oldNoteKey, newNoteKey) {
  */
 function removeStorageAndNoteReferences(input, noteKey) {
   return input.replace(
-    new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?("|])', 'g'),
+    new RegExp('/?' + STORAGE_FOLDER_PLACEHOLDER + '.*?("|\\))', 'g'),
     function(match) {
-      const temp = match
-        .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), path.sep)
-        .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), path.sep)
-        .replace(new RegExp(escapeStringRegexp(path.win32.sep), 'g'), path.sep)
-        .replace(new RegExp(escapeStringRegexp(path.posix.sep), 'g'), path.sep)
-      return temp.replace(
-        new RegExp(
-          STORAGE_FOLDER_PLACEHOLDER +
-            '(' +
-            escapeStringRegexp(path.sep) +
-            noteKey +
-            ')?',
-          'g'
-        ),
-        DESTINATION_FOLDER
-      )
+      return match
+        .replace(new RegExp(mdurl.encode(path.win32.sep), 'g'), path.posix.sep)
+        .replace(new RegExp(mdurl.encode(path.posix.sep), 'g'), path.posix.sep)
+        .replace(
+          new RegExp(escapeStringRegexp(path.win32.sep), 'g'),
+          path.posix.sep
+        )
+        .replace(
+          new RegExp(escapeStringRegexp(path.posix.sep), 'g'),
+          path.posix.sep
+        )
+        .replace(
+          new RegExp(
+            STORAGE_FOLDER_PLACEHOLDER +
+              '(' +
+              escapeStringRegexp(path.sep) +
+              noteKey +
+              ')?',
+            'g'
+          ),
+          DESTINATION_FOLDER
+        )
     }
   )
 }
