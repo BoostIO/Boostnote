@@ -196,6 +196,7 @@ class BackupTab extends React.Component {
                   ref='newImportPath'
                   placeholder={i18n.__('Select File')}
                   value={this.state.newImport.path}
+                  readOnly
                 />
                 <button styleName='backup-body-section-path-button'
                   ref='newImportButton'
@@ -220,6 +221,7 @@ class BackupTab extends React.Component {
                   ref='newExportPath'
                   placeholder={i18n.__('Select Folder')}
                   value={this.state.newExport.path}
+                  readOnly
                 />
                 <button styleName='backup-body-section-path-button'
                   onClick={(e) => this.handleExportPathBrowseButtonClick(e)}
