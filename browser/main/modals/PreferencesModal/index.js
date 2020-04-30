@@ -83,21 +83,14 @@ class Preferences extends React.Component {
           />
         )
       case 'SNIPPET':
-        return (
-          <SnippetTab
-            dispatch={dispatch}
-            config={config}
-            data={data}
-          />
-        )
+        return <SnippetTab dispatch={dispatch} config={config} data={data} />
       case 'BACKUP':
         return (
           <BackupTab
             config={config}
-            haveToSave={alert => this.setState({BackupAlert: alert})}
+            haveToSave={alert => this.setState({ BackupAlert: alert })}
           />
         )
-        return <SnippetTab dispatch={dispatch} config={config} data={data} />
       case 'STORAGES':
       default:
         return (
@@ -139,7 +132,11 @@ class Preferences extends React.Component {
       { target: 'CROWDFUNDING', label: i18n.__('Crowdfunding') },
       { target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert },
       { target: 'SNIPPET', label: i18n.__('Snippets') },
-      {target: 'BACKUP', label: i18n.__('Backup Config'), Backup: this.state.BackupAlert}
+      {
+        target: 'BACKUP',
+        label: i18n.__('Backup Config'),
+        Backup: this.state.BackupAlert
+      }
     ]
 
     const navButtons = tabs.map(tab => {
