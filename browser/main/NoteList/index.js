@@ -25,7 +25,7 @@ import queryString from 'query-string'
 
 const { remote } = require('electron')
 const { dialog } = remote
-const WP_POST_PATH = '/wp/v2/posts'
+const WP_POST_PATH = '/wp-json/v2/posts'
 
 const regexMatchStartingTitleNumber = new RegExp('^([0-9]*.?[0-9]+).*$')
 
