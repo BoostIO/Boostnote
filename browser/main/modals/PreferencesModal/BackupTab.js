@@ -175,7 +175,7 @@ class BackupTab extends React.Component {
         if (err) {
           alert(i18n.__('Export failed. Please try again'))
           return console.log(err)
-        } else alert(i18n.__('Saved successfully'))
+        } else alert(i18n.__('Exported config successfully'))
       }
     )
   }
