@@ -202,7 +202,7 @@ class BackupTab extends React.Component {
           <div styleName='group-section'>
             <div styleName='backup-body-section'>
               <div styleName='backup-body-section-label'>
-                {i18n.__('Select Backup File')}
+                {i18n.__('Import Backup File')}
               </div>
               <div styleName='backup-body-section-path'>
                 <input
