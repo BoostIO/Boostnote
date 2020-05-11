@@ -168,5 +168,13 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "백업 파일 가져 오기",
+  "Exported config successfully": "구성을 성공적으로 내보냈습니다.",
+  "Export Backup File": "백업 파일 내보내기",
+  "Select File": "파일 선택",
+  "Import": "수입",
+  "Export": "수출",
+  "Backup Config": "백업 구성",
+  "Select Folder": "폴더 선택"
 }

@@ -246,5 +246,13 @@
   "Enable MarkdownLint": "启用 MarkdownLint",
   "When scrolling, synchronize preview with editor": "滚动编辑页时同步滚动预览页",
   "This will delete all notes in the folder and can not be undone.": "即将删除文件夹中所有笔记，并且不能撤销。",
-  "Always Ask": "每次询问"
+  "Always Ask": "每次询问",
+  "Import Backup File": "导入备份文件",
+  "Exported config successfully": "导出配置成功",
+  "Export Backup File": "导出备份文件",
+  "Select File": "选择文件",
+  "Import": "进口",
+  "Export": "出口",
+  "Backup Config": "备份配置",
+  "Select Folder": "选择文件夹"
 }

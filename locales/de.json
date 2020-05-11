@@ -217,5 +217,13 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/ordner...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "Sicherungsdatei importieren",
+  "Exported config successfully": "Konfiguration erfolgreich exportiert",
+  "Export Backup File": "Sicherungsdatei exportieren",
+  "Select File": "Datei aussuchen",
+  "Import": "Importieren",
+  "Export": "Export",
+  "Backup Config": "Sicherungskonfiguration",
+  "Select Folder": "Ordner auswählen"
 }

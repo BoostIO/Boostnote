@@ -163,5 +163,13 @@
   "Snippet Default Language": "Lenguaje por defecto de los fragmentos de código",
   "Filter tags/folders...": "filter etiquetas/carpeta...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "Importar archivo de copia de seguridad",
+  "Exported config successfully": "Configuración exportada con éxito",
+  "Export Backup File": "Exportar archivo de copia de seguridad",
+  "Select File": "Seleccione Archivo",
+  "Import": "Importar",
+  "Export": "Exportar",
+  "Backup Config": "Configuración de respaldo",
+  "Select Folder": "Seleccione la carpeta"
 }

@@ -193,5 +193,13 @@
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note",
-  "Enable Auto Update": "Enable Auto Update"
+  "Enable Auto Update": "Enable Auto Update",
+  "Import Backup File": "Import Backup File",
+  "Exported config successfully": "Exported config successfully",
+  "Export Backup File": "Export Backup File",
+  "Select File": "Select File",
+  "Import": "Import",
+  "Export": "Export",
+  "Backup Config": "Backup Config",
+  "Select Folder": "Select Folder"
 }

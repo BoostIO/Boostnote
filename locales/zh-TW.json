@@ -193,5 +193,13 @@
   "Filter tags/folders...": "過濾標籤/資料夾...",
   "Enable HTML label in mermaid flowcharts": "在 mermaid 流程圖中啟用 HTML 標籤 ⚠ 本選項有潛在的 XSS 安全風險。",
   "Wrap line in Snippet Note": "Snippet Note 行尾換行",
-  "Enable Auto Update": "Enable Auto Update"
+  "Enable Auto Update": "Enable Auto Update",
+  "Import Backup File": "導入備份文件",
+  "Exported config successfully": "導出配置成功",
+  "Export Backup File": "導出備份文件",
+  "Select File": "選擇文件",
+  "Import": "進口",
+  "Export": "出口",
+  "Backup Config": "備份配置",
+  "Select Folder": "選擇文件夾"
 }

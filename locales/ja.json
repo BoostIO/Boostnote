@@ -224,5 +224,13 @@
   "Auto Detect": "自動検出",
   "Filter tags/folders...": "タグ/フォルダをフィルタ...",
   "Enable HTML label in mermaid flowcharts": "mermaid flowchartでHTMLラベルを有効にする  ⚠ このオプションには潜在的なXSSの危険性があります。",
-  "Wrap line in Snippet Note": "行を右端で折り返す（Snippet Note）"
+  "Wrap line in Snippet Note": "行を右端で折り返す（Snippet Note）",
+  "Import Backup File": "バックアップファイルのインポート",
+  "Exported config successfully": "設定が正常にエクスポートされました",
+  "Export Backup File": "バックアップファイルのエクスポート",
+  "Select File": "ファイルを選択",
+  "Import": "インポート",
+  "Export": "書き出す",
+  "Backup Config": "バックアップ構成",
+  "Select Folder": "フォルダーを選択"
 }

@@ -190,5 +190,13 @@
   "Show menu bar": "Zobrazit lištu menu",
   "Auto Detect": "Automatická detekce",
   "Enable HTML label in mermaid flowcharts": "Povolit HTML label v mermaid flowcharts ⚠ Tato možnost je potenciálním zdrojem XSS.",
-  "Wrap line in Snippet Note": "Ukončovat řádky v útržcích kódu"
+  "Wrap line in Snippet Note": "Ukončovat řádky v útržcích kódu",
+  "Import Backup File": "Importovat záložní soubor",
+  "Exported config successfully": "Konfigurace byla úspěšně exportována",
+  "Export Backup File": "Exportovat záložní soubor",
+  "Select File": "Zvolte soubor",
+  "Import": "Import",
+  "Export": "Vývozní",
+  "Backup Config": "Záložní konfigurace",
+  "Select Folder": "Vybrat složku"
 }
