@@ -168,5 +168,10 @@
   "Import": "İthalat",
   "Export": "ihracat",
   "Backup Config": "Yedekleme Yapılandırması",
-  "Select Folder": "Dosya Seç"
+  "Select Folder": "Dosya Seç",
+  "Please choose a directory for export file.": "Lütfen dışa aktarma dosyası için bir dizin seçin.",
+  "File is not valid JSON.": "Dosya geçerli JSON değil.",
+  "Something went wrong. Please try again": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin",
+  "Export failed. Please try again": "Dışa aktarma başarısız oldu. Lütfen tekrar deneyin",
+  "Backup Configuration": "Yedekleme Yapılandırması"
 }

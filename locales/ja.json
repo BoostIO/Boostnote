@@ -232,5 +232,9 @@
   "Import": "インポート",
   "Export": "書き出す",
   "Backup Config": "バックアップ構成",
-  "Select Folder": "フォルダーを選択"
+  "Please choose a directory for export file.": "エクスポートファイルのディレクトリを選択してください。",
+  "File is not valid JSON.": "ファイルは有効なJSONではありません。",
+  "Something went wrong. Please try again": "問題が発生しました。 もう一度お試しください",
+  "Export failed. Please try again": "エクスポートに失敗しました。 もう一度お試しください",
+  "Backup Configuration": "バックアップ構成"
 }

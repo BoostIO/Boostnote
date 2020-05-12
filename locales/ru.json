@@ -166,5 +166,10 @@
   "Import": "Импортировать",
   "Export": "экспорт",
   "Backup Config": "Резервная копия конфигурации",
-  "Select Folder": "Выберите папку"
+  "Select Folder": "Выберите папку",
+  "Please choose a directory for export file.": "Пожалуйста, выберите каталог для экспорта файла.",
+  "File is not valid JSON.": "Файл не является допустимым JSON.",
+  "Something went wrong. Please try again": "Что-то пошло не так. Пожалуйста, попробуйте еще раз",
+  "Export failed. Please try again": "Экспорт не удался. Пожалуйста, попробуйте еще раз",
+  "Backup Configuration": "Конфигурация резервного копирования"
 }

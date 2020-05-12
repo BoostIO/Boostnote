@@ -176,5 +176,10 @@
   "Import": "수입",
   "Export": "수출",
   "Backup Config": "백업 구성",
-  "Select Folder": "폴더 선택"
+  "Select Folder": "폴더 선택",
+  "Please choose a directory for export file.": "내보내기 파일의 디렉토리를 선택하십시오.",
+  "File is not valid JSON.": "파일이 유효한 JSON이 아닙니다.",
+  "Something went wrong. Please try again": "문제가 발생했습니다. 다시 시도하십시오",
+  "Export failed. Please try again": "내보내기에 실패했습니다. 다시 시도하십시오",
+  "Backup Configuration": "백업 구성"
 }

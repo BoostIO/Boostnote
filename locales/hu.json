@@ -193,5 +193,9 @@
   "Import": "import",
   "Export": "Export",
   "Backup Config": "Biztonsági mentés konfigur",
-  "Select Folder": "Mappa kiválasztása"
+  "Please choose a directory for export file.": "Válasszon egy könyvtárat az export fájlhoz.",
+  "File is not valid JSON.": "A fájl érvénytelen JSON.",
+  "Something went wrong. Please try again": "Valami elromlott. Kérlek próbáld újra",
+  "Export failed. Please try again": "Az exportálás sikertelen. Kérlek próbáld újra",
+  "Backup Configuration": "Biztonsági mentés konfigurálása"
 }

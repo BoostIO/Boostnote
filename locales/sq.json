@@ -168,5 +168,10 @@
   "Import": "import",
   "Export": "eksport",
   "Backup Config": "Konfiguro kopjimin",
-  "Select Folder": "Zgjidhni Dosjen"
+  "Select Folder": "Zgjidhni Dosjen",
+  "Please choose a directory for export file.": "Ju lutemi zgjidhni një drejtori për skedarin e eksportit.",
+  "File is not valid JSON.": "Skedari nuk është i vlefshëm JSON.",
+  "Something went wrong. Please try again": "Dicka shkoi keq. Ju lutemi provoni përsëri",
+  "Export failed. Please try again": "Eksporti dështoi. Ju lutemi provoni përsëri",
+  "Backup Configuration": "Konfigurimi i rezervës"
 }

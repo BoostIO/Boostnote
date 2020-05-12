@@ -185,5 +185,10 @@
   "Import": "Importation",
   "Export": "Exportation",
   "Backup Config": "Configuration de sauvegarde",
-  "Select Folder": "Sélectionner le dossier"
+  "Select Folder": "Sélectionner le dossier",
+  "Please choose a directory for export file.": "Veuillez choisir un répertoire pour exporter le fichier.",
+  "File is not valid JSON.": "Le fichier n'est pas JSON valide.",
+  "Something went wrong. Please try again": "Quelque chose a mal tourné. Veuillez réessayer",
+  "Export failed. Please try again": "L'exportation a échoué. Veuillez réessayer",
+  "Backup Configuration": "Configuration de sauvegarde"
 }

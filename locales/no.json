@@ -168,5 +168,10 @@
   "Import": "Importere",
   "Export": "Eksport",
   "Backup Config": "Backup Config",
-  "Select Folder": "Velg mappe"
+  "Select Folder": "Velg mappe",
+  "Please choose a directory for export file.": "Velg en katalog for eksportfil.",
+  "File is not valid JSON.": "Filen er ikke gyldig JSON.",
+  "Something went wrong. Please try again": "Noe gikk galt. Vær så snill, prøv på nytt",
+  "Export failed. Please try again": "Eksport mislyktes. Vær så snill, prøv på nytt",
+  "Backup Configuration": "Sikkerhetskopieringskonfigurasjon"
 }

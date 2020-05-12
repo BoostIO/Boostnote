@@ -201,5 +201,9 @@
   "Import": "Import",
   "Export": "Export",
   "Backup Config": "Backup Config",
-  "Select Folder": "Select Folder"
+  "Please choose a directory for export file.": "Please choose a directory for export file.",
+  "File is not valid JSON.": "File is not valid JSON.",
+  "Something went wrong. Please try again": "Something went wrong. Please try again",
+  "Export failed. Please try again": "Export failed. Please try again",
+  "Backup Configuration": "Backup Configuration"
 }

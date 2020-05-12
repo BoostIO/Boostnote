@@ -198,5 +198,9 @@
   "Import": "Import",
   "Export": "Vývozní",
   "Backup Config": "Záložní konfigurace",
-  "Select Folder": "Vybrat složku"
+  "Please choose a directory for export file.": "Vyberte adresář pro export souboru.",
+  "File is not valid JSON.": "Soubor není platný JSON.",
+  "Something went wrong. Please try again": "Něco se pokazilo. Prosím zkuste to znovu",
+  "Export failed. Please try again": "Export se nezdařil. Prosím zkuste to znovu",
+  "Backup Configuration": "Konfigurace zálohy"
 }

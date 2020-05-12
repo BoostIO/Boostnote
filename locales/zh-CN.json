@@ -254,5 +254,9 @@
   "Import": "进口",
   "Export": "出口",
   "Backup Config": "备份配置",
-  "Select Folder": "选择文件夹"
+  "Please choose a directory for export file.": "请选择导出文件的目录。",
+  "File is not valid JSON.": "文件不是有效的JSON。",
+  "Something went wrong. Please try again": "出问题了。 请再试一遍",
+  "Export failed. Please try again": "导出失败。 请再试一遍",
+  "Backup Configuration": "备份配置"
 }
