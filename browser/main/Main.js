@@ -18,6 +18,7 @@ import { getLocales } from 'browser/lib/Languages'
 import applyShortcuts from 'browser/main/lib/shortcutManager'
 import { chooseTheme, applyTheme } from 'browser/main/lib/ThemeManager'
 import { push } from 'connected-react-router'
+import { ipcRenderer } from 'electron'
 
 const path = require('path')
 const electron = require('electron')
@@ -184,6 +185,7 @@ class Main extends React.Component {
       this.toggleMenuBarVisible.bind(this)
     )
     eventEmitter.on('dispatch:push', this.changeRoutePush.bind(this))
+    eventEmitter.on('update', () => ipcRenderer.send('update-check', 'manual'))
   }
 
   componentWillUnmount() {
