@@ -20,21 +20,28 @@ class InfoTab extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { autoUpdateEnabled, amaEnabled } = ConfigManager.get()
+
+    this.setState({ config: { autoUpdateEnabled, amaEnabled } })
+  }
+
   handleLinkClick(e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
   }
 
   handleConfigChange(e) {
-    const newConfig = { amaEnabled: this.refs.amaEnabled.checked }
+    const newConfig = {
+      amaEnabled: this.refs.amaEnabled.checked,
+      autoUpdateEnabled: this.refs.autoUpdateEnabled.checked
+    }
 
     this.setState({ config: newConfig })
   }
 
   handleSaveButtonClick(e) {
-    const newConfig = {
-      amaEnabled: this.state.config.amaEnabled
-    }
+    const newConfig = this.state.config
 
     if (!newConfig.amaEnabled) {
       AwsMobileAnalyticsConfig.recordDynamicCustomEvent('DISABLE_AMA')
@@ -59,15 +66,6 @@ class InfoTab extends React.Component {
       type: 'SET_CONFIG',
       config: newConfig
     })
-  }
-
-  toggleAutoUpdate() {
-    const newConfig = {
-      autoUpdateEnabled: !this.state.config.autoUpdateEnabled
-    }
-
-    this.setState({ config: newConfig })
-    ConfigManager.set(newConfig)
   }
 
   infoMessage() {
@@ -181,7 +179,8 @@ class InfoTab extends React.Component {
           <label>
             <input
               type='checkbox'
-              onChange={this.toggleAutoUpdate.bind(this)}
+              ref='autoUpdateEnabled'
+              onChange={() => this.handleConfigChange()}
               checked={this.state.config.autoUpdateEnabled}
             />
             {i18n.__('Enable Auto Update')}
