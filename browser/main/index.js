@@ -117,8 +117,9 @@ function downloadUpdate() {
   })
 
   if (index === 0) {
-    ipcRenderer.send('update-app-confirm')
+    ipcRenderer.send('update-download-confirm')
   } else if (index === 1) {
+    ipcRenderer.send('update-cancel')
     ConfigManager.set({ autoUpdateEnabled: false })
   }
 }
