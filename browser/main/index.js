@@ -152,6 +152,12 @@ ReactDOM.render(
       })
     })
 
+    ipcRenderer.on('update-not-found', function(_, msg) {
+      notify('Update not found!', {
+        body: msg
+      })
+    })
+
     ipcRenderer.send('update-check', 'check-update')
     window.addEventListener('online', function() {
       if (!store.getState().status.updateReady) {
