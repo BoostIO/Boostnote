@@ -38,6 +38,7 @@ class InfoTab extends React.Component {
     }
 
     this.setState({ config: newConfig })
+    return newConfig
   }
 
   handleSaveButtonClick(e) {
@@ -71,6 +72,12 @@ class InfoTab extends React.Component {
   infoMessage() {
     const { amaMessage } = this.state
     return amaMessage ? <p styleName='policy-confirm'>{amaMessage}</p> : null
+  }
+
+  handleAutoUpdateChange() {
+    const config = this.handleConfigChange()
+
+    ConfigManager.set(config)
   }
 
   render() {
@@ -180,7 +187,7 @@ class InfoTab extends React.Component {
             <input
               type='checkbox'
               ref='autoUpdateEnabled'
-              onChange={() => this.handleConfigChange()}
+              onChange={() => this.handleAutoUpdateChange()}
               checked={this.state.config.autoUpdateEnabled}
             />
             {i18n.__('Enable Auto Update')}
