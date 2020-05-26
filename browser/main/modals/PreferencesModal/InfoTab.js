@@ -75,9 +75,9 @@ class InfoTab extends React.Component {
   }
 
   handleAutoUpdateChange() {
-    const config = this.handleConfigChange()
+    const { autoUpdateEnabled } = this.handleConfigChange()
 
-    ConfigManager.set(config)
+    ConfigManager.set({ autoUpdateEnabled })
   }
 
   render() {
