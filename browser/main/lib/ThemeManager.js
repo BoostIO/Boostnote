@@ -1,4 +1,5 @@
 import ConfigManager from 'browser/main/lib/ConfigManager'
+import uiThemes from 'browser/lib/ui-themes'
 
 const saveChanges = newConfig => {
   ConfigManager.set(newConfig)
@@ -40,14 +41,7 @@ const chooseTheme = config => {
 }
 
 const applyTheme = theme => {
-  const supportedThemes = [
-    'dark',
-    'white',
-    'solarized-dark',
-    'monokai',
-    'dracula'
-  ]
-  if (supportedThemes.indexOf(theme) !== -1) {
+  if (uiThemes.some(item => item.name === theme)) {
     document.body.setAttribute('data-theme', theme)
     if (document.body.querySelector('.MarkdownPreview')) {
       document.body
