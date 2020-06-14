@@ -1192,7 +1192,10 @@ class MarkdownPreview extends React.Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const rawHref = e.target.getAttribute('href')
+    const el = e.target.closest('a[href]')
+    if (!el) return
+
+    const rawHref = el.getAttribute('href')
     const { dispatch } = this.props
     if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 
