@@ -54,7 +54,7 @@ Issues on Boostnote can be funded by anyone and the money will be distributed to
 - [Reddit](https://www.reddit.com/r/Boostnote/)
 
 ### Boostnote mobile
-A community project developing a mobile cross-platform version of boostnote for iOS and Android can be found here: https://github.com/T0M0F/NoteApp
+A community project developing a mobile cross-platform version of boostnote for iOS and Android can be found here: [NoteApp](https://github.com/T0M0F/NoteApp)
 
 
 #### More Information
