@@ -16,7 +16,85 @@ class HotkeyTab extends React.Component {
 
     this.state = {
       isHotkeyHintOpen: false,
-      config: props.config
+      config: props.config,
+      hotkeys: [
+        {
+          name: 'toggleMain',
+          label: i18n.__('Show/Hide Boostnote')
+        },
+        {
+          name: 'toggleMode',
+          label: i18n.__('Toggle Editor Mode')
+        },
+        {
+          name: 'toggleDirection',
+          label: i18n.__('Toggle Direction')
+        },
+        {
+          name: 'deleteNote',
+          label: i18n.__('Delete Note')
+        },
+        {
+          name: 'pasteSmartly',
+          label: i18n.__('Paste HTML')
+        },
+        {
+          name: 'prettifyMarkdown',
+          label: i18n.__('Prettify Markdown')
+        },
+        {
+          name: 'reload',
+          label: i18n.__('Reload')
+        },
+        {
+          name: 'devTool',
+          label: i18n.__('Toggle Developer Tools')
+        },
+        {
+          name: 'nextNode',
+          label: i18n.__('Next Note')
+        },
+        {
+          name: 'prevNode',
+          label: i18n.__('Previous Note')
+        },
+        {
+          name: 'focusSearch',
+          label: i18n.__('Focus Search')
+        },
+        {
+          name: 'fullScreen',
+          label: i18n.__('Toggle Full Screen')
+        },
+        {
+          name: 'toggleSideBar',
+          label: i18n.__('Toggle Side Bar')
+        },
+        {
+          name: 'actualSize',
+          label: i18n.__('Actual Size')
+        },
+        {
+          name: 'zoomIn',
+          label: i18n.__('Zoom In')
+        },
+        {
+          name: 'zoomOut',
+          label: i18n.__('Zoom Out')
+        },
+        {
+          name: 'toggleMenuBar',
+          label: i18n.__('Toggle Menu Bar')
+        },
+        {
+          name: 'insertDate',
+          label: i18n.__('Insert Date')
+        },
+        {
+          name: 'insertDateTime',
+          label: i18n.__('Insert Date Time')
+        }
+      ]
     }
   }
 
@@ -83,21 +161,13 @@ class HotkeyTab extends React.Component {
   }
 
   handleHotkeyChange(e) {
-    const { config } = this.state
-    config.hotkey = Object.assign({}, config.hotkey, {
-      toggleMain: this.refs.toggleMain.value,
-      toggleMode: this.refs.toggleMode.value,
-      toggleDirection: this.refs.toggleDirection.value,
-      deleteNote: this.refs.deleteNote.value,
-      pasteSmartly: this.refs.pasteSmartly.value,
-      prettifyMarkdown: this.refs.prettifyMarkdown.value,
-      toggleMenuBar: this.refs.toggleMenuBar.value,
-      insertDate: this.refs.insertDate.value,
-      insertDateTime: this.refs.insertDateTime.value
+    const { config, hotkeys } = this.state
+
+    config.hotkey = {}
+    hotkeys.forEach(({ name }) => {
+      config.hotkey[name] = this.refs[name].value
     })
-    this.setState({
-      config
-    })
+
     if (_.isEqual(this.oldHotkey, config.hotkey)) {
       this.props.haveToSave()
     } else {
@@ -123,134 +193,28 @@ class HotkeyTab extends React.Component {
       keymapAlert != null ? (
         <p className={`alert ${keymapAlert.type}`}>{keymapAlert.message}</p>
       ) : null
-    const { config } = this.state
+    const { config, hotkeys } = this.state
+
+    const rows = hotkeys.map(({ label, name }) => (
+      <div styleName='group-section' key={name}>
+        <div styleName='group-section-label'>{label}</div>
+        <div styleName='group-section-control'>
+          <input
+            styleName='group-section-control-input'
+            onChange={e => this.handleHotkeyChange(e)}
+            ref={name}
+            value={config.hotkey[name]}
+            type='text'
+          />
+        </div>
+      </div>
+    ))
 
     return (
       <div styleName='root'>
         <div styleName='group'>
           <div styleName='group-header'>{i18n.__('Hotkeys')}</div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Show/Hide Boostnote')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='toggleMain'
-                value={config.hotkey.toggleMain}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Show/Hide Menu Bar')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='toggleMenuBar'
-                value={config.hotkey.toggleMenuBar}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Toggle Editor Mode')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='toggleMode'
-                value={config.hotkey.toggleMode}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Toggle Direction')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='toggleDirection'
-                value={config.hotkey.toggleDirection}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Delete Note')}</div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='deleteNote'
-                value={config.hotkey.deleteNote}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>{i18n.__('Paste HTML')}</div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='pasteSmartly'
-                value={config.hotkey.pasteSmartly}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Prettify Markdown')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                onChange={e => this.handleHotkeyChange(e)}
-                ref='prettifyMarkdown'
-                value={config.hotkey.prettifyMarkdown}
-                type='text'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Insert Current Date')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                ref='insertDate'
-                value={config.hotkey.insertDate}
-                type='text'
-                disabled='true'
-              />
-            </div>
-          </div>
-          <div styleName='group-section'>
-            <div styleName='group-section-label'>
-              {i18n.__('Insert Current Date and Time')}
-            </div>
-            <div styleName='group-section-control'>
-              <input
-                styleName='group-section-control-input'
-                ref='insertDateTime'
-                value={config.hotkey.insertDateTime}
-                type='text'
-                disabled='true'
-              />
-            </div>
-          </div>
+          {rows}
           <div styleName='group-control'>
             <button
               styleName='group-control-leftButton'
