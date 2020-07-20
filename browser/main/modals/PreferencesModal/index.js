@@ -90,6 +90,8 @@ class Preferences extends React.Component {
           <BackupTab
             config={config}
             haveToSave={alert => this.setState({ BackupAlert: alert })}
+          />
+        )
       case 'PLUGINS':
         return (
           <PluginsTab
