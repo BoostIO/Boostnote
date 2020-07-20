@@ -1,4 +1,3 @@
-const test = require('ava')
 const deleteFolder = require('browser/main/lib/dataApi/deleteFolder')
 const attachmentManagement = require('browser/main/lib/dataApi/attachmentManagement')
 const createNote = require('browser/main/lib/dataApi/createNote')
@@ -23,14 +22,16 @@ const CSON = require('@rokt33r/season')
 
 const storagePath = path.join(os.tmpdir(), 'test/delete-folder')
 
-test.beforeEach(t => {
-  t.context.storage = TestDummy.dummyStorage(storagePath)
-  localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
+let storageContext
+
+beforeEach(() => {
+  storageContext = TestDummy.dummyStorage(storagePath)
+  localStorage.setItem('storages', JSON.stringify([storageContext.cache]))
 })
 
-test.serial('Delete a folder', t => {
-  const storageKey = t.context.storage.cache.key
-  const folderKey = t.context.storage.json.folders[0].key
+it('Delete a folder', () => {
+  const storageKey = storageContext.cache.key
+  const folderKey = storageContext.json.folders[0].key
   let noteKey
 
   const input1 = {
@@ -72,16 +73,15 @@ test.serial('Delete a folder', t => {
       return deleteFolder(storageKey, folderKey)
     })
     .then(function assert(data) {
-      t.true(_.find(data.storage.folders, { key: folderKey }) == null)
+      expect(_.find(data.storage.folders, { key: folderKey })).toBeUndefined()
       const jsonData = CSON.readFileSync(
         path.join(data.storage.path, 'boostnote.json')
       )
 
-      t.true(_.find(jsonData.folders, { key: folderKey }) == null)
+      expect(_.find(jsonData.folders, { key: folderKey })).toBeUndefined()
       const notePaths = sander.readdirSync(data.storage.path, 'notes')
-      t.is(
-        notePaths.length,
-        t.context.storage.notes.filter(note => note.folder !== folderKey).length
+      expect(notePaths.length).toBe(
+        storageContext.notes.filter(note => note.folder !== folderKey).length
       )
 
       const attachmentFolderPath = path.join(
@@ -89,11 +89,11 @@ test.serial('Delete a folder', t => {
         attachmentManagement.DESTINATION_FOLDER,
         noteKey
       )
-      t.false(fs.existsSync(attachmentFolderPath))
+      expect(fs.existsSync(attachmentFolderPath)).toBe(false)
     })
 })
 
-test.after.always(function after() {
+afterAll(() => {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })

@@ -1,10 +1,9 @@
 /**
  * @fileoverview Unit test for browser/lib/markdown
  */
-const test = require('ava')
 const markdown = require('browser/lib/markdownTextHelper')
 
-test(t => {
+test(() => {
   // [input, expected]
   const testCases = [
     // List
@@ -42,10 +41,6 @@ test(t => {
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      markdown.strip(input),
-      expected,
-      `Test for strip() input: ${input} expected: ${expected}`
-    )
+    expect(markdown.strip(input)).toBe(expected)
   })
 })

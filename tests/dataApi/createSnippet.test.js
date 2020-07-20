@@ -1,4 +1,3 @@
-const test = require('ava')
 const createSnippet = require('browser/main/lib/dataApi/createSnippet')
 const sander = require('sander')
 const os = require('os')
@@ -7,29 +6,27 @@ const path = require('path')
 const snippetFilePath = path.join(os.tmpdir(), 'test', 'create-snippet')
 const snippetFile = path.join(snippetFilePath, 'snippets.json')
 
-test.beforeEach(t => {
+beforeEach(() => {
   sander.writeFileSync(snippetFile, '[]')
 })
 
-test.serial('Create a snippet', t => {
+it('Create a snippet', () => {
   return Promise.resolve()
-    .then(function doTest() {
-      return Promise.all([createSnippet(snippetFile)])
-    })
+    .then(() => Promise.all([createSnippet(snippetFile)]))
     .then(function assert(data) {
       data = data[0]
       const snippets = JSON.parse(sander.readFileSync(snippetFile))
       const snippet = snippets.find(
         currentSnippet => currentSnippet.id === data.id
       )
-      t.not(snippet, undefined)
-      t.is(snippet.name, data.name)
-      t.deepEqual(snippet.prefix, data.prefix)
-      t.is(snippet.content, data.content)
-      t.deepEqual(snippet.linesHighlighted, data.linesHighlighted)
+      expect(snippet).not.toBeUndefined()
+      expect(snippet.name).toEqual(data.name)
+      expect(snippet.prefix).toEqual(data.prefix)
+      expect(snippet.content).toEqual(data.content)
+      expect(snippet.linesHighlighted).toEqual(data.linesHighlighted)
     })
 })
 
-test.after.always(() => {
+afterAll(() => {
   sander.rimrafSync(snippetFilePath)
 })

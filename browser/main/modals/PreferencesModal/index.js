@@ -8,6 +8,7 @@ import Crowdfunding from './Crowdfunding'
 import StoragesTab from './StoragesTab'
 import SnippetTab from './SnippetTab'
 import BackupTab from './BackupTab'
+import PluginsTab from './PluginsTab'
 import Blog from './Blog'
 import ModalEscButton from 'browser/components/ModalEscButton'
 import CSSModules from 'browser/lib/CSSModules'
@@ -89,6 +90,12 @@ class Preferences extends React.Component {
           <BackupTab
             config={config}
             haveToSave={alert => this.setState({ BackupAlert: alert })}
+      case 'PLUGINS':
+        return (
+          <PluginsTab
+            dispatch={dispatch}
+            config={config}
+            haveToSave={alert => this.setState({ PluginsAlert: alert })}
           />
         )
       case 'STORAGES':
@@ -136,7 +143,8 @@ class Preferences extends React.Component {
         target: 'BACKUP',
         label: i18n.__('Backup Config'),
         Backup: this.state.BackupAlert
-      }
+      },
+      { target: 'PLUGINS', label: i18n.__('Plugins') }
     ]
 
     const navButtons = tabs.map(tab => {

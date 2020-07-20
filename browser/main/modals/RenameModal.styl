@@ -46,13 +46,18 @@
   font-size 14px
   colorPrimaryButton()
 
+.error
+  text-align center
+  color #F44336
+  height 20px
+
 apply-theme(theme)
   body[data-theme={theme}]
     .root
       background-color transparent
 
     .header
-      background-color get-theme-var(theme, 'button--hover-backgroundColor')
+      background-color transparent
       border-color get-theme-var(theme, 'borderColor')
       color get-theme-var(theme, 'text-color')
 

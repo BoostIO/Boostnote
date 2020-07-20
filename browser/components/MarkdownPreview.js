@@ -130,6 +130,81 @@ code {
   text-align: left;
   direction: ltr;
 }
+
+p code,
+li code,
+td code
+{
+  padding: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+}
+[data-theme="default"] p code,
+[data-theme="default"] li code,
+[data-theme="default"] td code
+{
+  background-color: #F4F4F4;
+  border-color: #d9d9d9;
+  color: inherit;
+}
+[data-theme="white"] p code,
+[data-theme="white"] li code,
+[data-theme="white"] td code
+{
+  background-color: #F4F4F4;
+  border-color: #d9d9d9;
+  color: inherit;
+}
+[data-theme="dark"] p code,
+[data-theme="dark"] li code,
+[data-theme="dark"] td code
+{
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
+}
+[data-theme="dracula"] p code,
+[data-theme="dracula"] li code,
+[data-theme="dracula"] td code
+{
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
+}
+[data-theme="monokai"] p code,
+[data-theme="monokai"] li code,
+[data-theme="monokai"] td code
+{
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
+}
+[data-theme="nord"] p code,
+[data-theme="nord"] li code,
+[data-theme="nord"] td code
+{
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
+}
+[data-theme="solarized-dark"] p code,
+[data-theme="solarized-dark"] li code,
+[data-theme="solarized-dark"] td code
+{
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
+}
+[data-theme="vulcan"] p code,
+[data-theme="vulcan"] li code,
+[data-theme="vulcan"] td code
+{
+  background-color: #444444;
+  border-color: #555;
+  color: #FFFFFF;
+}
+
 .lineNumber {
   ${lineNumber && 'display: block !important;'}
   font-family: '${codeBlockFontFamily.join("','")}';
@@ -1117,7 +1192,10 @@ class MarkdownPreview extends React.Component {
     e.preventDefault()
     e.stopPropagation()
 
-    const rawHref = e.target.getAttribute('href')
+    const el = e.target.closest('a[href]')
+    if (!el) return
+
+    const rawHref = el.getAttribute('href')
     const { dispatch } = this.props
     if (!rawHref) return // not checked href because parser will create file://... string for [empty link]()
 

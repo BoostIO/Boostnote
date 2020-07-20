@@ -6,6 +6,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import styles from './SideNav.styl'
 import { openModal } from 'browser/main/lib/modal'
 import PreferencesModal from '../modals/PreferencesModal'
+import RenameTagModal from 'browser/main/modals/RenameTagModal'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import StorageItem from './StorageItem'
 import TagListItem from 'browser/components/TagListItem'
@@ -170,6 +171,11 @@ class SideNav extends React.Component {
       )
     })
 
+    menu.push({
+      label: i18n.__('Rename Tag'),
+      click: this.handleRenameTagClick.bind(this, tag)
+    })
+
     context.popup(menu)
   }
 
@@ -190,6 +196,16 @@ class SideNav extends React.Component {
         tagName,
         targetRect: rect
       }
+    })
+  }
+
+  handleRenameTagClick(tagName) {
+    const { data, dispatch } = this.props
+
+    openModal(RenameTagModal, {
+      tagName,
+      data,
+      dispatch
     })
   }
 

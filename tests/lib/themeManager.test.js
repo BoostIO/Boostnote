@@ -12,7 +12,7 @@ const originalDate = Date
 let context = {}
 
 beforeAll(() => {
-  const constantDate = new Date('2017-11-27T14:33:42Z')
+  const constantDate = new Date('2017-11-27T14:33:42')
   global.Date = class extends Date {
     constructor() {
       super()

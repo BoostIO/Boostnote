@@ -1,11 +1,10 @@
 /**
  * @fileoverview Unit test for browser/lib/htmlTextHelper
  */
-const test = require('ava')
 const htmlTextHelper = require('browser/lib/htmlTextHelper')
 
 // Unit test
-test('htmlTextHelper#decodeEntities should return encoded text (string)', t => {
+test('htmlTextHelper#decodeEntities should return encoded text (string)', () => {
   // [input, expected]
   const testCases = [
     ['&lt;a href=', '<a href='],
@@ -21,15 +20,11 @@ test('htmlTextHelper#decodeEntities should return encoded text (string)', t => {
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      htmlTextHelper.decodeEntities(input),
-      expected,
-      `Test for decodeEntities() input: ${input} expected: ${expected}`
-    )
+    expect(htmlTextHelper.decodeEntities(input)).toBe(expected)
   })
 })
 
-test('htmlTextHelper#decodeEntities() should return decoded text (string)', t => {
+test('htmlTextHelper#decodeEntities() should return decoded text (string)', () => {
   // [input, expected]
   const testCases = [
     ['<a href=', '&lt;a href='],
@@ -44,16 +39,12 @@ test('htmlTextHelper#decodeEntities() should return decoded text (string)', t =>
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      htmlTextHelper.encodeEntities(input),
-      expected,
-      `Test for encodeEntities() input: ${input} expected: ${expected}`
-    )
+    expect(htmlTextHelper.encodeEntities(input)).toBe(expected)
   })
 })
 
 // Integration test
-test(t => {
+test(() => {
   const testCases = [
     "var test = 'test'",
     "<a href='https://boostnote.io'>Boostnote",
@@ -63,10 +54,6 @@ test(t => {
   testCases.forEach(testCase => {
     const encodedText = htmlTextHelper.encodeEntities(testCase)
     const decodedText = htmlTextHelper.decodeEntities(encodedText)
-    t.is(
-      decodedText,
-      testCase,
-      'Integration test through encodedText() and decodedText()'
-    )
+    expect(decodedText).toBe(testCase)
   })
 })

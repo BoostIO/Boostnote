@@ -60,6 +60,7 @@ class MarkdownNoteDetail extends React.Component {
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
     this.generateToc = this.handleGenerateToc.bind(this)
     this.handleUpdateContent = this.handleUpdateContent.bind(this)
+    this.handleSwitchStackDirection = this.handleSwitchStackDirection.bind(this)
   }
 
   focus() {
@@ -67,6 +68,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentDidMount() {
+    ee.on('editor:orientation', this.handleSwitchStackDirection)
     ee.on('topbar:togglelockbutton', this.toggleLockButton)
     ee.on('topbar:toggledirectionbutton', () => this.handleSwitchDirection())
     ee.on('topbar:togglemodebutton', () => {
@@ -383,11 +385,23 @@ class MarkdownNoteDetail extends React.Component {
   handleSwitchMode(type) {
     // If in split mode, hide the lock button
     this.setState(
-      { editorType: type, isLockButtonShown: !(type === 'SPLIT') },
+      { editorType: type, isLockButtonShown: type !== 'SPLIT' },
       () => {
         this.focus()
         const newConfig = Object.assign({}, this.props.config)
         newConfig.editor.type = type
+        ConfigManager.set(newConfig)
+      }
+    )
+  }
+
+  handleSwitchStackDirection() {
+    this.setState(
+      prevState => ({ isStacking: !prevState.isStacking }),
+      () => {
+        this.focus()
+        const newConfig = Object.assign({}, this.props.config)
+        newConfig.ui.isStacking = this.state.isStacking
         ConfigManager.set(newConfig)
       }
     )
@@ -429,7 +443,7 @@ class MarkdownNoteDetail extends React.Component {
 
   renderEditor() {
     const { config, ignorePreviewPointerEvents } = this.props
-    const { note } = this.state
+    const { note, isStacking } = this.state
 
     if (this.state.editorType === 'EDITOR_PREVIEW') {
       return (
@@ -455,6 +469,7 @@ class MarkdownNoteDetail extends React.Component {
           value={note.content}
           storageKey={note.storage}
           noteKey={note.key}
+          isStacking={isStacking}
           linesHighlighted={note.linesHighlighted}
           onChange={this.handleUpdateContent}
           ignorePreviewPointerEvents={ignorePreviewPointerEvents}

@@ -145,9 +145,7 @@ class InfoTab extends React.Component {
               height='92'
             />
             <div styleName='icon-right'>
-              <div styleName='appId'>
-                {i18n.__('Boostnote')} {appVersion}
-              </div>
+              <div styleName='appId'>Boostnote Legacy {appVersion}</div>
               <div styleName='description'>
                 {i18n.__(
                   'An open source note-taking app made for programmers just like you.'

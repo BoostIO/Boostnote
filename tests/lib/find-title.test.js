@@ -2,11 +2,10 @@
  * @fileoverview Unit test for browser/lib/findTitle
  */
 
-const test = require('ava')
 const { findNoteTitle } = require('browser/lib/findNoteTitle')
 
 // Unit test
-test('findNoteTitle#find  should return a correct title (string)', t => {
+test('findNoteTitle#find  should return a correct title (string)', () => {
   // [input, expected]
   const testCases = [
     ['# hoge\nfuga', '# hoge'],
@@ -20,15 +19,11 @@ test('findNoteTitle#find  should return a correct title (string)', t => {
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      findNoteTitle(input, false),
-      expected,
-      `Test for find() input: ${input} expected: ${expected}`
-    )
+    expect(findNoteTitle(input, false)).toBe(expected)
   })
 })
 
-test('findNoteTitle#find  should ignore front matter when enableFrontMatterTitle=false', t => {
+test('findNoteTitle#find  should ignore front matter when enableFrontMatterTitle=false', () => {
   // [input, expected]
   const testCases = [
     ['---\nlayout: test\ntitle:  hoge hoge hoge  \n---\n# fuga', '# fuga'],
@@ -38,15 +33,11 @@ test('findNoteTitle#find  should ignore front matter when enableFrontMatterTitle
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      findNoteTitle(input, false),
-      expected,
-      `Test for find() input: ${input} expected: ${expected}`
-    )
+    expect(findNoteTitle(input, false)).toBe(expected)
   })
 })
 
-test('findNoteTitle#find  should respect front matter when enableFrontMatterTitle=true', t => {
+test('findNoteTitle#find  should respect front matter when enableFrontMatterTitle=true', () => {
   // [input, expected]
   const testCases = [
     [
@@ -59,15 +50,11 @@ test('findNoteTitle#find  should respect front matter when enableFrontMatterTitl
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      findNoteTitle(input, true),
-      expected,
-      `Test for find() input: ${input} expected: ${expected}`
-    )
+    expect(findNoteTitle(input, true)).toBe(expected)
   })
 })
 
-test('findNoteTitle#find  should respect frontMatterTitleField when provided', t => {
+test('findNoteTitle#find  should respect frontMatterTitleField when provided', () => {
   // [input, expected]
   const testCases = [
     ['---\ntitle: hoge\n---\n# fuga', '# fuga'],
@@ -76,10 +63,6 @@ test('findNoteTitle#find  should respect frontMatterTitleField when provided', t
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      findNoteTitle(input, true, 'custom'),
-      expected,
-      `Test for find() input: ${input} expected: ${expected}`
-    )
+    expect(findNoteTitle(input, true, 'custom')).toBe(expected)
   })
 })

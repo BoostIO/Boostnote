@@ -1,4 +1,3 @@
-const test = require('ava')
 const copyFile = require('browser/main/lib/dataApi/copyFile')
 
 const path = require('path')
@@ -13,23 +12,25 @@ const srcPath = path.join(srcFolder, testFile)
 const dstFolder = path.join(__dirname, '😇')
 const dstPath = path.join(dstFolder, testFile)
 
-test.before(t => {
+beforeAll(() => {
   if (!fs.existsSync(srcFolder)) fs.mkdirSync(srcFolder)
 
   fs.writeFileSync(srcPath, 'test')
 })
 
-test('`copyFile` should handle encoded URI on src path', t => {
+it('`copyFile` should handle encoded URI on src path', done => {
   return copyFile(encodeURI(srcPath), dstPath)
     .then(() => {
-      t.true(true)
+      expect(true).toBe(true)
+      done()
     })
     .catch(() => {
-      t.true(false)
+      expect(false).toBe(true)
+      done()
     })
 })
 
-test.after(t => {
+afterAll(() => {
   fs.unlinkSync(srcPath)
   fs.unlinkSync(dstPath)
   execSync(removeDirCommand + '"' + srcFolder + '"')

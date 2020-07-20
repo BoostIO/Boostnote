@@ -4,11 +4,10 @@
 
 import CodeMirror from 'codemirror'
 require('codemirror/addon/search/searchcursor.js')
-const test = require('ava')
 const markdownToc = require('browser/lib/markdown-toc-generator')
 const EOL = require('os').EOL
 
-test(t => {
+test(() => {
   /**
    * Contains array of test cases in format :
    * [
@@ -261,15 +260,11 @@ this is a text
     const expectedToc = testCase[2].trim()
     const generatedToc = markdownToc.generate(inputMd)
 
-    t.is(
-      generatedToc,
-      expectedToc,
-      `generate test : ${title} , generated : ${EOL}${generatedToc}, expected : ${EOL}${expectedToc}`
-    )
+    expect(generatedToc).toBe(expectedToc)
   })
 })
 
-test(t => {
+test(() => {
   /**
    * Contains array of test cases in format :
    * [
@@ -667,10 +662,6 @@ this is a level one text
     editor.setCursor(cursor)
     markdownToc.generateInEditor(editor)
 
-    t.is(
-      expectedMd,
-      editor.getValue(),
-      `generateInEditor test : ${title} , generated : ${EOL}${editor.getValue()}, expected : ${EOL}${expectedMd}`
-    )
+    expect(expectedMd).toBe(editor.getValue())
   })
 })

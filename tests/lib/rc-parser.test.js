@@ -1,9 +1,8 @@
-const test = require('ava')
 const path = require('path')
 const { parse } = require('browser/lib/RcParser')
 
 // Unit test
-test('RcParser should return a json object', t => {
+test('RcParser should return a json object', () => {
   const validJson = {
     editor: { keyMap: 'vim', switchPreview: 'BLUR', theme: 'monokai' },
     hotkey: { toggleMain: 'Control + L' },
@@ -51,20 +50,12 @@ test('RcParser should return a json object', t => {
 
   validTestCases.forEach(validTestCase => {
     const [input, expected] = validTestCase
-    t.is(
-      parse(filePath(input)).editor.keyMap,
-      expected.editor.keyMap,
-      `Test for getTodoStatus() input: ${input} expected: ${expected.keyMap}`
-    )
+    expect(parse(filePath(input)).editor.keyMap).toBe(expected.editor.keyMap)
   })
 
   invalidTestCases.forEach(invalidTestCase => {
     const [input, expected] = invalidTestCase
-    t.is(
-      parse(filePath(input)).editor,
-      expected.editor,
-      `Test for getTodoStatus() input: ${input} expected: ${expected.editor}`
-    )
+    expect(parse(filePath(input)).editor).toBe(expected.editor)
   })
 })
 

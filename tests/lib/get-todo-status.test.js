@@ -1,8 +1,7 @@
-const test = require('ava')
 const { getTodoStatus } = require('browser/lib/getTodoStatus')
 
 // Unit test
-test('getTodoStatus should return a correct hash object', t => {
+test('getTodoStatus should return a correct hash object', () => {
   // [input, expected]
   const testCases = [
     ['', { total: 0, completed: 0 }],
@@ -40,15 +39,7 @@ test('getTodoStatus should return a correct hash object', t => {
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(
-      getTodoStatus(input).total,
-      expected.total,
-      `Test for getTodoStatus() input: ${input} expected: ${expected.total}`
-    )
-    t.is(
-      getTodoStatus(input).completed,
-      expected.completed,
-      `Test for getTodoStatus() input: ${input} expected: ${expected.completed}`
-    )
+    expect(getTodoStatus(input).total).toBe(expected.total)
+    expect(getTodoStatus(input).completed).toBe(expected.completed)
   })
 })

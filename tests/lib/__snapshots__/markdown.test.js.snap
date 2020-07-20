@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Markdown.render() should render PlantUML Ditaa correctly 1`] = `
+"<img src=\\"http://www.plantuml.com/plantuml/png/SoWkIImgISaiIKpaqjQ50cq51GLj93Q2mrMZ00NQO3cmHX3RJW4cKmDI4v9QKQ805a8nfyObCp6zA34NgCObFxiqDpMl1AIcHj4tCJqpLH5i18evG52TKbk3B8og1kmC0cvMKB1Im0NYkA2ckMRcANWabgQbvYau5YMbPfP0p4UOWmcqkHnIyrB0GG00\\" alt=\\"uml diagram\\" />
+"
+`;
+
+exports[`Markdown.render() should render PlantUML Gantt correctly 1`] = `
+"<img src=\\"http://www.plantuml.com/plantuml/svg/SoWkIImgIK_CAodXYWueoY_9BwaiI5L8IItEJC-BLSX9B2ufLZ0qLKX9h2pcYWv9BIvHA82fWaiRu906crsia5YYW6cqUh52QbuAbmEG0DiE0000\\" alt=\\"uml diagram\\" />
+"
+`;
+
+exports[`Markdown.render() should render PlantUML MindMaps correctly 1`] = `
+"<img src=\\"http://www.plantuml.com/plantuml/svg/JOzD3e8m44Rtd6BMtNW192IM5I29HEDsAbKdeLD2MvNRIsjCMCsRlFd9LpgFipV4Wy4f4o2r8kHC23Yhm3wi9A0X3XzeYNrgwx1H6wvb1KTjqtRJoYhMtexBSAqJUescwoEUq4tn3xp9Fm7XfUS5HiiFO3Gw7SjT4QUCkkKxLy2-WAvl3rkrtEclBdOCXcnMwZN7ByiN\\" alt=\\"uml diagram\\" />
+"
+`;
+
+exports[`Markdown.render() should render PlantUML Umls correctly 1`] = `
+"<img src=\\"http://www.plantuml.com/plantuml/svg/LOzD2eCm44RtESMtj0jx01V5E_G4Gvngo2_912gbTsz4LBfylCV7p5Y4ibJlbEENG2AocHV1P39hCJ6eOar8bCaZaROqyrDMnzWqXTcn8YqnGzSYqNC-q76sweoW5zOsLi57uMpHz-WESslY0jmVw1AjdaE30IPeLoVUceLTslrL3-2tS9ZA_qZRtm_vgh7PzkOF\\" alt=\\"uml diagram\\" />
+"
+`;
+
+exports[`Markdown.render() should render PlantUML WBS correctly 1`] = `
+"<img src=\\"http://www.plantuml.com/plantuml/svg/ZP2_JiD03CRtFeNdRF04fR140gdGeREv-z8plVYYimFYxSabKbaxsR9-ylTdRyxLVpvjrz5XDb6OqR6MqEPRYSXPz4BdmsdNTVJAiuP4da1JBLy8lbmxUYxZbE6Wa_CLgUI8IXymS0rf9NeL5yxKDt24EhiKfMDcRNzVO79HcX8RLdvLfZBGa_KtFx2RKcpK7TZ3dTpZfWgskMAZ9jIXr94rW4PubM1RbBZOb-6NtcS9LpgBjlj_1w9QldbPjZHxQ5pg_GC0\\" alt=\\"uml diagram\\" />
+"
+`;
+
+exports[`Markdown.render() should render footnote correctly 1`] = `
+"<p data-line=\\"1\\"><sup class=\\"footnote-ref\\"><a href=\\"#fn1\\" id=\\"fnref1\\">[1]</a></sup><br />
+hello-world: <a href=\\"https://github.com/BoostIO/Boostnote/\\">https://github.com/BoostIO/Boostnote/</a></p>
+<hr class=\\"footnotes-sep\\" />
+<section class=\\"footnotes\\">
+<ol class=\\"footnotes-list\\">
+<li id=\\"fn1\\" class=\\"footnote-item\\"><p>hello-world <a href=\\"#fnref1\\" class=\\"footnote-backref\\">↩︎</a></p>
+</li>
+</ol>
+</section>
+"
+`;
+
+exports[`Markdown.render() should render line breaks correctly 1`] = `
+"<p data-line=\\"0\\">This is the first line.<br />
+This is the second line.</p>
+"
+`;
+
+exports[`Markdown.render() should render line breaks correctly 2`] = `
+"<p data-line=\\"0\\">This is the first line.
+This is the second line.</p>
+"
+`;
+
+exports[`Markdown.render() should render shortcuts correctly 1`] = `
+"<p data-line=\\"0\\"><kbd>Ctrl</kbd></p>
+<p data-line=\\"2\\"><kbd>Ctrl</kbd></p>
+"
+`;
+
+exports[`Markdown.render() should renders [TOC] placholder correctly 1`] = `
+"<p data-line=\\"1\\"><div class=\\"markdownIt-TOC-wrapper\\"><ul class=\\"markdownIt-TOC\\">
+<li><a href=\\"#H1\\">H1</a>
+<ul>
+<li><a href=\\"#H2\\">H2</a>
+<ul>
+<li><a href=\\"#H3\\">H3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div></p>
+<h1 id=\\"H1\\" data-line=\\"2\\">H1</h1>
+<h2 id=\\"H2\\" data-line=\\"3\\">H2</h2>
+<h3 id=\\"H3\\" data-line=\\"4\\">H3</h3>
+<p data-line=\\"5\\">###$ H4</p>
+"
+`;
+
+exports[`Markdown.render() should renders KaTeX correctly 1`] = `
+"<span class=\\"katex-display\\"><span class=\\"katex\\"><span class=\\"katex-mathml\\"><math><semantics><mrow><mi>c</mi><mo>=</mo><mi>p</mi><mi>m</mi><mi>s</mi><mi>q</mi><mi>r</mi><mi>t</mi><mrow><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow></mrow><annotation encoding=\\"application/x-tex\\">c = pmsqrt{a^2 + b^2}</annotation></semantics></math></span><span class=\\"katex-html\\" aria-hidden=\\"true\\"><span class=\\"base\\"><span class=\\"strut\\" style=\\"height:0.43056em;vertical-align:0em;\\"></span><span class=\\"mord mathdefault\\">c</span><span class=\\"mspace\\" style=\\"margin-right:0.2777777777777778em;\\"></span><span class=\\"mrel\\">=</span><span class=\\"mspace\\" style=\\"margin-right:0.2777777777777778em;\\"></span></span><span class=\\"base\\"><span class=\\"strut\\" style=\\"height:1.0585479999999998em;vertical-align:-0.19444em;\\"></span><span class=\\"mord mathdefault\\">p</span><span class=\\"mord mathdefault\\">m</span><span class=\\"mord mathdefault\\">s</span><span class=\\"mord mathdefault\\" style=\\"margin-right:0.03588em;\\">q</span><span class=\\"mord mathdefault\\" style=\\"margin-right:0.02778em;\\">r</span><span class=\\"mord mathdefault\\">t</span><span class=\\"mord\\"><span class=\\"mord\\"><span class=\\"mord mathdefault\\">a</span><span class=\\"msupsub\\"><span class=\\"vlist-t\\"><span class=\\"vlist-r\\"><span class=\\"vlist\\" style=\\"height:0.8641079999999999em;\\"><span style=\\"top:-3.113em;margin-right:0.05em;\\"><span class=\\"pstrut\\" style=\\"height:2.7em;\\"></span><span class=\\"sizing reset-size6 size3 mtight\\"><span class=\\"mord mtight\\">2</span></span></span></span></span></span></span></span><span class=\\"mspace\\" style=\\"margin-right:0.2222222222222222em;\\"></span><span class=\\"mbin\\">+</span><span class=\\"mspace\\" style=\\"margin-right:0.2222222222222222em;\\"></span><span class=\\"mord\\"><span class=\\"mord mathdefault\\">b</span><span class=\\"msupsub\\"><span class=\\"vlist-t\\"><span class=\\"vlist-r\\"><span class=\\"vlist\\" style=\\"height:0.8641079999999999em;\\"><span style=\\"top:-3.113em;margin-right:0.05em;\\"><span class=\\"pstrut\\" style=\\"height:2.7em;\\"></span><span class=\\"sizing reset-size6 size3 mtight\\"><span class=\\"mord mtight\\">2</span></span></span></span></span></span></span></span></span></span></span></span></span>
+"
+`;
+
+exports[`Markdown.render() should renders abbrevations correctly 1`] = `
+"<h2 id=\\"abbr\\" data-line=\\"1\\">abbr</h2>
+<p data-line=\\"3\\">The <abbr title=\\"Hyper Text Markup Language\\">HTML</abbr> specification<br />
+is maintained by the <abbr title=\\"World Wide Web Consortium\\">W3C</abbr>.</p>
+"
+`;
+
+exports[`Markdown.render() should renders checkboxes 1`] = `
+"<ul>
+<li class=\\"taskListItem\\" data-line=\\"1\\"><input type=\\"checkbox\\" id=\\"checkbox-2\\" /> Unchecked</li>
+<li class=\\"taskListItem checked\\" data-line=\\"2\\"><input type=\\"checkbox\\" checked id=\\"checkbox-3\\" /> Checked</li>
+</ul>
+"
+`;
+
+exports[`Markdown.render() should renders codeblock correctly 1`] = `
+"<pre class=\\"code CodeMirror\\" data-line=\\"1\\">
+        <span class=\\"filename\\">filename.js</span>
+        <span class=\\"lineNumber CodeMirror-gutters\\"><span class=\\"CodeMirror-linenumber\\">2</span></span>
+        <code class=\\"js\\">var project = 'boostnote';
+</code>
+      </pre>"
+`;
+
+exports[`Markdown.render() should renders definition lists correctly 1`] = `
+"<h2 id=\\"definition-list\\" data-line=\\"1\\">definition list</h2>
+<h3 id=\\"list-1\\" data-line=\\"3\\">list 1</h3>
+<dl>
+<dt data-line=\\"5\\">Term 1</dt>
+<dd data-line=\\"6\\">Definition 1</dd>
+<dt data-line=\\"8\\">Term 2</dt>
+<dd data-line=\\"9\\">Definition 2a</dd>
+<dd data-line=\\"10\\">Definition 2b</dd>
+</dl>
+<p data-line=\\"12\\">Term 3<br />
+~</p>
+<h3 id=\\"list-2\\" data-line=\\"16\\">list 2</h3>
+<dl>
+<dt data-line=\\"18\\">Term 1</dt>
+<dd data-line=\\"20\\">
+<p data-line=\\"20\\">Definition 1</p>
+</dd>
+<dt data-line=\\"22\\">Term 2 with <em>inline markup</em></dt>
+<dd data-line=\\"24\\">
+<p data-line=\\"24\\">Definition 2</p>
+<pre><code>  { some code, part of Definition 2 }
+</code></pre>
+<p data-line=\\"28\\">Third paragraph of definition 2.</p>
+</dd>
+</dl>
+"
+`;
+
+exports[`Markdown.render() should renders markdown correctly 1`] = `
+"<h1 id=\\"Welcome-to-Boostnote\\" data-line=\\"1\\">Welcome to Boostnote!</h1>
+<h2 id=\\"Click-here-to-edit-markdown\\" data-line=\\"2\\">Click here to edit markdown 👋</h2>
+<iframe width=\\"560\\" height=\\"315\\" src=\\"https://www.youtube.com/embed/L0qNPLsvmyM\\" frameborder=\\"0\\" allowfullscreen></iframe>
+<h2 id=\\"Docs\\" data-line=\\"6\\">Docs 📝</h2>
+<ul>
+<li data-line=\\"7\\"><a href=\\"https://hackernoon.com/boostnote-boost-your-happiness-productivity-and-creativity-315034efeebe\\">Boostnote | Boost your happiness, productivity and creativity.</a></li>
+<li data-line=\\"8\\"><a href=\\"https://github.com/BoostIO/Boostnote/wiki/Cloud-Syncing-and-Backup\\">Cloud Syncing &amp; Backups</a></li>
+<li data-line=\\"9\\"><a href=\\"https://github.com/BoostIO/Boostnote/wiki/Sync-Data-Across-Desktop-and-Mobile-apps\\">How to sync your data across Desktop and Mobile apps</a></li>
+<li data-line=\\"10\\"><a href=\\"https://github.com/BoostIO/Boostnote/wiki/Evernote\\">Convert data from <strong>Evernote</strong> to Boostnote.</a></li>
+<li data-line=\\"11\\"><a href=\\"https://github.com/BoostIO/Boostnote/wiki/Keyboard-Shortcuts\\">Keyboard Shortcuts</a></li>
+<li data-line=\\"12\\"><a href=\\"https://github.com/BoostIO/Boostnote/wiki/Keymaps-in-Editor-mode\\">Keymaps in Editor mode</a></li>
+<li data-line=\\"13\\"><a href=\\"https://github.com/BoostIO/Boostnote/wiki/Syntax-Highlighting\\">How to set syntax highlight in Snippet note</a></li>
+</ul>
+<hr />
+<h2 id=\\"Article-Archive\\" data-line=\\"17\\">Article Archive 📚</h2>
+<ul>
+<li data-line=\\"18\\"><a href=\\"http://bit.ly/2mOJPu7\\">Reddit English</a></li>
+<li data-line=\\"19\\"><a href=\\"https://www.reddit.com/r/boostnote_es/\\">Reddit Spanish</a></li>
+<li data-line=\\"20\\"><a href=\\"https://www.reddit.com/r/boostnote_cn/\\">Reddit Chinese</a></li>
+<li data-line=\\"21\\"><a href=\\"https://www.reddit.com/r/boostnote_jp/\\">Reddit Japanese</a></li>
+</ul>
+<hr />
+<h2 id=\\"Community\\" data-line=\\"25\\">Community 🍻</h2>
+<ul>
+<li data-line=\\"26\\"><a href=\\"http://bit.ly/2AWWzkD\\">GitHub</a></li>
+<li data-line=\\"27\\"><a href=\\"http://bit.ly/2z8BUJZ\\">Twitter</a></li>
+<li data-line=\\"28\\"><a href=\\"http://bit.ly/2jcca8t\\">Facebook Group</a></li>
+</ul>
+"
+`;
+
+exports[`Markdown.render() should renders sub correctly 1`] = `
+"<h2 id=\\"sub\\" data-line=\\"1\\">sub</h2>
+<p data-line=\\"3\\">H<sub>2</sub>0</p>
+"
+`;
+
+exports[`Markdown.render() should renders sup correctly 1`] = `
+"<h2 id=\\"sup\\" data-line=\\"1\\">sup</h2>
+<p data-line=\\"3\\">29<sup>th</sup></p>
+"
+`;
+
+exports[`Markdown.render() should text with quotes correctly 1`] = `
+"<p data-line=\\"0\\">This is a “QUOTE”.</p>
+"
+`;
+
+exports[`Markdown.render() should text with quotes correctly 2`] = `
+"<p data-line=\\"0\\">This is a &quot;QUOTE&quot;.</p>
+"
+`;

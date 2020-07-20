@@ -1,4 +1,3 @@
-const test = require('ava')
 const { findStorage } = require('browser/lib/findStorage')
 
 global.document = require('jsdom').jsdom('<body></body>')
@@ -16,20 +15,22 @@ const sander = require('sander')
 const os = require('os')
 const storagePath = path.join(os.tmpdir(), 'test/find-storage')
 
-test.beforeEach(t => {
-  t.context.storage = TestDummy.dummyStorage(storagePath)
-  localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
+let storageContext
+
+beforeEach(() => {
+  storageContext = TestDummy.dummyStorage(storagePath)
+  localStorage.setItem('storages', JSON.stringify([storageContext.cache]))
 })
 
 // Unit test
-test('findStorage() should return a correct storage path(string)', t => {
-  const storageKey = t.context.storage.cache.key
+test('findStorage() should return a correct storage path(string)', () => {
+  const storageKey = storageContext.cache.key
 
-  t.is(findStorage(storageKey).key, storageKey)
-  t.is(findStorage(storageKey).path, storagePath)
+  expect(findStorage(storageKey).key).toBe(storageKey)
+  expect(findStorage(storageKey).path).toBe(storagePath)
 })
 
-test.after(function after() {
+afterAll(function after() {
   localStorage.clear()
   sander.rimrafSync(storagePath)
 })
