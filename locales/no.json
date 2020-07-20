@@ -160,5 +160,18 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "Importer sikkerhetskopifil",
+  "Exported config successfully": "Eksportert konfigurasjon",
+  "Export Backup File": "Eksporter sikkerhetskopifil",
+  "Select File": "Velg Fil",
+  "Import": "Importere",
+  "Export": "Eksport",
+  "Backup Config": "Backup Config",
+  "Select Folder": "Velg mappe",
+  "Please choose a directory for export file.": "Velg en katalog for eksportfil.",
+  "File is not valid JSON.": "Filen er ikke gyldig JSON.",
+  "Something went wrong. Please try again": "Noe gikk galt. Vær så snill, prøv på nytt",
+  "Export failed. Please try again": "Eksport mislyktes. Vær så snill, prøv på nytt",
+  "Backup Configuration": "Sikkerhetskopieringskonfigurasjon"
 }

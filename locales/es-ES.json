@@ -163,5 +163,18 @@
   "Snippet Default Language": "Lenguaje por defecto de los fragmentos de código",
   "Filter tags/folders...": "filter etiquetas/carpeta...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "Importar archivo de copia de seguridad",
+  "Exported config successfully": "Configuración exportada con éxito",
+  "Export Backup File": "Exportar archivo de copia de seguridad",
+  "Select File": "Seleccione Archivo",
+  "Import": "Importar",
+  "Export": "Exportar",
+  "Backup Config": "Configuración de respaldo",
+  "Select Folder": "Seleccione la carpeta",
+  "Please choose a directory for export file.": "Elija un directorio para el archivo de exportación.",
+  "File is not valid JSON.": "El archivo no es válido JSON.",
+  "Something went wrong. Please try again": "Algo salió mal. Inténtalo de nuevo",
+  "Export failed. Please try again": "Exportación fallida. Inténtalo de nuevo",
+  "Backup Configuration": "Configuración de respaldo"
 }

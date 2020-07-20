@@ -187,5 +187,17 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "นำเข้าไฟล์สำรอง",
+  "Exported config successfully": "ส่งออกการกำหนดค่าสำเร็จแล้ว",
+  "Export Backup File": "ส่งออกไฟล์สำรอง",
+  "Select File": "เลือกไฟล์",
+  "Import": "นำเข้า",
+  "Export": "ส่งออก",
+  "Backup Config": "กำหนดค่าการสำรองข้อมูล",
+  "Please choose a directory for export file.": "โปรดเลือกไดเรกทอรีสำหรับส่งออกไฟล์",
+  "File is not valid JSON.": "ไฟล์ไม่ถูกต้อง JSON",
+  "Something went wrong. Please try again": "บางอย่างผิดพลาด. กรุณาลองอีกครั้ง",
+  "Export failed. Please try again": "การส่งออกล้มเหลว กรุณาลองอีกครั้ง",
+  "Backup Configuration": "การกำหนดค่าการสำรองข้อมูล"
 }

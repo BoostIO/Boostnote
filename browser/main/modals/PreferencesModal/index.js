@@ -7,6 +7,7 @@ import InfoTab from './InfoTab'
 import Crowdfunding from './Crowdfunding'
 import StoragesTab from './StoragesTab'
 import SnippetTab from './SnippetTab'
+import BackupTab from './BackupTab'
 import PluginsTab from './PluginsTab'
 import Blog from './Blog'
 import ModalEscButton from 'browser/components/ModalEscButton'
@@ -24,7 +25,8 @@ class Preferences extends React.Component {
       currentTab: 'STORAGES',
       UIAlert: '',
       HotkeyAlert: '',
-      BlogAlert: ''
+      BlogAlert: '',
+      BackupAlert: ''
     }
   }
 
@@ -83,6 +85,13 @@ class Preferences extends React.Component {
         )
       case 'SNIPPET':
         return <SnippetTab dispatch={dispatch} config={config} data={data} />
+      case 'BACKUP':
+        return (
+          <BackupTab
+            config={config}
+            haveToSave={alert => this.setState({ BackupAlert: alert })}
+          />
+        )
       case 'PLUGINS':
         return (
           <PluginsTab
@@ -132,6 +141,11 @@ class Preferences extends React.Component {
       { target: 'CROWDFUNDING', label: i18n.__('Crowdfunding') },
       { target: 'BLOG', label: i18n.__('Blog'), Blog: this.state.BlogAlert },
       { target: 'SNIPPET', label: i18n.__('Snippets') },
+      {
+        target: 'BACKUP',
+        label: i18n.__('Backup Config'),
+        Backup: this.state.BackupAlert
+      },
       { target: 'PLUGINS', label: i18n.__('Plugins') }
     ]
 

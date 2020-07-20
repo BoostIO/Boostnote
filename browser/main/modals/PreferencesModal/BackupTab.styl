@@ -1,0 +1,106 @@
+@import('./ConfigTab')
+
+.backup
+  margin-bottom 15px
+
+.backup-header
+  font-size 24px
+  color $ui-text-color
+  padding 5px
+  border-bottom $default-border
+  margin-bottom 15px
+
+.backup-body-section
+  margin-bottom 15px
+  display flex
+  line-height 30px
+
+.backup-body-section-label
+  width 150px
+  margin-right 60px
+  margin-top 5px
+
+.backup-body-section-name
+  flex 1
+.backup-body-section-name-input
+  height 30px
+  vertical-align middle
+  width 150px
+  font-size 12px
+  border solid 1px $border-color
+  border-radius 2px
+  padding 0 5px
+
+.backup-body-section-path
+  flex 1
+  margin-right 10px
+.backup-body-section-path-input
+  height 30px
+  vertical-align middle
+  width 150px
+  font-size 12px
+  border-style solid
+  border-width 1px 0 1px 1px
+  border-color $border-color
+  border-top-left-radius 2px
+  border-bottom-left-radius 2px
+  padding 0 5px
+  margin-top 4px
+.backup-body-section-path-button
+  margin-top 4px
+  height 30px
+  border none
+  border-top-right-radius 2px
+  border-bottom-right-radius 2px
+  colorPrimaryButton()
+  vertical-align middle
+.backup-body-control
+  border-top $default-border
+  padding-top 10px
+  box-sizing border-box
+  height 40px
+  text-align right
+
+.backup-button-control
+  position relative
+
+.backup-submit-leftButton
+  border none
+  border-radius 2px
+  font-size $tab--button-font-size
+  height $tab--button-height
+  padding 0 15px
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .root
+      padding 15px
+      color get-theme-var(theme, 'text-color')
+
+    .backup-header
+      color get-theme-var(theme, 'text-color')
+      border-color get-theme-var(theme, 'borderColor')
+
+    .backup-body-section-name-input
+      border-color get-theme-var(theme, 'borderColor')
+
+    .backup-body-section-path-button
+      colorPrimaryButton()
+        
+    .backup-body-control
+      border-color get-theme-var(theme, 'borderColor')
+
+    .backup-button-control
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      border-color get-theme-var(theme, 'borderColor')
+
+    .backup-submit-leftButton
+      background-color get-theme-var(theme, 'button-backgroundColor')
+      color get-theme-var(theme, 'text-color')
+      
+
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

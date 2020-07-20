@@ -246,5 +246,17 @@
   "Enable MarkdownLint": "启用 MarkdownLint",
   "When scrolling, synchronize preview with editor": "滚动编辑页时同步滚动预览页",
   "This will delete all notes in the folder and can not be undone.": "即将删除文件夹中所有笔记，并且不能撤销。",
-  "Always Ask": "每次询问"
+  "Always Ask": "每次询问",
+  "Import Backup File": "导入备份文件",
+  "Exported config successfully": "导出配置成功",
+  "Export Backup File": "导出备份文件",
+  "Select File": "选择文件",
+  "Import": "进口",
+  "Export": "出口",
+  "Backup Config": "备份配置",
+  "Please choose a directory for export file.": "请选择导出文件的目录。",
+  "File is not valid JSON.": "文件不是有效的JSON。",
+  "Something went wrong. Please try again": "出问题了。 请再试一遍",
+  "Export failed. Please try again": "导出失败。 请再试一遍",
+  "Backup Configuration": "备份配置"
 }

@@ -168,5 +168,18 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "백업 파일 가져 오기",
+  "Exported config successfully": "구성을 성공적으로 내보냈습니다.",
+  "Export Backup File": "백업 파일 내보내기",
+  "Select File": "파일 선택",
+  "Import": "수입",
+  "Export": "수출",
+  "Backup Config": "백업 구성",
+  "Select Folder": "폴더 선택",
+  "Please choose a directory for export file.": "내보내기 파일의 디렉토리를 선택하십시오.",
+  "File is not valid JSON.": "파일이 유효한 JSON이 아닙니다.",
+  "Something went wrong. Please try again": "문제가 발생했습니다. 다시 시도하십시오",
+  "Export failed. Please try again": "내보내기에 실패했습니다. 다시 시도하십시오",
+  "Backup Configuration": "백업 구성"
 }

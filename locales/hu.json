@@ -185,5 +185,17 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "Biztonsági mentési fájl importálása",
+  "Exported config successfully": "A konfiguráció sikeresen exportált",
+  "Export Backup File": "Biztonsági mentési fájl exportálása",
+  "Select File": "Válaszd ki a fájlt",
+  "Import": "import",
+  "Export": "Export",
+  "Backup Config": "Biztonsági mentés konfigur",
+  "Please choose a directory for export file.": "Válasszon egy könyvtárat az export fájlhoz.",
+  "File is not valid JSON.": "A fájl érvénytelen JSON.",
+  "Something went wrong. Please try again": "Valami elromlott. Kérlek próbáld újra",
+  "Export failed. Please try again": "Az exportálás sikertelen. Kérlek próbáld újra",
+  "Backup Configuration": "Biztonsági mentés konfigurálása"
 }

@@ -177,5 +177,18 @@
   "New notes are tagged with the filtering tags": "Les nouvelles notes sont taggées avec les tags de filtrage",
   "Filter tags/folders...": "filtrage tags/dossier...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Import Backup File": "Importer un fichier de sauvegarde",
+  "Exported config successfully": "La configuration a été exportée avec succès",
+  "Export Backup File": "Exporter le fichier de sauvegarde",
+  "Select File": "Choisir le dossier",
+  "Import": "Importation",
+  "Export": "Exportation",
+  "Backup Config": "Configuration de sauvegarde",
+  "Select Folder": "Sélectionner le dossier",
+  "Please choose a directory for export file.": "Veuillez choisir un répertoire pour exporter le fichier.",
+  "File is not valid JSON.": "Le fichier n'est pas JSON valide.",
+  "Something went wrong. Please try again": "Quelque chose a mal tourné. Veuillez réessayer",
+  "Export failed. Please try again": "L'exportation a échoué. Veuillez réessayer",
+  "Backup Configuration": "Configuration de sauvegarde"
 }
