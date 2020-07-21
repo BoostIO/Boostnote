@@ -246,5 +246,6 @@
   "Enable MarkdownLint": "启用 MarkdownLint",
   "When scrolling, synchronize preview with editor": "滚动编辑页时同步滚动预览页",
   "This will delete all notes in the folder and can not be undone.": "即将删除文件夹中所有笔记，并且不能撤销。",
-  "Always Ask": "每次询问"
+  "Always Ask": "每次询问",
+  "Open in new window": "Open in new window"
 }

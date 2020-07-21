@@ -193,5 +193,6 @@
   "Filter tags/folders...": "過濾標籤/資料夾...",
   "Enable HTML label in mermaid flowcharts": "在 mermaid 流程圖中啟用 HTML 標籤 ⚠ 本選項有潛在的 XSS 安全風險。",
   "Wrap line in Snippet Note": "Snippet Note 行尾換行",
-  "Enable Auto Update": "Enable Auto Update"
+  "Enable Auto Update": "Enable Auto Update",
+  "Open in new window": "Open in new window"
 }

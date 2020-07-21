@@ -34,6 +34,7 @@ import { replace } from 'connected-react-router'
 
 const electron = require('electron')
 const { remote } = electron
+const { ipcRenderer } = electron
 const { dialog } = remote
 
 class SnippetNoteDetail extends React.Component {
@@ -61,6 +62,16 @@ class SnippetNoteDetail extends React.Component {
 
     this.scrollToNextTabThreshold = 0.7
     this.generateToc = () => this.handleGenerateToc()
+
+    const { showFullScreen } = this.props.data
+
+    if (showFullScreen !== false) {
+      // Main window, check for updates from children
+      ipcRenderer.on('update-note-state', (_, noteData) => {
+        const { note } = this.state
+        if (noteData.key === note.key) this.setState({ note: noteData })
+      })
+    }
   }
 
   componentDidMount() {
@@ -162,6 +173,11 @@ class SnippetNoteDetail extends React.Component {
         type: 'UPDATE_NOTE',
         note: note
       })
+      const { showFullScreen } = this.props.data
+      if (showFullScreen === false) {
+        // Window is not main window, send update event to main window
+        ipcRenderer.send('update-note-state', note)
+      }
       AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
     })
   }
@@ -796,6 +812,12 @@ class SnippetNoteDetail extends React.Component {
     const storageKey = note.storage
     const folderKey = note.folder
 
+    let renderFullScreenButton = true
+    const { showFullScreen } = this.props.data
+    if (showFullScreen === false) {
+      renderFullScreenButton = false
+    }
+
     const autoDetect = config.editor.snippetDefaultLanguage === 'Auto Detect'
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
@@ -960,7 +982,9 @@ class SnippetNoteDetail extends React.Component {
             isActive={note.isStarred}
           />
 
-          <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
+          {renderFullScreenButton ? (
+            <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
+          ) : null}
 
           <TrashButton onClick={e => this.handleTrashButtonClick(e)} />
 

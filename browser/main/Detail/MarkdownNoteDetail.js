@@ -32,6 +32,7 @@ import { confirmDeleteNote } from 'browser/lib/confirmDeleteNote'
 import markdownToc from 'browser/lib/markdown-toc-generator'
 import queryString from 'query-string'
 import { replace } from 'connected-react-router'
+import { ipcRenderer } from 'electron'
 import ToggleDirectionButton from 'browser/main/Detail/ToggleDirectionButton'
 
 class MarkdownNoteDetail extends React.Component {
@@ -58,6 +59,15 @@ class MarkdownNoteDetail extends React.Component {
     this.dispatchTimer = null
 
     this.toggleLockButton = this.handleToggleLockButton.bind(this)
+    const { showFullScreen } = this.props.data
+
+    if (showFullScreen !== false) {
+      // Main window, check for updates from children
+      ipcRenderer.on('update-note-state', (_, noteData) => {
+        const { note } = this.state
+        if (noteData.key === note.key) this.setState({ note: noteData })
+      })
+    }
     this.generateToc = this.handleGenerateToc.bind(this)
     this.handleUpdateContent = this.handleUpdateContent.bind(this)
     this.handleSwitchStackDirection = this.handleSwitchStackDirection.bind(this)
@@ -165,6 +175,11 @@ class MarkdownNoteDetail extends React.Component {
         type: 'UPDATE_NOTE',
         note: note
       })
+      const { showFullScreen } = this.props.data
+      if (showFullScreen === false) {
+        // Window is not main window, send update event to main window
+        ipcRenderer.send('update-note-state', note)
+      }
       AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
     })
   }
@@ -485,6 +500,12 @@ class MarkdownNoteDetail extends React.Component {
     const storageKey = note.storage
     const folderKey = note.folder
 
+    let renderFullScreenButton = true
+    const { showFullScreen } = this.props.data
+    if (showFullScreen === false) {
+      renderFullScreenButton = false
+    }
+
     const options = []
     data.storageMap.forEach((storage, index) => {
       storage.folders.forEach(folder => {
@@ -593,7 +614,9 @@ class MarkdownNoteDetail extends React.Component {
             return this.state.isLockButtonShown ? lockButtonComponent : ''
           })()}
 
-          <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
+          {renderFullScreenButton ? (
+            <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
+          ) : null}
 
           <TrashButton onClick={e => this.handleTrashButtonClick(e)} />
 

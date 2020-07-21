@@ -185,5 +185,6 @@
   "Auto Detect": "Auto Detect",
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
-  "Wrap line in Snippet Note": "Wrap line in Snippet Note"
+  "Wrap line in Snippet Note": "Wrap line in Snippet Note",
+  "Open in new window": "Megnyitás új ablakban"
 }
