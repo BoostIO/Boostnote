@@ -23,6 +23,7 @@ import RestoreButton from './RestoreButton'
 import PermanentDeleteButton from './PermanentDeleteButton'
 import InfoButton from './InfoButton'
 import ToggleModeButton from './ToggleModeButton'
+import MultipleSelectionDialog from './MultipleSelectionDialog'
 import InfoPanel from './InfoPanel'
 import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
@@ -622,6 +623,8 @@ class MarkdownNoteDetail extends React.Component {
             type={note.type}
             print={this.print}
           />
+
+          <MultipleSelectionDialog />
         </div>
       </div>
     )

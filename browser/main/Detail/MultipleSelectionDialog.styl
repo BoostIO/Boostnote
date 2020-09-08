@@ -1,0 +1,41 @@
+.multipleSelectionDialog
+  position absolute
+  top 50vh
+  left 50%
+  transform translate(-50%, -50%)
+  color $ui-text-color
+  background-color $ui-noteList-backgroundColor
+  padding 1em
+
+  box-shadow 2px 12px 15px 2px rgba(0, 0, 0, 0.1), 2px 1px 50px 2px rgba(0, 0, 0, 0.1)
+  .row
+    display flex
+    justify-content space-between
+    .button-box
+      display flex
+      border-radius 5px
+      button
+        color $ui-text-color
+        border none
+
+        font-size 24px
+        padding 0.5em
+        img
+          height 1em
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .multipleSelectionDialog
+      color get-theme-var(theme, 'text-color')
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
+      .row
+        .button-box
+          button
+            color get-theme-var(theme, 'text-color')
+            background-color get-theme-var(theme, 'noteList-backgroundColor')
+
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)
