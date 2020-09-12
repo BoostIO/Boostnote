@@ -63,7 +63,7 @@ export default class CodeEditor extends React.Component {
     this.focusHandler = () => {
       ipcRenderer.send('editor:focused', true)
     }
-    const debouncedDeletionOfAttachments = _.debounce(
+    this.debouncedDeletionOfAttachments = _.debounce(
       attachmentManagement.deleteAttachmentsNotPresentInNote,
       30000
     )
@@ -80,7 +80,7 @@ export default class CodeEditor extends React.Component {
       this.props.onBlur != null && this.props.onBlur(e)
       const { storageKey, noteKey } = this.props
       if (this.props.deleteUnusedAttachments === true) {
-        debouncedDeletionOfAttachments(
+        this.debouncedDeletionOfAttachments(
           this.editor.getValue(),
           storageKey,
           noteKey
@@ -810,6 +810,8 @@ export default class CodeEditor extends React.Component {
   }
 
   handleChange(editor, changeObject) {
+    this.debouncedDeletionOfAttachments.cancel()
+
     spellcheck.handleChange(editor, changeObject)
 
     // The current note contains an toc. We'll check for changes on headlines.
