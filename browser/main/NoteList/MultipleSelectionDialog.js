@@ -7,22 +7,19 @@ import i18n from 'browser/lib/i18n'
  * Dialog shown when multiple notes are selected
  */
 class MultipleSelectionDialog extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      nSelectedNotes: 7
-    }
-  }
+  // constructor(props) {
+  //   super(props)
+  // }
   render() {
     return (
       <div
         className='multipleSelectionDialog'
         styleName='multipleSelectionDialog'
         style={{
-          display: this.state.nSelectedNotes > 1 ? 'block' : 'none'
+          display: this.props.nSelectedNotes > 1 ? 'block' : 'none'
         }}
       >
-        <div className='row'>{`${this.state.nSelectedNotes} ${i18n.__(
+        <div className='row'>{`${this.props.nSelectedNotes} ${i18n.__(
           'notes selected'
         )}`}</div>
         <div styleName='row'>

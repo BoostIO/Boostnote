@@ -1392,7 +1392,7 @@ class NoteList extends React.Component {
         >
           {noteList}
         </div>
-        <MultipleSelectionDialog />
+        <MultipleSelectionDialog nSelectedNotes={selectedNoteKeys.length} />
       </div>
     )
   }
