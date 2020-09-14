@@ -9,6 +9,7 @@ import ee from 'browser/main/lib/eventEmitter'
 import dataApi from 'browser/main/lib/dataApi'
 import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import ConfigManager from 'browser/main/lib/ConfigManager'
+import MultipleSelectionDialog from './MultipleSelectionDialog'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
 import searchFromNotes from 'browser/lib/search'
@@ -1391,6 +1392,7 @@ class NoteList extends React.Component {
         >
           {noteList}
         </div>
+        <MultipleSelectionDialog />
       </div>
     )
   }
