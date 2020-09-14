@@ -10,8 +10,7 @@ class MultipleSelectionDialog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      nSelectedNotes: 7,
-      isVisible: true // change to false
+      nSelectedNotes: 7
     }
   }
   render() {
@@ -20,7 +19,7 @@ class MultipleSelectionDialog extends React.Component {
         className='multipleSelectionDialog'
         styleName='multipleSelectionDialog'
         style={{
-          display: this.state.isVisible ? 'block' : 'none'
+          display: this.state.nSelectedNotes > 1 ? 'block' : 'none'
         }}
       >
         <div className='row'>{`${this.state.nSelectedNotes} ${i18n.__(
