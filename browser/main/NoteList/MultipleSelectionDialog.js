@@ -26,30 +26,44 @@ class MultipleSelectionDialog extends React.Component {
           <div styleName='button-box'>
             <button onClick={this.props.onStarred}>
               <img src='../resources/icon/icon-starred.svg' />
+              <span styleName='tooltip'>{i18n.__('Star')}</span>
             </button>
             <button onClick={this.props.onUnStarred}>
               <img src='../resources/icon/icon-star.svg' />
+              <span styleName='tooltip'>{i18n.__('Un-star')}</span>
             </button>
           </div>
           <div styleName='button-box'>
             <button onClick={this.props.onPined}>
               <i className='fa fa-thumb-tack' />
+              <span styleName='tooltip'>{i18n.__('Pin')}</span>
             </button>
-            <button onClick={this.props.onUnPined}>Un-pin</button>
+            <button onClick={this.props.onUnPined}>
+              Un-pin
+              <span styleName='tooltip'>{i18n.__('Un-pin')}</span>
+            </button>
           </div>
         </div>
         <div styleName='row'>
           <div styleName='button-box'>
             <button>
               <img src='../resources/icon/icon-trash.svg' />
+              <span styleName='tooltip'>{i18n.__('Trash')}</span>
             </button>
-            <button>Permanent Delete</button>
+            <button>
+              <img src='../resources/icon/icon-trash.svg' />
+              <span styleName='tooltip'>{i18n.__('Permanently Delete')}</span>
+            </button>
           </div>
           <div styleName='button-box'>
             <button>
               <img src='../resources/icon/icon-external.svg' />
+              <span styleName='tooltip'>{i18n.__('Export')}</span>
             </button>
-            <button>Publish</button>
+            <button>
+              Publish
+              <span styleName='tooltip'>{i18n.__('Publish')}</span>
+            </button>
           </div>
         </div>
       </div>
