@@ -48,7 +48,7 @@ class MultipleSelectionDialog extends React.Component {
               <img src='../resources/icon/icon-trash.svg' />
               <span styleName='tooltip'>{i18n.__('Trash')}</span>
             </button>
-            <button>
+            <button onClick={this.props.onDeleted}>
               <img src='../resources/icon/icon-permanent-delete.svg' />
               <span styleName='tooltip'>{i18n.__('Permanently Delete')}</span>
             </button>

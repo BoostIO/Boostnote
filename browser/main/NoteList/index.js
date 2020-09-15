@@ -98,9 +98,10 @@ class NoteList extends React.Component {
     this.togglePinToTop = this.togglePinToTop.bind(this) // pin if unpined, unpin if pinned
     this.pinToTop = this.pinToTop.bind(this) // pin all selected
     this.unPin = this.unPin.bind(this) // unpin all selected
-    this.star = this.star.bind(this) // pin all selected
-    this.unStar = this.unStar.bind(this) // unpin all selected
+    this.star = this.star.bind(this)
+    this.unStar = this.unStar.bind(this)
     this.trash = this.trash.bind(this)
+    this.permanentlyDelete = this.permanentlyDelete.bind(this)
     this.getNoteStorage = this.getNoteStorage.bind(this)
     this.getNoteFolder = this.getNoteFolder.bind(this)
     this.getViewType = this.getViewType.bind(this)
@@ -855,12 +856,70 @@ class NoteList extends React.Component {
   }
 
   trash() {
+    const { dispatch } = this.props
+    const { selectedNoteKeys } = this.state
+    const notes = this.notes.map(note => Object.assign({}, note))
+    const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
+    const firstNote = selectedNotes[0]
     const { confirmDeletion } = this.props.config.ui
+
+    if (!confirmDeleteNote(confirmDeletion, false)) return
+
+    Promise.all(
+      selectedNotes.map(note => {
+        note.isTrashed = true
+
+        return dataApi.updateNote(note.storage, note.key, note)
+      })
+    )
+      .then(newNotes => {
+        newNotes.forEach(newNote => {
+          dispatch({
+            type: 'UPDATE_NOTE',
+            note: newNote
+          })
+        })
+        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
+      })
+      .then(() => ee.emit('list:next'))
+      .catch(err => {
+        console.error('Notes could not go to trash: ' + err)
+      })
+    this.setState({ selectedNoteKeys: [] })
+  }
+
+  permanentlyDelete() {
+    const { dispatch } = this.props
+    const { selectedNoteKeys } = this.state
+    const notes = this.notes.map(note => Object.assign({}, note))
+    const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
+    const firstNote = selectedNotes[0]
+    const { confirmDeletion } = this.props.config.ui
+
     if (!confirmDeleteNote(confirmDeletion, true)) return
-    this.updateSelectedNotes(note => {
-      note.isTrashed = true
-      return note
-    })
+
+    Promise.all(
+      selectedNotes.map(note => {
+        return dataApi.deleteNote(note.storage, note.key)
+      })
+    )
+      .then(data => {
+        const dispatchHandler = () => {
+          data.forEach(item => {
+            dispatch({
+              type: 'DELETE_NOTE',
+              storageKey: item.storageKey,
+              noteKey: item.noteKey
+            })
+          })
+        }
+        ee.once('list:next', dispatchHandler)
+      })
+      .then(() => ee.emit('list:next'))
+      .catch(err => {
+        console.error('Cannot Delete note: ' + err)
+      })
+    this.setState({ selectedNoteKeys: [] })
   }
 
   restoreNote() {
@@ -871,62 +930,16 @@ class NoteList extends React.Component {
   }
 
   deleteNote() {
-    const { dispatch } = this.props
     const { selectedNoteKeys } = this.state
     const notes = this.notes.map(note => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
     const firstNote = selectedNotes[0]
-    const { confirmDeletion } = this.props.config.ui
 
     if (firstNote.isTrashed) {
-      if (!confirmDeleteNote(confirmDeletion, true)) return
-
-      Promise.all(
-        selectedNotes.map(note => {
-          return dataApi.deleteNote(note.storage, note.key)
-        })
-      )
-        .then(data => {
-          const dispatchHandler = () => {
-            data.forEach(item => {
-              dispatch({
-                type: 'DELETE_NOTE',
-                storageKey: item.storageKey,
-                noteKey: item.noteKey
-              })
-            })
-          }
-          ee.once('list:next', dispatchHandler)
-        })
-        .then(() => ee.emit('list:next'))
-        .catch(err => {
-          console.error('Cannot Delete note: ' + err)
-        })
+      this.permanentlyDelete()
     } else {
-      if (!confirmDeleteNote(confirmDeletion, false)) return
-
-      Promise.all(
-        selectedNotes.map(note => {
-          note.isTrashed = true
-
-          return dataApi.updateNote(note.storage, note.key, note)
-        })
-      )
-        .then(newNotes => {
-          newNotes.forEach(newNote => {
-            dispatch({
-              type: 'UPDATE_NOTE',
-              note: newNote
-            })
-          })
-          AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
-        })
-        .then(() => ee.emit('list:next'))
-        .catch(err => {
-          console.error('Notes could not go to trash: ' + err)
-        })
+      this.trash()
     }
-    this.setState({ selectedNoteKeys: [] })
   }
 
   cloneNote() {
@@ -1441,6 +1454,7 @@ class NoteList extends React.Component {
           onStarred={this.star}
           onUnStarred={this.unStar}
           onTrashed={this.trash}
+          onDeleted={this.permanentlyDelete}
         />
       </div>
     )
