@@ -19,9 +19,7 @@ class MultipleSelectionDialog extends React.Component {
           display: this.props.nSelectedNotes > 1 ? 'block' : 'none'
         }}
       >
-        <div className='row'>{`${this.props.nSelectedNotes} ${i18n.__(
-          'notes selected'
-        )}`}</div>
+        <h3>{`${this.props.nSelectedNotes} ${i18n.__('notes selected')}`}</h3>
         <div styleName='row'>
           <div styleName='button-box'>
             <button onClick={this.props.onStarred}>
@@ -46,7 +44,7 @@ class MultipleSelectionDialog extends React.Component {
         </div>
         <div styleName='row'>
           <div styleName='button-box'>
-            <button>
+            <button onClick={this.props.onTrashed}>
               <img src='../resources/icon/icon-trash.svg' />
               <span styleName='tooltip'>{i18n.__('Trash')}</span>
             </button>

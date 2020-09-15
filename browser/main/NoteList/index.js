@@ -100,6 +100,7 @@ class NoteList extends React.Component {
     this.unPin = this.unPin.bind(this) // unpin all selected
     this.star = this.star.bind(this) // pin all selected
     this.unStar = this.unStar.bind(this) // unpin all selected
+    this.trash = this.trash.bind(this)
     this.getNoteStorage = this.getNoteStorage.bind(this)
     this.getNoteFolder = this.getNoteFolder.bind(this)
     this.getViewType = this.getViewType.bind(this)
@@ -853,6 +854,15 @@ class NoteList extends React.Component {
     })
   }
 
+  trash() {
+    const { confirmDeletion } = this.props.config.ui
+    if (!confirmDeleteNote(confirmDeletion, true)) return
+    this.updateSelectedNotes(note => {
+      note.isTrashed = true
+      return note
+    })
+  }
+
   restoreNote() {
     this.updateSelectedNotes(note => {
       note.isTrashed = false
@@ -1430,6 +1440,7 @@ class NoteList extends React.Component {
           onUnPined={this.unPin}
           onStarred={this.star}
           onUnStarred={this.unStar}
+          onTrashed={this.trash}
         />
       </div>
     )
