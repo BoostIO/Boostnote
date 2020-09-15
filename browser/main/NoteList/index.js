@@ -97,7 +97,9 @@ class NoteList extends React.Component {
     this.focusNote = this.focusNote.bind(this)
     this.togglePinToTop = this.togglePinToTop.bind(this) // pin if unpined, unpin if pinned
     this.pinToTop = this.pinToTop.bind(this) // pin all selected
-    this.unpin = this.unpin.bind(this) // unpin all selected
+    this.unPin = this.unPin.bind(this) // unpin all selected
+    this.star = this.star.bind(this) // pin all selected
+    this.unStar = this.unStar.bind(this) // unpin all selected
     this.getNoteStorage = this.getNoteStorage.bind(this)
     this.getNoteFolder = this.getNoteFolder.bind(this)
     this.getViewType = this.getViewType.bind(this)
@@ -830,9 +832,23 @@ class NoteList extends React.Component {
     })
   }
 
-  unpin() {
+  unPin() {
     this.updateSelectedNotes(note => {
       note.isPinned = false
+      return note
+    })
+  }
+
+  star() {
+    this.updateSelectedNotes(note => {
+      note.isStarred = true
+      return note
+    })
+  }
+
+  unStar() {
+    this.updateSelectedNotes(note => {
+      note.isStarred = false
       return note
     })
   }
@@ -1411,7 +1427,9 @@ class NoteList extends React.Component {
         <MultipleSelectionDialog
           nSelectedNotes={selectedNoteKeys.length}
           onPined={this.pinToTop}
-          onUnpined={this.unpin}
+          onUnPined={this.unPin}
+          onStarred={this.star}
+          onUnStarred={this.unStar}
         />
       </div>
     )

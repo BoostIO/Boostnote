@@ -24,10 +24,10 @@ class MultipleSelectionDialog extends React.Component {
         )}`}</div>
         <div styleName='row'>
           <div styleName='button-box'>
-            <button>
+            <button onClick={this.props.onStarred}>
               <img src='../resources/icon/icon-starred.svg' />
             </button>
-            <button>
+            <button onClick={this.props.onUnStarred}>
               <img src='../resources/icon/icon-star.svg' />
             </button>
           </div>
@@ -35,7 +35,7 @@ class MultipleSelectionDialog extends React.Component {
             <button onClick={this.props.onPined}>
               <i className='fa fa-thumb-tack' />
             </button>
-            <button onClick={this.props.onUnpined}>Un-pin</button>
+            <button onClick={this.props.onUnPined}>Un-pin</button>
           </div>
         </div>
         <div styleName='row'>
