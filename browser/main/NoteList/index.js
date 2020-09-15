@@ -1449,12 +1449,12 @@ class NoteList extends React.Component {
         </div>
         <MultipleSelectionDialog
           nSelectedNotes={selectedNoteKeys.length}
-          onPined={this.pinToTop}
-          onUnPined={this.unPin}
-          onStarred={this.star}
-          onUnStarred={this.unStar}
-          onTrashed={this.trash}
-          onDeleted={this.permanentlyDelete}
+          onPin={this.pinToTop}
+          onUnPin={this.unPin}
+          onStar={this.star}
+          onUnStar={this.unStar}
+          onTrash={this.trash}
+          onDelete={this.permanentlyDelete}
         />
       </div>
     )

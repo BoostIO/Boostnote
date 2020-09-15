@@ -22,21 +22,21 @@ class MultipleSelectionDialog extends React.Component {
         <h3>{`${this.props.nSelectedNotes} ${i18n.__('notes selected')}`}</h3>
         <div styleName='row'>
           <div styleName='button-box'>
-            <button onClick={this.props.onStarred}>
+            <button onClick={this.props.onStar}>
               <img src='../resources/icon/icon-starred.svg' />
               <span styleName='tooltip'>{i18n.__('Star')}</span>
             </button>
-            <button onClick={this.props.onUnStarred}>
+            <button onClick={this.props.onUnStar}>
               <img src='../resources/icon/icon-star.svg' />
               <span styleName='tooltip'>{i18n.__('Un-star')}</span>
             </button>
           </div>
           <div styleName='button-box'>
-            <button onClick={this.props.onPined}>
+            <button onClick={this.props.onPin}>
               <i className='fa fa-thumb-tack' />
               <span styleName='tooltip'>{i18n.__('Pin')}</span>
             </button>
-            <button onClick={this.props.onUnPined}>
+            <button onClick={this.props.onUnPin}>
               Un-pin
               <span styleName='tooltip'>{i18n.__('Un-pin')}</span>
             </button>
@@ -44,11 +44,11 @@ class MultipleSelectionDialog extends React.Component {
         </div>
         <div styleName='row'>
           <div styleName='button-box'>
-            <button onClick={this.props.onTrashed}>
+            <button onClick={this.props.onTrash}>
               <img src='../resources/icon/icon-trash.svg' />
               <span styleName='tooltip'>{i18n.__('Trash')}</span>
             </button>
-            <button onClick={this.props.onDeleted}>
+            <button onClick={this.props.onDelete}>
               <img src='../resources/icon/icon-permanent-delete.svg' />
               <span styleName='tooltip'>{i18n.__('Permanently Delete')}</span>
             </button>
