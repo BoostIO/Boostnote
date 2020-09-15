@@ -32,10 +32,10 @@ class MultipleSelectionDialog extends React.Component {
             </button>
           </div>
           <div styleName='button-box'>
-            <button>
+            <button onClick={this.props.onPined}>
               <i className='fa fa-thumb-tack' />
             </button>
-            <button>Un-pin</button>
+            <button onClick={this.props.onUnpined}>Un-pin</button>
           </div>
         </div>
         <div styleName='row'>

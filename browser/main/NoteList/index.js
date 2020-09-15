@@ -95,7 +95,9 @@ class NoteList extends React.Component {
     this.cloneNote = this.cloneNote.bind(this)
     this.deleteNote = this.deleteNote.bind(this)
     this.focusNote = this.focusNote.bind(this)
-    this.pinToTop = this.pinToTop.bind(this)
+    this.togglePinToTop = this.togglePinToTop.bind(this) // pin if unpined, unpin if pinned
+    this.pinToTop = this.pinToTop.bind(this) // pin all selected
+    this.unpin = this.unpin.bind(this) // unpin all selected
     this.getNoteStorage = this.getNoteStorage.bind(this)
     this.getNoteFolder = this.getNoteFolder.bind(this)
     this.getViewType = this.getViewType.bind(this)
@@ -706,7 +708,7 @@ class NoteList extends React.Component {
       if (!location.pathname.match(/\/starred/)) {
         templates.push({
           label: pinLabel,
-          click: this.pinToTop
+          click: this.togglePinToTop
         })
       }
       templates.push(
@@ -814,9 +816,23 @@ class NoteList extends React.Component {
     }
   }
 
-  pinToTop() {
+  togglePinToTop() {
     this.updateSelectedNotes(note => {
       note.isPinned = !note.isPinned
+      return note
+    })
+  }
+
+  pinToTop() {
+    this.updateSelectedNotes(note => {
+      note.isPinned = true
+      return note
+    })
+  }
+
+  unpin() {
+    this.updateSelectedNotes(note => {
+      note.isPinned = false
       return note
     })
   }
@@ -1392,7 +1408,11 @@ class NoteList extends React.Component {
         >
           {noteList}
         </div>
-        <MultipleSelectionDialog nSelectedNotes={selectedNoteKeys.length} />
+        <MultipleSelectionDialog
+          nSelectedNotes={selectedNoteKeys.length}
+          onPined={this.pinToTop}
+          onUnpined={this.unpin}
+        />
       </div>
     )
   }
