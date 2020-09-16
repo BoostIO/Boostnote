@@ -73,7 +73,7 @@ class MultipleSelectionDialog extends React.Component {
           </div>
           <div styleName='button-box'>
             <button>
-              Publish
+              <img src='../resources/icon/icon-external.svg' />
               <span styleName='tooltip'>{i18n.__('Publish')}</span>
             </button>
           </div>
