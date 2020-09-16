@@ -83,4 +83,14 @@ class MultipleSelectionDialog extends React.Component {
   }
 }
 
+MultipleSelectionDialog.propTypes = {
+  nSelectedNotes: PropTypes.number.isRequired,
+  onStar: PropTypes.func.isRequired,
+  onUnStar: PropTypes.func.isRequired,
+  onPin: PropTypes.func.isRequired,
+  onUnPin: PropTypes.func.isRequired,
+  onTrash: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
+}
+
 export default CSSModules(MultipleSelectionDialog, styles)
