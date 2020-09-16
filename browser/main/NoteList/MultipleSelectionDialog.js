@@ -33,11 +33,11 @@ class MultipleSelectionDialog extends React.Component {
           </div>
           <div styleName='button-box'>
             <button onClick={this.props.onPin}>
-              <i className='fa fa-thumb-tack' />
+              <img src='../resources/icon/icon-pin.svg' />
               <span styleName='tooltip'>{i18n.__('Pin')}</span>
             </button>
             <button onClick={this.props.onUnPin}>
-              Un-pin
+              <img src='../resources/icon/icon-unpin.svg' />
               <span styleName='tooltip'>{i18n.__('Un-pin')}</span>
             </button>
           </div>
