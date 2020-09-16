@@ -55,9 +55,23 @@ class MultipleSelectionDialog extends React.Component {
           </div>
           <div styleName='button-box'>
             <button>
-              <img src='../resources/icon/icon-external.svg' />
-              <span styleName='tooltip'>{i18n.__('Export')}</span>
+              <i className='fa fa-file-code-o' />
+              <span styleName='tooltip'>{i18n.__('Export as .md')}</span>
             </button>
+            <button>
+              <i className='fa fa-file-text-o' />
+              <span styleName='tooltip'>{i18n.__('Export as .txt')}</span>
+            </button>
+            <button>
+              <i className='fa fa-html5' />
+              <span styleName='tooltip'>{i18n.__('Export as .html')}</span>
+            </button>
+            <button>
+              <i className='fa fa-file-pdf-o' />
+              <span styleName='tooltip'>{i18n.__('Export as .pdf')}</span>
+            </button>
+          </div>
+          <div styleName='button-box'>
             <button>
               Publish
               <span styleName='tooltip'>{i18n.__('Publish')}</span>
