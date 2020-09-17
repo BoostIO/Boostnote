@@ -952,7 +952,6 @@ class NoteList extends React.Component {
     const { selectedNoteKeys } = this.state
     const notes = this.notes.map(note => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
-    const firstNote = selectedNotes[0]
     const { confirmDeletion } = this.props.config.ui
 
     if (!confirmDeleteNote(confirmDeletion, false)) return
@@ -985,7 +984,6 @@ class NoteList extends React.Component {
     const { selectedNoteKeys } = this.state
     const notes = this.notes.map(note => Object.assign({}, note))
     const selectedNotes = findNotesByKeys(notes, selectedNoteKeys)
-    const firstNote = selectedNotes[0]
     const { confirmDeletion } = this.props.config.ui
 
     if (!confirmDeleteNote(confirmDeletion, true)) return
