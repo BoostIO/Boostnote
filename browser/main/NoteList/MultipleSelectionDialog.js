@@ -54,19 +54,19 @@ class MultipleSelectionDialog extends React.Component {
             </button>
           </div>
           <div styleName='button-box'>
-            <button>
+            <button onClick={e => this.props.onExport(e, 'md')}>
               <i className='fa fa-file-code-o' />
               <span styleName='tooltip'>{i18n.__('Export as .md')}</span>
             </button>
-            <button>
+            <button onClick={e => this.props.onExport(e, 'txt')}>
               <i className='fa fa-file-text-o' />
               <span styleName='tooltip'>{i18n.__('Export as .txt')}</span>
             </button>
-            <button>
+            <button onClick={e => this.props.onExport(e, 'html')}>
               <i className='fa fa-html5' />
               <span styleName='tooltip'>{i18n.__('Export as .html')}</span>
             </button>
-            <button>
+            <button onClick={e => this.props.onExport(e, 'pdf')}>
               <i className='fa fa-file-pdf-o' />
               <span styleName='tooltip'>{i18n.__('Export as .pdf')}</span>
             </button>
@@ -90,7 +90,8 @@ MultipleSelectionDialog.propTypes = {
   onPin: PropTypes.func.isRequired,
   onUnPin: PropTypes.func.isRequired,
   onTrash: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onExport: PropTypes.func.isRequired
 }
 
 export default CSSModules(MultipleSelectionDialog, styles)

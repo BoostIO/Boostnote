@@ -102,6 +102,7 @@ class NoteList extends React.Component {
     this.unStar = this.unStar.bind(this)
     this.trash = this.trash.bind(this)
     this.permanentlyDelete = this.permanentlyDelete.bind(this)
+    this.exportAllSelected = this.exportAllSelected.bind(this)
     this.getNoteStorage = this.getNoteStorage.bind(this)
     this.getNoteFolder = this.getNoteFolder.bind(this)
     this.getViewType = this.getViewType.bind(this)
@@ -670,6 +671,97 @@ class NoteList extends React.Component {
             )
             throw err
           })
+      }
+    })
+  }
+
+  exportAllSelected(e, fileType) {
+    // Select directory
+    // trying export all notes one by one
+    // if a file already exists, ask resolution method [replace, replace all, skip, skip all, quit]
+    // replace all: replace all conflicting files
+    // skip all: skip all conflicting files
+    const options = {
+      title: i18n.__('Select folder for the exports'),
+      properties: ['openDirectory', 'createDirectory']
+    }
+
+    // Find the target folder
+    dialog.showOpenDialog(remote.getCurrentWindow(), options, folderPaths => {
+      if (folderPaths) {
+        // To show succesful and un-succesful attempts
+        let replaceAll = false
+        let skipAll = false
+
+        // Export each note one by one
+        const folderPath = folderPaths[0]
+        const { selectedNoteKeys } = this.state
+        selectedNoteKeys.every(noteKey => {
+          // Find the name
+          const note = findNoteByKey(this.notes, noteKey)
+          // generate full path and add extensions to
+          const filename =
+            filenamify(note.title, { replacement: '_' }) + `.${fileType}`
+          const filepath = path.join(folderPath, filename)
+
+          if (fs.existsSync(filepath)) {
+            if (skipAll) {
+              return
+            } else if (replaceAll) {
+              // pass through, file will be over-written
+            } else {
+              const options = {
+                buttons: [
+                  // if you change the order, change switch(response) too
+                  i18n.__('Replace'),
+                  i18n.__('Replace All'),
+                  i18n.__('Skip'),
+                  i18n.__('Skip All'),
+                  i18n.__('Abort')
+                ],
+                message: `${filename} ${i18n.__(
+                  'already exists in selected folder.'
+                )}`
+              }
+              const response = dialog.showMessageBox(
+                remote.getCurrentWindow(),
+                options
+              )
+              switch (response) {
+                case 0:
+                  // do nothing file will be over-written
+                  break
+                case 1:
+                  replaceAll = true
+                  break
+                case 2:
+                  return true // return to skip to next item in mapped array
+                case 3:
+                  skipAll = true
+                  return true
+                case 4:
+                  return false // break out of for each
+              }
+            }
+          }
+
+          const { config } = this.props
+          dataApi
+            .exportNoteAs(note, filepath, fileType, config)
+            .then(res => {
+              console.log(
+                `${filepath} ${i18n.__('was exported successsfully')}`
+              )
+            })
+            .catch(err => {
+              console.log(
+                `${i18n.__('Error while expoting')} ${filepath} : ${
+                  err ? err.message || err : 'Unexpected error during export'
+                }`
+              )
+            })
+          return true
+        })
       }
     })
   }
@@ -1455,6 +1547,7 @@ class NoteList extends React.Component {
           onUnStar={this.unStar}
           onTrash={this.trash}
           onDelete={this.permanentlyDelete}
+          onExport={this.exportAllSelected}
         />
       </div>
     )
