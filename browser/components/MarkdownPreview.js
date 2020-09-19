@@ -85,7 +85,6 @@ function getSourceLineNumberByElement(element) {
   return parent.dataset.line !== undefined ? parseInt(parent.dataset.line) : -1
 }
 
-// escapeRegExp escapes pattern
 function escapeRegExp(string) {
   return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
