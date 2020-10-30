@@ -72,7 +72,7 @@ class MultipleSelectionDialog extends React.Component {
             </button>
           </div>
           <div styleName='button-box'>
-            <button>
+            <button onClick={this.onPublish}>
               <img src='../resources/icon/icon-external.svg' />
               <span styleName='tooltip'>{i18n.__('Publish')}</span>
             </button>
@@ -91,7 +91,8 @@ MultipleSelectionDialog.propTypes = {
   onUnPin: PropTypes.func.isRequired,
   onTrash: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onExport: PropTypes.func.isRequired
+  onExport: PropTypes.func.isRequired,
+  onPublish: PropTypes.func.isRequired
 }
 
 export default CSSModules(MultipleSelectionDialog, styles)

@@ -1546,6 +1546,7 @@ class NoteList extends React.Component {
           onTrash={this.trash}
           onDelete={this.permanentlyDelete}
           onExport={this.exportAllSelected}
+          onPublish={this.publishMarkdown.bind(this)}
         />
       </div>
     )
