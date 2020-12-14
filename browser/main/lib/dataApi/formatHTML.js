@@ -638,74 +638,74 @@ code {
   direction: ltr;
 }
 
-p code,
-li code,
-td code
+p code.inline,
+li code.inline,
+td code.inline
 {
   padding: 2px;
   border-width: 1px;
   border-style: solid;
   border-radius: 5px;
 }
-[data-theme="default"] p code,
-[data-theme="default"] li code,
-[data-theme="default"] td code
+[data-theme="default"] p code.inline,
+[data-theme="default"] li code.inline,
+[data-theme="default"] td code.inline
 {
   background-color: #F4F4F4;
   border-color: #d9d9d9;
   color: inherit;
 }
-[data-theme="white"] p code,
-[data-theme="white"] li code,
-[data-theme="white"] td code
+[data-theme="white"] p code.inline,
+[data-theme="white"] li code.inline,
+[data-theme="white"] td code.inline
 {
   background-color: #F4F4F4;
   border-color: #d9d9d9;
   color: inherit;
 }
-[data-theme="dark"] p code,
-[data-theme="dark"] li code,
-[data-theme="dark"] td code
+[data-theme="dark"] p code.inline,
+[data-theme="dark"] li code.inline,
+[data-theme="dark"] td code.inline
 {
   background-color: #444444;
   border-color: #555;
   color: #FFFFFF;
 }
-[data-theme="dracula"] p code,
-[data-theme="dracula"] li code,
-[data-theme="dracula"] td code
+[data-theme="dracula"] p code.inline,
+[data-theme="dracula"] li code.inline,
+[data-theme="dracula"] td code.inline
 {
   background-color: #444444;
   border-color: #555;
   color: #FFFFFF;
 }
-[data-theme="monokai"] p code,
-[data-theme="monokai"] li code,
-[data-theme="monokai"] td code
+[data-theme="monokai"] p code.inline,
+[data-theme="monokai"] li code.inline,
+[data-theme="monokai"] td code.inline
 {
   background-color: #444444;
   border-color: #555;
   color: #FFFFFF;
 }
-[data-theme="nord"] p code,
-[data-theme="nord"] li code,
-[data-theme="nord"] td code
+[data-theme="nord"] p code.inline,
+[data-theme="nord"] li code.inline,
+[data-theme="nord"] td code.inline
 {
   background-color: #444444;
   border-color: #555;
   color: #FFFFFF;
 }
-[data-theme="solarized-dark"] p code,
-[data-theme="solarized-dark"] li code,
-[data-theme="solarized-dark"] td code
+[data-theme="solarized-dark"] p code.inline,
+[data-theme="solarized-dark"] li code.inline,
+[data-theme="solarized-dark"] td code.inline
 {
   background-color: #444444;
   border-color: #555;
   color: #FFFFFF;
 }
-[data-theme="vulcan"] p code,
-[data-theme="vulcan"] li code,
-[data-theme="vulcan"] td code
+[data-theme="vulcan"] p code.inline,
+[data-theme="vulcan"] li code.inline,
+[data-theme="vulcan"] td code.inline
 {
   background-color: #444444;
   border-color: #555;

@@ -18,9 +18,9 @@ const DEFAULT_MARKDOWN_LINT_CONFIG = `{
 
 const DEFAULT_CSS_CONFIG = `
 /* Drop Your Custom CSS Code Here */
-[data-theme="default"] p code,
-[data-theme="default"] li code,
-[data-theme="default"] td code
+[data-theme="default"] p code.inline,
+[data-theme="default"] li code.inline,
+[data-theme="default"] td code.inline
 {
   padding: 2px;
   border-width: 1px;

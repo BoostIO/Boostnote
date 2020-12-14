@@ -8,7 +8,7 @@ import markdownItTocAndAnchor from '@hikerpig/markdown-it-toc-and-anchor'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import katex from 'katex'
-import { lastFindInArray } from './utils'
+import { escapeHtmlCharacters, lastFindInArray } from './utils'
 
 function createGutter(str, firstLineNumber) {
   if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
@@ -478,6 +478,16 @@ class Markdown {
 
       return true
     })
+
+    this.md.renderer.rules.code_inline = function(tokens, idx) {
+      const token = tokens[idx]
+
+      return (
+        '<code class="inline">' +
+        escapeHtmlCharacters(token.content) +
+        '</code>'
+      )
+    }
 
     if (config.preview.smartArrows) {
       this.md.use(smartArrows)
