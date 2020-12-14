@@ -12,6 +12,7 @@ import DevTools from './DevTools'
 require('./lib/ipcClient')
 require('../lib/customMeta')
 import i18n from 'browser/lib/i18n'
+import ConfigManager from './lib/ConfigManager'
 
 const electron = require('electron')
 
@@ -107,6 +108,22 @@ function updateApp() {
   }
 }
 
+function downloadUpdate() {
+  const index = dialog.showMessageBox(remote.getCurrentWindow(), {
+    type: 'warning',
+    message: i18n.__('Update Boostnote'),
+    detail: i18n.__('New Boostnote is ready to be downloaded.'),
+    buttons: [i18n.__('Download now'), i18n.__('Ignore updates')]
+  })
+
+  if (index === 0) {
+    ipcRenderer.send('update-download-confirm')
+  } else if (index === 1) {
+    ipcRenderer.send('update-cancel')
+    ConfigManager.set({ autoUpdateEnabled: false })
+  }
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
@@ -147,8 +164,12 @@ ReactDOM.render(
     })
 
     ipcRenderer.on('update-found', function() {
-      notify('Update found!', {
-        body: 'Preparing to update...'
+      downloadUpdate()
+    })
+
+    ipcRenderer.on('update-not-found', function(_, msg) {
+      notify('Update not found!', {
+        body: msg
       })
     })
 
