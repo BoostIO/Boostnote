@@ -78,9 +78,10 @@ class MultipleSelectionDialog extends React.Component {
             </button>
           </div>
         </div>
-        <div styleName='row input-row'>
+        <div styleName='row'>
           <input id='addtag-input' type='text' />
           <button
+            styleName='input-button'
             onClick={e =>
               this.props.addTag(document.getElementById('addtag-input').value)
             }
@@ -89,9 +90,10 @@ class MultipleSelectionDialog extends React.Component {
             <span styleName='tooltip'>{i18n.__('Add tag')}</span>
           </button>
         </div>
-        <div styleName='row input-row'>
+        <div styleName='row'>
           <input id='removetag-input' type='text' />
           <button
+            styleName='input-button'
             onClick={e => {
               this.props.removeTag(
                 document.getElementById('removetag-input').value

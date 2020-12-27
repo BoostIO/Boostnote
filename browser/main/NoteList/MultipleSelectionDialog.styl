@@ -32,12 +32,16 @@
       padding 0.5em
       img
         height 1em
-
-  .input-row
     input
       background-color inherit
       border 2px solid $ui-text-color
-      color $ui-text-color
+      color inherit
+      margin 0.5em
+      padding 0 0.5em
+      width 100%
+      border-radius 5px
+   .input-button
+     border 2px solid $ui-text-color
 
 .tooltip
   tooltip()
@@ -67,6 +71,10 @@ apply-theme(theme)
         button
           color get-theme-var(theme, 'text-color')
           background-color get-theme-var(theme, 'noteList-backgroundColor')
+        input
+          border-color get-theme-var(theme, 'text-color')
+       .input-button
+          border-color get-theme-var(theme, 'text-color')
 
 for theme in 'dark' 'solarized-dark' 'dracula'
   apply-theme(theme)
