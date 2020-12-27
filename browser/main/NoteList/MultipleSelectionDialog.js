@@ -79,7 +79,12 @@ class MultipleSelectionDialog extends React.Component {
           </div>
         </div>
         <div styleName='row'>
-          <input id='addtag-input' type='text' />
+          <input
+            id='addtag-input'
+            type='text'
+            onFocus={e => e.target.select()}
+            placeholder={i18n.__('Add tag...')}
+          />
           <button
             styleName='input-button'
             onClick={e =>
@@ -91,7 +96,12 @@ class MultipleSelectionDialog extends React.Component {
           </button>
         </div>
         <div styleName='row'>
-          <input id='removetag-input' type='text' />
+          <input
+            id='removetag-input'
+            type='text'
+            onFocus={e => e.target.select()}
+            placeholder={i18n.__('Remove tag...')}
+          />
           <button
             styleName='input-button'
             onClick={e => {
