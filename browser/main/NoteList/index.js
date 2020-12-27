@@ -103,6 +103,8 @@ class NoteList extends React.Component {
     this.trash = this.trash.bind(this)
     this.permanentlyDelete = this.permanentlyDelete.bind(this)
     this.exportAllSelected = this.exportAllSelected.bind(this)
+    this.addTag = this.addTag.bind(this)
+    this.removeTag = this.removeTag.bind(this)
     this.getNoteStorage = this.getNoteStorage.bind(this)
     this.getNoteFolder = this.getNoteFolder.bind(this)
     this.getViewType = this.getViewType.bind(this)
@@ -947,6 +949,34 @@ class NoteList extends React.Component {
     })
   }
 
+  addTag(newTag) {
+    newTag = newTag.trim().replace(/ +/g, '_')
+    if (newTag.charAt(0) === '#') {
+      newTag.substring(1)
+    }
+
+    if (newTag.length <= 0) {
+      return
+    }
+
+    this.updateSelectedNotes(note => {
+      note.tags = _.isArray(note.tags) ? note.tags.slice() : []
+
+      if (!_.includes(note.tags, newTag)) {
+        note.tags.push(newTag)
+      }
+      return note
+    })
+  }
+
+  removeTag(tagname) {
+    this.updateSelectedNotes(note => {
+      note.tags = _.isArray(note.tags) ? note.tags.slice() : []
+      note.tags.splice(note.tags.indexOf(tagname), 1)
+      return note
+    })
+  }
+
   trash() {
     const { dispatch } = this.props
     const { selectedNoteKeys } = this.state
@@ -1539,6 +1569,8 @@ class NoteList extends React.Component {
         </div>
         <MultipleSelectionDialog
           nSelectedNotes={selectedNoteKeys.length}
+          addTag={this.addTag}
+          removeTag={this.removeTag}
           onPin={this.pinToTop}
           onUnPin={this.unPin}
           onStar={this.star}

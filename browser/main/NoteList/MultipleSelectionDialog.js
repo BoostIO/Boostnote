@@ -72,11 +72,35 @@ class MultipleSelectionDialog extends React.Component {
             </button>
           </div>
           <div styleName='button-box'>
-            <button onClick={this.onPublish}>
+            <button onClick={this.props.onPublish}>
               <img src='../resources/icon/icon-external.svg' />
               <span styleName='tooltip'>{i18n.__('Publish')}</span>
             </button>
           </div>
+        </div>
+        <div styleName='row input-row'>
+          <input id='addtag-input' type='text' />
+          <button
+            onClick={e =>
+              this.props.addTag(document.getElementById('addtag-input').value)
+            }
+          >
+            <img src='../resources/icon/addtag.svg' />
+            <span styleName='tooltip'>{i18n.__('Add tag')}</span>
+          </button>
+        </div>
+        <div styleName='row input-row'>
+          <input id='removetag-input' type='text' />
+          <button
+            onClick={e => {
+              this.props.removeTag(
+                document.getElementById('removetag-input').value
+              )
+            }}
+          >
+            <img src='../resources/icon/removetag.svg' />
+            <span styleName='tooltip'>{i18n.__('Remove tag')}</span>
+          </button>
         </div>
       </div>
     )
@@ -85,6 +109,8 @@ class MultipleSelectionDialog extends React.Component {
 
 MultipleSelectionDialog.propTypes = {
   nSelectedNotes: PropTypes.number.isRequired,
+  addTag: PropTypes.func.isRequired,
+  removeTag: PropTypes.func.isRequired,
   onStar: PropTypes.func.isRequired,
   onUnStar: PropTypes.func.isRequired,
   onPin: PropTypes.func.isRequired,

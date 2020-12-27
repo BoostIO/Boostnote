@@ -12,26 +12,32 @@
   h3
     font-size 1.5em
     text-align center
-  .row
+ .row
     display flex
     justify-content space-between
     .button-box
       display flex
       margin 0.5em
       margin-bottom 0
-      button
-        position relative
-        &:hover .tooltip
-          opacity 1
+    button
+      position relative
+      &:hover .tooltip
+        opacity 1
 
-        color $ui-text-color
-        background-color inherit
-        border none
+      color $ui-text-color
+      background-color inherit
+      border none
 
-        font-size 24px
-        padding 0.5em
-        img
-          height 1em
+      font-size 24px
+      padding 0.5em
+      img
+        height 1em
+
+  .input-row
+    input
+      background-color inherit
+      border 2px solid $ui-text-color
+      color $ui-text-color
 
 .tooltip
   tooltip()
@@ -58,10 +64,9 @@ apply-theme(theme)
       color get-theme-var(theme, 'text-color')
       background-color get-theme-var(theme, 'noteList-backgroundColor')
       .row
-        .button-box
-          button
-            color get-theme-var(theme, 'text-color')
-            background-color get-theme-var(theme, 'noteList-backgroundColor')
+        button
+          color get-theme-var(theme, 'text-color')
+          background-color get-theme-var(theme, 'noteList-backgroundColor')
 
 for theme in 'dark' 'solarized-dark' 'dracula'
   apply-theme(theme)
